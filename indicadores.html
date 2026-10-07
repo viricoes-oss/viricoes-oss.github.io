@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Laboratorio de Indicadores Geoeconómicos · Miss Viridiana</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F7F5FC; --paper2:#FFFFFF; --ink:#2A2340; --ink2:#5B5470; --line:#DCD5EC;
+  --lila:#8C6FD9; --lila-d:#5E43B0; --lila-l:#EAE3FA;
+  --rosa:#E58AB0; --rosa-l:#FCE6EF; --cielo:#5DAEE0; --cielo-l:#E2F1FB;
+  --amarillo:#FFE27A; --amarillo-l:#FFF6D1; --gris:#8A8698;
+  --ok:#2E9A6B; --bad:#C84B6B;
+  --r0:#F1ECFC; --r1:#D6C9F6; --r2:#B39CEB; --r3:#8C6FD9; --r4:#5A3FAA; --rz:#E7E5EC;
+  --grid:rgba(140,111,217,.09);
+  --shadow:0 1px 0 rgba(42,35,64,.06), 0 8px 24px -14px rgba(42,35,64,.35);
+  --fd:"Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+  --fb:"Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#1B1727; --paper2:#251F35; --ink:#EEEAF8; --ink2:#B7B0CB; --line:#3A3250;
+    --lila:#A98EF0; --lila-d:#C9B8FF; --lila-l:#30284A; --rosa:#F2A2C4; --rosa-l:#3D2735;
+    --cielo:#7FC2EC; --cielo-l:#1F3242; --amarillo:#FFE27A; --amarillo-l:#3A3420;
+    --r0:#2D2645; --r1:#493B78; --r2:#6D55B5; --r3:#9C80EC; --r4:#D5C6FF; --rz:#2B2834;
+    --grid:rgba(169,142,240,.08); --shadow:0 8px 24px -14px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#1B1727; --paper2:#251F35; --ink:#EEEAF8; --ink2:#B7B0CB; --line:#3A3250;
+  --lila:#A98EF0; --lila-d:#C9B8FF; --lila-l:#30284A; --rosa:#F2A2C4; --rosa-l:#3D2735;
+  --cielo:#7FC2EC; --cielo-l:#1F3242; --amarillo:#FFE27A; --amarillo-l:#3A3420;
+  --r0:#2D2645; --r1:#493B78; --r2:#6D55B5; --r3:#9C80EC; --r4:#D5C6FF; --rz:#2B2834;
+  --grid:rgba(169,142,240,.08); --shadow:0 8px 24px -14px rgba(0,0,0,.8);
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+body{margin:0;font-family:var(--fb);color:var(--ink);background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:28px 28px;line-height:1.55;font-size:17px;min-height:100vh}
+h1,h2,h3,h4{font-family:var(--fd);line-height:1.12;margin:0 0 .4em;letter-spacing:-.01em}
+h2{font-size:clamp(1.55rem,4.6vw,2.3rem);font-weight:800}
+h3{font-size:1.2rem;font-weight:700}
+p{margin:0 0 .8em}
+button,select,textarea,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--cielo);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 18px}
+.screen{display:none;padding:22px 0 60px}
+.screen.on{display:block}
+.muted{color:var(--ink2)}
+.small{font-size:.88rem}
+
+/* ---------- barra superior ---------- */
+.topbar{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--paper) 88%,transparent);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line);
+  padding-top:env(safe-area-inset-top,0px)}
+.topbar.hide{display:none}
+.topbar .wrap{display:flex;align-items:center;gap:12px;min-height:56px}
+.brand{display:flex;flex-direction:column;line-height:1.15;flex:1;min-width:0}
+.brand b{font-family:var(--fd);font-size:1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand span{font-size:.78rem;color:var(--ink2)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.45em;border:2px solid var(--ink);
+  background:var(--paper2);border-radius:12px;padding:.6em 1.05em;font-weight:700;min-height:44px;transition:transform .12s,background .12s}
+.btn:hover{background:var(--lila-l)}
+.btn:active{transform:translateY(1px)}
+.btn.prim{background:var(--ink);color:var(--paper);}
+.btn.prim:hover{background:var(--lila-d);border-color:var(--lila-d)}
+.btn.ghost{border-color:var(--line);font-weight:600}
+.btn.sm{min-height:38px;padding:.35em .8em;font-size:.92rem;border-radius:10px}
+
+/* ---------- portada ---------- */
+#portada{padding-top:0}
+.hero{min-height:100vh;min-height:100svh;display:grid;align-items:center;padding:28px 0}
+.hero-grid{display:grid;gap:26px;grid-template-columns:1fr}
+.kicker{display:inline-block;font-size:.9rem;font-weight:700;color:var(--lila-d);background:var(--lila-l);
+  border-radius:999px;padding:.3em .85em;margin-bottom:14px}
+.hero h1{font-size:clamp(2.2rem,8.2vw,4.6rem);font-weight:800;letter-spacing:-.025em;line-height:.95;margin-bottom:.35em;text-transform:uppercase}
+.hero h1 small{display:block;font-size:.38em;letter-spacing:0;text-transform:none;font-weight:700;color:var(--ink2);margin-top:.6em;line-height:1.2}
+.hero .lead{font-size:1.18rem;max-width:34ch}
+.hero .intro{max-width:46ch;border-left:4px solid var(--rosa);padding:.2em 0 .2em 14px;margin:18px 0 22px}
+.hero-map{position:relative;background:var(--paper2);border:2px solid var(--ink);border-radius:22px;padding:14px 14px 10px;box-shadow:var(--shadow)}
+.hero-map svg{width:100%;height:auto;display:block}
+.hero-map path{stroke:var(--paper2);stroke-width:.8;fill:var(--r0);transition:fill .5s ease}
+.hero-map .cap{display:flex;justify-content:space-between;gap:8px;font-size:.78rem;color:var(--ink2);border-top:1px dashed var(--line);padding-top:8px;margin-top:4px}
+.pipeline{display:flex;flex-direction:column;align-items:flex-start;gap:0;margin:0 0 24px;padding:0;list-style:none}
+.pipeline li{font-family:var(--fd);font-weight:800;font-size:1.05rem;padding:.38em .9em;border-radius:10px;border:2px solid var(--ink);background:var(--paper2)}
+.pipeline li:nth-child(1){background:var(--amarillo-l)}
+.pipeline li:nth-child(3){background:var(--rosa-l)}
+.pipeline li:nth-child(5){background:var(--cielo-l)}
+.pipeline li:nth-child(7){background:var(--lila-l)}
+.pipeline li.arw{border:0;background:none;padding:.05em 0 .05em 1.3em;font-size:1.1rem;color:var(--lila)}
+.go{font-size:1.15rem;padding:.8em 1.4em}
+@media (min-width:900px){
+  .hero-grid{grid-template-columns:1.05fr 1fr;align-items:center;gap:48px}
+  .pipeline{flex-direction:row;align-items:center;flex-wrap:wrap;gap:6px}
+  .pipeline li.arw{padding:0 .1em;transform:rotate(-90deg)}
+}
+
+/* ---------- teoría ---------- */
+.theory{display:grid;gap:18px}
+.defn{font-family:var(--fd);font-size:clamp(1.25rem,3.6vw,1.75rem);font-weight:700;line-height:1.25;max-width:30ch;margin:6px 0 18px}
+.ex-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.ex{background:var(--paper2);border:1.5px solid var(--line);border-radius:16px;padding:14px 16px}
+.ex h3{font-size:1.05rem;display:flex;gap:.4em;align-items:center}
+.ex p{margin:0;font-size:.95rem;color:var(--ink2)}
+.warn{background:var(--amarillo-l);border:2px solid var(--ink);border-radius:18px;padding:18px 20px}
+.warn h3{font-size:1.25rem}
+.formula{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:10px}
+.formula span{background:var(--paper2);border:1.5px solid var(--ink);border-radius:999px;padding:.25em .8em;font-weight:700;font-size:.95rem}
+.formula i{font-style:normal;font-weight:800;color:var(--lila-d)}
+
+/* ---------- menú ---------- */
+.idcard{display:grid;gap:10px;grid-template-columns:1fr;background:var(--paper2);border:1.5px solid var(--line);border-radius:16px;padding:14px 16px;margin:14px 0 22px}
+.idcard label{display:flex;flex-direction:column;font-size:.85rem;font-weight:700;gap:4px}
+.idcard input,.idcard select{border:1.5px solid var(--line);border-radius:10px;padding:.55em .7em;background:var(--paper);min-height:44px;font-weight:400;font-size:1rem}
+@media(min-width:640px){.idcard{grid-template-columns:2fr 1fr}}
+.missions{display:grid;gap:14px;grid-template-columns:1fr}
+@media(min-width:720px){.missions{grid-template-columns:1fr 1fr}}
+.mcard{position:relative;text-align:left;display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:start;background:var(--paper2);
+  border:2px solid var(--ink);border-radius:20px;padding:18px;box-shadow:var(--shadow);transition:transform .15s}
+.mcard:hover{transform:translateY(-2px)}
+.mcard .em{font-size:2.1rem;line-height:1;grid-row:span 3}
+.mcard .num{font-size:.85rem;font-weight:700;color:var(--ink2)}
+.mcard .ttl{font-family:var(--fd);font-weight:800;font-size:1.45rem;line-height:1.05}
+.mcard .dsc{font-size:.95rem;color:var(--ink2)}
+.mcard .st{position:absolute;top:14px;right:14px;font-size:.78rem;font-weight:700;border-radius:999px;padding:.2em .7em;background:var(--lila-l);color:var(--lila-d)}
+.mcard .st.done{background:#D9F2E6;color:#1F6B4A}
+.mcard.final{grid-column:1/-1;background:var(--ink);color:var(--paper)}
+.mcard.final .dsc,.mcard.final .num{color:color-mix(in srgb,var(--paper) 75%,transparent)}
+.mcard.m1{border-top:8px solid var(--rosa)}.mcard.m2{border-top:8px solid var(--cielo)}
+.mcard.m3{border-top:8px solid var(--amarillo)}.mcard.m4{border-top:8px solid var(--lila)}
+
+/* ---------- explorador ---------- */
+.mhead{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px 18px;margin-bottom:14px}
+.mhead .tag{font-weight:700;color:var(--ink2);font-size:.9rem}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 10px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
+.chip{flex:0 0 auto;border:2px solid var(--line);background:var(--paper2);border-radius:999px;padding:.45em .95em;font-weight:700;min-height:44px;white-space:nowrap}
+.chip[aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:var(--paper)}
+.seg{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 12px}
+.seg button{border:1.5px solid var(--line);background:var(--paper2);border-radius:10px;padding:.35em .8em;font-weight:600;min-height:40px}
+.seg button[aria-pressed="true"]{border-color:var(--lila-d);background:var(--lila-l);color:var(--lila-d)}
+.what{background:var(--paper2);border:1.5px solid var(--line);border-left:6px solid var(--lila);border-radius:14px;padding:12px 14px;margin-bottom:14px}
+.what p{margin:0 0 .35em}
+.what .meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.what .meta span{font-size:.82rem;background:var(--lila-l);color:var(--lila-d);border-radius:8px;padding:.15em .55em;font-weight:700}
+.ojo{font-size:.9rem;background:var(--amarillo-l);border-radius:10px;padding:.5em .7em;margin-top:8px}
+.xgrid{display:grid;gap:16px;grid-template-columns:minmax(0,1fr)}
+@media(min-width:900px){.chips{flex-wrap:wrap;overflow:visible}}
+@media(min-width:980px){.xgrid{grid-template-columns:minmax(0,1.45fr) minmax(0,1fr)}}
+.panel{background:var(--paper2);border:1.5px solid var(--line);border-radius:18px;padding:14px 16px;min-width:0}
+.mapbox{position:relative;background:var(--paper2);border:2px solid var(--ink);border-radius:18px;padding:12px 12px 8px;min-width:0}
+.maptitle{font-family:var(--fd);font-weight:800;font-size:1.05rem;margin:0 0 2px}
+.mapsub{font-size:.82rem;color:var(--ink2);margin:0 0 6px}
+.mapsvg{width:100%;height:auto;display:block;touch-action:manipulation}
+.mapsvg path.t{stroke:var(--paper2);stroke-width:.7;cursor:pointer;transition:fill .35s}
+.mapsvg path.t:hover{stroke:var(--ink);stroke-width:1.2}
+.mapsvg path.t.sel{stroke:var(--rosa);stroke-width:2.6}
+.mapsvg path.t.cmp{stroke:var(--cielo);stroke-width:2.6;stroke-dasharray:4 2}
+.mapsvg path.nb{fill:var(--rz);stroke:var(--paper2);stroke-width:.6}
+.mapsvg path.nd{fill:var(--rz);stroke:var(--paper2);stroke-width:.4}
+.mapsvg .nbl{font-size:13px;fill:var(--ink2);font-family:var(--fb);font-style:italic}
+.mapsvg circle.ps{fill:var(--cielo);fill-opacity:.55;stroke:var(--ink);stroke-width:.8;pointer-events:none}
+.mapsvg .north text{font-family:var(--fd);font-weight:800;fill:var(--ink)}
+.maptools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin-top:6px}
+.maptools select{border:1.5px solid var(--line);background:var(--paper);border-radius:10px;padding:.4em .6em;min-height:42px;max-width:100%}
+.legend{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:.8rem;margin-top:6px;align-items:center}
+.legend .sw{display:inline-block;width:16px;height:12px;border-radius:3px;margin-right:4px;vertical-align:-1px;border:1px solid var(--line)}
+.legend b{width:100%;font-size:.82rem}
+.src{font-size:.75rem;color:var(--ink2);margin-top:4px}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--paper);font-size:.82rem;padding:.35em .6em;border-radius:8px;transform:translate(-50%,-120%);white-space:nowrap;opacity:0;transition:opacity .1s;z-index:5}
+.tip.on{opacity:1}
+.ficha .nm{font-family:var(--fd);font-weight:800;font-size:1.5rem;line-height:1.05;margin:0}
+.ficha .rg{font-size:.85rem;color:var(--ink2)}
+.bigv{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin:10px 0 2px}
+.bigv b{font-family:var(--fd);font-size:2.3rem;font-weight:800;line-height:1}
+.bigv span{font-size:.9rem;color:var(--ink2)}
+.rankbar{position:relative;height:14px;background:linear-gradient(90deg,var(--r0),var(--r1),var(--r2),var(--r3),var(--r4));border-radius:999px;margin:16px 0 6px}
+.rankbar i{position:absolute;top:-5px;width:6px;height:24px;background:var(--rosa);border:2px solid var(--ink);border-radius:4px;transform:translateX(-50%)}
+.rankbar i.c{background:var(--cielo)}
+.ranklbl{display:flex;justify-content:space-between;font-size:.75rem;color:var(--ink2)}
+.reading{background:var(--rosa-l);border-radius:12px;padding:.6em .8em;margin:10px 0;font-size:.95rem}
+.stack{display:flex;height:22px;border-radius:7px;overflow:hidden;border:1.5px solid var(--ink);margin:4px 0 2px}
+.stack div{height:100%}
+.stackrow{display:grid;grid-template-columns:72px 1fr;gap:8px;align-items:center;font-size:.8rem}
+.s-p{background:var(--amarillo)}.s-s{background:var(--cielo)}.s-t{background:var(--rosa)}
+.keyrow{display:flex;gap:12px;font-size:.78rem;margin-top:4px;flex-wrap:wrap}
+.keyrow span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+.keyrow .kp::before{background:var(--amarillo)}.keyrow .ks::before{background:var(--cielo)}.keyrow .kt::before{background:var(--rosa)}
+.ql{border:1.5px dashed var(--lila);border-radius:12px;padding:.55em .75em;margin-top:10px;font-size:.92rem}
+.ql b{font-family:var(--fd)}
+.cmpbox{margin-top:12px;border-top:1px dashed var(--line);padding-top:10px}
+.cmpbox select{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:.45em .6em;min-height:44px;background:var(--paper)}
+.cmpres{margin-top:8px;font-size:.95rem}
+.bars{display:grid;gap:5px;margin-top:6px}
+.bar{display:grid;grid-template-columns:minmax(90px,38%) 1fr auto;gap:8px;align-items:center;font-size:.84rem;background:none;border:0;padding:2px 0;text-align:left}
+.bar .tr{height:12px;background:var(--lila-l);border-radius:6px;overflow:hidden}
+.bar .tr i{display:block;height:100%;background:var(--lila);border-radius:6px}
+.bar.hi .tr i{background:var(--rosa)}
+.bar .v{font-variant-numeric:tabular-nums;font-weight:700}
+.under{display:grid;gap:16px;grid-template-columns:minmax(0,1fr);margin-top:16px}
+@media(min-width:820px){.under{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.under h3{font-size:1rem}
+.bitacora textarea,.reflex textarea{width:100%;min-height:96px;border:1.5px solid var(--line);border-radius:12px;padding:.6em .7em;background:var(--paper);resize:vertical;font-size:1rem}
+.bitacora .q{font-weight:700;margin-bottom:6px}
+.saved{font-size:.78rem;color:var(--ok);min-height:1.2em}
+.reto .opts,.quiz .opts{display:grid;gap:6px;margin:8px 0}
+.reto .opts button,.quiz .opts button{text-align:left;border:1.5px solid var(--line);background:var(--paper);border-radius:10px;padding:.5em .75em;min-height:44px;font-weight:600}
+.opts button.right{border-color:var(--ok);background:#DDF3E9;color:#14533A}
+.opts button.wrong{border-color:var(--bad);background:#FBE1E8;color:#7A1F37}
+.fb{font-size:.92rem;margin-top:4px}
+.prog{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:18px;padding:12px 14px;background:var(--lila-l);border-radius:14px}
+.prog .dots{display:flex;gap:5px}
+.prog .dots i{width:12px;height:12px;border-radius:50%;background:var(--paper2);border:2px solid var(--lila-d)}
+.prog .dots i.f{background:var(--lila-d)}
+.prog p{margin:0;flex:1;min-width:180px;font-size:.92rem}
+
+/* ---------- scatter ---------- */
+.presets{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-bottom:14px}
+.preset{text-align:left;border:2px solid var(--line);background:var(--paper2);border-radius:16px;padding:12px 14px}
+.preset[aria-pressed="true"]{border-color:var(--ink);background:var(--amarillo-l)}
+.preset b{font-family:var(--fd);display:block;font-size:1.02rem;margin-bottom:2px}
+.preset span{font-size:.86rem;color:var(--ink2)}
+.axsel{display:grid;gap:8px;grid-template-columns:1fr;margin-bottom:10px}
+@media(min-width:640px){.axsel{grid-template-columns:auto 1fr 1fr}}
+.axsel label{display:flex;flex-direction:column;font-size:.8rem;font-weight:700;gap:3px}
+.axsel select{border:1.5px solid var(--line);background:var(--paper);border-radius:10px;padding:.45em .6em;min-height:44px;font-weight:400}
+.scatter{width:100%;height:auto;display:block}
+.scatter .ax{stroke:var(--ink);stroke-width:1.2}
+.scatter .gl{stroke:var(--line);stroke-width:1}
+.scatter .md{stroke:var(--rosa);stroke-width:1.4;stroke-dasharray:5 4}
+.scatter text{font-family:var(--fb);fill:var(--ink2);font-size:12px}
+.scatter .qd{font-size:11px;fill:var(--ink2);opacity:.75}
+.scatter circle.pt{stroke:var(--ink);stroke-width:1;cursor:pointer;transition:r .15s}
+.scatter circle.pt.sel{stroke-width:3}
+.scatter .lab{font-size:12px;fill:var(--ink);font-weight:700;pointer-events:none;paint-order:stroke;stroke:var(--paper2);stroke-width:3px}
+.rbox{display:flex;gap:12px;align-items:center;background:var(--cielo-l);border-radius:14px;padding:10px 12px;margin-top:10px}
+.rbox .r{font-family:var(--fd);font-weight:800;font-size:1.6rem;flex:0 0 auto;white-space:nowrap}
+.scroll-x{overflow-x:auto}
+@media(max-width:600px){.scatter text{font-size:17px}.scatter .lab{font-size:17px}.scatter .qd{font-size:14px}}
+
+/* ---------- quiz ---------- */
+.quiz .step{font-weight:700;color:var(--ink2);font-size:.9rem}
+.quiz .qq{font-family:var(--fd);font-weight:700;font-size:1.25rem;margin:6px 0 10px;line-height:1.25}
+.quiz .explain{background:var(--cielo-l);border-radius:12px;padding:.6em .8em;margin-top:10px;font-size:.95rem}
+.qnav{display:flex;justify-content:space-between;gap:8px;margin-top:14px;flex-wrap:wrap}
+.score{font-family:var(--fd);font-weight:800;font-size:2.6rem}
+
+/* ---------- final ---------- */
+.ftable{width:100%;border-collapse:collapse;font-size:.9rem;min-width:560px}
+.ftable th,.ftable td{text-align:left;padding:.5em .55em;border-bottom:1px solid var(--line);vertical-align:top}
+.ftable th{font-size:.8rem;color:var(--ink2)}
+.lvl{display:inline-block;border-radius:999px;padding:.1em .6em;font-size:.78rem;font-weight:700;white-space:nowrap}
+.lvl.l4{background:var(--r4);color:#fff}.lvl.l3{background:var(--r3);color:#fff}.lvl.l2{background:var(--r2);color:#1d1730}.lvl.l1{background:var(--r1);color:#1d1730}.lvl.l0{background:var(--r0);color:var(--ink)}
+.steps{display:grid;gap:14px;margin-top:16px}
+.dq{background:var(--paper2);border:1.5px solid var(--line);border-radius:16px;padding:14px 16px}
+.dq h3{font-size:1.05rem;display:flex;gap:10px;align-items:baseline}
+.dq h3 em{font-style:normal;font-family:var(--fd);background:var(--ink);color:var(--paper);border-radius:8px;padding:0 .45em;font-size:.95rem}
+.dq .hint{font-size:.88rem;color:var(--ink2);margin-bottom:6px}
+.dq .starters{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+.dq .starters button{border:1.5px dashed var(--lila);background:var(--paper);border-radius:999px;padding:.25em .7em;font-size:.82rem;min-height:36px}
+.checklist{display:grid;gap:6px;margin:10px 0}
+.checklist label{display:flex;gap:10px;align-items:flex-start;font-size:.95rem}
+.checklist input{width:22px;height:22px;flex:0 0 auto;margin-top:2px;accent-color:var(--lila-d)}
+#expediente{display:none;background:#fff;color:#1d1730;border:2px solid #1d1730;border-radius:18px;padding:24px;margin-top:20px}
+#expediente.on{display:block}
+#expediente h2{font-size:1.6rem}
+#expediente h3{margin-top:16px;font-size:1.05rem;border-bottom:2px solid #1d1730;padding-bottom:4px}
+#expediente .ehead{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;font-size:.9rem;border-bottom:1px dashed #999;padding-bottom:10px;margin-bottom:10px}
+#expediente p.ans{white-space:pre-wrap;background:#F6F3FC;border-radius:8px;padding:.5em .7em}
+#expediente table{width:100%;border-collapse:collapse;font-size:.85rem}
+#expediente td,#expediente th{border-bottom:1px solid #ddd;padding:.3em .4em;text-align:left}
+#expediente .emap{max-width:420px}
+#expediente .emap path{stroke:#fff;stroke-width:.7;fill:#E3DEEE}
+#expediente .emap path.sel{fill:#E58AB0;stroke:#1d1730;stroke-width:1.5}
+.toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:.6em 1em;border-radius:12px;font-weight:700;opacity:0;transition:opacity .2s;pointer-events:none;z-index:50}
+.toast.on{opacity:1}
+footer.foot{font-size:.78rem;color:var(--ink2);border-top:1px solid var(--line);padding:16px 0 24px;margin-top:30px}
+
+/* ---------- v2: recorrido lineal ---------- */
+.topbar .wrap{display:block}
+.stepper{display:flex;gap:4px;list-style:none;margin:0;padding:0 0 8px;overflow-x:auto}
+.stepper button{display:flex;align-items:center;gap:6px;border:0;background:none;padding:4px 10px 4px 4px;border-radius:999px;font-weight:700;font-size:.85rem;color:var(--ink2);white-space:nowrap;min-height:36px}
+.stepper button i{font-style:normal;display:grid;place-items:center;width:26px;height:26px;border-radius:50%;border:2px solid var(--line);background:var(--paper2);font-size:.8rem}
+.stepper button[aria-current="step"]{background:var(--ink);color:var(--paper)}
+.stepper button[aria-current="step"] i{border-color:var(--paper);background:var(--paper);color:var(--ink)}
+.stepper button.done i{background:var(--lila-d);border-color:var(--lila-d);color:#fff}
+@media(max-width:640px){.stepper button span{display:none}.stepper button[aria-current="step"] span{display:inline}}
+details.ojo summary{cursor:pointer;font-weight:700}
+details.ojo p{margin:.4em 0 0}
+.toplist{font-size:.85rem;margin-top:8px;color:var(--ink2)}
+.toplist b{color:var(--ink)}
+.iq{margin-top:16px;border:2px solid var(--ink);border-radius:18px;background:var(--amarillo-l);padding:14px 16px}
+.iq .step{font-weight:700;color:var(--ink2);font-size:.85rem}
+.iq .qq{font-family:var(--fd);font-weight:700;font-size:1.15rem;line-height:1.25;margin:4px 0 10px}
+.iq .opts,.quiz .opts{display:grid;gap:6px}
+.iq .opts button{text-align:left;border:1.5px solid var(--line);background:var(--paper2);border-radius:10px;padding:.5em .75em;min-height:44px;font-weight:600}
+.iq .explain{background:var(--paper2);border-radius:12px;padding:.6em .8em;margin-top:10px;font-size:.95rem}
+.next{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:18px;padding:12px 14px;background:var(--lila-l);border-radius:14px}
+.next p{margin:0;flex:1;min-width:200px;font-size:.92rem}
+.next .dots{display:flex;gap:5px}
+.next .dots i{width:12px;height:12px;border-radius:50%;background:var(--paper2);border:2px solid var(--lila-d)}
+.next .dots i.f{background:var(--lila-d)}
+.write{margin-top:16px}
+.write textarea{width:100%;min-height:100px;border:1.5px solid var(--line);border-radius:12px;padding:.6em .7em;background:var(--paper);resize:vertical;font-size:1rem}
+.write .q{font-weight:700;margin-bottom:6px}
+.starters{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+.starters button{border:1.5px dashed var(--lila);background:var(--paper);border-radius:999px;padding:.25em .7em;font-size:.82rem;min-height:36px}
+.ex-grid.mini{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.ex-grid.mini .ex{padding:10px 12px}
+.chips{flex-wrap:wrap;overflow:visible}
+@media(max-width:640px){.chip{min-height:40px;padding:.35em .8em;font-size:.9rem}.seg{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px}.seg button{white-space:nowrap}}
+.sectionh{font-family:var(--fd);font-weight:800;font-size:1.35rem;margin:28px 0 8px}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+@media print{
+  body{background:#fff}
+  .topbar,.screen:not(#p4),#p4 > .wrap > *:not(#expediente),.toast,footer.foot{display:none!important}
+  #p4{display:block!important;padding:0}
+  #expediente{display:block!important;border:0;padding:0;margin:0}
+  #expediente .noprint{display:none}
+}
+</style>
+</head>
+<body>
+<header class="topbar hide" id="topbar">
+  <div class="wrap">
+    <div style="display:flex;align-items:center;gap:12px;min-height:48px"><div class="brand"><b>Laboratorio de Indicadores Geoeconómicos</b><span>Laboratorio Cartográfico de Miss Viridiana · Geografía Económica 1.4</span></div></div>
+    <ol class="stepper" id="stepper" aria-label="Paradas del laboratorio"></ol>
+  </div>
+</header>
+<main>
+<section class="screen on" id="p0">
+  <div class="wrap">
+    <div class="hero" style="min-height:auto;padding:28px 0 12px">
+    <div class="hero-grid">
+      <div>
+        <span class="kicker">🧪 Laboratorio Cartográfico de Miss Viridiana · Geografía Económica</span>
+        <h1>Laboratorio de indicadores geoeconómicos<small>¿Qué nos dicen los datos sobre las actividades económicas de los territorios?</small></h1>
+        <p class="intro">Los indicadores geoeconómicos son datos que permiten medir, comparar e interpretar cómo se desarrollan las actividades económicas en diferentes territorios.</p>
+        <ol class="pipeline" aria-label="Ruta del laboratorio">
+          <li>Indicador</li><li class="arw" aria-hidden="true">↓</li>
+          <li>Comparación</li><li class="arw" aria-hidden="true">↓</li>
+          <li>Mapa</li><li class="arw" aria-hidden="true">↓</li>
+          <li>Interpretación</li>
+        </ol>
+      </div>
+      <figure class="hero-map" style="margin:0">
+        <svg id="heroMap" viewBox="0 0 800 520" role="img" aria-label="Mapa de México coloreado según la población ocupada en actividades primarias"></svg>
+        <figcaption class="cap"><span>Mismo país, un dato: % de población ocupada en el sector primario</span></figcaption>
+      </figure>
+    </div></div>
+    <h2 style="font-size:1.4rem">¿Qué es un indicador geoeconómico?</h2>
+    <p style="max-width:62ch">Es un dato que permite medir y comparar un fenómeno relacionado con las actividades económicas de un territorio.</p>
+    <div class="ex-grid mini">
+      <div class="ex"><h3>💰 PIB</h3><p>Valor de los bienes y servicios producidos.</p></div>
+      <div class="ex"><h3>👷 Población ocupada</h3><p>En qué actividades trabaja la población.</p></div>
+      <div class="ex"><h3>🌽 Producción</h3><p>Cuánto se produce de un bien.</p></div>
+      <div class="ex"><h3>✈️ Infraestructura</h3><p>Conectividad y localización.</p></div>
+      <div class="ex"><h3>🤝 Comercio e inversión</h3><p>Relaciones económicas entre territorios.</p></div>
+    </div>
+    <div class="warn" style="margin-top:14px">
+      <h3>⚠️ Un indicador por sí solo no explica todo un territorio.</h3>
+      <div class="formula"><span>qué mide</span><i>+</i><span>dónde</span><i>+</i><span>cuándo</span><i>+</i><span>unidad</span><i>+</i><span>comparación</span></div>
+    </div>
+    <p class="muted" style="margin-top:16px">4 paradas · una pregunta rápida por indicador · solo 4 respuestas escritas · al final, tu expediente.</p>
+    <button class="btn prim go" type="button" data-go="1">🚀 Comenzar laboratorio</button>
+  </div>
+</section>
+<section class="screen" id="p1"><div class="wrap" id="p1w"></div></section>
+<section class="screen" id="p2"><div class="wrap" id="p2w"></div></section>
+<section class="screen" id="p3">
+  <div class="wrap">
+    <div class="mhead"><h2 style="margin:0">🔀 Cruza los datos</h2><span class="tag">Parada 3 de 4</span></div>
+    <p class="muted" style="max-width:66ch">Cada punto es un territorio ubicado según dos indicadores a la vez. Las líneas rosas (medianas) separan los valores altos de los bajos. Toca los puntos.</p>
+    <div class="presets" id="presets"></div>
+    <div class="xgrid">
+      <div class="mapbox"><svg class="scatter" id="scSvg" viewBox="0 0 640 440" role="img" aria-label="Gráfico de dispersión"></svg><div class="keyrow" id="scKey"></div></div>
+      <div class="panel">
+        <div id="scInfo"></div>
+        <div class="rbox"><span class="r" id="scR">–</span><span id="scRtxt" class="small"></span></div>
+        <p class="ojo">🧠 <b>Correlación no es causalidad.</b> Que dos datos se muevan juntos no prueba que uno cause el otro: la explicación la construyes tú.</p>
+      </div>
+    </div>
+    <div class="write panel"><div class="q">✍️ Respuesta 2 de 4: Elige uno de los dos cruces. Describe la relación y propone una explicación geográfica.</div>
+      <div class="starters"><button type="button">Observo que cuando…</button><button type="button">Un caso que no sigue el patrón es…</button><button type="button">Esto puede explicarse porque…</button></div>
+      <textarea id="w2" data-w="w2"></textarea><div class="saved"></div></div>
+    <h3 class="sectionh">🗺️ Lee el mapa: ¿qué dice… y qué no dice?</h3>
+    <div class="xgrid">
+      <div class="mapbox" id="m4map"></div>
+      <div class="panel quiz" id="m4quiz"></div>
+    </div>
+    <div class="next" id="n3"></div>
+  </div>
+</section>
+<section class="screen" id="p4">
+  <div class="wrap">
+    <div class="mhead"><h2 style="margin:0">🎯 Diagnóstico territorial</h2><span class="tag">Parada 4 de 4</span></div>
+    <p class="muted" style="max-width:66ch">Elige una entidad. El laboratorio reúne sus indicadores; tú explicas qué tipo de territorio económico es y por qué.</p>
+    <div class="panel" style="margin-bottom:14px">
+      <label style="font-weight:700;display:block;margin-bottom:6px" for="fState">Entidad a diagnosticar</label>
+      <select id="fState" style="width:100%;max-width:420px;border:1.5px solid var(--line);border-radius:10px;padding:.5em .6em;min-height:44px;background:var(--paper)"></select>
+    </div>
+    <div id="fFicha"></div>
+    <div class="write panel"><div class="q">✍️ Respuesta 3 de 4: ¿Qué caracteriza a la economía de esta entidad? Usa al menos dos indicadores con su unidad y compáralos con el país.</div>
+      <div class="starters"><button type="button">Según el PIB, el sector con mayor peso es…</button><button type="button">La mayoría de la población trabaja en…</button><button type="button">Se especializa en…</button></div>
+      <textarea id="w3" data-w="w3"></textarea><div class="saved"></div></div>
+    <div class="write panel"><div class="q">✍️ Respuesta 4 de 4: ¿Por qué es así? Propone factores naturales o socioeconómicos y cómo se relaciona con otros territorios (escala regional, nacional o global).</div>
+      <div class="starters"><button type="button">Un factor natural que influye es…</button><button type="button">Un factor socioeconómico es…</button><button type="button">Se relaciona con otros territorios mediante…</button></div>
+      <textarea id="w4" data-w="w4"></textarea><div class="saved"></div></div>
+    <div class="panel" style="margin-top:16px">
+      <div class="idcard" style="margin:0 0 12px;border:0;padding:0">
+        <label>Tu nombre completo<input id="stName" autocomplete="name" placeholder="Nombre y apellido"></label>
+        <label>Grupo<select id="stGroup"><option value="">Elige…</option><option>4010</option><option>4020</option><option>4030</option><option>4040</option><option>4050</option><option>6030</option><option>Otro</option></select></label>
+      </div>
+      <button class="btn prim" type="button" id="fGen">📄 Generar expediente</button>
+    </div>
+    <div id="expediente"></div>
+  </div>
+</section>
+</main>
+<div class="wrap"><footer class="foot">Datos aproximados y redondeados con fines didácticos, elaborados a partir de INEGI (PIBE, ENOE), SIAP, CONAPESCA, AFAC, Secretaría de Economía, Banco Mundial y OIT. Para investigar, verifica las cifras más recientes en el <a href="https://www.inegi.org.mx/app/tablero/" target="_blank" rel="noopener">Tablero de indicadores de INEGI</a>.</footer></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+const GEO_MX=[{"id":"ZAC","n":"Zacatecas","d":"M429.3,245.8L428.8,246.2L425.8,251.1L418.4,256.7L415.7,266.4L411.4,267.8L406.9,273.8L400.4,278.6L394.5,278.5L394.5,293.5L403.1,298.3L406.1,302.5L410.1,301.6L416.7,296.2L418.7,298.8L415.5,306.9L416.6,311.7L413.7,319.1L411.9,319.4L401.1,313.8L399.4,309.3L392.8,303.9L384.1,309.3L378.6,321.3L381.0,323.6L383.8,332.3L372.9,340.6L366.1,342.2L360.0,340.2L356.0,336.2L360.7,334.2L357.4,329.2L360.9,326.8L361.1,322.5L370.4,316.9L373.2,310.3L370.3,306.4L362.9,313.9L357.8,312.8L361.6,306.6L358.3,301.6L354.2,302.8L354.1,309.9L351.3,308.2L356.0,297.9L349.2,299.5L351.0,304.8L345.4,304.1L342.5,308.0L341.2,303.8L346.7,297.9L346.5,287.2L350.0,276.5L355.2,271.3L353.9,258.8L356.3,258.1L364.7,248.9L373.5,249.0L378.2,250.7L386.6,249.5L385.9,238.2L382.1,233.0L388.1,229.8L397.3,230.5L402.2,233.1L409.5,241.2L419.6,241.0L424.9,246.8Z","c":[382.7,281.2]},{"id":"YUC","n":"Yucatán","d":"M765.3,310.8L765.2,321.1L766.8,325.2L763.8,334.3L756.5,340.3L751.1,340.7L746.8,347.4L734.6,355.7L723.2,360.4L722.5,364.9L715.9,355.2L711.8,353.4L705.2,344.1L703.6,346.1L695.6,343.3L695.2,335.8L696.4,329.7L707.3,322.8L732.8,316.3L738.1,312.4L750.2,308.5L759.3,310.8Z","c":[732.1,333.4]},{"id":"VER","n":"Veracruz","d":"M516.7,327.4L516.7,327.4L516.7,327.4ZM506.2,306.9L509.5,322.7L514.7,331.5L523.9,350.8L535.3,362.4L542.5,371.0L547.0,385.3L552.3,391.1L555.6,392.0L560.0,400.3L576.3,400.5L581.5,404.4L585.9,404.7L591.9,413.6L595.6,414.8L606.0,411.9L606.1,422.0L614.7,426.7L617.3,435.3L619.0,435.6L612.4,441.1L582.6,440.9L582.1,437.8L574.7,430.6L574.6,427.1L566.6,431.8L560.3,432.3L557.9,427.8L560.2,419.8L558.5,415.5L551.1,415.8L542.8,409.7L540.3,404.1L538.8,409.7L534.1,406.8L531.3,409.0L528.4,404.8L524.4,403.7L524.3,388.4L529.8,388.3L529.3,385.7L522.5,383.8L519.6,377.9L525.7,362.3L518.4,360.0L515.5,363.8L510.5,362.0L509.8,355.5L513.5,351.9L506.6,344.8L503.8,351.2L502.3,350.2L491.6,359.3L489.4,355.6L490.4,348.4L493.7,344.6L497.0,345.7L499.1,339.5L496.4,335.8L490.9,335.5L488.1,330.2L485.7,322.4L489.9,320.0L487.2,315.2L492.7,310.8L489.9,306.1L483.0,304.1L493.5,302.0ZM511.0,318.0L518.0,324.5L517.1,326.1Z","c":[546,385.1]},{"id":"TLA","n":"Tlaxcala","d":"M488.1,383.0L485.7,380.8L498.7,376.4L503.0,374.6L514.8,384.0L506.7,389.5L500.6,391.7Z","c":[500.9,383.1]},{"id":"TAM","n":"Tamaulipas","d":"M506.5,251.8L506.5,251.8L506.5,251.8ZM512.3,225.5L512.3,225.5L512.3,225.5ZM506.2,306.9L493.5,302.0L483.0,304.1L471.2,304.2L468.0,298.8L462.6,294.5L461.1,296.5L450.3,293.4L450.1,286.1L447.5,281.0L451.2,278.6L453.3,268.4L463.5,265.4L458.1,256.7L458.9,250.8L456.1,245.1L470.5,235.7L472.4,228.7L476.3,230.0L482.2,225.9L488.4,219.2L485.0,217.5L484.9,207.6L483.2,204.8L476.3,207.0L470.3,203.3L463.1,195.1L461.8,191.1L456.8,188.2L457.4,183.8L454.1,181.4L456.5,177.7L454.4,166.6L450.1,166.2L455.3,160.9L461.3,165.8L460.1,170.6L462.2,177.2L466.4,182.7L471.7,195.1L478.3,195.8L481.5,198.8L487.2,199.5L493.3,204.0L500.9,203.5L507.3,205.1L512.2,209.2L518.7,205.6L518.1,214.5L512.9,225.6L513.5,221.1L510.6,219.9L510.2,224.2L506.2,222.4L506.9,227.4L505.6,246.1L502.7,245.3L505.7,250.5L506.3,265.1L506.3,289.9L503.3,297.5Z","c":[483.1,252.3]},{"id":"TAB","n":"Tabasco","d":"M646.3,398.1L647.7,401.9L654.0,405.7L657.2,412.5L661.9,416.1L670.2,416.4L670.2,412.4L676.9,412.6L686.3,418.1L687.2,433.2L676.3,434.2L676.3,431.0L670.5,429.2L669.0,422.7L664.9,418.2L655.7,419.5L652.7,423.8L641.8,433.6L635.4,430.0L632.8,425.0L634.1,420.2L624.8,418.9L623.9,427.5L619.0,435.6L617.3,435.3L614.7,426.7L606.1,422.0L606.0,411.9L617.9,408.8L622.7,405.5L635.8,404.4L641.0,399.5ZM617.8,407.1L617.8,407.1L617.8,407.1Z","c":[643.9,417.9]},{"id":"SON","n":"Sonora","d":"M156.0,109.9L157.7,115.9L154.4,123.1L148.2,119.1L151.2,111.4ZM192.8,163.3L192.8,163.3L192.8,163.3ZM225.8,193.6L224.8,193.4L225.8,193.6ZM242.1,57.5L244.1,65.8L242.0,68.7L244.4,71.9L247.1,85.8L245.8,94.4L246.9,108.7L245.9,115.8L242.9,120.2L241.1,134.4L244.7,137.7L239.2,141.0L236.8,139.5L231.9,141.9L232.8,146.2L236.7,150.6L236.2,154.6L239.3,157.0L242.1,164.5L240.2,173.3L247.3,175.2L239.9,187.2L229.0,194.3L226.2,192.0L217.9,181.2L214.0,183.3L210.1,179.9L208.9,172.3L199.8,169.5L193.3,160.6L194.3,149.3L182.4,147.1L178.4,143.7L173.2,134.2L168.1,131.9L163.5,124.4L164.2,122.5L158.1,117.2L158.5,113.4L148.2,91.3L146.3,90.5L146.7,83.5L144.8,77.3L140.0,69.3L139.3,65.4L140.8,55.3L128.8,50.4L128.4,45.9L121.8,41.8L117.0,44.9L102.6,34.6L97.6,30.6L98.2,21.6L101.6,16.0L103.9,16.1L153.6,38.9L188.3,54.7ZM106.2,36.7L106.2,36.7L106.2,36.7ZM102.9,34.7L102.9,34.7L102.9,34.7Z","c":[193.3,100.1]},{"id":"SIN","n":"Sinaloa","d":"M244.5,224.7L244.5,224.7L244.5,224.7ZM249.6,229.2L249.6,229.2L249.6,229.2ZM244.9,227.0L244.9,227.0L244.9,227.0ZM224.8,193.4L225.8,193.6L226.2,192.0L229.0,194.3L239.9,187.2L247.3,175.2L252.0,175.2L255.3,180.8L254.7,185.8L260.4,199.6L269.2,201.7L274.3,212.6L272.2,216.7L272.0,228.8L274.7,235.9L277.8,235.9L282.2,243.4L284.3,250.9L291.3,247.6L296.7,249.9L300.4,254.9L303.0,265.6L306.6,270.5L310.1,283.9L315.7,285.8L312.1,292.9L313.9,300.3L308.6,298.3L307.7,301.2L304.1,295.2L290.0,281.0L287.7,275.7L279.1,263.2L261.2,245.7L252.9,240.5L253.0,231.7L244.3,223.3L235.6,219.3L235.0,215.7L230.6,217.3L218.9,207.6L219.0,202.0Z","c":[265.8,231.6]},{"id":"SLP","n":"San Luis Potosí","d":"M447.5,281.0L450.1,286.1L450.3,293.4L461.1,296.5L462.6,294.5L468.0,298.8L471.2,304.2L483.0,304.1L489.9,306.1L492.7,310.8L487.2,315.2L489.9,320.0L485.7,322.4L488.1,330.2L481.3,336.3L475.3,333.6L467.4,326.8L466.4,329.6L456.5,328.0L449.4,329.2L439.7,323.3L438.2,327.0L433.9,327.7L427.0,323.0L413.7,319.1L416.6,311.7L415.5,306.9L418.7,298.8L416.7,296.2L410.1,301.6L406.1,302.5L403.1,298.3L394.5,293.5L394.5,278.5L400.4,278.6L406.9,273.8L411.4,267.8L415.7,266.4L418.4,256.7L425.8,251.1L428.8,246.2L432.9,248.8L431.9,252.5L437.3,261.7L437.9,279.4L441.3,283.2Z","c":[439.8,298.9]},{"id":"ROO","n":"Quintana Roo","d":"M788.3,332.8L782.6,342.2L783.4,334.4ZM775.6,306.9L775.6,306.9L775.6,306.9ZM733.5,410.6L735.7,402.6L733.0,391.8L732.6,382.6L733.8,375.3L722.5,364.9L723.2,360.4L734.6,355.7L746.8,347.4L751.1,340.7L756.5,340.3L763.8,334.3L766.8,325.2L765.2,321.1L765.3,310.8L774.2,311.1L776.4,306.8L780.0,308.5L786.1,318.5L783.9,326.2L775.3,337.3L770.7,348.7L771.8,354.1L765.1,362.3L773.1,361.6L773.2,365.1L768.6,368.2L768.0,373.0L773.5,369.4L768.5,386.3L766.4,400.4L760.8,393.8L758.9,383.1L754.1,393.7L749.3,394.1L741.5,412.0L736.6,408.8Z","c":[755.3,361.7]},{"id":"QUE","n":"Querétaro","d":"M475.3,333.6L474.5,336.2L468.7,337.5L464.2,345.7L463.7,350.4L455.9,354.1L455.0,360.8L452.9,365.6L448.4,368.0L442.3,361.2L436.7,351.0L437.8,344.9L446.7,344.1L451.2,336.5L457.6,335.7L456.5,328.0L466.4,329.6L467.4,326.8Z","c":[454.3,346.5]},{"id":"PUE","n":"Puebla","d":"M538.8,409.7L536.1,414.3L530.1,417.8L524.1,417.9L520.5,423.1L512.8,413.6L510.8,418.1L512.1,422.8L508.2,421.1L501.1,422.2L497.8,425.2L494.4,422.4L490.0,423.6L482.9,419.1L478.8,413.7L484.7,408.5L488.2,410.4L486.7,403.4L489.4,394.9L488.1,383.0L500.6,391.7L506.7,389.5L514.8,384.0L503.0,374.6L498.7,376.4L499.5,361.2L496.7,360.1L504.0,354.2L503.8,351.2L506.6,344.8L513.5,351.9L509.8,355.5L510.5,362.0L515.5,363.8L518.4,360.0L525.7,362.3L519.6,377.9L522.5,383.8L529.3,385.7L529.8,388.3L524.3,388.4L524.4,403.7L528.4,404.8L531.3,409.0L534.1,406.8Z","c":[508.3,394.7]},{"id":"OAX","n":"Oaxaca","d":"M612.4,441.1L610.9,449.1L608.1,451.7L606.1,458.7L607.3,466.9L600.7,465.2L598.9,467.5L608.1,470.8L608.0,471.5L599.7,468.7L592.1,468L587.6,462.1L581.6,467.9L589.1,468.0L577.2,470.6L573.3,475.2L559.5,480.0L552.3,484.2L544.0,485.2L536.0,483.3L526.6,478.6L511.7,477.6L499.9,470.9L490.9,468.8L504.0,454.8L501.6,446.2L498.6,444.9L498.9,437.1L496.3,432.1L497.8,425.2L501.1,422.2L508.2,421.1L512.1,422.8L510.8,418.1L512.8,413.6L520.5,423.1L524.1,417.9L530.1,417.8L536.1,414.3L538.8,409.7L540.3,404.1L542.8,409.7L551.1,415.8L558.5,415.5L560.2,419.8L557.9,427.8L560.3,432.3L566.6,431.8L574.6,427.1L574.7,430.6L582.1,437.8L582.6,440.9Z","c":[545.9,450]},{"id":"NLE","n":"Nuevo León","d":"M455.3,160.9L450.1,166.2L454.4,166.6L456.5,177.7L454.1,181.4L457.4,183.8L456.8,188.2L461.8,191.1L463.1,195.1L470.3,203.3L476.3,207.0L483.2,204.8L484.9,207.6L485.0,217.5L488.4,219.2L482.2,225.9L476.3,230.0L472.4,228.7L470.5,235.7L456.1,245.1L458.9,250.8L458.1,256.7L463.5,265.4L453.3,268.4L451.2,278.6L447.5,281.0L441.3,283.2L437.9,279.4L437.3,261.7L431.9,252.5L432.9,248.8L428.8,246.2L429.3,245.8L428.2,236.4L430.7,236.0L429.9,230.5L433.0,226.0L442.2,228.2L441.6,223.9L434.5,219.6L433.6,215.9L429.6,215.1L429.4,208.1L418.5,196.2L422.0,190.3L431.9,187.5L434.8,182.4L434.3,177.4L431.1,178.9L427.5,173.7L430.4,169.8L435.7,169.4L438.5,161.1L448.4,161.0L452.4,158.3Z","c":[449.7,218.2]},{"id":"NAY","n":"Nayarit","d":"M308.2,298.5L308.8,308.5L306.6,300.2ZM282.7,319.4L282.7,319.4L282.7,319.4ZM293.5,331.7L293.5,331.7L293.5,331.7ZM283.1,321.5L283.1,321.5L283.1,321.5ZM341.2,303.8L342.5,308.0L341.8,316.5L346.3,317.8L347.2,322.2L351.3,322.6L354.8,328.5L354.5,334.3L349.1,337.6L344.0,338.2L342.4,346.8L343.1,353.0L335.3,344.7L328.2,341.8L320.9,344.4L316.7,349.7L311.1,347.5L318.7,339.2L319.9,329.4L314.5,325.2L309.2,315.4L308.6,298.3L313.9,300.3L312.1,292.9L315.7,285.8L325.5,289.4L327.5,294.6L324.1,297.7L326.9,301.9L329.1,298.5L337.8,306.4ZM288.4,327.1L288.4,327.1L288.4,327.1Z","c":[328.8,320.2]},{"id":"MOR","n":"Morelos","d":"M481.1,393.9L485.8,397.3L489.4,394.9L486.7,403.4L488.2,410.4L484.7,408.5L478.8,413.7L470.7,410.7L465.9,405.4L472.1,394.3Z","c":[477.8,403.3]},{"id":"MIC","n":"Michoacán","d":"M442.3,361.2L448.4,368.0L449.2,372.0L444.7,376.8L446.5,383.7L441.2,394.9L434.3,402.5L431.7,402.8L433.3,410.5L436.3,414.4L426.1,410.4L418.9,409.4L413.0,410.8L410.0,408.1L403.3,409.3L403.5,416.6L395.8,420.1L396.7,425.0L395.5,426.3L380.1,421.7L361.9,414.8L355.4,404.7L362.1,397.7L367.7,395.9L369.5,397.8L379.3,390.3L381.7,390.9L385.2,385.2L380.9,383.7L379.6,372.2L372.5,370.5L375.1,365.3L378.7,367.2L389.0,360.7L398.8,359.5L401.5,363.9L407.6,364.3L413.9,360.9L415.2,368.3L420.1,369.8L425.4,367.7L425.9,370.6L434.4,371.5L442.9,367.1Z","c":[403.3,391.6]},{"id":"MEX","n":"México","d":"M485.7,380.8L488.1,383.0L489.4,394.9L485.8,397.3L481.1,393.9L480.7,389.2L474.7,381.6L469.3,389.9L472.1,394.3L465.9,405.4L460.4,404.1L458.6,407.9L450.7,409.7L445.4,414.3L440.1,410.6L441.2,394.9L446.5,383.7L444.7,376.8L449.2,372.0L448.4,368.0L452.9,365.6L455.0,360.8L463.7,364.3L469.0,375.9L473.3,369.1L480.1,366.9L479.4,376.7L481.1,374.0L487.1,373.2Z","c":[461.4,386.9]},{"id":"JAL","n":"Jalisco","d":"M381.0,323.6L387.3,322.9L391.2,325.4L396.2,323.8L403.1,318.2L401.1,313.8L411.9,319.4L408.8,329.3L409.8,332.1L397.1,348.8L401.0,353.2L398.8,359.5L389.0,360.7L378.7,367.2L375.1,365.3L372.5,370.5L379.6,372.2L380.9,383.7L385.2,385.2L381.7,390.9L379.3,390.3L369.5,397.8L367.7,395.9L362.1,397.7L361.9,388.4L359.7,381.4L353.2,385.4L349.2,385.1L331.6,390.6L322.7,385.3L321.3,380.7L316.9,377.2L311.0,368.2L309.8,362.2L306.4,357.2L316.0,354.6L316.7,349.7L320.9,344.4L328.2,341.8L335.3,344.7L343.1,353.0L342.4,346.8L344.0,338.2L349.1,337.6L354.5,334.3L354.8,328.5L351.3,322.6L347.2,322.2L346.3,317.8L341.8,316.5L342.5,308.0L345.4,304.1L351.0,304.8L349.2,299.5L356.0,297.9L351.3,308.2L354.1,309.9L354.2,302.8L358.3,301.6L361.6,306.6L357.8,312.8L362.9,313.9L370.3,306.4L373.2,310.3L370.4,316.9L361.1,322.5L360.9,326.8L357.4,329.2L360.7,334.2L356.0,336.2L360.0,340.2L366.1,342.2L372.9,340.6L383.8,332.3Z","c":[359,354.3]},{"id":"HID","n":"Hidalgo","d":"M488.1,330.2L490.9,335.5L496.4,335.8L499.1,339.5L497.0,345.7L493.7,344.6L490.4,348.4L489.4,355.6L491.6,359.3L502.3,350.2L503.8,351.2L504.0,354.2L496.7,360.1L499.5,361.2L498.7,376.4L485.7,380.8L487.1,373.2L481.1,374.0L479.4,376.7L480.1,366.9L473.3,369.1L469.0,375.9L463.7,364.3L455.0,360.8L455.9,354.1L463.7,350.4L464.2,345.7L468.7,337.5L474.5,336.2L475.3,333.6L481.3,336.3Z","c":[480.7,355.5]},{"id":"GRO","n":"Guerrero","d":"M465.9,405.4L470.7,410.7L478.8,413.7L482.9,419.1L490.0,423.6L494.4,422.4L497.8,425.2L496.3,432.1L498.9,437.1L498.6,444.9L501.6,446.2L504.0,454.8L490.9,468.8L485.0,462.5L482.9,463.3L467.1,459.4L462.9,459.4L453.9,453.8L425.1,443.7L421.3,439.6L409.8,433.0L405.6,427.2L396.7,425.0L395.8,420.1L403.5,416.6L403.3,409.3L410.0,408.1L413.0,410.8L418.9,409.4L426.1,410.4L436.3,414.4L433.3,410.5L431.7,402.8L434.3,402.5L441.2,394.9L440.1,410.6L445.4,414.3L450.7,409.7L458.6,407.9L460.4,404.1Z","c":[455.6,432.7]},{"id":"GUA","n":"Guanajuato","d":"M456.5,328.0L457.6,335.7L451.2,336.5L446.7,344.1L437.8,344.9L436.7,351.0L442.3,361.2L442.9,367.1L434.4,371.5L425.9,370.6L425.4,367.7L420.1,369.8L415.2,368.3L413.9,360.9L407.6,364.3L401.5,363.9L398.8,359.5L401.0,353.2L397.1,348.8L409.8,332.1L408.8,329.3L411.9,319.4L413.7,319.1L427.0,323.0L433.9,327.7L438.2,327.0L439.7,323.3L449.4,329.2Z","c":[424.8,345.4]},{"id":"DUR","n":"Durango","d":"M355.2,186.1L362.9,192.0L366.4,211.8L362.7,218.5L365.3,221.6L362.3,226.5L369.4,237.4L377.5,240.5L379.1,235.0L382.1,233.0L385.9,238.2L386.6,249.5L378.2,250.7L373.5,249.0L364.7,248.9L356.3,258.1L353.9,258.8L355.2,271.3L350.0,276.5L346.5,287.2L346.7,297.9L341.2,303.8L337.8,306.4L329.1,298.5L326.9,301.9L324.1,297.7L327.5,294.6L325.5,289.4L315.7,285.8L310.1,283.9L306.6,270.5L303.0,265.6L300.4,254.9L296.7,249.9L291.3,247.6L284.3,250.9L282.2,243.4L277.8,235.9L274.7,235.9L272.0,228.8L272.2,216.7L274.3,212.6L283.8,215.7L290.2,209.1L289.0,205.1L291.4,198.9L295.2,196.0L297.3,184.6L300.1,182.4L314.8,192.5L318.1,193.3L327.3,191.5L331.8,194.8L335.1,194.2L337.5,188.9L342.5,186.6Z","c":[327.2,236]},{"id":"CMX","n":"Ciudad de México","d":"M481.1,393.9L472.1,394.3L469.3,389.9L474.7,381.6L480.7,389.2Z","c":[475.4,389.4]},{"id":"COL","n":"Colima","d":"M362.1,397.7L355.4,404.7L349.8,400.1L331.6,390.6L349.2,385.1L353.2,385.4L359.7,381.4L361.9,388.4Z","c":[351.1,392.6]},{"id":"COA","n":"Coahuila","d":"M452.4,158.3L448.4,161.0L438.5,161.1L435.7,169.4L430.4,169.8L427.5,173.7L431.1,178.9L434.3,177.4L434.8,182.4L431.9,187.5L422.0,190.3L418.5,196.2L429.4,208.1L429.6,215.1L433.6,215.9L434.5,219.6L441.6,223.9L442.2,228.2L433.0,226.0L429.9,230.5L430.7,236.0L428.2,236.4L429.3,245.8L424.9,246.8L419.6,241.0L409.5,241.2L402.2,233.1L397.3,230.5L388.1,229.8L382.1,233.0L379.1,235.0L377.5,240.5L369.4,237.4L362.3,226.5L365.3,221.6L362.7,218.5L366.4,211.8L362.9,192.0L355.2,186.1L351.9,180.1L356.2,177.0L354,175.5L351.6,159.5L351.8,153.9L358.2,142.5L360.5,136.2L363.1,134.9L367.5,124.2L373.9,125.4L376.8,120.1L379.8,118.9L381.3,110.7L384.2,105.3L390.8,104.1L392.9,101.1L397.2,103.2L413.3,103.5L418.3,110.8L422.7,112.4L431.9,121.9L436.3,134.0L440.3,138.4L443.4,146.7L446.5,148.0Z","c":[398.2,172]},{"id":"CHH","n":"Chihuahua","d":"M367.5,124.2L363.1,134.9L360.5,136.2L358.2,142.5L351.8,153.9L351.6,159.5L354,175.5L356.2,177.0L351.9,180.1L355.2,186.1L342.5,186.6L337.5,188.9L335.1,194.2L331.8,194.8L327.3,191.5L318.1,193.3L314.8,192.5L300.1,182.4L297.3,184.6L295.2,196.0L291.4,198.9L289.0,205.1L290.2,209.1L283.8,215.7L274.3,212.6L269.2,201.7L260.4,199.6L254.7,185.8L255.3,180.8L252.0,175.2L247.3,175.2L240.2,173.3L242.1,164.5L239.3,157.0L236.2,154.6L236.7,150.6L232.8,146.2L231.9,141.9L236.8,139.5L239.2,141.0L244.7,137.7L241.1,134.4L242.9,120.2L245.9,115.8L246.9,108.7L245.8,94.4L247.1,85.8L244.4,71.9L242.0,68.7L244.1,65.8L242.1,57.5L255.3,58.1L255.8,45.8L294.9,47.2L298.3,48.7L301.9,55.7L308.0,59.1L316.1,67.1L320.6,73.4L329.7,78.2L333.1,86.5L336.5,90.6L337.1,99.8L340.3,106.3L349.0,113.9L363.5,120.5Z","c":[294.3,128.6]},{"id":"CHP","n":"Chiapas","d":"M608.0,471.5L608.1,470.8L608.0,471.5ZM607.3,466.9L606.1,458.7L608.1,451.7L610.9,449.1L612.4,441.1L619.0,435.6L623.9,427.5L624.8,418.9L634.1,420.2L632.8,425.0L635.4,430.0L641.8,433.6L652.7,423.8L655.7,419.5L664.9,418.2L669.0,422.7L670.5,429.2L676.3,431.0L676.3,434.2L680.0,436.1L686.2,443.2L695.7,447.2L697.9,452.8L704.1,454.8L704.1,464.5L670.5,466.7L659.1,489.9L663.6,494.9L660.7,501.7L660.2,510L637.1,489.3L629.3,482.9L615.4,474.0L613.4,470.3Z","c":[650.1,456.9]},{"id":"CAM","n":"Campeche","d":"M670.2,392.9L670.2,392.9L670.2,392.9ZM695.2,335.8L695.6,343.3L703.6,346.1L705.2,344.1L711.8,353.4L715.9,355.2L722.5,364.9L733.8,375.3L732.6,382.6L733.0,391.8L735.7,402.6L733.5,410.6L733.8,414.1L686.3,418.1L676.9,412.6L670.2,412.4L670.2,416.4L661.9,416.1L657.2,412.5L654.0,405.7L647.7,401.9L646.3,398.1L657.9,396.0L662.5,401.0L669.6,402.2L676.3,398.5L677.8,393.7L673.4,389.7L680.1,385.4L689.7,375.4L689.4,367.0L695.3,358.8L692.9,344.2Z","c":[701.6,389.4]},{"id":"BCS","n":"Baja California Sur","d":"M71.5,399.2L71.5,399.2L71.5,399.2ZM174.7,380.7L174.7,380.7L174.7,380.7ZM187.4,218.8L187.4,218.8L187.4,218.8ZM83.1,140.4L83.1,140.4L83.1,140.4ZM152.0,217.6L150.4,227.3L146.8,230.3ZM186.0,207.9L186.0,207.9L186.0,207.9ZM179.6,207.4L179.6,207.4L179.6,207.4ZM108.8,141.2L109.4,141.2L140.4,143.8L141.7,145.8L145.4,152.4L151.5,156.4L153.7,164.8L159.8,168.5L158.0,171.6L161.2,175.8L160.2,178.8L163.9,184.0L162.6,174.1L168.5,180.0L168.1,183.4L173.3,197.3L173.1,205.4L177.2,212.4L179.7,212.8L181.7,223.0L187.3,232.5L185.0,237.4L186.0,244.7L193.8,251.8L197.0,245.7L206.6,254.0L206.4,257.9L209.6,265.4L214.8,268.3L215.2,276.7L204.2,285.5L199.2,283.9L197.1,273.9L194.1,267.8L185.6,261.4L176.5,250.8L163.3,241.2L162.3,237.5L158.9,237.9L155.8,232.5L149.8,228.9L153.3,217.5L154.3,207.4L151.8,198.1L147.1,190.8L144.9,191.0L131.8,179.8L130.3,169.2L126.9,175.5L122.4,173.1L119.7,176.1L114.9,169.6L110.1,168.1L105.9,163.1L98.9,160.1L98.9,155.1L93.2,150.9L86.8,142.9L104.4,145.5L113.8,152.6L114.7,145.7L107.4,146.6ZM194.2,240.4L194.2,240.4L194.2,240.4ZM128.2,176.1L128.2,176.1L128.2,176.1ZM154.1,238.1L159.8,240.8L160.6,244.1ZM204.5,245.4L204.5,245.4L204.5,245.4ZM179.5,197.8L175.1,204.2L176.7,198.3ZM153.7,206.6L153.7,206.6L153.7,206.6ZM186.6,224.4L186.6,224.4L186.6,224.4ZM193.4,238.8L193.4,238.8L193.4,238.8ZM162.1,158.8L162.1,158.8L162.1,158.8ZM156.8,163.8L156.8,163.8L156.8,163.8ZM169.1,393.1L169.1,393.1L169.1,393.1Z","c":[156.1,201.1]},{"id":"BCN","n":"Baja California","d":"M140.4,123.9L140.4,123.9L140.4,123.9ZM126.4,98.9L130.1,101.7L130.9,106.3L134.8,106.8L135.7,115.1L129.3,108.5L125.3,101.9ZM84.3,127.4L84.2,136.8L80.2,134.4ZM109.4,141.2L108.8,141.2L109.4,141.2ZM148.5,123.0L148.5,123.0L148.5,123.0ZM103.9,16.1L101.6,16.0L98.2,21.6L97.6,30.6L102.6,34.6L102.5,40.0L99.1,49.6L99.8,56.9L102.3,58.9L103.3,71.1L101.7,79.3L104.3,85.7L121.0,102.3L124.0,106.1L125.1,115.2L133.3,120.1L135.0,128.2L141.0,131.0L141.7,145.8L140.4,143.8L110.1,141.3L110.0,133.0L112.3,128.2L109.6,122.0L100.4,112.5L92.2,100.6L80.5,93.1L76.4,88.7L74.3,82.9L75.3,74.4L70.0,68.6L70.7,60.3L64.5,54.3L65.7,49.4L58.6,38.4L60.3,29.5L54.9,24.6L54.2,18.3L52.0,16.9L50.7,10L106.6,10.2ZM14.2,97.9L12.8,106.2L11.6,98.7Z","c":[93.3,69.7]},{"id":"AGU","n":"Aguascalientes","d":"M381.0,323.6L378.6,321.3L384.1,309.3L392.8,303.9L399.4,309.3L401.1,313.8L403.1,318.2L396.2,323.8L391.2,325.4L387.3,322.9Z","c":[391.2,315.7]}];
+const GEO_MXN=[{"id":"840","d":"M-12.3,-472.8L43.5,-465.2L102.1,-458.4L121.6,-456.4L182.0,-451.2L240.5,-447.3L300.1,-444.5L359.7,-443.1L427.3,-442.9L495.4,-444.4L536.5,-446.0L536.0,-457.7L542.7,-458.2L547.1,-441.7L553.5,-436.9L567.5,-435.8L588.2,-432.3L608.2,-424.3L624.1,-429.4L649.4,-423.7L655.9,-424.5L673.0,-434.7L692.8,-425.7L713.6,-416.2L730.9,-408.1L747.7,-400.5L750.6,-393.0L755.7,-390.6L754.8,-387.6L760.4,-387.3L764.0,-390.9L765.9,-384.0L770.5,-379.9L776.1,-380.6L779.6,-377.4L777.7,-371.9L800.8,-361.0L808.8,-335.3L816.4,-310.8L812.7,-293.1L804.9,-276.0L801.6,-265.4L801.6,-262.4L804.5,-258.6L812.2,-255.1L817.6,-255.9L840.0,-274.5L861.0,-282.2L886.1,-300.6L886.0,-303.6L882.7,-312.0L878.5,-317.1L887.1,-323.1L907.5,-326.7L926.5,-329.9L931.1,-342.3L933.2,-345.0L951.1,-369.6L959.2,-376.7L990.1,-382.9L1027.4,-390.8L1027.9,-398.3L1034.1,-401.1L1041.7,-407.5L1045.9,-422.1L1046.9,-446.0L1056.9,-471.4L1065.2,-465.3L1077.3,-473.3L1088.1,-467.0L1097.6,-427.8L1114.6,-414.9L1120.4,-406.4L1102.3,-387.4L1083.7,-372.7L1064.0,-359.3L1056.9,-340.1L1054.9,-333.0L1057.9,-318.0L1068.1,-304.7L1076.9,-306.0L1072.4,-315.7L1080.0,-310.9L1080.2,-302.5L1067.1,-294.8L1056.9,-293.1L1042.5,-284.9L1033.7,-281.6L1021.7,-277.7L1005.8,-266.0L1035.7,-277.6L1043.0,-273.7L1015.2,-259.2L1001.7,-256.4L1001.6,-259.9L996.8,-250.9L1003.3,-250.9L1002.6,-230.0L991.1,-205.6L988.2,-212.5L983.2,-213.0L974.8,-218.6L982.1,-204.5L988.3,-200.6L990.7,-190.2L985.8,-178.2L977.6,-153.9L975.4,-154.6L978.7,-174.6L965.6,-183.1L958.9,-205.7L956.9,-192.9L964.7,-176.2L949.6,-178.0L966.2,-171.7L971.9,-145.7L978.5,-144.9L982.5,-135.9L990.7,-109.1L980.2,-86.3L958.4,-74.1L946.4,-55.6L935.4,-52.0L925.5,-40.1L923.8,-30.4L901.5,-8.9L890.4,5.9L881.9,23.6L881.1,43.3L888.0,61.6L899.2,83.5L912.6,101.0L914.4,112.7L930.5,142.1L932.5,160.3L933.1,170.9L929.6,188.2L922.8,192.8L910.4,191.3L904.8,180.0L894.8,175.2L878.7,153.8L864.7,134.8L859.7,124.7L862.1,106.1L853.6,92.1L832.2,71.9L822.6,68.9L800.3,84.1L796.0,83.2L783.1,71.9L767.6,66.8L741.5,73.0L720.3,72.1L702.5,75.6L693.3,80.7L698.1,87.5L698.7,98.6L704.2,103.6L700.0,107.5L690.8,104.3L682.4,110.2L665.1,110.7L646.3,97.7L625.9,102.5L608.3,97.3L593.7,100.1L574.1,107.5L553.4,128.7L530.1,141.5L517.4,154.9L512.4,167.3L512.7,186.1L514.3,199.1L519.2,208.2L509.7,209.3L492.3,203.8L473.0,195.8L466.0,183.2L460.3,164.3L445.9,149.0L437.4,133.1L425.3,114.6L408.5,103.7L389.1,104.2L374.0,125.7L354.4,117.3L342.2,108.9L336.6,93.8L329.1,79.4L315.4,67.0L303.7,58.1L295.4,48.1L255.0,46.6L254.5,57.9L235.9,57.0L189.5,54.6L137.7,31.6L104.0,15.3L106.6,10.1L77.0,10.4L50.6,9.8L48.3,-4.5L35.2,-21.8L24.9,-26.3L23.3,-34.5L10.7,-37.4L3.5,-45.7L-17.1,-51.1L-22.3,-56.3L-23.0,-71.7L-41.0,-102.3L-54.0,-143.3L-52.3,-149.6L-60.6,-160.2L-74.0,-186.0L-73.5,-209.3L-82.5,-226.4L-74.2,-248.9L-71.1,-273.3L-74.4,-296.1L-62.0,-321.8L-55.5,-347.5L-49.0,-373.4L-46.6,-413.1L-49.0,-439.4L-52.5,-454.1L-49.2,-459.5L-22.1,-445.0L-15.5,-415.5L-9.4,-422.6L-9.2,-447.3ZM-931.7,116.5L-928.3,120.3L-925.8,125.2L-923.1,136.4L-924.3,137.6L-935.7,139.4L-944.9,140.4L-950.1,143.2L-954.6,137.3L-951.1,130.5L-951.4,119.7L-949.1,117.4L-943.4,114.8L-943.1,109.2L-940.8,107.4L-939.1,108.6ZM-938.9,93.6L-942.1,95.9L-950.8,94.5L-952.7,87.6L-954.6,84.4L-954.2,82.8L-951.1,81.5L-943.6,87.3ZM-952.8,76.0L-954.6,78.4L-966.9,72.6L-963.9,70.3ZM-976.9,50.4L-975.7,52.8L-972.3,63.9L-974.2,64.8L-975.7,63.8L-983.5,59.5L-984.1,52.7L-984.6,51.3ZM-1002.8,24.9L-1004.9,30.9L-1008.7,32.2L-1014.5,24.4L-1012.6,23.1L-1008.0,22.1ZM-678.4,-1058.2L-667.4,-1049.4L-671.6,-1036.7L-683.6,-1036.4L-691.1,-1047.2L-696.3,-1060.3ZM-496.7,-890.6L-486.3,-884.3L-482.8,-871.9L-502.9,-862.3L-524.3,-856.9L-529.9,-868.1L-526.9,-883.8L-507.4,-889.1ZM-169.8,-1248.2L-210.6,-1102.4L-267.0,-900.2L-250.9,-894.7L-237.0,-881.0L-229.0,-863.2L-219.5,-837.4L-198.2,-851.9L-178.5,-858.7L-173.6,-839.2L-165.2,-822.8L-152.7,-804.3L-147.0,-778.2L-136.9,-737.1L-110.6,-710.4L-114.1,-690.1L-127.3,-676.8L-134.8,-690.8L-148.7,-704.3L-147.8,-733.3L-164.9,-764.5L-167.4,-797.6L-183.6,-803.5L-211.0,-811.0L-228.9,-825.6L-255.1,-869.2L-269.5,-880.0L-295.5,-900.2L-319.4,-904.2L-347.3,-929.6L-362.2,-950.2L-382.7,-949.1L-387.0,-924.8L-396.9,-925.8L-418.3,-925.5L-436.7,-919.6L-457.5,-919.2L-452.9,-939.2L-434.0,-968.8L-413.1,-972.9L-414.6,-982.9L-441.8,-971.7L-461.0,-953.8L-493.2,-939.5L-487.0,-919.4L-511.3,-902.5L-534.3,-896.2L-554.8,-893.3L-564.5,-881.3L-597.2,-876.1L-608.4,-864.0L-633.7,-859.5L-644.4,-866.7L-663.8,-865.2L-685.5,-862.7L-704.0,-859.3L-737.0,-864.3L-737.3,-870.4L-712.5,-875.5L-691.9,-877.1L-666.6,-885.4L-644.3,-879.7L-630.6,-888.5L-599.7,-896.9L-593.4,-901.6L-576.6,-907.4L-564.1,-929.9L-548.2,-945.2L-571.0,-943.3L-574.0,-950.9L-587.6,-943.2L-591.5,-963.6L-600.7,-954.3L-600.1,-972.5L-621.8,-967.0L-631.7,-971.4L-624.8,-990.7L-616.8,-1000.9L-622.0,-1016.8L-645.4,-1020.1L-651.9,-1041.1L-659.0,-1053.8L-650.5,-1071.9L-655.9,-1091.2L-641.1,-1107.0L-620.0,-1119.5L-606.7,-1134.0L-593.3,-1130.7L-585.4,-1120.7L-565.9,-1131.4L-556.2,-1123.6L-540.1,-1129.1L-536.1,-1146.0L-541.7,-1155.9L-524.9,-1164.5L-534.1,-1168.0L-553.2,-1167.5L-561.2,-1161.9L-569.4,-1174.8L-592.1,-1180.6L-609.6,-1199.1L-609.1,-1215.8L-617.4,-1244.8L-590.2,-1249.6L-550.2,-1251.9L-538.5,-1246.5L-548.6,-1229.5L-517.5,-1217.1L-519.3,-1244.6L-530.5,-1266.4L-532.0,-1289.3L-538.0,-1311.3L-551.3,-1332.0L-534.2,-1347.9L-509.5,-1337.7L-484.3,-1347.3L-472.5,-1364.7L-450.4,-1377.3L-435.4,-1376.1L-402.4,-1383.2L-391.3,-1375.3L-361.9,-1388.9L-345.1,-1372.3L-342.5,-1349.9L-333.4,-1355.6L-311.5,-1344.6L-315.7,-1335.4L-297.3,-1320.8L-281.8,-1320.1L-257.0,-1297.2L-231.4,-1284.7L-222.3,-1276.0L-201.5,-1277.0L-183.7,-1258.3ZM-702.4,-1207.8L-696.7,-1196.8L-685.8,-1195.5L-678.4,-1180.6L-665.9,-1168.8L-668.9,-1165.8L-683.7,-1164.6L-691.3,-1177.5L-693.9,-1186.3L-707.8,-1191.2L-709.8,-1195.9Z"},{"id":"320","d":"M660.1,509.8L660.3,501.8L662.9,495.2L658.8,490.3L669.9,467.2L703.6,464.5L703.5,455.2L699.1,453.9L695.7,448.2L685.6,442.7L675.2,434.3L686.9,433.4L685.8,418.0L710.0,416.0L733.9,414.3L735.7,435.8L736.4,466.8L744.2,466.1L753.1,470.2L755.0,465.9L763.1,468.7L752.1,480.2L740.3,489.0L738.9,494.4L741.5,499.6L736.6,507.0L730.5,509.3L732.2,512.3L727.5,515.8L719.0,523.5L718.5,527.6L704.5,523.9L687.8,524.7L675.2,520.1Z"},{"id":"084","d":"M733.9,414.3L733.4,410.3L736.3,408.8L741.4,411.6L749.0,394.3L753.9,393.5L754.4,397.5L759.3,397.1L759.6,404.5L756.5,416.7L759.1,420.6L757.4,430.7L759.3,433.1L757.6,447.1L753.1,454.8L748.5,456.1L744.2,466.1L736.4,466.8L735.7,435.8Z"}];
+const GEO_W=[{"id":"242","n":"Fiji","d":"M948,329L949,329L950,330L949,331L947,332L946,331L946,330L947,329ZM954,326L952,327L950,328L950,327L952,326L953,326L955,325L955,325L954,326ZM5,325L5,325L5,325L5,325L5,326L5,326L5,326L5,325Z","c":[911.5,329.2]},{"id":"834","n":"Tanzania","d":"M570,278L571,278L580,285L580,287L584,290L583,293L583,295L585,296L585,297L584,299L584,300L584,301L585,303L586,306L587,307L584,309L582,310L580,310L579,311L577,311L576,311L573,311L571,311L571,307L570,305L569,304L567,304L565,303L563,302L562,302L561,301L560,297L558,295L558,294L558,292L558,289L559,289L560,288L561,286L562,286L562,285L561,284L561,283L562,282L562,280L561,279L562,278L565,278Z","c":[572.6,295]},{"id":"732","n":"W. Sahara","d":"M457,189L457,190L457,190L457,195L449,195L448,203L446,203L445,205L446,209L435,209L435,210L435,209L435,209L441,209L441,207L442,206L443,202L447,198L448,194L449,194L450,192L452,192L453,192L454,192L455,191L457,191L457,189Z","c":[448.4,200.4]},{"id":"124","n":"Canada","d":"M190,124L190,124L187,121L186,119L183,118L183,116L185,114L182,112L184,110L182,108L183,106L185,105L187,103L184,101L184,98L184,96L183,95L183,94L183,92L180,93L176,95L176,93L175,92L174,91L172,91L186,75L195,65L198,66L200,67L202,67L205,66L208,65L211,66L215,65L219,64L219,65L221,64L223,63L224,63L225,66L230,64L228,66L231,66L232,65L235,65L237,66L241,67L243,67L245,67L247,69L243,70L246,70L252,70L254,70L255,71L259,70L257,69L259,68L262,68L264,68L265,68L266,70L268,69L271,71L275,70L278,70L278,69L281,68L283,69L281,72L284,69L286,69L288,67L287,65L286,64L288,61L292,59L294,60L295,61L296,64L293,65L297,66L295,68L299,66L300,68L298,70L299,72L303,70L305,68L307,65L310,65L313,65L315,67L314,68L312,69L313,71L312,72L306,74L303,74L302,74L300,75L297,77L296,78L292,80L289,80L287,82L286,83L283,84L279,86L275,89L273,91L271,95L274,95L273,98L273,100L277,99L280,101L282,102L283,103L285,104L287,105L291,105L293,105L292,108L291,111L291,114L294,117L296,116L298,113L299,108L298,107L302,105L306,103L308,101L308,100L308,97L306,95L310,92L310,89L312,85L314,84L317,85L319,85L321,85L323,86L325,87L325,88L329,89L327,91L327,94L329,95L330,97L333,95L337,92L339,91L339,93L341,97L342,100L341,102L343,104L345,105L348,106L349,107L349,109L351,110L352,111L351,114L349,115L347,116L343,117L339,120L335,120L330,120L327,120L324,120L322,122L318,123L314,127L310,130L312,130L317,126L323,123L327,123L328,124L325,126L325,130L325,132L328,134L332,133L335,130L335,132L336,133L333,135L327,137L324,138L321,140L319,140L320,137L325,135L321,135L318,135L317,134L318,129L317,129L316,129L315,128L313,131L311,133L310,134L309,135L308,135L307,136L303,136L299,136L298,136L295,139L295,139L293,140L291,140L289,140L288,140L288,141L288,142L288,142L284,144L281,144L278,146L277,146L277,145L276,145L277,145L277,144L279,142L280,140L281,137L281,135L279,133L280,133L279,132L279,132L279,132L279,131L278,131L277,131L278,131L277,131L277,130L276,129L274,128L272,127L271,126L268,127L267,127L265,126L263,126L261,125L259,125L257,125L257,124L257,122L256,122L255,124L251,124L243,124L235,124L227,124L220,124L213,124L206,124L204,124L197,124ZM299,85L302,83L304,83L304,84L301,86L299,85ZM323,57L322,56L323,55L324,55L328,55L330,56L330,57L328,57L326,57L324,57ZM307,86L308,85L309,85L309,86L307,87L307,87L306,86ZM300,52L298,53L296,53L294,52L296,51L299,50L300,51ZM305,46L304,46L301,46L301,45L304,45L305,45ZM302,43L303,44L302,45L299,45L298,44L298,44L299,43L301,43ZM310,53L307,53L302,52L303,51L303,50L302,49L299,48L297,48L299,47L302,47L304,47L307,47L308,48L307,49L309,50L310,50L312,50L315,51L318,50L322,50L325,50L327,51L327,52L325,53L322,53L319,53L314,53ZM274,44L276,45L275,45L271,46L269,45L271,45ZM276,43L278,43L275,44L272,44L273,43L275,43ZM350,117L349,119L346,121L348,120L350,121L349,122L350,123L352,122L354,123L353,125L354,125L354,126L355,128L353,131L352,131L350,130L351,128L351,127L348,130L346,130L348,129L346,128L343,128L339,128L339,127L340,126L340,125L342,123L346,119L348,117L350,116L351,116ZM303,77L305,78L307,79L307,80L308,80L309,81L307,82L304,81L304,80L301,82L297,83L297,81L294,82L297,80L298,78L300,76L302,76L301,77L303,77ZM325,58L327,57L331,59L333,60L332,61L336,60L338,62L342,63L343,64L344,67L340,68L344,69L346,70L348,73L352,73L350,75L345,78L343,77L341,74L338,74L337,76L339,77L341,79L342,79L342,82L340,84L338,83L333,81L335,84L337,85L337,86L332,85L328,83L326,82L327,81L324,80L322,79L321,79L315,80L314,79L316,77L320,77L325,76L324,76L326,74L330,72L330,70L329,69L327,68L323,67L325,67L324,65L322,65L321,64L319,65L316,65L309,65L305,64L302,63L301,62L304,61L301,61L302,59L305,56L308,55L313,55L311,56L311,58L314,56L320,55L322,57L320,59ZM297,54L301,54L304,55L300,57L297,57L294,59L291,59L292,57L293,56L295,55ZM247,49L252,47L258,46L261,46L263,45L261,47L259,48L257,48L253,49L249,50ZM177,109L179,108L176,112L177,114L176,114L175,113L175,111L175,111L175,109L176,108ZM287,42L290,42L295,43L295,44L295,45L292,45L290,44L286,44L288,43L286,43ZM188,125L187,126L183,124L183,123L182,122L182,121L180,121L180,119L180,118L183,119L184,119L186,120L186,121L186,122L188,123ZM246,53L248,54L253,54L254,55L255,56L252,56L245,58L241,60L240,61L234,62L234,61L231,60L233,59L236,57L239,55L239,54ZM275,50L277,49L279,49L278,51L276,52L269,52L263,53L260,53L261,52L266,51L257,52L255,51L260,49L262,48L267,49L269,50L272,51L271,48L274,47L275,48L275,49ZM272,57L273,58L272,60L271,62L274,63L276,64L275,66L272,66L273,67L271,68L268,67L265,67L262,67L258,68L252,68L249,68L248,67L246,66L244,67L243,65L245,64L249,64L251,64L254,63L251,63L246,63L244,63L243,62L249,61L246,61L243,60L246,58L249,57L255,56L257,56L255,58L260,57L261,58L265,57L266,58L265,60L267,59L268,57L270,56ZM283,57L282,56L285,55L287,55L291,55L291,56L288,57L290,58L288,60L284,61L282,61L282,60L278,58L279,57ZM272,55L275,55L276,56L273,57L272,56ZM294,48L295,49L294,50L292,52L288,52L287,52L288,50L284,50L286,49L288,49L291,48L294,48ZM307,39L309,38L311,38L311,38L315,37L316,39L319,39L322,39L322,41L323,42L320,42L315,44L312,44L308,44L307,43L308,42L310,42L307,42L305,41L305,40ZM318,36L321,36L324,36L327,35L331,35L333,35L334,35L337,34L339,34L343,34L348,34L349,34L354,34L358,34L361,34L366,34L369,34L372,35L371,35L366,36L362,37L360,37L364,37L358,38L355,39L351,41L347,41L345,41L339,42L342,42L340,42L341,43L338,44L335,45L334,46L330,46L330,47L334,47L333,47L327,49L323,48L317,49L314,48L311,48L312,47L315,47L316,45L317,45L321,46L320,44L317,44L320,43L323,42L324,42L323,41L323,40L328,40L329,40L333,39L329,39L322,39L320,38L319,37L318,37ZM325,71L323,72L321,72L321,71L322,69L324,69L326,70L325,71ZM285,66L286,67L284,68L282,67L280,67L278,66L280,65L282,64L284,65L285,65ZM328,121L329,121L332,122L334,123L334,123L333,123L330,122ZM327,130L328,131L329,131L331,131L330,133L329,133L326,132L326,131Z","c":[267.2,92.8]},{"id":"840","n":"United States of America","d":"M190,124L197,124L204,124L206,124L213,124L220,124L227,124L235,124L243,124L251,124L255,124L256,122L257,122L257,124L257,125L259,125L261,125L263,126L265,126L267,127L268,127L271,126L272,127L274,128L276,129L277,130L277,131L278,131L277,131L278,131L279,131L279,132L279,132L279,132L280,133L279,133L281,135L281,137L280,140L279,142L277,144L277,145L276,145L277,145L277,146L278,146L281,144L284,144L288,142L288,142L288,141L288,140L289,140L291,140L293,140L295,139L295,139L298,136L299,136L303,136L307,136L308,135L309,135L310,134L311,133L313,131L315,128L316,129L317,129L318,129L317,134L318,135L318,136L315,138L312,139L310,140L308,142L307,142L307,144L307,146L308,146L308,144L309,145L308,146L307,147L305,146L303,147L302,147L301,147L299,148L302,148L303,148L299,149L298,149L298,149L297,150L298,150L297,152L294,154L294,154L294,153L293,153L293,154L294,155L293,156L292,157L290,160L290,160L291,157L290,156L291,154L290,155L290,157L288,157L290,158L289,160L290,161L290,162L290,165L287,167L285,168L283,170L281,170L280,171L279,172L276,174L274,176L272,178L272,180L272,182L272,185L273,187L272,188L273,192L273,194L272,195L271,197L270,197L269,197L269,196L268,195L267,192L266,190L266,189L267,187L267,185L265,182L265,182L262,183L261,183L260,182L259,181L256,181L254,181L252,181L251,182L251,182L250,184L251,184L250,185L249,184L248,185L247,185L245,183L243,184L241,183L239,183L237,184L234,186L231,187L230,189L229,190L228,192L228,194L228,195L227,195L226,194L224,193L223,192L223,190L222,188L222,186L221,184L219,183L217,183L215,185L213,184L212,183L212,182L211,180L210,179L209,178L209,177L204,177L204,178L202,178L197,178L192,176L188,174L189,174L185,174L182,174L183,173L182,171L180,171L180,170L179,169L179,169L176,168L176,168L176,166L175,163L174,159L175,158L174,157L173,154L174,152L173,150L175,148L176,145L177,143L179,140L181,137L182,134L184,130L185,128L185,126L185,126L188,127L188,129L189,129L190,126ZM72,213L73,213L73,214L73,215L73,215L72,216L71,216L71,217L70,216L70,215L70,214L70,214L71,213L71,213L71,212L71,212ZM71,211L71,211L70,211L70,211L69,211L70,210L70,210L71,210ZM70,210L69,210L68,210L68,209ZM67,208L67,208L67,209L67,209L67,209L66,209L66,208L66,208ZM64,206L64,207L63,207L62,207L63,207L63,206ZM116,90L118,91L117,92L115,92L114,92L114,91ZM139,97L141,98L141,98L138,100L134,101L134,100L135,99L138,98ZM195,65L186,75L172,91L174,91L175,92L176,93L176,95L180,93L183,92L183,94L183,95L184,96L184,98L184,101L187,103L185,105L183,106L183,105L181,104L182,102L181,100L182,97L180,97L177,97L175,96L173,93L171,92L168,91L165,92L161,90L160,89L157,90L156,92L154,92L151,92L149,93L146,94L147,92L150,90L153,89L153,88L149,90L146,91L141,93L141,95L137,97L134,98L131,99L129,100L125,102L123,103L119,104L118,104L115,105L112,106L109,107L104,108L104,107L108,106L111,105L115,103L118,103L120,102L125,100L126,99L128,98L131,96L133,95L130,95L130,95L127,96L127,95L126,96L126,94L123,95L122,95L123,94L124,93L124,92L121,92L120,91L119,90L121,89L120,87L123,86L126,84L128,83L130,83L131,83L134,82L136,82L138,81L139,80L138,79L141,78L140,78L137,79L136,80L135,79L131,79L129,79L129,77L128,76L132,75L138,73L140,73L138,75L143,75L143,73L142,72L142,71L141,70L139,69L142,67L146,67L149,66L151,65L155,64L157,63L162,62L164,62L169,61L171,61L171,63L173,62L176,62L175,63L178,63L180,63L183,64L187,64L188,64L191,64L193,65ZM115,81L116,82L117,81L118,82L120,82L119,83L117,83L116,83L116,82L114,82L114,82Z","c":[219.7,139]},{"id":"398","n":"Kazakhstan","d":"M685,123L684,125L682,125L683,128L682,130L677,129L677,134L676,135L672,136L676,141L674,142L675,144L674,143L672,142L668,142L664,142L663,142L660,141L658,142L659,143L654,142L653,143L653,144L651,145L649,147L648,149L647,149L646,148L643,147L642,145L641,145L640,142L637,140L633,140L630,140L627,138L625,136L620,134L620,134L614,136L617,147L615,147L613,145L611,144L609,145L608,146L608,145L608,144L607,143L604,141L603,139L601,138L601,137L603,137L603,135L605,135L607,135L607,132L606,130L604,130L601,130L599,131L597,132L595,131L595,129L593,127L592,128L589,125L590,123L589,123L590,119L593,121L593,119L597,116L601,116L606,118L609,119L612,118L615,117L619,119L619,118L622,118L623,117L618,115L620,113L619,113L621,112L619,110L620,109L628,108L629,107L634,106L636,105L640,105L642,108L644,108L647,109L648,110L650,110L654,107L654,108L658,111L666,118L666,117L670,118L673,117L675,118L677,120L679,120L680,122L683,121Z","c":[639.1,126.9]},{"id":"860","n":"Uzbekistan","d":"M617,147L614,136L620,134L620,134L625,136L627,138L630,140L633,140L637,140L640,142L641,145L642,145L643,147L646,148L647,149L648,149L649,147L651,145L653,144L653,144L652,146L654,148L655,147L659,148L656,151L654,150L653,150L653,150L653,148L650,149L649,151L649,153L647,152L646,154L648,154L649,157L649,160L647,159L645,159L645,157L641,156L638,155L636,153L633,151L631,148L630,147L628,147L627,147L626,144L622,143L620,144L619,145L619,147Z","c":[634.6,146.3]},{"id":"598","n":"Papua New Guinea","d":"M856,283L861,285L865,287L867,289L869,290L869,292L873,294L874,296L871,296L872,298L874,300L875,303L877,303L877,305L879,305L878,306L880,307L880,308L878,308L878,307L875,307L873,306L871,304L870,303L868,300L865,299L863,300L861,301L861,303L859,304L857,303L855,303L856,293ZM887,286L888,287L888,289L887,290L887,288L886,287L885,286L884,285L882,284L883,283L884,284L885,284L886,285ZM883,293L881,294L880,295L879,295L877,294L875,293L875,292L878,292L879,292L880,291L880,291L880,292L882,292L883,291L884,290L884,288L886,288L886,288L886,290L885,292L883,292ZM892,292L893,292L894,294L895,295L895,296L894,297L893,295L892,293L892,291L892,291Z","c":[867.3,295.6]},{"id":"360","n":"Indonesia","d":"M856,283L856,293L855,303L853,301L850,300L849,301L846,301L847,299L849,298L849,294L847,292L842,289L840,289L836,286L835,288L834,288L834,287L834,285L832,284L835,283L837,283L837,282L833,282L832,280L829,280L828,278L832,277L833,276L837,278L838,279L838,284L841,286L843,282L847,280L849,280L851,281L853,283ZM812,303L812,303L812,304L810,306L808,307L808,307L808,306L809,304ZM837,296L837,294L838,293L838,292L839,293L839,294ZM794,262L793,265L795,268L794,270L797,272L794,273L793,275L793,278L791,280L791,283L790,288L789,286L786,288L785,286L783,286L782,285L779,286L778,284L776,285L774,284L773,280L772,279L771,277L771,274L771,271L772,269L773,271L775,273L776,272L778,272L780,271L781,271L783,271L786,271L787,266L788,265L789,262L792,262ZM825,284L828,285L829,287L827,286L824,286L823,286L821,286L822,284ZM818,287L816,286L816,285L819,285L819,286ZM821,268L821,270L823,270L823,272L823,274L822,274L821,276L822,278L822,278L821,276L820,272L820,270ZM808,272L811,272L814,270L814,271L812,274L810,274L807,274L803,274L801,274L800,277L802,279L804,278L809,277L809,278L808,278L806,280L804,281L806,285L806,286L808,290L808,292L807,293L806,291L807,289L804,290L804,289L804,288L802,286L803,283L801,284L801,288L801,292L799,293L798,292L799,289L798,286L797,286L797,284L798,282L798,279L800,275L800,273L802,271L804,272ZM799,307L796,305L798,304L800,305L801,306L800,307ZM803,302L804,301L807,300L806,302L802,303L799,302L799,301L801,301ZM794,301L796,301L797,302L793,303L792,303L790,303L791,301L793,301L793,300ZM769,295L769,296L774,296L775,295L780,297L780,299L784,299L788,301L784,302L782,301L779,301L776,301L774,300L771,299L769,299L768,299L763,298L763,297L760,296L762,293L766,294L768,295ZM758,278L759,281L760,282L762,283L763,285L762,288L762,293L759,293L757,291L753,288L752,286L750,284L749,281L747,277L745,275L744,272L743,270L740,268L739,265L737,263L734,260L734,258L735,258L740,259L742,262L744,264L746,265L748,269L751,269L753,271L755,273L757,275L756,277L757,278Z","c":[793.4,282.5]},{"id":"032","n":"Argentina","d":"M321,437L323,439L325,441L328,443L332,444L331,445L329,445L328,444L326,444L324,444ZM332,369L332,371L332,375L332,378L332,378L332,380L332,382L336,385L336,387L338,388L338,390L336,394L333,395L328,396L325,396L326,397L326,400L327,401L326,402L323,403L321,402L320,402L321,406L323,406L324,405L325,407L323,408L321,410L322,413L322,415L320,415L318,416L318,418L321,421L323,421L323,424L321,426L321,429L319,430L318,432L320,435L322,437L321,436L319,436L313,436L312,434L311,432L309,432L308,431L307,428L308,426L308,424L308,423L308,420L308,416L307,414L308,414L307,413L306,412L307,411L305,410L304,406L304,406L303,402L303,399L303,396L304,395L302,392L302,389L303,387L303,384L303,381L303,378L302,378L300,372L301,369L300,366L301,363L302,360L303,358L302,357L303,356L302,351L305,350L305,346L305,346L306,343L310,343L312,346L312,343L315,343L316,344L321,349L324,350L327,352L330,353L330,354L328,359L331,360L334,361L336,360L338,358L338,355L339,354L341,356L341,359L339,360L338,362L335,365Z","c":[317.2,384.5]},{"id":"152","n":"Chile","d":"M321,437L324,444L326,444L328,444L327,445L326,446L324,446L323,446L321,445L319,445L315,443L312,441L308,438L310,439L314,441L317,442L318,440L318,438L320,437ZM296,330L298,332L298,334L300,335L299,338L301,342L303,346L305,346L305,346L305,350L302,351L303,356L302,357L303,358L302,360L301,363L300,366L301,369L300,372L302,378L303,378L303,381L303,384L303,387L302,389L302,392L304,395L303,396L303,399L303,402L304,406L304,406L305,410L307,411L306,412L307,413L308,414L307,414L308,416L308,420L308,423L308,424L308,426L307,428L308,431L309,432L311,432L312,434L313,436L319,436L321,436L319,436L318,437L317,438L317,441L316,441L313,440L310,438L307,436L305,434L305,433L303,431L301,426L301,423L303,420L299,420L301,417L300,412L303,413L302,407L300,406L301,410L299,409L299,405L298,399L299,397L297,394L296,390L297,390L297,385L298,380L298,376L297,371L297,368L296,365L297,361L296,355L296,348L296,341L296,336L294,332L296,331Z","c":[304.2,394.2]},{"id":"180","n":"Dem. Rep. Congo","d":"M558,289L558,292L558,294L558,295L560,297L561,301L560,301L557,301L556,301L555,303L556,305L555,309L555,312L555,312L557,313L558,313L558,316L556,316L555,314L554,313L552,313L552,311L550,312L548,312L547,310L545,310L544,310L544,309L543,309L542,309L540,309L539,309L538,309L539,306L538,305L538,303L538,301L537,300L537,298L534,298L534,297L533,297L533,297L531,297L531,299L530,300L529,299L528,300L526,300L525,298L524,297L524,296L523,293L515,293L514,294L513,294L512,294L512,293L513,293L513,291L513,291L514,290L515,290L516,289L517,289L517,290L518,291L520,289L522,287L522,286L522,284L523,281L525,279L526,277L527,276L527,275L527,274L527,273L527,270L528,268L529,266L529,264L529,262L530,261L531,260L534,261L535,262L537,262L539,263L540,261L540,261L542,261L545,259L546,260L547,260L547,259L548,259L550,259L552,259L553,259L554,262L555,262L556,261L557,262L559,261L559,262L562,264L562,268L563,268L562,269L561,270L560,272L559,273L559,276L559,277L559,279L558,280L558,282L557,282L557,284L558,285Z","c":[542.9,284.4]},{"id":"706","n":"Somalia","d":"M591,280L589,278L589,267L591,263L592,262L594,262L596,260L599,260L607,250L609,248L610,246L610,244L609,241L609,240L609,240L610,240L612,239L613,239L614,238L615,238L615,239L615,241L615,242L615,243L614,247L613,250L611,254L609,259L607,262L604,266L601,269L597,272L595,274L592,278L591,280Z","c":[601.9,261]},{"id":"404","n":"Kenya","d":"M584,290L580,287L580,285L571,278L570,278L570,275L571,274L572,272L573,269L572,266L572,264L570,262L572,260L574,258L575,259L575,260L576,261L578,261L581,264L582,264L583,264L583,264L585,265L586,263L588,262L589,263L591,263L589,267L589,278L591,280L589,282L588,283L587,283L587,285L586,287L585,289Z","c":[580.9,273.8]},{"id":"729","n":"Sudan","d":"M545,250L543,248L542,247L542,247L542,245L542,244L541,242L540,241L540,240L539,239L539,237L539,236L538,236L538,235L539,234L538,233L539,232L539,231L539,229L540,227L543,227L542,215L542,213L545,213L545,207L555,207L565,207L576,207L577,210L576,211L577,214L578,218L579,218L581,219L579,221L577,222L577,223L576,225L576,229L576,231L576,233L575,236L573,238L572,240L572,241L571,242L570,246L570,248L570,246L569,246L569,244L569,243L568,242L567,240L568,237L566,237L566,238L565,238L565,239L566,241L564,243L563,245L562,245L559,243L558,244L558,245L557,245L557,246L554,246L554,245L552,245L551,246L550,246L549,244L548,243L546,243L545,245L545,248L544,248L543,249Z","c":[558.7,226.2]},{"id":"148","n":"Chad","d":"M542,215L543,227L540,227L539,229L539,231L539,232L538,233L539,234L538,235L538,236L539,236L539,237L539,239L540,240L540,241L539,241L537,242L535,246L533,247L530,247L530,247L530,248L528,250L527,251L524,252L523,251L523,251L522,252L520,252L521,251L520,249L519,248L518,247L517,246L517,244L518,244L519,244L521,244L519,241L519,239L519,237L518,235L518,234L516,234L516,232L515,231L516,227L520,224L520,220L521,213L521,212L520,211L520,210L519,209L518,204L521,203L531,209Z","c":[529,228.3]},{"id":"332","n":"Haiti","d":"M291,214L291,216L291,217L290,218L291,218L291,219L289,219L288,219L286,219L285,219L284,218L284,217L286,218L288,218L289,217L288,216L289,215L287,214L288,214L289,214Z","c":[289.2,217.2]},{"id":"214","n":"Dominican Rep.","d":"M291,219L291,218L290,218L291,217L291,216L291,214L292,214L294,214L295,214L296,214L296,215L298,215L298,216L299,216L300,218L299,219L298,218L296,218L296,218L295,219L294,219L294,218L293,219L292,221L291,220Z","c":[294.9,217.2]},{"id":"643","n":"Russia","d":"M647,38L650,37L655,39L661,41L663,43L659,43L653,42L649,41L646,40L643,39ZM667,42L673,43L673,44L664,45L664,42L665,42ZM742,49L747,49L756,50L756,52L749,52L747,53L741,51L740,49ZM762,51L768,52L767,53L763,52L759,51L758,51ZM752,56L753,55L755,55L759,56L759,56L757,56L752,56ZM560,39L563,38L566,38L567,39L567,39L569,38L572,39L571,39L569,39L567,39L567,40L565,40L563,40L564,39ZM531,108L527,108L524,108L525,106L528,105L530,106L531,106L531,107ZM583,55L587,53L586,52L590,50L595,49L601,48L604,47L607,47L609,48L608,49L602,50L597,51L592,53L590,56L588,58L590,60L594,63L593,63L587,62L586,61L582,61L581,59L583,59L582,57L585,55ZM806,110L809,113L811,115L814,118L820,124L816,123L817,127L822,130L823,132L820,130L820,133L818,130L816,127L814,124L813,122L810,118L807,115L804,111L805,110L804,108L804,108ZM114,67L114,67L117,69L119,72L117,73L117,74L119,72L124,73L125,75L122,76L118,77L115,79L114,80L112,80L111,79L109,78L110,77L109,76L106,77L106,76L108,75L104,75L104,77L101,78L101,78L114,67ZM858,78L858,78L857,79L854,79L857,80L861,82L863,83L864,84L865,85L860,85L856,87L855,87L853,89L852,91L852,92L847,90L844,92L842,91L841,92L838,92L839,94L839,97L840,98L843,98L846,103L844,103L845,105L847,106L845,108L847,111L844,112L845,115L844,118L842,116L837,111L831,105L829,101L829,99L828,98L831,97L832,93L833,91L834,88L832,84L830,85L831,87L828,90L823,87L819,88L817,92L821,94L817,95L813,95L812,93L808,93L806,94L799,93L793,94L790,100L786,107L790,107L793,109L795,110L796,108L798,108L804,111L806,114L806,117L808,121L810,125L809,130L810,132L809,135L807,139L807,141L804,142L803,142L801,141L798,143L798,144L798,144L798,144L797,142L798,142L797,138L795,136L796,135L799,135L799,132L798,129L799,128L798,125L795,126L794,127L790,127L787,124L783,122L779,121L776,118L774,117L773,115L769,112L767,111L763,110L760,110L757,111L756,112L758,113L759,115L758,116L758,119L758,120L756,122L753,121L750,121L748,120L747,120L744,122L742,123L740,123L737,123L734,123L732,121L729,120L727,119L724,120L722,120L718,119L717,117L713,116L711,116L708,115L707,118L709,119L707,121L704,121L701,121L699,119L697,119L694,118L691,120L688,122L686,123L685,123L683,121L680,122L679,120L677,120L675,118L673,117L670,118L666,117L666,118L658,111L654,108L654,107L650,110L648,110L647,109L644,108L642,108L640,105L636,105L634,106L629,107L628,108L620,109L619,110L621,112L619,113L620,113L618,115L623,117L622,118L619,118L619,119L615,117L612,118L609,119L606,118L601,116L597,116L593,119L593,121L590,119L589,123L590,123L589,125L592,128L593,127L595,129L595,131L597,132L596,133L594,134L592,137L595,140L595,142L598,146L597,147L597,148L596,147L594,145L593,145L591,145L590,143L588,143L586,143L586,143L582,141L579,141L577,140L576,141L573,138L570,137L568,135L569,135L571,132L569,131L573,130L572,129L570,129L570,128L571,127L574,127L574,126L573,124L574,123L573,122L570,121L569,121L567,119L565,120L562,119L562,118L561,117L559,117L559,116L559,115L557,114L555,114L554,114L554,115L553,114L552,113L551,112L552,111L554,111L554,111L554,110L552,109L552,109L551,108L549,106L550,106L549,104L547,104L546,104L545,103L543,102L542,101L541,99L540,99L541,98L540,95L541,94L541,93L543,91L541,90L545,87L546,85L547,84L543,82L544,80L542,78L543,76L540,72L541,70L538,69L537,67L539,67L542,66L544,65L548,66L554,67L562,70L564,71L565,73L563,74L559,75L550,73L548,73L552,75L553,77L553,79L556,80L558,81L558,80L556,78L558,77L563,79L565,78L563,76L567,74L569,74L571,75L572,73L569,71L570,70L568,68L574,69L576,70L573,71L574,72L576,73L579,73L578,71L582,70L589,67L590,68L589,69L591,69L593,69L596,68L599,67L602,69L604,67L601,66L601,65L608,66L611,66L620,69L620,68L618,67L617,66L615,66L615,65L613,63L612,62L615,59L615,57L616,57L622,57L623,59L622,61L624,62L625,63L627,67L630,69L630,70L628,74L630,75L631,74L632,73L632,72L634,70L632,69L632,67L629,67L628,65L628,63L625,61L627,59L626,57L627,57L628,59L629,61L631,61L629,60L632,59L636,58L641,60L638,58L636,55L639,55L644,55L648,54L645,53L646,51L648,51L651,50L656,50L656,49L661,49L663,50L666,48L669,48L669,47L670,46L673,45L677,46L675,47L680,47L682,48L683,48L688,48L694,49L696,50L697,51L695,52L692,53L691,54L693,54L697,55L698,54L701,56L701,55L704,55L710,55L712,56L720,57L719,55L723,55L726,55L731,57L733,58L733,59L737,61L742,62L741,60L745,61L748,60L752,61L753,60L757,61L753,58L754,57L774,59L777,60L785,62L792,62L797,62L800,63L801,65L805,66L807,65L810,65L815,66L818,66L825,68L826,67L822,65L822,64L829,65L833,65L841,66L845,67L858,78ZM839,62L837,62L835,62L836,61L839,62ZM123,61L123,61L123,61L123,60L125,60L127,61L126,61L123,62L120,62L120,62L123,61ZM560,133L560,132L562,133L563,133L563,133L563,134L563,134L565,135L567,134L567,135L564,136L561,138L560,137L560,136L557,135L558,134L560,133Z","c":[687.2,89.2]},{"id":"044","n":"Bahamas","d":"M276,192L277,192L279,192L279,193L276,193ZM279,191L281,193L280,195L279,195L280,193L279,192ZM277,197L278,197L278,200L278,202L277,202L277,200L276,199Z","c":[278.3,196.6]},{"id":"238","n":"Falkland Is.","d":"M338,435L340,433L342,434L343,433L346,434L345,435L342,436L341,435L339,436Z","c":[342.4,435.2]},{"id":"578","n":"Norway","d":"M507,41L508,40L510,40L513,41L519,42L514,43L514,45L512,45L512,47L509,48L505,46L507,45L504,45L500,43L498,41L503,40L504,41ZM542,66L539,67L537,67L538,65L535,64L532,65L532,67L530,68L528,67L525,67L522,66L521,67L520,67L520,69L516,68L516,70L514,70L513,72L511,74L508,78L509,79L508,80L506,80L505,83L505,87L507,88L506,91L505,93L504,95L502,93L498,96L495,97L492,96L491,92L490,86L492,84L498,82L502,79L505,75L510,70L513,68L518,65L522,64L526,64L528,62L532,62L536,61L542,63L540,64ZM529,40L527,41L521,41L516,41L516,40L513,40L511,39L516,39L519,39L521,39L525,39ZM525,45L521,46L518,45L519,45L518,44L522,44L523,44Z","c":[509.8,71]},{"id":"304","n":"Greenland","d":"M398,35L405,34L411,34L413,33L419,33L433,33L443,35L440,35L433,35L424,36L424,36L431,36L436,36L439,36L441,36L438,38L443,37L452,36L457,37L458,37L450,39L449,39L443,40L448,40L445,41L443,43L443,45L445,47L442,47L439,48L442,49L442,51L440,51L442,54L438,54L440,55L439,56L436,56L434,56L436,58L436,59L432,58L431,58L433,59L436,61L436,63L432,63L431,62L429,61L429,62L427,64L432,64L435,64L429,66L423,68L417,69L415,69L412,70L409,73L404,75L402,75L399,76L396,76L394,78L393,80L392,82L388,84L388,86L387,89L385,91L382,91L379,89L375,89L373,88L372,85L370,81L369,80L370,77L368,75L369,73L368,72L371,69L375,68L376,67L377,65L374,66L373,66L371,66L369,65L370,64L371,62L373,62L377,63L374,61L372,60L370,61L369,60L372,58L371,57L371,55L369,52L367,52L368,51L364,49L360,49L355,49L350,49L348,48L346,47L351,46L355,46L347,45L344,45L345,44L352,43L360,41L361,41L357,40L359,39L366,38L369,37L369,36L374,36L379,36L385,36L386,36L392,35L395,36L398,36L401,37L397,36Z","c":[399.7,55.3]},{"id":"260","n":"Fr. S. Antarctic Lands","d":"M642,426L643,426L645,427L645,427L644,429L641,429L641,427L642,426Z","c":[643.4,428.1]},{"id":"626","n":"Timor-Leste","d":"M812,303L812,302L815,301L817,301L818,301L819,301L817,302L815,303L812,304L812,303Z","c":[815.3,302.7]},{"id":"710","n":"South Africa","d":"M521,364L523,362L524,363L524,364L525,365L527,365L528,365L531,363L531,352L532,352L533,355L533,357L533,358L535,358L537,357L538,356L539,354L540,353L541,354L542,355L544,355L546,354L546,353L547,352L548,351L549,350L550,348L553,346L556,344L557,344L559,344L560,344L561,344L562,348L562,351L562,354L562,355L561,355L560,355L560,356L559,357L559,358L560,360L562,359L562,358L564,358L563,360L563,363L562,364L560,366L560,366L559,368L558,369L556,372L553,375L551,377L549,378L546,379L545,380L545,380L543,380L542,381L539,380L538,380L536,380L534,381L532,382L530,383L529,383L528,382L527,382L526,381L526,381L526,380L526,378L525,376L526,376L526,373L524,370L523,368L523,368ZM554,365L553,364L552,365L550,366L549,368L550,370L551,370L552,369L553,368L554,367L555,366Z","c":[544.3,365.3]},{"id":"426","n":"Lesotho","d":"M554,365L555,366L554,367L553,368L552,369L551,370L550,370L549,368L550,366L552,365L553,364Z","c":[552.1,367.5]},{"id":"484","n":"Mexico","d":"M182,174L185,174L189,174L188,174L192,176L197,178L202,178L204,178L204,177L209,177L209,178L210,179L211,180L212,182L212,183L213,184L215,185L217,183L219,183L221,184L222,186L222,188L223,190L223,192L224,193L226,194L227,195L228,195L227,198L226,200L225,204L224,206L224,207L225,209L225,211L226,214L227,215L228,217L230,218L231,219L234,218L236,218L238,217L239,217L241,215L242,214L243,211L243,210L245,209L248,209L250,209L252,208L253,209L252,211L251,212L250,214L250,215L250,216L249,219L248,218L247,218L247,218L246,220L245,219L245,220L245,220L242,220L240,220L240,222L239,222L239,223L240,224L241,224L241,224L241,225L237,225L236,228L236,229L236,229L236,230L233,227L232,226L230,225L228,225L226,226L225,227L223,226L221,225L219,224L217,223L214,222L212,221L211,220L210,220L207,219L206,217L204,215L203,213L203,212L204,212L203,211L204,210L204,209L204,207L204,206L203,205L202,202L199,199L199,197L197,196L196,195L197,193L196,192L195,191L195,189L194,189L192,187L192,185L192,184L191,182L191,180L191,178L190,177L189,177L188,177L187,178L187,179L186,182L187,183L188,185L188,186L189,186L189,187L189,187L189,189L190,190L190,191L191,193L192,195L192,197L192,198L192,200L193,200L194,201L195,203L195,203L193,204L193,204L192,203L191,201L190,199L188,199L189,196L189,195L188,194L187,192L186,193L186,192L184,191L183,189L184,189L185,189L186,188L186,187L185,184L184,184L183,182L183,180L183,177Z","c":[213.9,201.6]},{"id":"858","n":"Uruguay","d":"M332,369L334,368L337,371L338,371L341,373L343,375L345,377L344,378L345,380L344,382L341,384L339,383L338,383L336,382L334,382L332,380L332,378L332,378L332,375L332,371Z","c":[338.1,377.3]},{"id":"076","n":"Brazil","d":"M345,380L344,378L345,377L343,375L341,373L338,371L337,371L334,368L332,369L335,365L338,362L339,360L341,359L341,356L339,354L338,355L338,353L339,351L338,350L337,349L337,349L336,349L335,348L335,345L334,344L332,344L331,344L328,344L328,339L327,338L328,337L327,335L328,334L328,331L328,329L326,329L326,327L326,326L321,325L320,322L320,322L320,320L320,320L319,318L318,317L316,317L315,316L313,315L312,314L309,314L306,311L306,309L306,308L306,305L302,306L301,307L299,308L298,309L297,309L295,309L293,310L292,309L292,304L290,306L288,306L286,305L285,304L285,303L284,301L282,298L283,298L283,297L285,296L284,294L285,293L285,291L288,289L290,289L291,288L293,288L294,280L294,279L294,277L292,276L292,273L294,273L295,273L295,272L293,272L293,270L298,270L299,269L300,270L300,272L301,271L302,273L304,273L305,272L307,271L308,271L308,269L310,268L310,268L308,267L308,265L308,263L307,263L307,262L309,263L311,263L312,263L314,262L317,261L318,260L317,259L319,259L319,260L319,261L320,261L321,263L320,264L319,267L320,268L320,270L322,271L323,271L323,271L324,270L326,270L326,269L328,269L329,269L330,270L330,269L330,268L330,267L331,268L332,267L334,268L335,269L336,268L336,268L337,269L338,269L339,267L340,265L342,262L343,262L343,264L345,269L346,270L346,272L344,274L345,275L350,276L350,279L352,277L355,278L360,280L361,282L360,283L364,283L369,284L373,284L377,287L380,290L382,291L385,291L386,292L386,296L387,298L386,303L385,305L381,309L380,313L378,315L377,316L376,318L377,324L376,328L376,330L375,332L375,336L373,340L373,343L371,344L370,346L367,346L363,347L362,349L359,350L356,352L354,355L354,358L355,359L354,363L354,364L352,366L350,371L348,374L347,375L346,378Z","c":[339.4,308.9]},{"id":"068","n":"Bolivia","d":"M295,309L297,309L298,309L299,308L301,307L302,306L306,305L306,308L306,309L306,311L309,314L312,314L313,315L315,316L316,317L318,317L319,318L320,320L320,320L320,322L320,322L321,325L326,326L326,327L326,329L328,329L328,331L328,334L327,335L328,337L327,338L327,337L324,335L322,335L317,336L316,339L317,340L316,344L315,343L312,343L312,346L310,343L306,343L305,346L303,346L301,342L299,338L300,335L298,334L298,332L296,330L298,326L296,324L297,323L296,321L297,320L297,317L297,315L297,314Z","c":[309.7,327.4]},{"id":"604","n":"Peru","d":"M293,288L291,288L290,289L288,289L285,291L285,293L284,294L285,296L283,297L283,298L282,298L284,301L285,303L285,304L286,305L288,306L290,306L292,304L292,309L293,310L295,309L297,314L297,315L297,317L297,320L296,321L297,323L296,324L298,326L296,330L296,331L294,332L292,330L291,329L286,326L281,322L279,320L277,318L278,317L275,313L272,307L269,301L268,300L267,297L265,295L263,294L264,293L262,290L263,288L265,286L265,287L265,288L265,289L266,289L267,289L268,290L270,289L270,287L272,284L275,283L278,280L279,278L278,276L279,275L281,277L282,278L283,279L284,282L286,283L288,282L289,282L290,282L292,284L291,287L292,287Z","c":[282.2,304]},{"id":"170","n":"Colombia","d":"M301,271L300,272L300,270L299,269L298,270L293,270L293,272L295,272L295,273L294,273L292,273L292,276L294,277L294,279L294,280L293,288L292,287L291,287L292,284L290,282L289,282L288,282L286,283L284,282L283,279L282,278L281,277L279,275L278,276L277,275L276,274L275,274L273,274L272,273L272,273L269,271L269,270L270,270L269,268L270,267L271,267L273,265L274,263L273,263L273,261L273,258L273,257L273,254L272,253L272,251L273,252L274,251L273,249L274,248L275,248L277,246L278,246L278,245L279,242L281,241L282,241L282,240L285,240L287,239L288,238L289,237L290,237L291,238L290,239L288,239L288,241L287,242L286,243L285,245L284,247L286,247L286,248L287,249L287,250L286,252L286,252L287,252L288,254L291,253L293,254L294,256L296,256L297,256L299,256L300,256L299,258L299,259L299,261L299,263L300,264L300,265L298,266L299,267L300,268Z","c":[285.1,263.5]},{"id":"591","n":"Panama","d":"M274,248L273,249L274,251L273,252L272,251L272,253L271,252L271,250L271,249L271,249L270,248L269,247L268,248L267,249L266,249L265,249L265,250L266,252L266,252L265,253L264,253L264,251L263,252L262,251L262,250L261,250L260,250L259,250L259,250L259,250L259,249L259,248L259,248L259,248L259,247L259,246L260,246L261,247L261,247L262,247L262,247L263,248L264,248L265,247L267,246L268,245L269,246L269,246L271,246L272,247L273,247Z","c":[266.8,249.3]},{"id":"188","n":"Costa Rica","d":"M260,246L259,246L259,247L259,248L259,248L259,248L259,249L259,250L257,249L257,248L257,248L257,247L256,246L255,246L254,245L254,245L254,244L254,245L253,246L253,245L252,244L251,244L252,243L252,242L251,241L252,241L252,240L254,241L255,241L255,241L256,242L257,242L257,241L258,243L259,244Z","c":[256.2,244.8]},{"id":"558","n":"Nicaragua","d":"M257,241L257,242L256,242L255,241L255,241L254,241L252,240L252,241L251,240L250,239L249,238L248,237L247,235L247,235L248,235L248,235L249,235L249,234L250,234L250,233L250,233L251,233L252,232L252,232L253,232L253,232L254,231L254,230L255,230L255,229L255,229L256,230L256,230L257,230L257,230L258,229L259,229L260,229L259,229L259,230L259,231L259,232L258,233L258,235L258,235L258,237L258,237L257,238L257,239L257,240L257,241Z","c":[254.7,235.9]},{"id":"340","n":"Honduras","d":"M260,229L259,229L258,229L257,230L257,230L256,230L256,230L255,229L255,229L255,230L254,230L254,231L253,232L253,232L252,232L252,232L251,233L250,233L250,233L250,234L249,234L249,235L248,235L248,234L247,234L247,233L247,232L246,232L245,232L245,232L244,231L244,231L243,231L244,230L244,229L244,229L245,228L247,226L247,227L247,226L248,226L248,226L249,226L250,226L251,226L252,226L253,226L253,226L254,226L255,226L255,226L256,226L257,226L258,227L258,227L259,228Z","c":[251.1,229.8]},{"id":"222","n":"El Salvador","d":"M243,231L244,231L244,231L245,232L245,232L246,232L247,232L247,233L247,234L247,234L245,234L244,234L243,234L242,233L241,233L241,232L242,231L243,231L243,231Z","c":[244.7,233.2]},{"id":"320","n":"Guatemala","d":"M236,230L236,229L236,229L236,228L237,225L241,225L241,224L241,224L240,224L239,223L239,222L240,222L240,220L242,220L245,220L245,223L244,226L245,226L246,227L246,226L247,226L245,228L244,229L244,229L244,230L243,231L243,231L243,231L242,231L241,232L241,233L240,232L238,232L237,231Z","c":[241.4,227.1]},{"id":"084","n":"Belize","d":"M245,220L245,220L245,219L246,220L247,218L247,218L247,218L248,218L248,219L247,221L247,221L247,222L247,222L247,224L246,225L245,225L245,226L244,226L245,223Z","c":[246.3,222.4]},{"id":"862","n":"Venezuela","d":"M317,259L318,260L317,261L314,262L312,263L311,263L309,263L307,262L307,263L308,263L308,265L308,267L310,268L310,268L308,269L308,271L307,271L305,272L304,273L302,273L301,271L300,268L299,267L298,266L300,265L300,264L299,263L299,261L299,259L299,258L300,256L299,256L297,256L296,256L294,256L293,254L291,253L288,254L287,252L286,252L286,252L287,250L287,249L286,248L286,247L284,247L285,245L286,243L287,242L288,241L288,239L290,239L290,239L288,240L289,241L289,243L288,245L289,247L290,247L291,245L290,244L290,241L293,240L293,239L294,238L295,240L297,240L298,241L298,243L301,243L304,242L305,244L307,244L309,243L309,242L312,242L315,242L313,243L314,244L316,245L318,246L318,249L319,249L320,249L318,251L318,252L319,253L318,254L316,254L316,256L316,257Z","c":[303.8,253.5]},{"id":"328","n":"Guyana","d":"M329,269L328,269L326,269L326,270L324,270L323,271L323,271L322,271L320,270L320,268L319,267L320,264L321,263L320,261L319,261L319,260L319,259L317,259L316,257L316,256L316,254L318,254L319,253L318,252L318,251L320,249L322,250L324,252L324,254L325,254L326,256L327,257L327,259L325,260L325,261L325,263L326,265L327,265L327,267Z","c":[322.7,260.8]},{"id":"740","n":"Suriname","d":"M334,268L332,267L331,268L330,267L330,268L330,269L330,270L329,269L327,267L327,265L326,265L325,263L325,261L325,260L327,259L327,257L330,257L331,257L333,257L336,257L334,260L334,262L335,264L335,265L335,267Z","c":[330.8,262.9]},{"id":"250","n":"France","d":"M342,262L340,265L339,267L338,269L337,269L336,268L336,268L335,269L334,268L335,267L335,265L335,264L334,262L334,260L336,257L337,258L338,258L341,261ZM494,122L495,123L499,124L497,126L497,128L497,128L495,128L496,129L494,131L494,132L495,131L496,133L496,134L497,135L496,136L496,138L498,138L498,140L495,141L491,141L487,142L487,143L484,144L481,143L480,143L476,142L475,141L476,139L477,133L474,129L472,128L469,127L469,125L472,124L476,125L475,121L477,123L483,120L483,118L485,117L486,118L487,118L488,120L490,121L491,121L493,122L493,122ZM501,143L502,142L503,144L502,147L501,146L500,144Z","c":[470,145.9]},{"id":"218","n":"Ecuador","d":"M278,276L279,278L278,280L275,283L272,284L270,287L270,289L268,290L267,289L266,289L265,289L265,288L265,287L265,286L267,283L266,282L265,283L263,282L264,281L263,278L264,278L265,276L266,274L266,273L267,272L269,271L272,273L272,273L273,274L275,274L276,274L277,275Z","c":[270.7,280.1]},{"id":"630","n":"Puerto Rico","d":"M305,218L307,218L307,219L306,220L304,220L303,220L303,218L303,218Z","c":[305.2,219.2]},{"id":"388","n":"Jamaica","d":"M276,218L277,218L279,219L279,220L277,220L276,220L275,220L274,219L274,218L275,218Z","c":[276.6,219.5]},{"id":"192","n":"Cuba","d":"M265,203L268,204L270,204L272,205L273,206L275,205L276,206L278,208L279,209L280,209L282,210L281,211L283,211L285,212L285,213L283,213L281,214L279,213L276,214L278,212L277,211L275,211L274,210L274,208L272,208L270,208L269,207L266,206L265,206L266,205L264,205L262,207L261,207L260,207L259,208L258,207L259,206L260,205L261,205L263,204L265,204Z","c":[273.7,208.7]},{"id":"716","n":"Zimbabwe","d":"M561,344L560,344L559,344L557,344L556,344L555,342L553,342L552,340L552,339L551,338L548,335L547,333L547,333L546,330L549,330L550,331L551,331L552,329L555,326L556,326L556,325L557,324L559,323L560,324L562,324L563,325L564,326L565,326L566,327L566,331L565,333L565,335L565,336L565,338L565,338L564,341Z","c":[558.2,334.1]},{"id":"072","n":"Botswana","d":"M556,344L553,346L550,348L549,350L548,351L547,352L546,353L546,354L544,355L542,355L541,354L540,353L539,354L538,356L537,357L535,358L533,358L533,357L533,355L532,352L531,352L531,343L534,343L534,332L536,332L541,330L541,332L543,330L544,330L546,330L546,330L547,333L547,333L548,335L551,338L552,339L552,340L553,342L555,342Z","c":[542,344]},{"id":"516","n":"Namibia","d":"M531,352L531,363L528,365L527,365L525,365L524,364L524,363L523,362L521,364L520,361L519,359L518,356L518,354L517,349L517,345L517,344L516,342L514,340L513,336L513,334L511,331L510,329L512,328L513,328L515,328L517,329L517,329L528,329L529,330L536,331L541,329L543,329L545,329L546,330L546,330L544,330L543,330L541,332L541,330L536,332L534,332L534,343L531,343Z","c":[524.7,344]},{"id":"686","n":"Senegal","d":"M435,233L434,231L433,230L434,229L435,227L436,225L437,224L438,225L440,224L441,224L442,225L444,226L446,228L447,230L447,232L448,234L449,235L449,236L449,237L449,237L447,237L447,237L446,237L444,236L443,236L438,236L438,236L437,236L435,237L435,234L437,235L438,234L438,234L439,233L441,234L442,234L443,233L442,232L441,233L441,233L440,232L439,232L438,233Z","c":[441.6,231.3]},{"id":"466","n":"Mali","d":"M449,237L449,236L449,235L448,234L447,232L447,230L448,229L449,228L450,227L451,228L453,228L454,228L454,227L465,227L465,225L465,225L464,211L463,198L467,198L475,205L484,211L485,213L487,214L488,214L488,216L491,216L491,223L489,225L489,227L487,227L483,228L482,229L480,229L479,229L478,228L477,229L474,230L474,231L472,232L471,233L470,234L469,233L468,234L468,236L466,239L466,240L465,241L465,243L464,244L463,244L463,243L462,243L462,243L461,244L459,244L459,243L458,244L457,243L457,242L457,241L457,242L457,241L457,240L456,239L456,238L455,237L455,237L454,237L453,238L453,239L451,238L451,237L450,237L450,238L449,238Z","c":[470.6,222.3]},{"id":"478","n":"Mauritania","d":"M435,210L435,209L446,209L445,205L446,203L448,203L449,195L457,195L457,190L467,198L463,198L464,211L465,225L465,225L465,227L454,227L454,228L453,228L451,228L450,227L449,228L448,229L447,230L446,228L444,226L442,225L441,224L440,224L438,225L437,224L436,225L436,224L437,222L437,219L437,216L437,215L437,213L436,211Z","c":[452.9,213.1]},{"id":"204","n":"Benin","d":"M487,256L484,256L484,254L484,247L483,246L483,245L482,244L482,243L482,241L483,241L483,239L485,239L485,238L486,237L487,237L489,239L489,240L490,242L489,243L489,244L488,246L487,247L487,249L487,251Z","c":[486.2,245.8]},{"id":"562","n":"Niger","d":"M518,204L519,209L520,210L520,211L521,212L521,213L520,220L520,224L516,227L515,231L516,232L516,234L518,234L518,235L517,236L517,237L517,237L515,233L514,233L512,235L510,234L509,234L508,234L506,234L505,235L503,235L500,234L499,235L498,235L497,233L494,232L491,233L490,233L490,235L489,236L489,239L487,237L486,237L485,238L485,236L482,235L482,234L481,232L480,230L480,229L482,229L483,228L487,227L489,227L489,225L491,223L491,216L494,214L502,208L511,202L515,204L516,206Z","c":[504.5,222]},{"id":"566","n":"Nigeria","d":"M487,256L487,251L487,249L487,247L488,246L489,244L489,243L490,242L489,240L489,239L489,236L490,235L490,233L491,233L494,232L497,233L498,235L499,235L500,234L503,235L505,235L506,234L508,234L509,234L510,234L512,235L514,233L515,233L517,237L517,237L518,238L518,238L518,239L516,242L515,244L515,245L514,246L513,248L512,249L512,251L511,252L511,254L509,255L507,253L506,253L505,255L504,255L503,258L502,260L499,262L498,261L497,262L495,262L494,260L493,258L491,256L489,256Z","c":[501.3,246.1]},{"id":"120","n":"Cameroon","d":"M518,235L519,237L519,239L519,241L521,244L519,244L518,244L517,244L517,246L518,247L519,248L520,249L521,251L520,252L519,255L518,256L518,258L518,260L518,261L519,262L520,263L521,265L522,266L522,267L522,268L522,270L520,269L518,268L514,268L514,268L513,268L511,268L510,268L505,268L506,266L505,264L503,263L503,262L502,261L502,260L503,258L504,255L505,255L506,253L507,253L509,255L511,254L511,252L512,251L512,249L513,248L514,246L515,245L515,244L516,242L518,239L518,238L518,238L517,237L517,236Z","c":[513.6,258.1]},{"id":"768","n":"Togo","d":"M482,241L482,243L482,244L483,245L483,246L484,247L484,254L484,256L482,257L482,256L481,254L481,252L481,249L481,248L480,246L480,244L479,242L480,241Z","c":[482.7,249.6]},{"id":"288","n":"Ghana","d":"M480,241L479,242L480,244L480,246L481,248L481,249L481,252L481,254L482,256L482,257L478,259L477,260L474,261L472,260L472,258L471,256L472,252L473,250L472,245L472,243L472,241L476,241L477,241L478,241Z","c":[476.7,251.1]},{"id":"384","n":"Côte d'Ivoire","d":"M458,244L459,243L459,244L461,244L462,243L462,243L463,243L463,244L464,244L465,243L466,244L467,245L468,245L469,245L470,245L472,245L473,250L472,252L471,256L472,258L472,260L471,260L469,259L467,259L464,260L462,261L459,262L459,262L459,259L459,259L459,258L458,256L457,256L457,255L457,254L457,252L457,251L457,251L458,250L457,249L458,249L459,249L458,246L457,245L458,244Z","c":[465.1,252.3]},{"id":"324","n":"Guinea","d":"M443,236L444,236L446,237L447,237L447,237L449,237L449,237L449,238L450,238L450,237L451,237L451,238L453,239L453,238L454,237L455,237L455,237L456,238L456,239L457,240L457,241L457,242L457,241L457,242L457,243L458,244L458,244L457,245L458,246L459,249L458,249L457,249L458,250L457,251L457,251L456,251L456,253L455,253L454,252L455,251L454,249L453,249L452,249L452,249L452,248L451,247L451,246L451,245L450,244L448,244L447,245L446,245L446,245L446,246L444,248L443,246L442,245L441,244L441,244L440,242L440,242L439,241L441,240L441,240L442,239L443,239L443,239L443,238L443,237Z","c":[450.6,243.3]},{"id":"624","n":"Guinea-Bissau","d":"M435,237L437,236L438,236L438,236L443,236L443,237L443,238L443,239L443,239L442,239L441,240L441,240L439,241L438,240L437,240L436,239L436,238L435,238Z","c":[439.9,238.5]},{"id":"430","n":"Liberia","d":"M457,251L457,252L457,254L457,255L457,256L458,256L459,258L459,259L459,259L459,262L458,262L455,260L453,258L451,256L449,254L450,253L450,252L451,251L452,249L453,249L454,249L455,251L454,252L455,253L456,253L456,251Z","c":[454.9,255.8]},{"id":"694","n":"Sierra Leone","d":"M444,248L446,246L446,245L446,245L447,245L448,244L450,244L451,245L451,246L451,247L452,248L452,249L452,249L451,251L450,252L450,253L449,254L448,254L446,253L445,251L445,250Z","c":[448.6,249.3]},{"id":"854","n":"Burkina Faso","d":"M465,243L465,241L466,240L466,239L468,236L468,234L469,233L470,234L471,233L472,232L474,231L474,230L477,229L478,228L479,229L480,229L480,230L481,232L482,234L482,235L485,236L485,238L485,239L483,239L483,241L482,241L480,241L478,241L477,241L476,241L472,241L472,243L472,245L470,245L469,245L468,245L467,245L466,244Z","c":[475.3,237.6]},{"id":"140","n":"Central African Rep.","d":"M553,259L552,259L550,259L548,259L547,259L547,260L546,260L545,259L542,261L540,261L540,261L539,263L537,262L535,262L534,261L531,260L530,261L529,262L529,264L527,264L525,264L524,265L522,268L522,267L522,266L521,265L520,263L519,262L518,261L518,260L518,258L518,256L519,255L520,252L522,252L523,251L523,251L524,252L527,251L528,250L530,248L530,247L530,247L533,247L535,246L537,242L539,241L540,241L541,242L542,244L542,245L542,247L542,247L543,248L545,250L546,251L546,252L548,254L549,255L550,257L552,258Z","c":[534.3,255.4]},{"id":"178","n":"Congo","d":"M529,264L529,266L528,268L527,270L527,273L527,274L527,275L527,276L526,277L525,279L523,281L522,284L522,286L522,287L520,289L518,291L517,290L517,289L516,289L515,290L514,290L513,289L512,289L511,291L509,287L511,286L510,284L511,283L513,283L513,281L515,283L517,283L518,281L518,279L518,277L516,275L518,271L517,271L515,271L514,269L514,268L518,268L520,269L522,270L522,268L524,265L525,264L527,264Z","c":[520.4,278.2]},{"id":"266","n":"Gabon","d":"M510,268L511,268L513,268L514,268L514,268L514,269L515,271L517,271L518,271L516,275L518,277L518,279L518,281L517,283L515,283L513,281L513,283L511,283L510,284L511,286L509,287L506,284L505,282L503,279L503,278L504,277L504,274L505,272L506,272L510,272Z","c":[511.2,277.6]},{"id":"226","n":"Eq. Guinea","d":"M505,268L510,268L510,272L506,272L505,272L504,272Z","c":[507.7,270.6]},{"id":"894","n":"Zambia","d":"M561,301L562,302L563,302L565,303L567,304L568,305L568,308L568,309L567,311L568,314L567,315L566,318L567,318L559,321L559,323L557,324L556,325L556,326L555,326L552,329L551,331L550,331L549,330L546,330L546,330L546,330L545,329L543,329L541,329L539,327L537,325L538,315L543,315L543,314L543,313L543,311L543,310L543,309L544,309L544,310L545,310L547,310L548,312L550,312L552,311L552,313L554,313L555,314L556,316L558,316L558,313L557,313L555,312L555,312L555,309L556,305L555,303L556,301L557,301L560,301Z","c":[553.4,317.1]},{"id":"454","n":"Malawi","d":"M567,304L569,304L570,305L571,307L571,311L570,313L571,317L572,317L573,318L574,320L574,324L573,325L572,327L570,325L570,323L571,322L571,320L570,320L569,320L567,318L566,318L567,315L568,314L567,311L568,309L568,308L568,305Z","c":[570.6,316.4]},{"id":"508","n":"Mozambique","d":"M571,311L573,311L576,311L577,311L579,311L580,310L582,310L584,309L587,307L587,308L587,312L587,314L587,319L587,321L586,323L585,325L584,327L581,328L578,330L575,333L574,333L572,336L571,336L570,339L571,341L572,343L572,344L572,344L572,347L572,348L572,349L572,350L570,351L568,352L565,354L564,355L564,356L565,356L564,358L562,358L562,357L562,355L562,354L562,351L562,348L561,344L564,341L565,338L565,338L565,336L565,335L565,333L566,331L566,327L565,326L564,326L563,325L562,324L560,324L559,323L559,321L567,318L569,320L570,320L571,320L571,322L570,323L570,325L572,327L573,325L574,324L574,320L573,318L572,317L571,317L570,313Z","c":[573.4,328.9]},{"id":"748","n":"eSwatini","d":"M562,358L562,359L560,360L559,358L559,357L560,356L560,355L561,355L562,355L562,357Z","c":[561.1,357.7]},{"id":"024","n":"Angola","d":"M514,290L513,291L513,291L513,293L512,293L511,291L512,289L513,289ZM512,294L513,294L514,294L515,293L523,293L524,296L524,297L525,298L526,300L528,300L529,299L530,300L531,299L531,297L533,297L533,297L534,297L534,298L537,298L537,300L538,301L538,303L538,305L539,306L538,309L539,309L540,309L542,309L543,309L543,310L543,311L543,313L543,314L543,315L538,315L537,325L539,327L541,329L536,331L529,330L528,329L517,329L517,329L515,328L513,328L512,328L510,329L510,327L511,324L512,321L512,320L513,317L513,316L515,314L516,312L516,310L516,308L515,307L514,305L514,303L514,303L515,302L514,299L513,297L512,295Z","c":[526.3,313.5]},{"id":"108","n":"Burundi","d":"M561,283L561,284L562,285L562,286L561,286L560,288L559,289L558,289L558,285L557,284L559,284L559,282Z","c":[559.9,286.1]},{"id":"376","n":"Israel","d":"M570,174L570,175L569,174L568,176L569,177L568,177L568,178L570,178L570,179L569,184L569,183L567,178L567,177L567,177L568,176L568,173L568,173L568,173L569,173L569,172L570,172L570,173L570,174Z","c":[569.1,178]},{"id":"422","n":"Lebanon","d":"M570,172L569,172L569,173L568,173L569,170L570,168L570,168L571,168L572,169L571,170Z","c":[570.5,170.5]},{"id":"450","n":"Madagascar","d":"M611,314L612,315L612,317L612,321L613,322L613,324L612,325L611,323L611,324L611,326L611,327L610,328L610,331L608,334L607,339L605,344L603,349L602,352L599,353L597,354L596,354L594,353L593,351L593,348L592,346L592,343L593,341L594,341L594,340L596,337L596,335L596,334L595,332L595,329L596,327L597,325L598,325L600,325L601,324L602,324L603,322L606,320L607,319L606,317L607,318L609,316L609,314L610,312Z","c":[602.5,335.5]},{"id":"275","n":"Palestine","d":"M570,178L568,178L568,177L569,177L568,176L569,174L570,175L570,177Z","c":[569.6,176.6]},{"id":"270","n":"Gambia","d":"M435,233L438,233L439,232L440,232L441,233L441,233L442,232L443,233L442,234L441,234L439,233L438,234L438,234L437,235L435,234Z","c":[439.1,234]},{"id":"788","n":"Tunisia","d":"M504,181L503,176L501,174L501,174L499,172L498,169L500,168L501,165L500,162L501,161L503,159L505,160L505,161L507,160L507,161L506,162L506,164L507,164L507,167L505,169L506,170L507,170L508,172L509,172L509,175L507,176L507,177L505,178L505,179L505,180Z","c":[504,169.7]},{"id":"012","n":"Algeria","d":"M457,190L457,190L457,189L457,186L461,183L464,183L466,182L467,181L470,179L470,177L472,177L473,176L476,175L477,174L476,173L475,170L475,168L474,166L476,164L479,164L481,163L483,162L487,161L492,161L493,161L495,160L498,160L499,161L501,161L500,162L501,165L500,168L498,169L499,172L501,174L501,174L503,176L504,181L505,184L505,185L504,188L505,189L504,191L505,193L504,194L505,197L505,198L506,200L507,199L510,201L511,202L502,208L494,214L491,216L488,216L488,214L487,214L485,213L484,211L475,205L467,198Z","c":[486.7,188.5]},{"id":"400","n":"Jordan","d":"M570,175L570,174L573,175L578,172L579,175L579,176L574,177L577,181L576,181L575,182L573,183L573,184L572,185L569,184L569,184L570,179L570,178L570,177Z","c":[573.7,178.8]},{"id":"784","n":"United Arab Emirates","d":"M613,200L614,200L614,201L616,200L618,200L620,200L621,198L623,196L624,194L625,195L626,198L624,198L624,200L625,200L624,201L624,202L623,204L623,205L623,205L615,204L614,201Z","c":[620.9,201.7]},{"id":"634","n":"Qatar","d":"M611,198L611,196L611,195L612,194L613,195L613,197L613,199L612,199Z","c":[612.6,197.2]},{"id":"414","n":"Kuwait","d":"M602,182L603,184L603,184L604,187L602,187L601,185L599,185L600,182Z","c":[602,184.8]},{"id":"368","n":"Iraq","d":"M579,175L578,172L583,168L583,165L583,162L584,162L585,160L586,159L589,160L590,160L591,160L593,164L595,164L595,166L594,167L594,170L596,173L600,174L601,177L601,179L602,179L602,181L604,182L602,182L600,182L599,185L594,185L586,178L582,176Z","c":[590.8,173.2]},{"id":"512","n":"Oman","d":"M623,205L623,204L624,202L624,201L625,200L624,200L624,198L626,198L627,200L629,201L631,202L632,202L634,204L634,205L635,205L636,206L635,208L634,209L633,210L633,212L631,212L631,212L631,214L631,216L631,217L630,217L628,218L628,219L628,220L626,220L625,221L625,222L624,223L622,222L621,223L620,224L619,221L616,216L624,213L625,207ZM625,195L624,194L625,193L625,194L625,195Z","c":[626.8,211.9]},{"id":"548","n":"Vanuatu","d":"M921,324L922,326L921,326L921,325ZM920,324L920,323L920,320L921,321L921,324L920,323Z","c":[921.2,323.7]},{"id":"116","n":"Cambodia","d":"M752,237L751,234L752,231L755,231L758,231L760,232L761,230L764,231L764,233L765,237L760,239L762,241L759,241L757,243L754,242L753,241Z","c":[758,236.4]},{"id":"764","n":"Thailand","d":"M758,231L755,231L752,231L751,234L752,237L749,236L747,236L747,234L745,234L745,237L744,242L743,244L743,247L745,247L746,250L747,252L749,254L750,254L752,256L751,257L749,258L749,256L747,255L746,255L745,254L745,252L743,251L742,249L741,251L741,249L741,247L742,244L743,241L744,238L742,236L742,234L742,232L740,230L739,228L740,228L740,225L739,223L737,221L735,218L736,218L737,214L739,214L740,213L742,212L743,213L743,215L745,215L745,218L746,221L748,219L749,220L750,220L751,218L753,219L755,221L756,224L758,227L759,230Z","c":[746.8,229.2]},{"id":"418","n":"Laos","d":"M764,231L761,230L760,232L758,231L759,230L758,227L756,224L755,221L753,219L751,218L750,220L749,220L748,219L746,221L745,218L745,215L743,215L743,213L742,212L742,211L744,209L744,210L746,210L745,206L746,206L748,208L750,211L753,211L754,214L753,214L752,216L756,217L758,221L760,224L763,226L764,228Z","c":[752.7,218.6]},{"id":"104","n":"Myanmar","d":"M742,212L740,213L739,214L737,214L736,218L735,218L737,221L739,223L740,225L740,228L739,228L740,230L742,232L742,234L742,236L744,238L743,241L742,244L741,242L742,240L741,238L741,235L739,233L738,229L737,225L736,223L734,224L731,227L730,226L728,226L728,222L728,219L725,215L725,214L724,214L721,211L721,209L722,209L721,207L723,206L722,205L722,204L722,201L724,201L725,199L725,197L726,195L725,193L728,191L730,191L729,189L730,189L730,188L731,187L732,189L734,190L734,192L735,195L733,197L733,201L736,201L737,203L739,204L738,207L741,208L742,208L744,207L744,209L742,211Z","c":[732.3,210.6]},{"id":"704","n":"Vietnam","d":"M757,243L759,241L762,241L760,239L765,237L764,233L764,231L764,228L763,226L760,224L758,221L756,217L752,216L753,214L754,214L753,211L750,211L748,208L746,206L747,205L749,205L752,204L754,203L755,204L758,205L758,206L759,208L762,208L759,211L757,214L757,216L759,219L763,223L765,225L767,228L769,234L769,239L767,241L764,243L763,246L759,249L758,247L759,244Z","c":[760,224.2]},{"id":"408","n":"North Korea","d":"M798,144L798,144L798,144ZM798,144L798,144L797,144L797,145L797,146L798,148L797,149L797,150L796,151L795,151L794,152L795,153L794,154L796,154L798,155L798,156L797,156L795,156L795,158L793,158L793,158L792,157L792,158L791,158L791,158L790,157L789,157L789,156L790,155L789,155L789,153L789,152L787,152L786,151L787,149L789,148L790,146L791,146L793,147L792,145L795,144L795,142Z","c":[793.1,151.2]},{"id":"410","n":"South Korea","d":"M793,158L793,158L795,158L795,156L797,156L798,156L798,155L801,159L803,161L804,165L804,166L802,167L800,168L798,168L797,167L797,164L794,161L796,161Z","c":[799.6,162.7]},{"id":"496","n":"Mongolia","d":"M686,123L688,122L691,120L694,118L697,119L699,119L701,121L704,121L707,121L709,119L707,118L708,115L711,116L713,116L717,117L718,119L722,120L724,120L727,119L729,120L732,121L734,123L737,123L740,123L742,123L744,122L747,120L748,120L750,121L753,121L753,123L753,126L754,127L755,127L758,128L759,126L761,127L765,130L765,131L763,130L760,131L758,132L758,134L754,135L753,136L750,136L749,135L748,137L749,139L750,140L749,141L748,142L746,143L742,143L738,145L736,146L735,145L732,145L728,143L725,143L722,143L717,143L714,143L712,141L710,138L708,138L704,136L701,135L698,135L697,134L696,130L694,128L690,126L687,125Z","c":[725.4,130.9]},{"id":"356","n":"India","d":"M730,188L730,189L729,189L730,191L728,191L725,193L726,195L725,197L725,199L724,201L722,201L722,204L722,205L723,206L721,207L719,202L718,202L718,204L717,202L717,201L718,200L719,198L717,197L715,197L712,197L712,195L711,195L708,193L708,195L710,197L709,198L708,199L710,200L710,202L711,204L712,207L712,208L710,208L707,209L707,211L706,213L703,215L700,219L698,220L696,223L696,224L695,225L693,226L692,226L691,228L692,232L692,235L691,238L692,243L690,243L689,246L690,247L688,248L687,250L686,251L683,248L682,243L681,240L680,239L678,236L677,232L676,230L674,226L672,220L671,216L670,212L669,209L666,211L664,211L660,207L661,206L660,204L657,202L658,200L664,200L663,197L661,195L661,193L659,192L661,188L664,189L666,185L667,182L669,179L669,177L671,175L668,174L667,171L665,169L666,167L670,168L673,168L675,165L678,169L679,171L680,173L680,174L678,174L680,177L683,179L687,182L685,183L685,186L688,187L690,189L694,190L698,191L700,192L702,193L705,193L707,193L707,192L706,190L706,189L708,188L708,191L709,191L711,192L713,192L715,192L717,192L717,190L715,189L717,189L719,186L722,184L724,185L726,184L727,186L727,187Z","c":[687,204.8]},{"id":"050","n":"Bangladesh","d":"M721,207L722,209L721,209L721,211L720,210L720,208L719,206L718,205L715,205L716,206L715,208L714,207L714,207L713,207L712,207L711,204L710,202L710,200L708,199L709,198L710,197L708,195L708,193L711,195L712,195L712,197L715,197L717,197L719,198L718,200L717,201L717,202L718,204L718,202L719,202Z","c":[714.7,201.8]},{"id":"064","n":"Bhutan","d":"M715,189L717,190L717,192L715,192L713,192L711,192L709,191L708,191L710,188L711,187L713,188L714,188Z","c":[713.1,190.6]},{"id":"524","n":"Nepal","d":"M706,189L706,190L707,192L707,193L705,193L702,193L700,192L698,191L694,190L690,189L688,187L685,186L685,183L687,182L688,181L690,182L693,184L694,184L696,186L698,186L700,188L703,188Z","c":[695.9,188.1]},{"id":"586","n":"Pakistan","d":"M675,165L673,168L670,168L666,167L665,169L667,171L668,174L671,175L669,177L669,179L667,182L666,185L664,189L661,188L659,192L661,193L661,195L663,197L664,200L658,200L657,202L655,201L654,199L651,196L647,197L642,197L639,197L639,194L643,192L642,191L641,190L641,188L638,186L637,184L635,183L640,184L642,184L644,184L644,184L646,184L649,182L649,180L650,178L652,178L652,177L654,177L655,177L656,176L655,174L656,172L657,172L656,170L658,170L659,169L658,167L659,166L659,165L658,163L659,162L662,161L664,161L666,160L667,160L669,161L670,164Z","c":[657.3,182.8]},{"id":"004","n":"Afghanistan","d":"M645,159L647,159L649,160L649,160L651,159L652,160L653,158L654,159L654,158L654,157L655,156L657,156L657,157L657,158L658,160L659,161L660,161L661,160L662,159L664,159L666,159L667,160L666,160L664,161L662,161L659,162L658,163L659,165L659,166L658,167L659,169L658,170L656,170L657,172L656,172L655,174L656,176L655,177L654,177L652,177L652,178L650,178L649,180L649,182L646,184L644,184L644,184L642,184L640,184L635,183L637,180L637,178L635,177L634,175L633,173L634,171L632,171L633,168L633,165L636,166L638,165L638,164L640,163L641,163L641,160L643,159L643,158L644,159Z","c":[646.7,170.7]},{"id":"762","n":"Tajikistan","d":"M649,160L649,157L648,154L646,154L647,152L649,153L649,151L650,149L653,148L653,150L653,150L654,150L654,151L651,151L651,153L654,152L657,153L661,153L663,156L664,155L665,156L665,157L666,159L664,159L662,159L661,160L660,161L659,161L658,160L657,158L657,157L657,156L655,156L654,157L654,158L654,159L653,158L652,160L651,159L649,160Z","c":[656.1,156]},{"id":"417","n":"Kyrgyzstan","d":"M653,144L653,143L654,142L659,143L658,142L660,141L663,142L664,142L668,142L672,142L674,143L675,144L675,145L672,146L671,147L668,148L668,150L665,149L663,150L661,151L662,152L661,153L657,153L654,152L651,153L651,151L654,151L654,150L656,151L659,148L655,147L654,148L652,146L653,144Z","c":[662.6,147]},{"id":"795","n":"Turkmenistan","d":"M608,146L609,145L611,144L613,145L615,147L617,147L619,147L619,145L620,144L622,143L626,144L627,147L628,147L630,147L631,148L633,151L636,153L638,155L641,156L645,157L645,159L644,159L643,158L643,159L641,160L641,163L640,163L638,164L638,165L636,166L633,165L632,162L630,162L627,159L625,159L622,157L620,157L619,157L617,157L616,159L614,160L613,158L613,154L611,153L611,151L609,151L609,148L612,149L614,148L612,146L611,145L609,145L609,148Z","c":[626.7,154.5]},{"id":"364","n":"Iran","d":"M604,182L602,181L602,179L601,179L601,177L600,174L596,173L594,170L594,167L595,166L595,164L593,164L591,160L589,157L590,156L588,153L590,152L591,153L592,155L594,155L595,155L597,153L598,152L599,153L598,155L600,156L601,156L602,159L604,159L606,161L610,161L614,160L614,160L616,159L617,157L619,157L620,157L622,157L625,159L627,159L630,162L632,162L633,165L633,168L632,171L634,171L633,173L634,175L635,177L637,178L637,180L635,183L637,184L638,186L641,188L641,190L642,191L643,192L639,194L639,197L634,197L631,196L628,195L626,192L625,191L623,192L621,193L618,192L615,190L612,189L610,186L608,182L606,182L605,181Z","c":[617.7,174.9]},{"id":"760","n":"Syria","d":"M570,174L570,174L570,173L570,172L571,170L572,169L571,168L570,168L570,165L570,164L571,163L571,163L571,161L572,162L575,161L576,161L578,161L581,160L582,160L585,160L584,162L583,162L583,165L583,168L578,172L573,175Z","c":[576.9,167.1]},{"id":"051","n":"Armenia","d":"M595,155L594,155L593,153L592,153L591,153L591,152L590,152L589,151L587,150L587,149L586,148L590,147L590,148L591,149L591,149L592,150L592,151L593,152L594,153Z","c":[590.8,150.9]},{"id":"752","n":"Sweden","d":"M504,95L505,93L506,91L507,88L505,87L505,83L506,80L508,80L509,79L508,78L511,74L513,72L514,70L516,70L516,68L520,69L520,67L521,67L524,68L528,70L528,74L529,75L526,76L524,78L525,79L522,82L518,84L517,88L518,90L521,91L519,95L517,95L516,100L515,103L512,102L511,105L509,105L508,102L506,99Z","c":[515.2,84.9]},{"id":"112","n":"Belarus","d":"M543,102L545,103L546,104L547,104L549,104L550,106L549,106L551,108L552,109L552,109L554,110L554,111L554,111L552,111L551,112L552,113L553,114L551,115L550,115L550,117L549,116L547,117L547,116L546,116L545,116L543,116L540,115L538,115L536,115L535,116L534,116L534,115L533,113L534,113L534,111L533,110L533,109L535,109L538,108L538,106L540,105L539,104L541,104Z","c":[544.1,110.8]},{"id":"804","n":"Ukraine","d":"M553,114L554,115L554,114L555,114L557,114L559,115L559,116L559,117L561,117L562,118L562,119L565,120L567,119L569,121L570,121L573,122L574,123L573,124L574,126L574,127L571,127L570,128L570,129L569,130L567,131L565,131L563,132L563,134L563,133L563,133L562,133L560,132L560,133L559,132L555,132L555,131L553,131L552,133L551,135L549,134L548,135L547,134L548,134L548,133L549,132L548,131L549,131L549,132L551,132L551,131L551,131L551,131L550,130L549,129L548,128L549,127L547,126L546,126L544,125L543,126L542,126L541,126L541,127L539,127L538,127L537,127L536,127L534,126L533,127L533,126L532,125L532,124L533,123L533,124L532,122L534,120L535,119L535,119L534,116L535,116L536,115L538,115L540,115L543,116L545,116L546,116L547,116L547,117L549,116L550,117L550,115L551,115Z","c":[553.5,123.8]},{"id":"616","n":"Poland","d":"M533,109L533,110L534,111L534,113L533,113L534,115L534,116L535,119L535,119L534,120L532,122L533,124L533,123L530,122L529,123L527,122L526,123L525,122L524,122L524,122L523,121L521,121L520,120L519,119L519,120L517,119L517,119L516,118L514,117L513,115L513,114L513,113L512,112L512,111L512,110L513,109L517,107L519,106L522,107L522,108L524,108L527,108L531,108L532,108Z","c":[524.6,114.8]},{"id":"040","n":"Austria","d":"M520,126L520,128L518,128L519,128L518,130L518,131L516,131L514,131L512,131L509,130L508,129L506,130L506,130L504,130L503,130L502,129L502,129L502,128L503,128L504,129L505,128L507,128L508,128L509,128L510,128L510,128L510,126L511,125L512,124L513,125L515,124L515,124L517,124L518,124L520,125L519,125Z","c":[513.4,128.3]},{"id":"348","n":"Hungary","d":"M532,125L533,126L533,127L532,128L531,130L530,132L528,132L526,132L525,133L524,133L522,133L520,132L519,131L519,130L518,130L519,128L518,128L520,128L520,126L521,127L522,127L524,127L524,126L525,126L526,126L526,126L527,126L528,125L529,125L531,126Z","c":[526,129.6]},{"id":"498","n":"Moldova","d":"M542,126L543,126L544,125L546,126L547,126L549,127L548,128L549,129L550,130L551,131L551,131L551,131L551,132L549,132L549,131L548,131L549,132L548,133L548,134L547,134L547,133L547,132L547,130L545,128L544,127L543,126Z","c":[547.6,129.6]},{"id":"642","n":"Romania","d":"M547,134L548,135L549,134L551,135L551,136L550,136L549,136L549,140L547,139L545,138L543,139L541,140L538,140L536,139L535,139L534,138L534,138L534,137L534,137L533,137L531,136L531,135L530,134L529,134L528,132L530,132L531,130L532,128L533,127L534,126L536,127L537,127L538,127L539,127L541,127L541,126L542,126L543,126L544,127L545,128L547,130L547,132L547,133Z","c":[539.8,133.7]},{"id":"440","n":"Lithuania","d":"M539,104L540,105L538,106L538,108L535,109L533,109L532,108L531,108L531,107L531,106L530,106L528,105L527,103L529,102L533,102L535,102L536,103L537,103Z","c":[534,105.6]},{"id":"428","n":"Latvia","d":"M540,99L541,99L542,101L543,102L541,104L539,104L537,103L536,103L535,102L533,102L529,102L527,103L527,101L528,99L530,98L532,100L533,100L534,98L535,97L536,98L538,99Z","c":[535.6,101.2]},{"id":"233","n":"Estonia","d":"M541,93L541,94L540,95L541,98L540,99L538,99L536,98L535,97L534,98L534,96L533,96L531,95L531,94L534,93L536,93L539,93Z","c":[537.1,95.9]},{"id":"276","n":"Germany","d":"M512,110L512,111L512,112L513,113L513,114L513,115L514,117L513,118L513,117L512,118L511,118L510,119L508,120L509,121L509,122L510,123L512,124L511,125L510,126L510,128L510,128L509,128L508,128L507,128L505,128L504,129L503,128L502,128L500,127L499,128L497,128L497,126L499,124L495,123L494,122L494,121L494,120L494,118L493,115L495,115L495,114L496,111L495,110L496,110L498,110L498,110L500,109L499,108L499,106L501,106L502,106L502,107L504,108L504,109L507,108L508,107L511,109Z","c":[503.9,117.9]},{"id":"100","n":"Bulgaria","d":"M534,138L535,139L536,139L538,140L541,140L543,139L545,138L547,139L549,140L548,141L547,143L548,145L546,145L543,145L543,147L541,147L539,146L538,147L536,147L535,145L534,144L534,144L534,143L534,142L535,141L534,140L534,139Z","c":[541.3,143.1]},{"id":"300","n":"Greece","d":"M546,166L545,167L542,167L542,166L539,166L539,164L540,165L542,165L544,165L544,166ZM536,147L538,147L539,146L541,147L543,147L543,145L545,146L544,148L543,149L542,148L541,148L538,149L540,151L538,151L537,151L536,150L535,150L536,152L537,154L536,154L538,156L539,157L539,158L537,158L538,159L536,159L537,162L536,162L534,161L532,158L532,156L531,155L529,153L529,152L530,151L530,150L531,149L531,149L533,148L534,148L535,148L535,147Z","c":[536.2,154.5]},{"id":"792","n":"Turkey","d":"M591,160L590,160L589,160L586,159L585,160L582,160L581,160L578,161L576,161L575,161L572,162L571,161L571,163L571,163L570,164L569,163L570,161L568,162L566,161L565,163L561,163L559,161L556,161L556,163L554,163L551,161L549,161L547,158L545,157L546,154L544,153L547,150L550,150L551,147L556,148L559,146L561,145L565,145L570,147L574,148L576,148L579,148L581,146L584,146L586,148L587,149L587,150L589,151L590,152L588,153L590,156L589,157ZM543,145L546,145L548,145L548,146L551,147L550,148L547,148L546,149L544,151L543,149L543,149L544,148L545,146Z","c":[566.9,154.5]},{"id":"008","n":"Albania","d":"M531,149L531,149L530,150L530,151L529,152L529,152L529,151L527,150L527,149L527,147L527,146L527,145L527,144L528,143L528,143L528,143L529,144L530,144L530,145L530,146L530,148Z","c":[529.1,148.1]},{"id":"191","n":"Croatia","d":"M519,131L520,132L522,133L524,133L525,133L525,134L526,135L525,136L524,136L522,136L520,135L519,135L519,136L518,135L517,136L519,138L519,139L520,140L521,141L522,142L525,143L524,143L522,142L521,141L518,140L516,138L517,138L515,137L515,136L514,135L513,136L512,135L512,134L512,134L514,134L515,134L515,134L516,134L516,134L517,133L517,132Z","c":[519.9,136.2]},{"id":"756","n":"Switzerland","d":"M502,128L502,129L502,129L503,130L504,130L504,131L503,132L501,131L501,133L500,133L499,132L498,133L497,133L496,133L495,131L494,132L494,131L496,129L495,128L497,128L497,128L499,128L500,127Z","c":[499.3,130.8]},{"id":"442","n":"Luxembourg","d":"M494,120L494,121L494,122L493,122L493,122L493,120Z","c":[494,121.9]},{"id":"056","n":"Belgium","d":"M494,118L494,120L493,120L493,122L491,121L490,121L488,120L487,118L486,118L485,117L487,117L489,117L491,116L493,118Z","c":[490.7,119.2]},{"id":"528","n":"Netherlands","d":"M495,110L496,111L495,114L495,115L493,115L494,118L493,118L491,116L489,117L487,117L488,116L490,111L493,110Z","c":[492.7,114.3]},{"id":"620","n":"Portugal","d":"M457,145L458,145L459,144L460,146L461,146L462,145L463,145L464,147L463,148L463,150L462,151L462,152L461,152L462,154L461,156L462,157L462,158L461,159L461,160L460,161L459,160L457,161L458,158L458,156L456,156L456,155L456,153L457,152L457,151L458,149L458,147L458,146Z","c":[460.1,152.8]},{"id":"724","n":"Spain","d":"M461,160L461,159L462,158L462,157L461,156L462,154L461,152L462,152L462,151L463,150L463,148L464,147L463,145L462,145L461,146L460,146L459,144L458,145L457,145L458,143L457,142L460,140L463,140L466,140L469,141L471,140L475,141L476,142L480,143L481,143L484,144L487,143L487,145L485,147L481,148L481,149L480,151L479,153L480,155L478,156L478,158L476,159L474,161L471,161L469,161L467,162L466,164L465,163L464,162L463,161Z","c":[471.1,150.6]},{"id":"372","n":"Ireland","d":"M465,109L466,111L464,114L460,116L456,115L458,112L457,109L461,107L462,105L463,107L462,109L464,109Z","c":[461.6,111.7]},{"id":"540","n":"New Caledonia","d":"M913,340L915,342L916,344L914,345L913,344L912,342L911,341L909,338L909,337L910,337L912,338L912,340Z","c":[912.8,341.5]},{"id":"090","n":"Solomon Is.","d":"M910,308L911,309L909,309L908,307L910,307ZM910,305L909,305L907,303L907,301L908,301L909,303ZM907,306L906,306L905,305L904,305L904,304L906,304L907,305ZM905,300L905,301L905,302L903,300L902,299L901,298L901,298L903,299ZM898,297L899,298L899,298L898,297L897,296L897,296Z","c":[905.7,303]},{"id":"554","n":"New Zealand","d":"M915,399L913,401L911,403L908,404L908,404L907,403L910,401L911,399L909,398L909,397L912,395L914,393L915,391L915,389L915,388L915,387L914,384L914,382L915,382L916,384L917,385L917,387L917,391L918,388L918,389L918,392L919,393L920,393L923,392L924,392L921,395L920,397L918,397L917,397L916,399ZM891,410L894,409L896,407L899,405L900,404L902,402L904,401L904,402L904,403L906,402L906,403L905,405L904,406L901,408L898,410L898,411L896,411L894,412L892,414L888,417L885,419L883,420L881,419L880,418L878,418L878,417L881,415L886,412L888,411Z","c":[902.4,404.6]},{"id":"036","n":"Australia","d":"M842,402L843,402L842,406L840,407L839,409L838,408L835,410L835,410L833,410L833,407L834,405L834,403L835,401L836,402L838,403L840,402ZM800,375L797,377L794,377L793,379L792,380L789,380L788,381L786,380L784,380L782,381L780,382L779,382L778,383L776,384L774,384L773,384L771,382L770,381L770,379L772,379L772,378L773,377L774,375L774,373L773,370L774,368L774,366L774,364L774,364L773,362L773,360L773,357L772,356L773,357L773,355L774,355L775,357L775,355L774,353L774,352L774,351L775,349L775,348L776,347L776,345L778,343L777,345L779,343L781,342L783,340L785,339L786,339L787,339L789,338L791,338L791,337L792,337L794,337L796,336L798,335L799,333L801,331L801,330L802,329L804,326L805,329L806,328L805,326L806,325L807,326L808,323L810,322L810,321L812,320L812,319L813,320L813,319L815,318L816,318L818,319L819,321L820,321L822,321L822,320L823,317L825,316L824,316L826,314L828,313L829,313L831,313L831,311L830,310L831,310L833,310L834,312L836,312L837,312L838,313L840,312L841,312L842,312L843,313L842,315L841,316L840,316L840,318L839,319L838,321L838,322L839,323L841,324L842,325L844,327L845,327L846,328L846,329L849,330L850,329L851,327L852,326L853,324L854,322L854,320L854,319L854,318L855,315L856,315L855,314L856,312L857,310L857,309L858,308L859,310L859,312L859,312L859,313L860,315L860,317L860,318L860,320L862,319L863,320L864,321L863,323L863,326L863,327L864,327L864,330L864,332L864,334L866,335L868,337L869,338L869,339L870,341L870,344L871,344L872,345L873,345L872,348L873,350L874,351L875,353L875,356L875,358L874,360L874,362L873,365L872,366L870,369L870,371L868,373L866,376L864,378L862,380L860,382L858,384L856,386L855,388L853,390L853,391L851,392L848,392L845,394L844,395L842,396L840,395L839,394L840,393L838,393L835,396L833,395L832,394L831,394L829,393L828,391L829,389L829,387L828,386L826,386L827,384L828,382L826,384L823,385L825,383L826,381L828,379L829,377L825,380L823,381L822,383L820,382L821,380L820,378L819,377L820,376L817,374L816,374L814,373L809,373L805,374L802,375Z","c":[827.2,355.1]},{"id":"144","n":"Sri Lanka","d":"M697,252L697,255L696,256L694,257L692,254L692,250L693,245L695,246L696,249Z","c":[694.9,251.8]},{"id":"156","n":"China","d":"M767,219L765,218L765,215L766,214L768,213L770,213L771,214L770,216L769,217ZM675,144L674,142L676,141L672,136L676,135L677,134L677,129L682,130L683,128L682,125L684,125L685,123L686,123L687,125L690,126L694,128L696,130L697,134L698,135L701,135L704,136L708,138L710,138L712,141L714,143L717,143L722,143L725,143L728,143L732,145L735,145L736,146L738,145L742,143L746,143L748,142L749,141L750,140L749,139L748,137L749,135L750,136L753,136L754,135L758,134L758,132L760,131L763,130L765,131L765,130L761,127L759,126L758,128L755,127L754,127L753,126L753,123L753,121L756,122L758,120L758,119L758,116L759,115L758,113L756,112L757,111L760,110L763,110L767,111L769,112L773,115L774,117L776,118L779,121L783,122L787,124L790,127L794,127L795,126L798,125L799,128L798,129L799,132L799,135L796,135L795,136L797,138L798,142L797,142L798,144L795,142L795,144L792,145L793,147L791,146L790,146L789,148L787,149L786,151L783,152L782,154L779,155L780,153L779,152L780,150L778,148L776,149L774,151L774,153L771,154L771,155L773,157L775,158L776,159L778,160L780,158L783,159L784,159L785,161L782,161L782,163L780,165L779,167L782,169L785,172L787,174L790,177L790,179L789,180L790,182L792,183L792,185L792,188L791,188L790,191L789,195L787,199L785,202L782,205L779,205L777,206L776,205L775,207L772,208L769,209L769,212L767,212L766,210L767,209L763,208L762,208L759,208L758,206L758,205L755,204L754,203L752,204L749,205L747,205L746,206L745,206L746,210L744,210L744,209L744,207L742,208L741,208L738,207L739,204L737,203L736,201L733,201L733,197L735,195L734,192L734,190L732,189L731,187L730,188L727,187L727,186L726,184L724,185L722,184L719,186L717,189L715,189L714,188L713,188L711,187L710,188L708,191L708,188L706,189L703,188L700,188L698,186L696,186L694,184L693,184L690,182L688,181L687,182L683,179L680,177L678,174L680,174L680,173L679,171L678,169L675,165L670,164L669,161L667,160L666,159L665,157L665,156L664,155L663,156L661,153L662,152L661,151L663,150L665,149L668,150L668,148L671,147L672,146L675,145Z","c":[738.6,163.2]},{"id":"158","n":"Taiwan","d":"M796,200L795,205L795,207L793,204L792,202L793,199L794,197L796,198Z","c":[794.5,202.1]},{"id":"380","n":"Italy","d":"M504,130L506,130L506,130L508,129L509,130L512,131L512,133L513,134L511,134L509,135L509,136L509,137L510,139L512,140L514,143L516,145L518,145L519,146L518,146L521,147L522,148L525,150L525,151L525,152L523,150L521,150L520,152L522,153L522,154L521,155L520,157L518,158L518,157L519,155L519,154L518,153L517,151L516,151L516,149L514,149L513,147L511,147L509,146L507,144L505,142L504,139L503,139L501,138L500,138L499,140L498,140L498,138L496,138L496,136L497,135L496,134L496,133L497,133L498,133L499,132L500,133L501,133L501,131L503,132L504,131ZM516,157L518,157L517,159L518,160L517,162L515,160L514,160L510,158L511,157L514,157ZM501,148L502,147L504,150L503,154L502,153L501,154L500,154L500,150L500,148Z","c":[509.6,143.3]},{"id":"208","n":"Denmark","d":"M502,106L501,106L499,106L498,104L498,101L498,101L499,100L501,100L501,99L503,98L503,99L502,100L503,101L504,102L504,103L503,102L501,105ZM507,103L508,104L507,106L504,105L504,104Z","c":[502.2,103.3]},{"id":"826","n":"United Kingdom","d":"M465,109L464,109L462,109L463,107L462,105L464,105L467,107ZM472,111L472,111L473,109L471,107L471,107L469,106L468,106L469,104L468,104L467,105L467,102L466,101L467,98L468,95L470,96L473,95L470,99L473,98L475,98L475,100L472,103L475,103L475,104L477,107L479,107L480,111L481,112L483,113L483,114L482,115L483,117L481,118L478,118L474,119L473,119L471,120L469,120L467,121L466,120L469,117L472,116L472,116L468,116L467,115L470,114L469,112L469,110Z","c":[473.6,109.8]},{"id":"352","n":"Iceland","d":"M449,74L449,76L451,77L448,79L442,81L440,82L437,81L431,81L434,79L429,78L433,77L433,77L429,76L430,74L434,74L437,76L440,74L442,75L446,74Z","c":[440.6,78]},{"id":"031","n":"Azerbaijan","d":"M593,145L594,145L596,147L597,148L597,147L598,146L600,147L601,149L603,149L604,150L602,151L602,153L601,154L600,155L601,156L600,156L598,155L599,153L598,152L597,153L595,155L594,153L593,152L592,151L592,150L591,149L591,149L590,148L590,147L590,147L592,148L594,148L594,147L592,146ZM594,155L592,155L591,153L590,152L591,152L591,153L592,153L593,153Z","c":[597.1,150.9]},{"id":"268","n":"Georgia","d":"M576,141L577,140L579,141L582,141L586,143L586,143L588,143L590,143L591,145L593,145L592,146L594,147L594,148L592,148L590,147L590,147L586,148L584,146L581,146L581,145L580,143L579,142L577,141Z","c":[586.1,145]},{"id":"608","n":"Philippines","d":"M800,236L798,234L800,234L802,235L801,237ZM805,244L806,243L806,242L808,241L807,243L809,240L809,243L808,244L808,246L807,247L805,245ZM816,249L816,251L817,253L816,256L815,253L814,254L815,256L814,258L811,256L810,254L811,252L809,251L808,252L807,252L805,254L804,253L805,250L807,249L808,248L809,250L811,249L812,247L813,247L813,245L815,246L816,248ZM795,246L791,249L793,247L794,245L796,243L797,240L798,243L796,244ZM801,219L801,220L802,222L802,225L801,226L801,228L802,231L803,231L804,231L808,233L808,234L809,235L808,236L806,235L805,233L805,234L803,233L800,233L799,232L799,231L799,230L799,230L798,231L797,229L796,227L796,225L797,226L796,221L797,218L798,218L800,219L801,218ZM803,240L803,238L805,239L806,239L806,241L805,242L804,243L803,241ZM812,238L814,241L811,240L812,241L812,243L811,244L811,242L810,241L809,240L811,240L811,239L809,236L812,236Z","c":[806,239.3]},{"id":"458","n":"Malaysia","d":"M746,255L747,255L749,256L749,258L751,257L752,256L752,256L754,258L755,260L756,262L755,264L756,265L756,267L757,267L758,270L758,271L756,271L753,269L750,267L750,265L748,263L748,260L747,259L747,256ZM794,262L792,262L789,262L788,265L787,266L786,271L783,271L781,271L780,271L778,272L776,272L775,273L773,271L772,269L774,270L776,269L777,267L778,266L781,266L783,263L784,261L786,263L786,262L787,262L787,260L787,258L789,256L791,254L792,254L793,255L793,257L795,258L797,258L797,260L795,260L796,261Z","c":[772.8,264.1]},{"id":"096","n":"Brunei","d":"M787,258L787,260L787,262L786,262L786,263L784,261L785,260Z","c":[786.6,261.2]},{"id":"705","n":"Slovenia","d":"M512,131L514,131L516,131L518,131L518,130L519,130L519,131L517,132L517,133L516,134L516,134L515,134L515,134L514,134L512,134L513,134L512,133Z","c":[515.7,132.8]},{"id":"246","n":"Finland","d":"M537,67L538,69L541,70L540,72L543,76L542,78L544,80L543,82L547,84L546,85L545,87L541,90L537,90L533,91L530,92L528,90L526,90L526,87L525,84L525,83L527,81L532,78L533,77L532,76L529,75L528,74L528,70L524,68L521,67L522,66L525,67L528,67L530,68L532,67L532,65L535,64L538,65Z","c":[535.3,80]},{"id":"703","n":"Slovakia","d":"M533,123L532,124L532,125L531,126L529,125L528,125L527,126L526,126L526,126L525,126L524,126L524,127L522,127L521,127L520,126L519,125L520,125L520,124L521,124L522,124L522,124L522,124L522,123L523,123L523,122L524,122L524,122L525,122L526,123L527,122L529,123L530,122Z","c":[526,125]},{"id":"203","n":"Czechia","d":"M514,117L516,118L517,119L517,119L519,120L519,119L520,120L521,121L523,121L524,122L523,122L523,123L522,123L522,124L522,124L522,124L521,124L520,124L520,125L518,124L517,124L515,124L515,124L513,125L512,124L510,123L509,122L509,121L508,120L510,119L511,118L512,118L513,117L513,118Z","c":[515.9,121.8]},{"id":"232","n":"Eritrea","d":"M576,231L576,229L576,225L577,223L577,222L579,221L581,219L582,223L583,226L585,227L588,230L590,232L591,234L592,235L594,236L593,237L592,236L591,235L590,234L588,233L588,231L585,230L584,230L583,230L581,230L580,229L579,231Z","c":[582.2,227.9]},{"id":"392","n":"Japan","d":"M830,154L830,157L831,160L831,162L832,164L832,166L829,168L825,168L823,171L821,170L820,168L815,169L813,170L810,170L814,172L814,178L813,179L811,178L811,175L809,174L807,172L809,171L809,169L811,167L812,165L817,164L820,165L820,159L823,161L825,158L826,157L825,153L823,149L823,147L826,147L829,151ZM829,139L830,138L833,141L830,142L829,145L824,143L825,146L822,146L820,143L820,141L822,141L821,136L820,134L825,137L827,138ZM814,171L815,170L816,170L817,169L819,169L820,170L819,172L818,171L817,172L817,174L815,173Z","c":[823,159.1]},{"id":"600","n":"Paraguay","d":"M327,338L328,339L328,344L331,344L332,344L334,344L335,345L335,348L336,349L337,349L337,349L338,350L339,351L338,353L338,355L338,358L336,360L334,361L331,360L328,359L330,354L330,353L327,352L324,350L321,349L316,344L317,340L316,339L317,336L322,335L324,335L327,337Z","c":[328,347.6]},{"id":"887","n":"Yemen","d":"M616,216L619,221L620,224L618,224L617,226L617,227L615,228L611,230L608,232L607,232L606,232L605,233L603,234L601,234L600,234L600,235L599,235L599,236L597,236L597,236L595,236L594,234L594,233L594,232L593,229L592,228L593,228L592,227L593,226L592,225L593,224L593,222L594,221L595,222L596,221L599,221L599,222L602,222L603,222L603,223L605,222L606,219L609,218Z","c":[605.4,226.4]},{"id":"682","n":"Saudi Arabia","d":"M569,184L572,185L573,184L573,183L575,182L576,181L577,181L574,177L579,176L579,175L582,176L586,178L594,185L599,185L601,185L602,187L604,187L605,189L606,190L607,191L609,192L609,194L609,195L610,196L610,197L611,198L611,198L612,199L613,199L613,200L614,201L615,204L623,205L623,205L625,207L624,213L616,216L609,218L606,219L605,222L603,223L603,222L602,222L599,222L599,221L596,221L595,222L594,221L593,222L593,224L592,225L592,223L591,222L591,221L589,220L588,217L587,215L585,213L584,212L582,209L581,207L581,205L580,202L578,201L577,200L576,198L576,197L575,196L574,195L573,193L571,190L570,188L569,188L569,186L569,185Z","c":[595.7,201]},{"id":"N. Cyprus","n":"N. Cyprus","d":"M562,166L562,166L562,165L564,165L566,165L565,166L565,166L565,166L564,167L564,166L564,167L564,166L563,166L563,166L562,166Z","c":[564.3,166.2]},{"id":"196","n":"Cyprus","d":"M562,166L562,166L563,166L563,166L564,166L564,167L564,166L564,167L565,166L565,166L565,167L563,168L561,168L561,166Z","c":[563.1,167.4]},{"id":"504","n":"Morocco","d":"M474,166L475,168L475,170L476,173L477,174L476,175L473,176L472,177L470,177L470,179L467,181L466,182L464,183L461,183L457,186L457,189L457,189L457,191L455,191L454,192L453,192L452,192L450,192L449,194L448,194L447,198L443,202L442,206L441,207L441,209L435,209L435,209L435,207L436,207L437,205L437,204L438,202L439,200L440,199L441,197L441,196L442,194L444,193L446,189L446,189L447,188L449,188L452,186L453,185L455,182L454,178L456,176L456,174L458,172L460,171L462,169L464,166L465,164L466,164L468,166L470,165L473,166Z","c":[458.3,183.1]},{"id":"818","n":"Egypt","d":"M576,207L565,207L555,207L545,207L544,196L544,185L543,182L543,180L543,179L544,177L547,177L549,178L552,179L553,179L555,178L556,178L558,177L560,178L561,179L561,178L564,179L566,179L567,178L569,183L569,184L568,185L568,187L567,189L567,189L566,188L565,187L562,183L562,183L564,186L565,189L568,194L569,196L570,198L572,201L572,202L572,204L575,206Z","c":[557.1,193.6]},{"id":"434","n":"Libya","d":"M545,207L545,213L542,213L542,215L531,209L521,203L518,204L516,206L515,204L511,202L510,201L507,199L506,200L505,198L505,197L504,194L505,193L504,191L505,189L504,188L505,185L505,184L504,181L505,180L505,179L505,178L507,177L507,176L509,175L509,172L512,173L513,173L515,174L518,175L520,178L522,178L525,180L528,181L529,181L531,179L530,177L531,175L532,174L534,173L538,174L538,175L539,175L540,176L543,176L544,177L543,179L543,180L543,182L544,185L544,196Z","c":[526.4,192.1]},{"id":"231","n":"Ethiopia","d":"M607,250L599,260L596,260L594,262L592,262L591,263L589,263L588,262L586,263L585,265L583,264L583,264L582,264L581,264L578,261L576,261L575,260L575,259L574,258L572,255L571,254L570,253L569,251L567,251L568,249L570,249L570,248L570,246L571,242L572,241L572,240L573,238L575,236L576,233L576,231L579,231L580,229L581,230L583,230L584,230L585,230L588,231L588,233L590,234L591,235L592,236L591,238L590,239L590,240L590,241L592,241L593,241L593,241L593,242L594,244L595,246L596,247L605,250Z","c":[585.2,248.9]},{"id":"262","n":"Djibouti","d":"M592,236L593,237L594,236L594,237L594,238L593,239L594,240L593,241L593,241L592,241L590,241L590,240L590,239L591,238Z","c":[592.8,239.2]},{"id":"Somaliland","n":"Somaliland","d":"M609,240L609,240L609,241L610,244L610,246L609,248L607,250L605,250L596,247L595,246L594,244L593,242L593,241L594,240L595,240L595,242L597,243L598,243L601,242L603,242L606,241L607,241L608,240Z","c":[602.9,245.5]},{"id":"800","n":"Uganda","d":"M570,278L565,278L562,278L561,279L559,280L559,279L559,277L559,276L559,273L560,272L561,270L562,269L563,268L562,268L562,264L563,263L565,264L567,263L569,263L570,262L572,264L572,266L573,269L572,272L571,274L570,275Z","c":[566.4,271.6]},{"id":"646","n":"Rwanda","d":"M561,279L562,280L562,282L561,283L559,282L559,284L557,284L557,282L558,282L558,280L559,279L559,280Z","c":[559.9,281.9]},{"id":"070","n":"Bosnia and Herz.","d":"M525,143L522,142L521,141L520,140L519,139L519,138L517,136L518,135L519,136L519,135L520,135L522,136L524,136L525,136L526,136L526,138L527,139L527,140L526,140L526,141L525,141Z","c":[523,138.8]},{"id":"807","n":"Macedonia","d":"M534,144L535,145L536,147L535,147L535,148L534,148L533,148L531,149L530,148L530,146L530,145L530,145L530,145L532,144L532,144L533,144Z","c":[533.1,146.7]},{"id":"688","n":"Serbia","d":"M525,133L526,132L528,132L529,134L530,134L531,135L531,136L533,137L534,137L534,137L534,138L534,138L534,139L534,140L535,141L534,142L534,143L534,144L534,144L533,144L532,144L532,144L532,144L532,143L532,143L532,142L531,142L531,142L530,141L530,141L530,141L529,142L529,142L529,142L528,142L527,141L527,141L526,140L527,140L527,139L526,138L526,136L525,136L526,135L525,134Z","c":[530.3,138.6]},{"id":"499","n":"Montenegro","d":"M528,143L528,143L528,143L527,144L527,145L526,145L526,144L524,143L525,143L525,141L526,141L526,140L527,141L527,141L528,142L529,142L529,142Z","c":[526.9,143]},{"id":"Kosovo","n":"Kosovo","d":"M530,145L530,144L529,144L528,143L529,142L529,142L530,141L530,141L530,141L531,142L531,142L532,142L532,143L532,143L532,144L532,144L532,144L532,144L530,145L530,145Z","c":[530.9,143.7]},{"id":"780","n":"Trinidad and Tobago","d":"M316,242L317,241L318,242L318,244L315,244L315,244L316,243Z","c":[317,243.4]},{"id":"728","n":"S. Sudan","d":"M562,264L559,262L559,261L557,262L556,261L555,262L554,262L553,259L552,258L550,257L549,255L548,254L546,252L546,251L545,250L543,249L544,248L545,248L545,245L546,243L548,243L549,244L550,246L551,246L552,245L554,245L554,246L557,246L557,245L558,245L558,244L559,243L562,245L563,245L564,243L566,241L565,239L565,238L566,238L566,237L568,237L567,240L568,242L569,243L569,244L569,246L570,246L570,248L570,249L568,249L567,251L569,251L570,253L571,254L572,255L574,258L572,260L570,262L569,263L567,263L565,264L563,263Z","c":[560.5,253.1]}];
+</script>
+<script>
+"use strict";
+/* ================== DATOS: MÉXICO ==================
+ [aportación PIB nacional %, PIB prim %, PIB sec %, PIB ter %, empleo prim %, sec %, ter %,
+  maíz (miles t), aguacate (miles t), café cereza (miles t), carne bovino en canal (miles t),
+  pesca (miles t peso vivo), pasajeros aéreos (millones), IED (millones USD)]
+ Valores aproximados/redondeados con fines didácticos. */
+const MXD = {
+AGU:[1.3,3.6,42,54.4,4,33,63,100,1,0,40,1,1.0,500],
+BCN:[3.6,2.2,34,63.8,3,34,63,20,0,0,80,130,13.8,1700],
+BCS:[0.8,4.5,20,75.5,6,18,76,40,1,0,7,170,7.8,500],
+CAM:[2.5,1.2,72,26.8,14,18,68,450,1,0,30,45,0.4,150],
+CHP:[1.5,8.5,19,72.5,37,13,50,1250,25,400,120,35,2.2,80],
+CHH:[3.4,5.6,38,56.4,7,33,60,1200,0,0,95,2,2.6,1500],
+CMX:[15.2,0.1,9,90.9,0.5,15,84.5,5,0,0,1,0,48.4,12000],
+COA:[3.6,2.6,52,45.4,4,37,59,80,0,0,75,1,0.9,1400],
+COL:[0.6,5.5,22,72.5,11,19,70,50,2,1,15,25,0.3,150],
+DUR:[1.2,10.5,33,56.5,11,28,61,300,0,0,95,3,0.5,200],
+GUA:[4.1,4.2,37,58.8,9,34,57,1600,3,0,70,3,2.9,1200],
+GRO:[1.4,6,15,79,24,17,59,1350,25,40,50,10,2.0,100],
+HID:[1.6,3.8,37,59.2,17,26,57,550,3,30,30,8,0.05,400],
+JAL:[7.2,5.5,29,65.5,7,29,64,3700,330,5,260,30,22.5,1900],
+MEX:[9.1,1.4,27,71.6,3,26,71,1900,135,1,65,5,3.2,2400],
+MIC:[2.5,13.5,20,66.5,19,21,60,1950,2150,1,105,30,1.4,350],
+MOR:[1.1,3.4,26,70.6,10,21,69,100,65,0.3,10,3,0.05,200],
+NAY:[0.7,9,18,73,15,16,69,230,75,12,25,40,0.4,150],
+NLE:[8.0,0.6,38,61.4,1.5,33,65.5,50,0,0,55,0,12.6,4000],
+OAX:[1.5,6.5,25,68.5,26,21,53,650,10,90,60,15,2.4,150],
+PUE:[3.3,4.5,33,62.5,16,27,57,1000,30,145,60,4,0.5,700],
+QUE:[2.4,1.8,38,60.2,4,34,62,200,0,1,35,1,1.3,1000],
+ROO:[1.6,0.6,12,87.4,4,14,82,50,0,0,8,6,35,600],
+SLP:[2.1,4,42,54,13,28,59,200,0,10,60,2,0.8,800],
+SIN:[2.2,13,20,67,15,17,68,4000,0,0,115,360,4.5,400],
+SON:[3.4,7,44,49,9,26,65,300,0,0,90,750,3.0,1000],
+TAB:[2.9,1.8,62,36.2,13,17,70,100,0,1,70,40,1.5,300],
+TAM:[2.9,3.6,36,60.4,7,26,67,700,0,0,75,40,1.4,900],
+TLA:[0.5,3.6,32,64.4,10,35,55,300,0,0,8,1,0,100],
+VER:[4.6,5.8,32,62.2,21,18,61,1200,20,220,300,70,1.6,600],
+YUC:[1.5,4,24,72,9,22,69,100,20,0,50,40,3.5,350],
+ZAC:[0.9,9.5,37,53.5,20,22,58,450,0,0,45,1,0.4,300]
+};
+const MXNAME = {AGU:"Aguascalientes",BCN:"Baja California",BCS:"Baja California Sur",CAM:"Campeche",CHP:"Chiapas",CHH:"Chihuahua",CMX:"Ciudad de México",COA:"Coahuila",COL:"Colima",DUR:"Durango",GUA:"Guanajuato",GRO:"Guerrero",HID:"Hidalgo",JAL:"Jalisco",MEX:"Estado de México",MIC:"Michoacán",MOR:"Morelos",NAY:"Nayarit",NLE:"Nuevo León",OAX:"Oaxaca",PUE:"Puebla",QUE:"Querétaro",ROO:"Quintana Roo",SLP:"San Luis Potosí",SIN:"Sinaloa",SON:"Sonora",TAB:"Tabasco",TAM:"Tamaulipas",TLA:"Tlaxcala",VER:"Veracruz",YUC:"Yucatán",ZAC:"Zacatecas"};
+const MXREG = {};
+[["Norte","BCN BCS SON SIN CHH COA NLE TAM DUR"],["Centro-Occidente","ZAC AGU SLP JAL COL NAY MIC GUA QUE"],["Centro","CMX MEX HID MOR PUE TLA"],["Sur-Sureste","GRO OAX CHP VER TAB CAM YUC ROO"]]
+ .forEach(([r,l])=>l.split(" ").forEach(id=>MXREG[id]=r));
+const REGCOL = {"Norte":"var(--cielo)","Centro-Occidente":"var(--amarillo)","Centro":"var(--lila)","Sur-Sureste":"var(--rosa)"};
+/* normalizar aportación nacional a 100 */
+(()=>{const s=Object.values(MXD).reduce((a,v)=>a+v[0],0);for(const k in MXD)MXD[k][0]=Math.round(MXD[k][0]/s*1000)/10;})();
+const MX_NAT = {pib:[3.4,31,65.6], emp:[11,25,64]};
+
+/* ================== DATOS: MUNDO ==================
+ [PIB por habitante USD, agro %VA, industria %VA, servicios %VA, empleo agrícola %, exportaciones %PIB] (≈2023) */
+const WD = {
+"840":["Estados Unidos","América",[82000,0.9,17.6,77.6,1.6,11]],
+"124":["Canadá","América",[53400,1.8,24,67,1.4,33]],
+"484":["México","América",[13800,3.9,31.5,59,11.5,36]],
+"320":["Guatemala","América",[5800,9.5,22.5,62,30,17]],
+"170":["Colombia","América",[6900,8.5,25,56,15,16]],
+"604":["Perú","América",[7800,6.8,33,52,26,26]],
+"076":["Brasil","América",[10300,6.8,22,59,8.5,18]],
+"032":["Argentina","América",[13700,5.5,23,54,7,13]],
+"152":["Chile","América",[17000,3.6,30,57,6,31]],
+"068":["Bolivia","América",[3700,12,26,50,27,25]],
+"276":["Alemania","Europa",[52700,0.8,27,63,1.2,47]],
+"250":["Francia","Europa",[44500,1.6,17,70,2.4,35]],
+"826":["Reino Unido","Europa",[48900,0.6,17.5,72,1,32]],
+"724":["España","Europa",[33500,2.5,20,68,3.6,39]],
+"380":["Italia","Europa",[38400,1.9,23,65,3.6,35]],
+"578":["Noruega","Europa",[87900,1.8,37,53,2,47]],
+"643":["Rusia","Europa",[13800,3.8,33,54,5.6,23]],
+"792":["Turquía","Asia",[13000,6,28,56,16,32]],
+"682":["Arabia Saudita","Asia",[32500,2.6,45,50,2.5,35]],
+"156":["China","Asia",[12600,7.1,38.3,54.6,22.3,20]],
+"392":["Japón","Asia",[33800,1,29,70,3,22]],
+"410":["Corea del Sur","Asia",[33100,1.6,32,58,5.2,44]],
+"356":["India","Asia",[2500,16.7,25.6,49.9,43,22]],
+"050":["Bangladés","Asia",[2550,11,34,51,37,13]],
+"704":["Vietnam","Asia",[4300,11.9,37,42.5,27,87]],
+"360":["Indonesia","Asia",[4900,12.5,40.5,42.5,29,22]],
+"566":["Nigeria","África",[1600,24,30,44,35,14]],
+"231":["Etiopía","África",[1270,32,23,40,62,7]],
+"404":["Kenia","África",[1950,21,17,55,33,12]],
+"818":["Egipto","África",[3500,11,32,52,19,16]],
+"710":["Sudáfrica","África",[6000,2.6,24,63,21,33]],
+"036":["Australia","Oceanía",[64700,2.3,27,66,2.4,26]]
+};
+for(const k in WD){const v=WD[k][2];const s=v[1]+v[2]+v[3];v[1]=+(v[1]/s*100).toFixed(1);v[2]=+(v[2]/s*100).toFixed(1);v[3]=+(100-v[1]-v[2]).toFixed(1);}
+const CONTCOL = {"América":"var(--cielo)","Europa":"var(--lila)","Asia":"var(--amarillo)","África":"var(--rosa)","Oceanía":"var(--gris)"};
+const W_REF = {estr:[4.4,27.6,68]};
+
+/* ================== INDICADORES ================== */
+const SECT = {p:"primarias",s:"secundarias",t:"terciarias"};
+const IND = {
+mx:{
+ pib:{em:"💰",n:"PIB por actividad económica",anio:2022,fuente:"INEGI, PIB por Entidad Federativa (aprox.)",
+   subs:[{k:"nac",l:"Peso en el PIB nacional",u:"% del PIB nacional",i:0},{k:"p",l:"Actividades primarias",u:"% del PIB estatal",i:1},{k:"s",l:"Actividades secundarias",u:"% del PIB estatal",i:2},{k:"t",l:"Actividades terciarias",u:"% del PIB estatal",i:3}],
+   mide:"El valor de lo que produce cada entidad. «Peso en el PIB nacional» compara entidades entre sí; los sectores muestran qué parte de la economía de cada entidad viene de cada tipo de actividad.",
+   q:"¿Qué actividad económica tiene mayor peso en este territorio?",
+   ojo:"El PIB mide valor en dinero, no cuántas personas trabajan. Un sector puede generar mucho valor con poca gente (como el petróleo)."},
+ emp:{em:"👷",n:"Población ocupada por sector",anio:2024,fuente:"INEGI, ENOE (aprox.)",
+   subs:[{k:"p",l:"Sector primario",u:"% de la población ocupada",i:4},{k:"s",l:"Sector secundario",u:"% de la población ocupada",i:5},{k:"t",l:"Sector terciario",u:"% de la población ocupada",i:6}],
+   mide:"De cada 100 personas que trabajan en la entidad, cuántas lo hacen en cada sector.",
+   q:"¿En qué sector se concentra el empleo?",
+   ojo:"Compara este indicador con el PIB del mismo sector: si hay mucho empleo pero poco PIB, la productividad de esa actividad es baja."},
+ prod:{em:"🌽",n:"Producción de una actividad",anio:2023,fuente:"SIAP y CONAPESCA (aprox.)",
+   subs:[{k:"maiz",l:"🌽 Maíz",u:"miles de toneladas",i:7},{k:"agu",l:"🥑 Aguacate",u:"miles de toneladas",i:8},{k:"cafe",l:"☕ Café cereza",u:"miles de toneladas",i:9},{k:"bov",l:"🐄 Ganado bovino (carne)",u:"miles de toneladas en canal",i:10},{k:"pesca",l:"🐟 Pesca y acuacultura",u:"miles de toneladas (peso vivo)",i:11}],
+   mide:"Cuánto se produce de un bien en cada entidad. Es un valor absoluto: también te dice qué parte de la producción nacional concentra cada lugar.",
+   q:"¿Dónde se concentra esta actividad?",
+   ojo:"Producir mucho no significa que esa actividad domine la economía del estado. Revisa también su estructura del PIB."},
+ infra:{em:"✈️",n:"Infraestructura y conectividad",anio:2023,fuente:"AFAC y grupos aeroportuarios (aprox.)",
+   subs:[{k:"aer",l:"Pasajeros en aeropuertos",u:"millones de pasajeros al año",i:12}],
+   mide:"Cuántas personas llegan o salen por avión de los aeropuertos de cada entidad. Muestra qué tan conectado está un territorio con otros a escala nacional y global.",
+   q:"¿Qué territorios están mejor conectados y qué actividad económica podría explicarlo?",
+   ojo:"Un aeropuerto muy activo puede deberse a negocios, a turismo o a que la entidad es un nodo de conexión. El dato no dice cuál; tú lo interpretas."},
+ ied:{em:"🤝",n:"Comercio e inversión",anio:2023,fuente:"Secretaría de Economía (aprox.)",
+   subs:[{k:"ied",l:"Inversión extranjera directa",u:"millones de dólares",i:13}],
+   mide:"El dinero que empresas de otros países invierten en la entidad (fábricas, comercios, servicios). Muestra la relación del territorio con la economía global.",
+   q:"¿Qué territorios atraen más inversión extranjera y qué relación tienen con el resto del mundo?",
+   ojo:"La IED se registra en la entidad donde la empresa tiene su domicilio fiscal, no siempre donde está la fábrica. Por eso la Ciudad de México aparece tan alta."}
+},
+w:{
+ pibpc:{em:"💰",n:"PIB por habitante",anio:2023,fuente:"Banco Mundial (aprox.)",
+   subs:[{k:"pc",l:"PIB por habitante",u:"dólares por persona",i:0}],
+   mide:"El valor de todo lo producido en el país dividido entre su población. Permite comparar países de tamaños muy distintos.",
+   q:"¿Qué países tienen valores altos o bajos? ¿Ves algún patrón por continente?",
+   ojo:"Es un promedio: no dice cómo se reparte la riqueza dentro del país."},
+ estr:{em:"🏭",n:"Estructura económica",anio:2023,fuente:"Banco Mundial (aprox.)",
+   subs:[{k:"p",l:"Agropecuario (primario)",u:"% del valor agregado",i:1},{k:"s",l:"Industria (secundario)",u:"% del valor agregado",i:2},{k:"t",l:"Servicios (terciario)",u:"% del valor agregado",i:3}],
+   mide:"Qué parte del valor que produce cada país viene de cada sector económico.",
+   q:"¿Qué sector tiene mayor peso en este país y en qué se parece o se distingue de México?",
+   ojo:"La industria incluye minería y petróleo: por eso Arabia Saudita o Noruega tienen un secundario alto."},
+ emp:{em:"👷",n:"Empleo en agricultura",anio:2023,fuente:"OIT, estimaciones modeladas (aprox.)",
+   subs:[{k:"ag",l:"Empleo agropecuario",u:"% del empleo total",i:4}],
+   mide:"De cada 100 personas que trabajan, cuántas lo hacen en actividades agropecuarias.",
+   q:"¿En qué regiones del mundo trabaja más gente en el campo?",
+   ojo:"Incluye trabajo informal y de autoconsumo, muy común en zonas rurales."},
+ exp:{em:"🚢",n:"Comercio exterior",anio:2023,fuente:"Banco Mundial (aprox.)",
+   subs:[{k:"x",l:"Exportaciones",u:"% del PIB",i:5}],
+   mide:"Qué parte de lo que produce un país se vende a otros países. Indica qué tan integrado está al comercio global.",
+   q:"¿Qué países dependen más del comercio con el exterior?",
+   ojo:"Un país grande (como EE. UU.) puede exportar muchísimo en dólares y aun así tener un porcentaje bajo, porque su mercado interno es enorme."}
+}};
+
+/* ================== UTILIDADES ================== */
+const $ = (s,el=document)=>el.querySelector(s);
+const $$ = (s,el=document)=>[...el.querySelectorAll(s)];
+const NS = "http://www.w3.org/2000/svg";
+const esc = s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt = v=>{ if(v==null||isNaN(v))return"–"; const a=Math.abs(v);
+  return v.toLocaleString("es-MX",{maximumFractionDigits: a>=1000?0: a>=100?0: a>=10?1: a>=1?1:2}); };
+const RAMP = ["var(--r0)","var(--r1)","var(--r2)","var(--r3)","var(--r4)"];
+const LVL = ["muy bajo","bajo","medio","alto","muy alto"];
+const noEmoji=s=>String(s).replace(/^[^\p{L}\p{N}]+/u,"");
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove("on"),1800);}
+
+/* almacenamiento local seguro */
+const KEY="lab-indicadores-geoeco-v2";
+let ST = {nombre:"",grupo:"",iq:{},w:{},m4:{},estado:"",gen:false};
+try{const raw=localStorage.getItem(KEY); if(raw) ST=Object.assign(ST,JSON.parse(raw));}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(ST));}catch(e){}}
+
+/* acceso a datos */
+function ids(ds){return ds==="mx"?Object.keys(MXD):Object.keys(WD);}
+function nameOf(ds,id){return ds==="mx"?MXNAME[id]:(WD[id]?WD[id][0]:id);}
+function groupOf(ds,id){return ds==="mx"?MXREG[id]:WD[id][1];}
+function raw(ds,id){return ds==="mx"?MXD[id]:WD[id][2];}
+function val(ds,ind,sub,id){const s=IND[ds][ind].subs.find(x=>x.k===sub);return raw(ds,id)[s.i];}
+function subOf(ds,ind,sub){return IND[ds][ind].subs.find(x=>x.k===sub);}
+
+/* clasificación */
+function quantBreaks(vals){const v=vals.filter(x=>x>0).sort((a,b)=>a-b);if(!v.length)return[0,0,0,0];
+  const q=p=>{const i=(v.length-1)*p,lo=Math.floor(i),hi=Math.ceil(i);return v[lo]+(v[hi]-v[lo])*(i-lo);};
+  return [q(.2),q(.4),q(.6),q(.8)];}
+function eqBreaks(vals){const mx=Math.max(...vals),mn=Math.min(...vals);const st=(mx-mn)/5;return [mn+st,mn+2*st,mn+3*st,mn+4*st];}
+function classOf(v,b){let c=0;for(const x of b)if(v>x)c++;return c;}
+function niceNum(v){if(v>=100)return Math.round(v);if(v>=10)return Math.round(v*10)/10;return Math.round(v*100)/100;}
+
+/* ================== MAPA SVG ================== */
+function buildMap(ds,{onPick,frame=false,neighbors=true}={}){
+  const svg=document.createElementNS(NS,"svg");
+  svg.setAttribute("class","mapsvg");
+  const W= ds==="mx"?800:960, H= ds==="mx"?520:480;
+  svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
+  svg.dataset.vb=`0 0 ${W} ${H}`;
+  svg.setAttribute("role","img");
+  const g=document.createElementNS(NS,"g");svg.appendChild(g);
+  if(ds==="mx"){
+    if(neighbors){GEO_MXN.forEach(f=>{const p=document.createElementNS(NS,"path");p.setAttribute("d",f.d);p.setAttribute("class","nb");g.appendChild(p);});
+      [["Estados Unidos",360,40],["Golfo de México",610,250],["Océano Pacífico",120,430],["Guatemala",705,500]].forEach(([t,x,y])=>{const tx=document.createElementNS(NS,"text");tx.setAttribute("x",x);tx.setAttribute("y",y);tx.setAttribute("class","nbl");tx.textContent=t;g.appendChild(tx);});}
+    GEO_MX.forEach(f=>{const p=document.createElementNS(NS,"path");p.setAttribute("d",f.d);p.setAttribute("class","t");p.dataset.id=f.id;p.setAttribute("fill","var(--r0)");g.appendChild(p);});
+  }else{
+    GEO_W.forEach(f=>{const p=document.createElementNS(NS,"path");p.setAttribute("d",f.d);const has=!!WD[f.id];p.setAttribute("class",has?"t":"nd");if(has)p.dataset.id=f.id;p.setAttribute("fill",has?"var(--r0)":"var(--rz)");g.appendChild(p);});
+  }
+  const cg=document.createElementNS(NS,"g");cg.setAttribute("class","circles");svg.appendChild(cg);
+  if(frame){ // flecha norte
+    const n=document.createElementNS(NS,"g");n.setAttribute("class","north");
+    const x=ds==="mx"?740:910,y=ds==="mx"?60:60;
+    n.innerHTML=`<path d="M${x} ${y-26} L${x+9} ${y+4} L${x} ${y-3} L${x-9} ${y+4} Z" fill="var(--ink)"/><text x="${x}" y="${y+22}" text-anchor="middle" font-size="16">N</text>`;
+    svg.appendChild(n);
+  }
+  if(onPick){
+    svg.addEventListener("click",e=>{const p=e.target.closest("path.t");if(p)onPick(p.dataset.id);});
+  }
+  return svg;
+}
+function paintMap(svg,ds,getV,method="q"){
+  const list=ids(ds).map(id=>getV(id));
+  const b= method==="e"?eqBreaks(list):quantBreaks(list);
+  const hasZero=list.some(v=>v===0);
+  $$("path.t",svg).forEach(p=>{const v=getV(p.dataset.id);p.setAttribute("fill", (hasZero&&v===0)?"var(--rz)":RAMP[classOf(v,b)]);});
+  return {b,hasZero,min:Math.min(...list),max:Math.max(...list),posMin:Math.min(...list.filter(v=>v>0))};
+}
+function circlesMap(svg,ds,getV){
+  const cg=$("g.circles",svg);cg.innerHTML="";
+  const geo=ds==="mx"?GEO_MX:GEO_W;const mx=Math.max(...ids(ds).map(getV));
+  const R=ds==="mx"?42:40;
+  geo.filter(f=>ds==="mx"||WD[f.id]).map(f=>({f,v:getV(f.id)})).sort((a,b)=>b.v-a.v).forEach(({f,v})=>{
+    if(v<=0)return;const c=document.createElementNS(NS,"circle");c.setAttribute("cx",f.c[0]);c.setAttribute("cy",f.c[1]);
+    c.setAttribute("r",(Math.sqrt(v/mx)*R).toFixed(1));c.setAttribute("class","ps");cg.appendChild(c);});
+  return mx;
+}
+function clearCircles(svg){const cg=$("g.circles",svg);if(cg)cg.innerHTML="";}
+function legendHTML(info,unit,method){
+  const lo=info.hasZero?info.posMin:info.min;
+  const e=[lo,...info.b,info.max].map(niceNum);
+  const rows=[];
+  if(info.hasZero)rows.push(`<span><i class="sw" style="background:var(--rz)"></i>0 / sin producción</span>`);
+  for(let i=0;i<5;i++)rows.push(`<span><i class="sw" style="background:${RAMP[i]}"></i>${fmt(e[i])} – ${fmt(e[i+1])}</span>`);
+  return `<b>Leyenda: ${esc(unit)} ${method==="e"?"(intervalos iguales)":"(cuantiles: 5 grupos con casi el mismo número de territorios)"}</b>${rows.join("")}`;
+}
+function addTooltip(box,svg,ds,getV,unit){
+  const tip=document.createElement("div");tip.className="tip";box.appendChild(tip);
+  svg.addEventListener("pointermove",e=>{if(e.pointerType==="touch")return;const p=e.target.closest("path.t");
+    if(!p){tip.classList.remove("on");return;}const r=box.getBoundingClientRect();
+    tip.style.left=(e.clientX-r.left)+"px";tip.style.top=(e.clientY-r.top)+"px";
+    tip.textContent=`${nameOf(ds,p.dataset.id)}: ${fmt(getV(p.dataset.id))} ${unit()}`;tip.classList.add("on");});
+  svg.addEventListener("pointerleave",()=>tip.classList.remove("on"));
+}
+
+
+/* ================== PREGUNTA RÁPIDA POR INDICADOR ================== */
+const IQ={
+ mx:{
+  pib:{sub:"s",hint:"Elige «Actividades secundarias» y observa los estados más oscuros.",q:"Campeche y Tabasco tienen el mayor peso del sector secundario en su PIB (más del 60 %). ¿Qué actividad lo explica?",
+   o:["Fábricas de autos y electrónicos","Extracción de petróleo y gas en el Golfo de México","El turismo de playa","La agricultura de riego"],a:1,
+   e:"La extracción petrolera se cuenta como actividad secundaria (minería). Genera muchísimo valor con poca gente: por eso su PIB es industrial aunque gran parte de su población trabaje en servicios. Un factor natural (yacimientos) explica la especialización."},
+  emp:{sub:"p",hint:"Elige «Sector primario».",q:"¿En qué región se concentran los valores más altos de empleo en el sector primario?",
+   o:["Norte","Centro","Sur-Sureste","Centro-Occidente"],a:2,
+   e:"Chiapas, Oaxaca, Guerrero y Veracruz tienen la mayor proporción de personas trabajando en el campo. Predomina la agricultura campesina y de autoconsumo, y hay menos industria que en el norte o el centro."},
+  prod:{sub:"agu",hint:"Elige «Aguacate».",q:"¿Cómo describirías la distribución territorial de la producción de aguacate?",
+   o:["Muy concentrada en una sola entidad","Repartida casi por igual en todo el país","Concentrada en los estados del norte","Concentrada en las costas"],a:0,
+   e:"Michoacán produce cerca de tres cuartas partes del aguacate nacional. Influyen factores naturales (clima templado, suelos volcánicos del Eje Neovolcánico) y socioeconómicos (empacadoras y exportación a Estados Unidos, un circuito productivo global)."},
+  infra:{sub:"aer",hint:"Busca a Quintana Roo en el mapa o en la lista.",q:"Quintana Roo ocupa el 2.º lugar del país en pasajeros aéreos. ¿Qué actividad económica explica mejor esa conectividad?",
+   o:["La industria automotriz","El turismo (sector terciario)","La pesca","La minería"],a:1,
+   e:"Cancún y la Riviera Maya conectan al territorio a escala global por el turismo. La infraestructura (aeropuertos) se localiza donde una actividad económica la necesita… y a la vez atrae más actividad."},
+  ied:{sub:"ied",hint:"Observa la Ciudad de México.",q:"La Ciudad de México aparece con la inversión extranjera más alta. ¿Por qué hay que leer este dato con cuidado?",
+   o:["Porque ahí no hay empresas","Porque muchas empresas registran la inversión donde tienen su domicilio fiscal, aunque sus fábricas estén en otros estados","Porque la inversión extranjera no se puede medir","Porque es un dato de otro año"],a:1,
+   e:"La IED se asigna a la entidad del domicilio fiscal. Muchas oficinas centrales están en la CDMX aunque produzcan en el Bajío o el norte. Por eso siempre hay que saber cómo se construye un indicador."}
+ },
+ w:{
+  pibpc:{sub:"pc",hint:"Observa los tonos más claros del mapa.",q:"¿Qué continente concentra los PIB por habitante más bajos de esta muestra?",
+   o:["América","Europa","Asia","África"],a:3,
+   e:"Etiopía, Nigeria y Kenia tienen los valores más bajos. Recuerda que es un promedio por persona: no dice cómo se reparte la riqueza dentro de cada país."},
+  estr:{sub:"s",hint:"Elige «Industria (secundario)».",q:"Arabia Saudita y Noruega tienen un sector secundario muy alto. ¿Por qué?",
+   o:["Porque tienen muchas fábricas de ropa","Porque la extracción de petróleo y gas cuenta como industria","Porque casi no tienen servicios","Porque exportan alimentos"],a:1,
+   e:"Igual que Campeche y Tabasco en México: los yacimientos de hidrocarburos elevan el peso del sector secundario. El mismo patrón aparece a escala nacional y global."},
+  emp:{sub:"ag",hint:"Compara Etiopía y Alemania.",q:"Etiopía emplea al 62 % de su población en el campo; Alemania, a cerca del 1 %. ¿Qué indica esta diferencia?",
+   o:["Que Alemania no tiene tierras fértiles","Estructuras económicas distintas: en Etiopía domina la agricultura campesina; en Alemania, la industria y los servicios","Que Etiopía es más rica","Que es un error de los datos"],a:1,
+   e:"El empleo agrícola alto suele ir con agricultura poco mecanizada y con poca industria. Alemania produce alimentos con muy pocas personas gracias a la tecnología."},
+  exp:{sub:"x",hint:"Busca Vietnam y México.",q:"Vietnam exporta el equivalente al 87 % de su PIB; México, al 36 %. ¿Qué significa?",
+   o:["Que Vietnam no consume nada de lo que produce","Que Vietnam está muy integrado a los circuitos productivos globales, sobre todo en manufactura para exportar","Que México no exporta","Que Vietnam importa muy poco"],a:1,
+   e:"Vietnam ensambla celulares, ropa y calzado para otros países: es un eslabón clave de cadenas globales. México también lo es, pero su mercado interno pesa más."}
+ }
+};
+
+/* ================== EXPLORADOR CONCISO ================== */
+function Explorer(root,ds,step){
+  const cfg=IND[ds],keys=Object.keys(cfg),isMX=ds==="mx";
+  let ind=keys[0],sub=IQ[ds][ind].sub,sel=isMX?"MEX":"484";
+  root.innerHTML=`
+   <div class="mhead"><h2 style="margin:0">${isMX?"🇲🇽 ¿Cómo se distribuyen las actividades económicas en México?":"🌎 ¿Y en el mundo?"}</h2><span class="tag">Parada ${step} de 4</span></div>
+   <p class="muted" style="max-width:66ch;margin-top:-4px">${isMX?"Recorre los 5 indicadores. En cada uno: observa el mapa, toca estados y responde la pregunta rápida.":"Recorre los 4 indicadores y compara a México con otros países."}</p>
+   <div class="chips" role="group" aria-label="Indicadores"></div>
+   <div class="seg" role="group" aria-label="Variante del indicador"></div>
+   <div class="what"></div>
+   <div class="xgrid">
+     <div class="mapbox">
+       <p class="maptitle"></p><p class="mapsub"></p>
+       <div class="mapslot"></div>
+       <div class="legend"></div>
+       <div class="maptools">
+         <select aria-label="Elegir territorio de la lista"></select>
+         ${isMX?'<button class="btn sm ghost zbtn" type="button">🔍 Acercar al centro</button>':""}
+       </div>
+     </div>
+     <div class="panel ficha" aria-live="polite"></div>
+   </div>
+   <div class="iq"></div>
+   ${isMX?`<div class="write panel"><div class="q">✍️ Respuesta 1 de 4: Elige uno de los indicadores. ¿Dónde se concentran los valores altos y qué actividad económica reflejan en ese territorio?</div>
+     <div class="starters"><button type="button">Los valores más altos se concentran en…</button><button type="button">Esto refleja que…</button><button type="button">En cambio, en…</button></div>
+     <textarea data-w="w1"></textarea><div class="saved"></div></div>`:""}
+   <div class="next"></div>`;
+  const chips=$(".chips",root),seg=$(".seg",root),what=$(".what",root),ficha=$(".ficha",root),box=$(".mapbox",root);
+  const svg=buildMap(ds,{onPick:id=>{sel=id;update();}});
+  $(".mapslot",root).appendChild(svg);
+  const lsel=$(".maptools select",root);
+  lsel.innerHTML=ids(ds).sort((a,b)=>nameOf(ds,a).localeCompare(nameOf(ds,b),"es")).map(id=>`<option value="${id}">${esc(nameOf(ds,id))}</option>`).join("");
+  lsel.addEventListener("change",()=>{sel=lsel.value;update();});
+  if(isMX){let z=false;const zb=$(".zbtn",root);zb.addEventListener("click",()=>{z=!z;
+    if(z){const bb=["CMX","MEX","MOR","TLA","HID","PUE","QUE"].map(i=>$(`path[data-id="${i}"]`,svg).getBBox());
+      const x0=Math.min(...bb.map(b=>b.x))-10,y0=Math.min(...bb.map(b=>b.y))-10,x1=Math.max(...bb.map(b=>b.x+b.width))+10,y1=Math.max(...bb.map(b=>b.y+b.height))+10;
+      svg.setAttribute("viewBox",`${x0} ${y0} ${x1-x0} ${y1-y0}`);zb.textContent="🗺️ Ver todo el país";}
+    else{svg.setAttribute("viewBox",svg.dataset.vb);zb.textContent="🔍 Acercar al centro";}});}
+  addTooltip(box,svg,ds,id=>val(ds,ind,sub,id),()=>subOf(ds,ind,sub).u);
+  keys.forEach(k=>{const b=document.createElement("button");b.type="button";b.className="chip";b.dataset.k=k;
+    b.addEventListener("click",()=>{ind=k;sub=IQ[ds][k].sub;update();});chips.appendChild(b);});
+  wireWrites(root);
+
+  function update(){
+    const I=cfg[ind],S=subOf(ds,ind,sub),gv=id=>val(ds,ind,sub,id);
+    $$(".chip",chips).forEach(c=>{const k=c.dataset.k;c.setAttribute("aria-pressed",k===ind);
+      c.textContent=`${cfg[k].em} ${cfg[k].n}${ST.iq[ds+"."+k]!=null?" ✓":""}`;});
+    seg.innerHTML=I.subs.length>1?I.subs.map(s=>`<button type="button" data-s="${s.k}" aria-pressed="${s.k===sub}">${esc(s.l)}</button>`).join(""):"";
+    $$("button",seg).forEach(b=>b.addEventListener("click",()=>{sub=b.dataset.s;update();}));
+    what.innerHTML=`<p><b>¿Qué mide?</b> ${esc(I.mide)}</p><div class="meta"><span>Unidad: ${esc(S.u)}</span><span>Año: ${I.anio}</span><span>Fuente: ${esc(I.fuente)}</span></div>
+      <details class="ojo" style="margin-top:8px"><summary>👀 Ojo al interpretar</summary><p>${esc(I.ojo)}</p></details>`;
+    const info=paintMap(svg,ds,gv);
+    $(".maptitle",root).textContent=`${I.n}${I.subs.length>1?": "+noEmoji(S.l):""}`;
+    $(".mapsub",root).textContent=`${isMX?"Entidades federativas de México":"Países seleccionados (en gris: sin datos)"}, ${I.anio}. Fuente: ${I.fuente}.`;
+    $(".legend",root).innerHTML=legendHTML(info,S.u,"q");
+    $$("path.t",svg).forEach(p=>p.classList.toggle("sel",p.dataset.id===sel));
+    const sp=$(`path[data-id="${sel}"]`,svg);if(sp)sp.parentNode.appendChild(sp);
+    lsel.value=sel;
+    renderFicha(info);renderIQ();progress();
+  }
+  function renderFicha(info){
+    const I=cfg[ind],S=subOf(ds,ind,sub),gv=id=>val(ds,ind,sub,id);
+    const L=ids(ds),v=gv(sel),n=L.length,sorted=L.slice().sort((a,b)=>gv(b)-gv(a)),rk=sorted.findIndex(i=>gv(i)===v)+1;
+    const zero=info.hasZero&&v===0,cl=classOf(v,info.b),pos=n>1?((n-rk)/(n-1))*100:50;
+    const avg=L.reduce((a,i)=>a+gv(i),0)/n;
+    let ref=isMX?`Promedio de las 32 entidades: <b>${fmt(avg)}</b>`:(sel!=="484"?`México: <b>${fmt(gv("484"))}</b> · promedio de la muestra: <b>${fmt(avg)}</b>`:`Promedio de la muestra: <b>${fmt(avg)}</b>`);
+    let h=`<p class="nm">${esc(nameOf(ds,sel))}</p><div class="rg">${isMX?"Región "+esc(MXREG[sel]):esc(WD[sel][1])}</div>
+      <div class="bigv"><b>${fmt(v)}</b><span>${esc(S.u)} · ${I.anio}</span></div>
+      <div class="rankbar" aria-hidden="true"><i style="left:${pos}%"></i></div>
+      <div class="ranklbl"><span>más bajo</span><span>más alto</span></div>
+      <p style="margin:6px 0 0"><b>Posición ${rk} de ${n}</b> · nivel ${zero?"<b>sin producción</b>":`<b>${LVL[cl]}</b>`}</p>
+      <p class="small" style="margin:4px 0 0">${ref}</p>`;
+    if((ind==="pib"&&sub!=="nac")||ind==="emp"&&isMX||ind==="estr"){
+      const base=ind==="emp"?[4,5,6]:[1,2,3],r=raw(ds,sel),mine=base.map(i=>r[i]);
+      const refA=isMX?(ind==="pib"?MX_NAT.pib:MX_NAT.emp):W_REF.estr;
+      const bar=a=>`<div class="stack"><div class="s-p" style="width:${a[0]}%"></div><div class="s-s" style="width:${a[1]}%"></div><div class="s-t" style="width:${a[2]}%"></div></div>`;
+      h+=`<div style="margin-top:10px"><div class="stackrow"><span>${esc(nameOf(ds,sel).split(" ")[0])}</span>${bar(mine)}</div><div class="stackrow"><span>${isMX?"México":"Mundo"}</span>${bar(refA)}</div>
+        <div class="keyrow"><span class="kp">Prim. ${fmt(mine[0])}%</span><span class="ks">Sec. ${fmt(mine[1])}%</span><span class="kt">Ter. ${fmt(mine[2])}%</span></div></div>`;
+      const si={p:0,s:1,t:2}[sub];
+      if(si!=null){const ql=mine[si]/refA[si];
+        h+=`<div class="ql">🧮 <b>Cociente de localización: ${fmt(ql)}</b> <span class="small">${ql>=1.2?"→ especializado en este sector.":ql>0.8?"→ similar al promedio.":"→ el sector pesa menos que en el promedio."}</span></div>`;}
+    }
+    if(ind==="prod"){const tot=L.reduce((a,i)=>a+gv(i),0);h+=`<div class="ql">🧮 <b>Concentra el ${fmt(v/tot*100)}% de la producción nacional</b></div>`;}
+    h+=`<div class="toplist">Más altos: <b>${sorted.slice(0,3).map(i=>esc(nameOf(ds,i))).join(", ")}</b><br>Más bajos: <b>${sorted.slice(-3).reverse().map(i=>esc(nameOf(ds,i))).join(", ")}</b></div>`;
+    ficha.innerHTML=h;
+  }
+  function renderIQ(){
+    const Q=IQ[ds][ind],key=ds+"."+ind,box=$(".iq",root),prev=ST.iq[key];
+    box.innerHTML=`<div class="step">⚡ Pregunta rápida · ${esc(cfg[ind].n)}</div><p class="qq">${esc(Q.q)}</p><p class="small muted" style="margin:-4px 0 8px">💡 ${esc(Q.hint)}</p>
+      <div class="opts">${Q.o.map((o,k)=>`<button type="button" data-k="${k}">${esc(o)}</button>`).join("")}</div><div class="fbx"></div>`;
+    const mark=k=>{$$(".opts button",box).forEach(b=>{const bk=+b.dataset.k;if(bk===Q.a)b.classList.add("right");else if(bk===k)b.classList.add("wrong");b.disabled=true;});
+      const nx=keys[keys.indexOf(ind)+1];
+      $(".fbx",box).innerHTML=`<div class="explain">${k===Q.a?"✅ <b>Correcto.</b>":"❌ <b>Revisa:</b>"} ${esc(Q.e)}</div>${nx?`<button class="btn sm prim" type="button" style="margin-top:10px">Siguiente indicador: ${esc(cfg[nx].n)}</button>`:""}`;
+      const b=$(".fbx button",box);if(b)b.addEventListener("click",()=>{ind=nx;sub=IQ[ds][nx].sub;update();chips.scrollIntoView({behavior:"smooth",block:"start"});});};
+    if(prev!=null)mark(prev);
+    $$(".opts button",box).forEach(b=>b.addEventListener("click",()=>{ST.iq[key]=+b.dataset.k;save();mark(+b.dataset.k);
+      $$(".chip",chips).forEach(c=>{const k=c.dataset.k;c.textContent=`${cfg[k].em} ${cfg[k].n}${ST.iq[ds+"."+k]!=null?" ✓":""}`;});progress();}));
+  }
+  function progress(){
+    const done=keys.filter(k=>ST.iq[ds+"."+k]!=null).length,ok=keys.filter(k=>ST.iq[ds+"."+k]===IQ[ds][k].a).length;
+    const nx=$(".next",root);
+    nx.innerHTML=`<div class="dots">${keys.map(k=>`<i class="${ST.iq[ds+"."+k]!=null?"f":""}"></i>`).join("")}</div><p><b>${done} de ${keys.length} indicadores</b> · ${ok} ${ok===1?"acierto":"aciertos"}${isMX?" · respuesta escrita "+((ST.w.w1||"").trim().length>=15?"✓":"pendiente"):""}</p>
+      <button class="btn sm prim" type="button">Siguiente parada</button>`;
+    $("button",nx).addEventListener("click",()=>go(step+1));
+    stepper();
+  }
+  root._progress=progress;
+  update();
+}
+
+/* respuestas escritas (w1–w4) */
+function wireWrites(scope){
+  $$("textarea[data-w]",scope).forEach(ta=>{const k=ta.dataset.w;ta.value=ST.w[k]||"";const sv=ta.parentNode.querySelector(".saved");let t;
+    ta.addEventListener("input",()=>{ST.w[k]=ta.value;clearTimeout(t);t=setTimeout(()=>{save();if(sv)sv.textContent="✓ Guardado en este dispositivo";const s=ta.closest(".screen");if(s){const w=s.querySelector(".wrap");if(w&&w._progress)w._progress();}if(scope._progress)scope._progress();stepper();},400);});});
+  $$(".starters button",scope).forEach(b=>b.addEventListener("click",()=>{const ta=b.closest(".write").querySelector("textarea");
+    ta.value=(ta.value.trim()?ta.value.trimEnd()+" ":"")+b.textContent+" ";ta.focus();ta.dispatchEvent(new Event("input"));}));
+}
+
+/* ================== PARADA 3: cruce + lectura de mapa ================== */
+function flatVars(ds){const out=[];for(const k in IND[ds]){const I=IND[ds][k];I.subs.forEach(s=>out.push({key:`${k}.${s.k}`,ind:k,sub:s.k,l:I.subs.length>1?`${I.n}: ${noEmoji(s.l)}`:noEmoji(s.l),u:s.u}));}return out;}
+const PRESETS=[
+ {ds:"w",x:"pibpc.pc",y:"emp.ag",t:"Cruce A: riqueza y campo",d:"Mundo: PIB por habitante vs. empleo agrícola"},
+ {ds:"mx",x:"emp.p",y:"pib.p",t:"Cruce B: empleo y producción en el campo",d:"México: empleo primario vs. PIB primario"}
+];
+function Scatter(){
+  const svg=$("#scSvg"),pr=$("#presets");let preset=0,sel=null;
+  PRESETS.forEach((p,i)=>{const b=document.createElement("button");b.type="button";b.className="preset";b.innerHTML=`<b>${esc(p.t)}</b><span>${esc(p.d)}</span>`;
+    b.addEventListener("click",()=>{preset=i;sel=null;draw();});pr.appendChild(b);});
+  function draw(){
+    $$(".preset",pr).forEach((b,i)=>b.setAttribute("aria-pressed",i===preset));
+    const P=PRESETS[preset],ds=P.ds,V=flatVars(ds),X=V.find(v=>v.key===P.x),Y=V.find(v=>v.key===P.y);
+    const gx=id=>val(ds,X.ind,X.sub,id),gy=id=>val(ds,Y.ind,Y.sub,id);
+    const L=ids(ds),xs=L.map(gx),ys=L.map(gy);
+    const W=640,H=440,m={l:58,r:34,t:16,b:52};
+    const ext=a=>{const mn=Math.min(...a),mx=Math.max(...a);const p=(mx-mn)*.06||1;return[mn>=0?Math.max(0,mn-p):mn-p,mx+p];};
+    const [x0,x1]=ext(xs),[y0,y1]=ext(ys);
+    const sx=v=>m.l+(v-x0)/(x1-x0)*(W-m.l-m.r),sy=v=>H-m.b-(v-y0)/(y1-y0)*(H-m.t-m.b);
+    const med=a=>{const s=a.slice().sort((p,q)=>p-q),n=s.length;return n%2?s[(n-1)/2]:(s[n/2-1]+s[n/2])/2;};
+    const mx_=med(xs),my_=med(ys);
+    const tk=(a,b)=>{const rw=(b-a)/5,p=Math.pow(10,Math.floor(Math.log10(rw))),f=rw/p,st=(f<1.5?1:f<3?2:f<7?5:10)*p;const out=[];for(let v=Math.ceil(a/st)*st;v<=b+1e-9;v+=st)out.push(+v.toFixed(6));return out;};
+    let h="";
+    tk(x0,x1).forEach(v=>{h+=`<line class="gl" x1="${sx(v)}" x2="${sx(v)}" y1="${m.t}" y2="${H-m.b}"/><text x="${sx(v)}" y="${H-m.b+16}" text-anchor="middle">${fmt(v)}</text>`;});
+    tk(y0,y1).forEach(v=>{h+=`<line class="gl" y1="${sy(v)}" y2="${sy(v)}" x1="${m.l}" x2="${W-m.r}"/><text x="${m.l-6}" y="${sy(v)+4}" text-anchor="end">${fmt(v)}</text>`;});
+    h+=`<line class="md" x1="${sx(mx_)}" x2="${sx(mx_)}" y1="${m.t}" y2="${H-m.b}"/><line class="md" y1="${sy(my_)}" y2="${sy(my_)}" x1="${m.l}" x2="${W-m.r}"/>`;
+    h+=`<line class="ax" x1="${m.l}" x2="${W-m.r}" y1="${H-m.b}" y2="${H-m.b}"/><line class="ax" x1="${m.l}" x2="${m.l}" y1="${m.t}" y2="${H-m.b}"/>`;
+    h+=`<text x="${(m.l+W-m.r)/2}" y="${H-12}" text-anchor="middle" style="font-weight:700;fill:var(--ink)">${esc(X.l)} (${esc(X.u)})</text>`;
+    h+=`<text transform="translate(14 ${(m.t+H-m.b)/2}) rotate(-90)" text-anchor="middle" style="font-weight:700;fill:var(--ink)">${esc(Y.l)} (${esc(Y.u)})</text>`;
+    const col=id=>ds==="mx"?REGCOL[MXREG[id]]:CONTCOL[WD[id][1]];
+    L.forEach(id=>{h+=`<circle class="pt ${id===sel?"sel":""}" data-id="${id}" cx="${sx(gx(id)).toFixed(1)}" cy="${sy(gy(id)).toFixed(1)}" r="${id===sel?9:7}" fill="${col(id)}"><title>${esc(nameOf(ds,id))}</title></circle>`;});
+    const lbl=new Set([sel,ds==="mx"?"CHP":"231",ds==="mx"?"OAX":"578"]);
+    [...L].sort((a,b)=>gx(b)-gx(a)).slice(0,1).forEach(i=>lbl.add(i));[...L].sort((a,b)=>gy(b)-gy(a)).slice(0,1).forEach(i=>lbl.add(i));
+    lbl.forEach(id=>{if(!id)return;const x=sx(gx(id)),y=sy(gy(id)),right=x<W-140;h+=`<text class="lab" x="${x+(right?11:-11)}" y="${y+4}" text-anchor="${right?"start":"end"}">${esc(nameOf(ds,id))}</text>`;});
+    svg.innerHTML=h;
+    $$("circle.pt",svg).forEach(c=>c.addEventListener("click",()=>{sel=c.dataset.id;draw();}));
+    $("#scKey").innerHTML=Object.entries(ds==="mx"?REGCOL:CONTCOL).map(([k,c])=>`<span><i style="display:inline-block;width:11px;height:11px;border-radius:50%;background:${c};border:1px solid var(--ink);margin-right:4px;vertical-align:-1px"></i>${esc(k)}</span>`).join("");
+    const n=L.length,mxv=xs.reduce((a,b)=>a+b,0)/n,myv=ys.reduce((a,b)=>a+b,0)/n;let sxy=0,sxx=0,syy=0;
+    for(let i=0;i<n;i++){sxy+=(xs[i]-mxv)*(ys[i]-myv);sxx+=(xs[i]-mxv)**2;syy+=(ys[i]-myv)**2;}
+    const r=sxx&&syy?sxy/Math.sqrt(sxx*syy):0,a=Math.abs(r);
+    $("#scR").textContent=(r>=0?"+":"−")+a.toFixed(2);
+    const fz=a<.2?"Casi no hay relación":a<.4?"Relación débil":a<.7?"Relación moderada":"Relación fuerte";
+    $("#scRtxt").innerHTML=`<b>${fz}${a>=.2?(r>0?" y positiva":" y negativa"):""}.</b> ${a<.2?"Los puntos están dispersos.":r>0?"Cuando un dato sube, el otro tiende a subir.":"Cuando un dato sube, el otro tiende a bajar."}`;
+    $("#scInfo").innerHTML=sel?`<p style="font-family:var(--fd);font-weight:800;font-size:1.3rem;margin:0">${esc(nameOf(ds,sel))}</p><p class="small muted" style="margin:0 0 6px">${esc(groupOf(ds,sel))}</p><p style="margin:0"><b>X:</b> ${fmt(gx(sel))} ${esc(X.u)}<br><b>Y:</b> ${fmt(gy(sel))} ${esc(Y.u)}</p>`
+      :`<p style="margin:0">${preset===0?"🔎 ¿Qué pasa con el empleo agrícola cuando aumenta el PIB por habitante?":"🔎 Chiapas y Oaxaca tienen mucho empleo primario. ¿Su PIB primario es igual de alto? ¿Qué dice eso de la productividad?"}</p><p class="small muted" style="margin:6px 0 0">Toca un punto para ver qué territorio es.</p>`;
+  }
+  draw();
+}
+const M4Q=[
+ {map:{ind:"ied",sub:"ied",m:"e"},q:"Este mapa clasifica la inversión extranjera en intervalos iguales. Casi todo el país se ve del mismo color claro. ¿Por qué?",
+  o:["Porque casi ningún estado recibe inversión","Porque un valor extremo (la CDMX) estira los intervalos y deja a los demás en la primera clase","Porque el mapa tiene un error","Porque la inversión no se puede mapear"],a:1,
+  e:"Con intervalos iguales, el rango total se divide en 5 partes iguales. Como la CDMX es muchísimo mayor, casi todas las entidades caen en la primera clase y se ocultan sus diferencias."},
+ {map:{ind:"ied",sub:"ied",m:"q"},q:"Ahora el mismo dato se clasificó por cuantiles y el mapa cambió mucho. ¿Cambiaron los datos?",
+  o:["Sí, se actualizaron","No: solo cambió la forma de agrupar los valores en clases","Sí, ahora mide otra cosa","No se puede saber"],a:1,
+  e:"Los datos son idénticos; cambió el método de clasificación. Por eso siempre hay que leer la leyenda: quien hace el mapa decide cómo agrupar, y eso cambia lo que vemos."},
+ {map:{ind:"prod",sub:"cafe",m:"c"},q:"Para mostrar las toneladas de café se usaron círculos. ¿Por qué es buena elección?",
+  o:["Porque se ven más bonitos","Porque los símbolos proporcionales representan cantidades absolutas: más producción, círculo más grande","Porque el café es redondo","Porque así no hace falta leyenda"],a:1,
+  e:"Los símbolos proporcionales sirven para cantidades absolutas (toneladas, pasajeros). Los colores (coropletas) funcionan mejor para porcentajes, porque un estado grande no parece «más» solo por su tamaño."}
+];
+function MapQuiz(){
+  const mb=$("#m4map"),qz=$("#m4quiz");let i=0;
+  mb.innerHTML=`<p class="maptitle"></p><p class="mapsub"></p><div class="mapslot"></div><div class="legend"></div>`;
+  const svg=buildMap("mx",{frame:true});$(".mapslot",mb).appendChild(svg);
+  function show(){
+    const Q=M4Q[i],I=IND.mx[Q.map.ind],S=subOf("mx",Q.map.ind,Q.map.sub),gv=id=>val("mx",Q.map.ind,Q.map.sub,id);
+    $(".maptitle",mb).textContent=`${I.n}: ${noEmoji(S.l)}`;$(".mapsub",mb).textContent=`Entidades federativas de México, ${I.anio}. Fuente: ${I.fuente}.`;
+    if(Q.map.m==="c"){$$("path.t",svg).forEach(p=>p.setAttribute("fill","var(--r0)"));const mx=circlesMap(svg,"mx",gv);
+      $(".legend",mb).innerHTML=`<b>Leyenda: ${esc(S.u)} (símbolos proporcionales)</b><span><svg width="26" height="26" style="vertical-align:middle"><circle cx="13" cy="13" r="12" fill="var(--cielo)" fill-opacity=".55" stroke="var(--ink)"/></svg> ${fmt(mx)}</span><span><svg width="26" height="26" style="vertical-align:middle"><circle cx="13" cy="13" r="6" fill="var(--cielo)" fill-opacity=".55" stroke="var(--ink)"/></svg> ${fmt(mx/4)}</span>`;}
+    else{clearCircles(svg);const info=paintMap(svg,"mx",gv,Q.map.m);$(".legend",mb).innerHTML=legendHTML(info,S.u,Q.map.m);}
+    const prev=ST.m4[i];
+    qz.innerHTML=`<div class="step">Mapa ${i+1} de ${M4Q.length}</div><p class="qq">${esc(Q.q)}</p><div class="opts">${Q.o.map((o,k)=>`<button type="button" data-k="${k}">${esc(o)}</button>`).join("")}</div><div class="fbx"></div>
+      <div class="qnav"><button class="btn sm ghost" type="button" data-n="-1" ${i===0?"disabled":""}>Anterior</button>${i<M4Q.length-1?`<button class="btn sm prim" type="button" data-n="1">Siguiente mapa</button>`:""}</div>`;
+    const mark=k=>{$$(".opts button",qz).forEach(b=>{const bk=+b.dataset.k;if(bk===Q.a)b.classList.add("right");else if(bk===k)b.classList.add("wrong");b.disabled=true;});
+      $(".fbx",qz).innerHTML=`<div class="explain">${k===Q.a?"✅ <b>Correcto.</b>":"❌ <b>Revisa:</b>"} ${esc(Q.e)}</div>`;};
+    if(prev!=null)mark(prev);
+    $$(".opts button",qz).forEach(b=>b.addEventListener("click",()=>{ST.m4[i]=+b.dataset.k;save();mark(+b.dataset.k);p3prog();}));
+    $$("[data-n]",qz).forEach(b=>b.addEventListener("click",()=>{i=Math.max(0,Math.min(M4Q.length-1,i+ +b.dataset.n));show();}));
+  }
+  show();
+}
+function p3prog(){
+  const nm=Object.keys(ST.m4).length,ok=M4Q.filter((Q,k)=>ST.m4[k]===Q.a).length,w=(ST.w.w2||"").trim().length>=15;
+  const nx=$("#n3");nx.innerHTML=`<div class="dots">${[0,1,2].map(k=>`<i class="${ST.m4[k]!=null?"f":""}"></i>`).join("")}<i class="${w?"f":""}"></i></div><p><b>Mapas: ${nm} de 3</b> · ${ok} ${ok===1?"acierto":"aciertos"} · respuesta escrita ${w?"✓":"pendiente"}</p><button class="btn sm prim" type="button">Siguiente parada</button>`;
+  $("button",nx).addEventListener("click",()=>go(4));stepper();
+}
+
+/* ================== PARADA 4: diagnóstico ================== */
+function fichaRows(id){const rows=[];
+  for(const k in IND.mx){const I=IND.mx[k];I.subs.forEach(s=>{const gv=x=>val("mx",k,s.k,x);const all=Object.keys(MXD).map(gv);const b=quantBreaks(all);const v=gv(id);
+    const rk=all.slice().sort((a,c)=>c-a).indexOf(v)+1;const z=all.some(x=>x===0)&&v===0;
+    rows.push({ind:I.n,sub:I.subs.length>1?noEmoji(s.l):"",v,u:s.u,anio:I.anio,rk,lvl:z?-1:classOf(v,b)});});}
+  return rows;}
+function qlList(id){const r=MXD[id];return["Primario","Secundario","Terciario"].map((n,i)=>({n,pib:r[1+i]/MX_NAT.pib[i],emp:r[4+i]/MX_NAT.emp[i]}));}
+function Final(){
+  const fs=$("#fState");fs.innerHTML=`<option value="">— elige una entidad —</option>`+Object.keys(MXD).sort((a,b)=>MXNAME[a].localeCompare(MXNAME[b],"es")).map(id=>`<option value="${id}">${esc(MXNAME[id])}</option>`).join("");
+  fs.value=ST.estado||"";fs.addEventListener("change",()=>{ST.estado=fs.value;save();ficha();});
+  wireWrites($("#p4"));
+  const nm=$("#stName"),gr=$("#stGroup");nm.value=ST.nombre||"";gr.value=ST.grupo||"";
+  nm.addEventListener("input",()=>{ST.nombre=nm.value;save();});gr.addEventListener("change",()=>{ST.grupo=gr.value;save();});
+  $("#fGen").addEventListener("click",expediente);
+  ficha();
+}
+function ficha(){
+  const id=ST.estado,box=$("#fFicha");
+  if(!id){box.innerHTML=`<div class="panel"><p class="muted" style="margin:0">Elige una entidad para ver su ficha de indicadores.</p></div>`;return;}
+  const rows=fichaRows(id),ql=qlList(id);
+  box.innerHTML=`<div class="panel"><h3>📋 ${esc(MXNAME[id])} <span class="small muted">(región ${esc(MXREG[id])})</span></h3>
+   <div class="scroll-x"><table class="ftable"><thead><tr><th>Indicador</th><th>Valor</th><th>Año</th><th>Posición</th><th>Nivel</th></tr></thead><tbody>
+   ${rows.map(r=>`<tr><td>${esc(r.ind)}${r.sub?`<br><span class="small muted">${esc(r.sub)}</span>`:""}</td><td><b>${fmt(r.v)}</b> <span class="small muted">${esc(r.u)}</span></td><td>${r.anio}</td><td>${r.rk} de 32</td><td>${r.lvl<0?'<span class="lvl l0">sin producción</span>':`<span class="lvl l${r.lvl}">${LVL[r.lvl]}</span>`}</td></tr>`).join("")}
+   </tbody></table></div>
+   <p style="margin:12px 0 4px"><b>🧮 Especialización (cociente de localización; ⭐ = 1.2 o más)</b></p>
+   <div class="keyrow" style="font-size:.9rem">${ql.map(q=>`<span>${q.n}: PIB <b>${fmt(q.pib)}</b>${q.pib>=1.2?"⭐":""} · empleo <b>${fmt(q.emp)}</b>${q.emp>=1.2?"⭐":""}</span>`).join("")}</div></div>`;
+}
+function expediente(){
+  const ex=$("#expediente"),id=ST.estado;
+  if(!id){toast("Primero elige una entidad");$("#fState").focus();return;}
+  const ans=t=>t&&t.trim()?`<p class="ans">${esc(t.trim())}</p>`:`<p class="ans" style="color:#999">(sin respuesta)</p>`;
+  const okMX=Object.keys(IQ.mx).filter(k=>ST.iq["mx."+k]===IQ.mx[k].a).length,okW=Object.keys(IQ.w).filter(k=>ST.iq["w."+k]===IQ.w[k].a).length,okM=M4Q.filter((Q,k)=>ST.m4[k]===Q.a).length;
+  const mapSvg=`<svg class="emap" viewBox="0 0 800 520" width="100%">${GEO_MX.map(f=>`<path d="${f.d}" class="${f.id===id?"sel":""}"/>`).join("")}</svg>`;
+  ex.innerHTML=`<div class="ehead"><div><b>Laboratorio de Indicadores Geoeconómicos</b><br>Laboratorio Cartográfico de Miss Viridiana · Geografía Económica · Aprendizaje 1.4</div><div>Estudiante: <b>${esc(ST.nombre||"________________")}</b><br>Grupo: <b>${esc(ST.grupo||"____")}</b> · Fecha: ${new Date().toLocaleDateString("es-MX")}</div></div>
+   <h2>Diagnóstico territorial: ${esc(MXNAME[id])}</h2>${mapSvg}
+   <h3>Preguntas rápidas</h3><table><tr><td>México (5 indicadores)</td><td><b>${okMX} / 5</b></td></tr><tr><td>Mundo (4 indicadores)</td><td><b>${okW} / 4</b></td></tr><tr><td>Lectura de mapas</td><td><b>${okM} / 3</b></td></tr><tr><td><b>Total</b></td><td><b>${okMX+okW+okM} / 12</b></td></tr></table>
+   <h3>Respuestas escritas</h3>
+   <p><b>1. Indicadores de México: dónde se concentran y qué actividad reflejan</b></p>${ans(ST.w.w1)}
+   <p><b>2. Cruce de datos: relación y explicación geográfica</b></p>${ans(ST.w.w2)}
+   <p><b>3. ¿Qué caracteriza a la economía de ${esc(MXNAME[id])}?</b></p>${ans(ST.w.w3)}
+   <p><b>4. ¿Por qué es así? Factores y relación con otros territorios</b></p>${ans(ST.w.w4)}
+   <h3>Ficha de indicadores</h3><table><tr><th>Indicador</th><th>Valor</th><th>Año</th><th>Posición</th></tr>${fichaRows(id).map(r=>`<tr><td>${esc(r.ind)}${r.sub?" – "+esc(r.sub):""}</td><td>${fmt(r.v)} ${esc(r.u)}</td><td>${r.anio}</td><td>${r.rk}/32</td></tr>`).join("")}</table>
+   <p style="font-size:.75rem;color:#666;margin-top:14px">Datos aproximados y redondeados con fines didácticos (INEGI, SIAP, CONAPESCA, AFAC, Secretaría de Economía, Banco Mundial, OIT).</p>
+   <div class="noprint" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px"><button class="btn prim" type="button" id="exDown">⬇️ Descargar mi expediente</button><button class="btn" type="button" id="exPrint">🖨️ Imprimir o guardar como PDF</button><button class="btn" type="button" id="exCopy">📋 Copiar texto</button></div>`;
+  ex.classList.add("on");ex.scrollIntoView({behavior:"smooth",block:"start"});
+  $("#exPrint").addEventListener("click",()=>window.print());
+  $("#exDown").addEventListener("click",()=>{
+    const css=`body{font-family:Arial,Helvetica,sans-serif;color:#1d1730;max-width:820px;margin:24px auto;padding:0 16px;line-height:1.5}
+h2{font-size:1.5rem}h3{margin-top:16px;font-size:1.05rem;border-bottom:2px solid #1d1730;padding-bottom:4px}
+.ehead{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;font-size:.9rem;border-bottom:1px dashed #999;padding-bottom:10px;margin-bottom:10px}
+p.ans{white-space:pre-wrap;background:#F6F3FC;border-radius:8px;padding:.5em .7em}
+table{width:100%;border-collapse:collapse;font-size:.85rem}td,th{border-bottom:1px solid #ddd;padding:.3em .4em;text-align:left}
+.emap{max-width:420px}.emap path{stroke:#fff;stroke-width:.7;fill:#E3DEEE}.emap path.sel{fill:#E58AB0;stroke:#1d1730;stroke-width:1.5}
+.tip{background:#FFF6D1;border-radius:8px;padding:.6em .8em;font-size:.9rem}@media print{.tip{display:none}}`;
+    const clone=ex.cloneNode(true);clone.querySelectorAll(".noprint").forEach(n=>n.remove());
+    const doc=`<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Expediente - ${esc(ST.nombre||"estudiante")}</title><style>${css}</style></head><body><p class="tip">Para entregarlo en PDF: abre este archivo y usa <b>Imprimir → Guardar como PDF</b>.</p>${clone.innerHTML}</body></html>`;
+    const limpio=s=>(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^A-Za-z0-9]+/g,"_").replace(/^_|_$/g,"");
+    const nombre=`Expediente_${limpio(ST.grupo)||"grupo"}_${limpio(ST.nombre)||"estudiante"}.html`;
+    try{const url=URL.createObjectURL(new Blob([doc],{type:"text/html"}));const a=document.createElement("a");a.href=url;a.download=nombre;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);toast("Expediente descargado");}
+    catch(e){toast("No se pudo descargar: usa Imprimir o Copiar texto");}
+  });
+  $("#exCopy").addEventListener("click",async()=>{const txt=ex.innerText.replace(/🖨️[\s\S]*$/,"").trim();
+    try{await navigator.clipboard.writeText(txt);toast("Texto copiado");}catch(e){const r=document.createRange();r.selectNodeContents(ex);const s=getSelection();s.removeAllRanges();s.addRange(r);toast("Texto seleccionado: cópialo con el menú");}});
+  ST.gen=true;save();stepper();
+}
+
+/* ================== NAVEGACIÓN ================== */
+const STOPS=["Inicio","México","El mundo","Cruza y lee","Diagnóstico"];
+let cur=0;const inited={};
+function doneStop(n){
+  const w=k=>(ST.w[k]||"").trim().length>=15;
+  if(n===1)return Object.keys(IQ.mx).every(k=>ST.iq["mx."+k]!=null)&&w("w1");
+  if(n===2)return Object.keys(IQ.w).every(k=>ST.iq["w."+k]!=null);
+  if(n===3)return Object.keys(ST.m4).length>=M4Q.length&&w("w2");
+  if(n===4)return !!ST.gen;
+  return cur>0;
+}
+function stepper(){
+  $("#stepper").innerHTML=STOPS.map((s,i)=>`<li><button type="button" data-go="${i}" class="${doneStop(i)&&i!==cur?"done":""}" ${i===cur?'aria-current="step"':""}><i>${doneStop(i)&&i!==cur?"✓":i===0?"⌂":i}</i><span>${s}</span></button></li>`).join("");
+}
+function go(n){
+  cur=+n;$$(".screen").forEach(s=>s.classList.toggle("on",s.id==="p"+cur));
+  $("#topbar").classList.toggle("hide",cur===0);window.scrollTo(0,0);
+  if(!inited[cur]){inited[cur]=1;
+    if(cur===1)Explorer($("#p1w"),"mx",1);
+    if(cur===2)Explorer($("#p2w"),"w",2);
+    if(cur===3){Scatter();MapQuiz();wireWrites($("#p3"));$("#p3 .wrap")._progress=p3prog;p3prog();}
+    if(cur===4)Final();}
+  stepper();
+  try{history.replaceState(null,"","#p"+cur);}catch(e){}
+}
+document.addEventListener("click",e=>{const g=e.target.closest("[data-go]");if(g)go(g.dataset.go);});
+(function hero(){
+  const svg=$("#heroMap");GEO_MX.forEach(f=>{const p=document.createElementNS(NS,"path");p.setAttribute("d",f.d);p.dataset.id=f.id;svg.appendChild(p);});
+  const gv=id=>MXD[id][4],b=quantBreaks(Object.keys(MXD).map(gv));
+  const reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+  GEO_MX.slice().sort((a,c)=>a.c[0]-c.c[0]).forEach((f,i)=>{const p=svg.querySelector(`[data-id="${f.id}"]`),c=RAMP[classOf(gv(f.id),b)];
+    if(reduce)p.style.fill=c;else setTimeout(()=>p.style.fill=c,400+i*55);});
+})();
+const h0=(location.hash||"").match(/^#p([1-4])$/);go(h0?h0[1]:0);
+
+</script>
+</body>
+</html>

@@ -1,0 +1,2436 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Misión: sigue la ruta del producto | Laboratorio Cartográfico de Miss Viridiana</title>
+<meta name="description" content="Actividad interactiva de Geografía Económica: agentes y factores en circuitos productivos globales.">
+<style>
+/* =========================================================
+   1. TOKENS DE DISEÑO
+   Paleta: lila, rosa suave, azul, amarillo y blanco.
+   Tipografía: pila redondeada del sistema (funciona sin conexión).
+   ========================================================= */
+:root{
+  --ink:#2A2150;        /* tinta violeta: texto principal */
+  --ink2:#5E5494;       /* texto secundario */
+  --lila:#8E7CF0;
+  --lila-d:#6B58D6;
+  --lila-s:#EEEAFF;
+  --rosa:#F29BC0;
+  --rosa-d:#DC5F97;
+  --rosa-s:#FDEBF3;
+  --azul:#5FA8F5;
+  --azul-d:#2F7FDB;
+  --azul-s:#E4F1FF;
+  --amar:#FFD35C;
+  --amar-d:#D9A400;
+  --amar-s:#FFF5D4;
+  --ok:#17906E;
+  --ok-s:#E2F6EE;
+  --bad:#D2436B;
+  --bad-s:#FDE8EE;
+  --paper:#F8F6FF;
+  --line:#DDD6FB;
+  --r-lg:24px;
+  --r-md:16px;
+  --r-sm:10px;
+  --font:ui-rounded,"SF Pro Rounded","Nunito","Varela Round","Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+
+/* =========================================================
+   2. BASE
+   ========================================================= */
+*{box-sizing:border-box}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:120px}
+body{
+  margin:0;font-family:var(--font);color:var(--ink);line-height:1.5;font-size:17px;
+  background-color:var(--paper);
+  /* Cuadrícula tipo papel cartográfico */
+  background-image:
+    linear-gradient(rgba(142,124,240,.09) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(142,124,240,.09) 1px,transparent 1px);
+  background-size:44px 44px;
+}
+h1,h2,h3{line-height:1.15;margin:0}
+p{margin:.4em 0}
+button{font:inherit;color:inherit}
+.hidden{display:none!important}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:focus-visible{outline:3px solid var(--amar-d);outline-offset:3px;border-radius:8px}
+
+/* =========================================================
+   3. BARRA SUPERIOR + PROGRESO EN FORMA DE RUTA
+   ========================================================= */
+.topbar{
+  position:sticky;top:0;z-index:40;
+  padding-top:env(safe-area-inset-top,0px);
+  background:rgba(255,255,255,.92);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  border-bottom:1.5px solid var(--line);
+}
+.tb-inner{max-width:1080px;margin:0 auto;padding:10px 16px;display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center}
+.brand{display:flex;align-items:center;gap:8px;font-size:.78rem;color:var(--ink2);font-weight:700;line-height:1.2;max-width:170px}
+.brand-mark{font-size:1.6rem}
+.tb-main{min-width:0}
+.tb-title{font-weight:900;font-size:clamp(.82rem,1.9vw,1rem);letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.route-prog{display:flex;align-items:center;margin-top:6px;max-width:440px}
+.rp-pin{
+  flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;
+  font-size:.75rem;font-weight:900;background:#fff;border:2px solid var(--line);color:var(--ink2);
+  transition:background .3s,border-color .3s,transform .3s;
+}
+.rp-pin.done{background:var(--lila);border-color:var(--lila);color:#fff}
+.rp-pin.active{background:var(--amar);border-color:var(--ink);color:var(--ink);transform:scale(1.12)}
+.rp-seg{flex:1;height:3px;margin:0 3px;border-radius:3px;background:repeating-linear-gradient(90deg,var(--line) 0 6px,transparent 6px 10px)}
+.rp-seg.done{background:var(--lila)}
+.prog-label{font-size:.78rem;color:var(--ink2);font-weight:700;margin-top:3px}
+.tb-actions{display:flex;align-items:center;gap:10px}
+.pts{font-weight:900;font-size:.85rem;background:var(--amar-s);border:1.5px solid var(--amar);padding:6px 12px;border-radius:999px;white-space:nowrap}
+.btn-restart{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:7px 12px;font-weight:800;font-size:.82rem;cursor:pointer;white-space:nowrap}
+.btn-restart:hover{border-color:var(--lila)}
+
+/* =========================================================
+   4. CONTENEDOR, TARJETAS Y BOTONES
+   ========================================================= */
+main{max-width:1000px;margin:0 auto;padding:26px 16px 40px}
+.card{background:#fff;border:1.5px solid var(--line);border-radius:var(--r-lg);padding:20px}
+.stack>*+*{margin-top:18px}
+.reveal{scroll-margin-top:120px;margin-top:18px}
+.reveal>*+*{margin-top:18px}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  border:0;border-radius:999px;padding:13px 22px;min-height:48px;
+  font-weight:900;cursor:pointer;transition:transform .15s,box-shadow .15s,background .2s;
+}
+.btn.primary{background:var(--ink);color:#fff;box-shadow:0 4px 0 var(--lila-d)}
+.btn.primary:hover{transform:translateY(-1px)}
+.btn.primary:active{transform:translateY(2px);box-shadow:0 2px 0 var(--lila-d)}
+.btn.primary:disabled{background:#B9B3D6;box-shadow:none;cursor:not-allowed;transform:none}
+.btn.ghost{background:#fff;border:2px solid var(--line);color:var(--ink)}
+.btn.ghost:hover{border-color:var(--lila)}
+.btn.big{font-size:1.05rem;padding:16px 28px}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:16px}
+.next{display:flex;justify-content:flex-end;margin-top:22px}
+.counter{font-size:.85rem;color:var(--ink2);font-weight:700}
+
+/* Encabezado de misión */
+.m-head{margin-bottom:20px}
+.m-tag{display:inline-block;background:var(--ink);color:#fff;font-weight:900;font-size:.8rem;padding:5px 12px;border-radius:999px;transform:rotate(-2deg)}
+.m-head h2{font-size:clamp(1.6rem,4.5vw,2.4rem);font-weight:900;margin-top:10px;letter-spacing:-.01em}
+.lead{color:var(--ink2);font-size:1.05rem;max-width:62ch}
+.q-prompt{font-weight:800;font-size:1.1rem;max-width:65ch}
+.hint{color:var(--ink2);font-size:.92rem}
+
+/* Chips seleccionables */
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.chip{
+  display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:10px 16px;
+  background:#fff;border:2px solid var(--line);border-radius:14px;font-weight:800;cursor:pointer;
+  transition:border-color .15s,background .15s,transform .15s;text-align:left;
+}
+.chip:hover{border-color:var(--lila)}
+.chip.on{border-color:var(--lila-d);background:var(--lila-s)}
+.chip.good{border-color:var(--ok);background:var(--ok-s)}
+.chip.badc{border-color:var(--bad);background:var(--bad-s)}
+.chip:disabled{cursor:default}
+.chip.small{min-height:42px;padding:8px 12px;font-size:.92rem}
+
+/* Retroalimentación */
+.fb{border-radius:var(--r-md);padding:14px 16px;margin-top:14px;border-left:6px solid;animation:pop .35s ease}
+.fb.ok{background:var(--ok-s);border-color:var(--ok)}
+.fb.bad{background:var(--bad-s);border-color:var(--bad)}
+.fb.info{background:var(--amar-s);border-color:var(--amar-d)}
+.fb ul.why{margin:.5em 0 .2em;padding-left:0;list-style:none}
+.fb ul.why li{margin:.35em 0;padding-left:0}
+@keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* Opciones múltiples */
+.opts{display:grid;gap:10px;margin-top:14px}
+.opt{
+  display:flex;align-items:flex-start;gap:12px;text-align:left;width:100%;
+  background:#fff;border:2px solid var(--line);border-radius:var(--r-md);padding:12px 14px;min-height:52px;
+  font-weight:700;cursor:pointer;transition:border-color .15s,background .15s;
+}
+.opt:hover:not(:disabled){border-color:var(--lila)}
+.opt-k{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--lila-s);font-weight:900}
+.opt.is-ok{border-color:var(--ok);background:var(--ok-s)}
+.opt.is-ok .opt-k{background:var(--ok);color:#fff}
+.opt.is-bad{border-color:var(--bad);background:var(--bad-s);opacity:.75}
+.opt.is-bad .opt-k{background:var(--bad);color:#fff}
+.opt:disabled{cursor:default}
+
+.shake{animation:shake .4s}
+@keyframes shake{20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+
+/* Insignia en línea */
+.badge-inline{display:flex;align-items:center;gap:14px;background:var(--amar-s);border:2px dashed var(--amar-d);border-radius:var(--r-lg);padding:14px 18px;margin-top:18px;animation:pop .4s ease}
+.badge-inline .b-e{font-size:2.2rem}
+.badge-inline small{display:block;color:var(--ink2);font-weight:700}
+.badge-inline strong{font-size:1.05rem}
+
+/* Ilustraciones */
+.illo{display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--azul-s);border-color:#CFE3FB}
+.illo svg{width:100%;max-width:340px;height:auto}
+.illo figcaption{font-weight:800;color:var(--ink2);text-align:center;margin-top:6px}
+figure{margin:0}
+
+/* =========================================================
+   5. PANTALLA DE INICIO
+   ========================================================= */
+.hero{text-align:center;padding:10px 0 20px}
+.hero-art{max-width:640px;margin:0 auto}
+.hero-art svg{width:100%;height:auto}
+.hero-brand{font-weight:800;color:var(--lila-d);font-size:.95rem;margin-top:6px}
+.hero h1{font-size:clamp(2rem,6.4vw,3.6rem);font-weight:900;letter-spacing:-.02em;margin:10px auto 0;max-width:15ch}
+.hero-sub{font-size:clamp(1.1rem,3vw,1.35rem);font-weight:800;color:var(--rosa-d);margin-top:14px}
+.hero-intro{max-width:56ch;margin:12px auto 0;color:var(--ink2);font-size:1.05rem}
+.hero-meta{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:22px 0}
+.hero-meta span{background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:6px 14px;font-weight:800;font-size:.9rem}
+.hero-topic{font-size:.85rem;color:var(--ink2);margin-top:18px}
+.hero-route{stroke-dasharray:900;stroke-dashoffset:900;animation:draw 2.6s .3s ease forwards}
+.hero-pin{opacity:0;animation:pinIn .4s ease forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes pinIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+
+/* =========================================================
+   6. MISIÓN 0: PRODUCTOS
+   ========================================================= */
+.products{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.prod{
+  position:relative;background:#fff;border:2px solid var(--line);border-radius:var(--r-lg);padding:22px 12px;
+  display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;min-height:170px;justify-content:center;
+  transition:transform .2s,border-color .2s,background .2s;
+}
+.prod:hover{transform:translateY(-3px);border-color:var(--lila)}
+.prod .p-e{font-size:3.4rem;line-height:1}
+.prod .p-n{font-weight:900;font-size:1.15rem;letter-spacing:.04em}
+.prod .p-s{font-size:.78rem;font-weight:800;color:var(--ink2)}
+.prod.soon{opacity:.62}
+.prod.soon .p-s{background:var(--lila-s);padding:3px 10px;border-radius:999px}
+.prod.on{border-color:var(--ink);background:var(--amar-s);transform:translateY(-3px) rotate(-1deg)}
+
+/* =========================================================
+   7. MISIONES 1-3
+   ========================================================= */
+.grid-m1{display:grid;grid-template-columns:1fr 1.35fr;gap:18px;align-items:stretch}
+.pista{background:var(--lila-s);border-color:#D3CAFB}
+.pista-h{font-weight:900;color:var(--lila-d)}
+.pista-t{font-size:1.15rem;font-weight:800}
+
+.terr-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
+.terr{
+  text-align:left;background:#fff;border:2px solid var(--line);border-radius:var(--r-lg);padding:0;overflow:hidden;cursor:pointer;
+  transition:transform .2s,border-color .2s,box-shadow .2s;
+}
+.terr:hover{border-color:var(--lila)}
+.terr.on{border-color:var(--ink);box-shadow:0 6px 0 var(--lila);transform:translateY(-3px)}
+.terr-top{padding:16px 16px 12px}
+.t-A .terr-top{background:var(--amar-s)}
+.t-B .terr-top{background:var(--rosa-s)}
+.t-C .terr-top{background:var(--azul-s)}
+.terr-emoji{font-size:2rem;display:block}
+.terr-code{display:block;font-size:.8rem;font-weight:800;color:var(--ink2);margin-top:4px}
+.terr-name{display:block;font-weight:900;font-size:1.25rem}
+.terr ul{margin:0;padding:12px 16px 16px 34px;font-size:.95rem}
+.terr li{margin:.2em 0}
+.big-quote{font-size:clamp(1.15rem,3vw,1.4rem);font-weight:800;max-width:48ch}
+.quote{background:var(--ink);color:#fff;border-color:var(--ink)}
+.quote p:not(.big-quote){color:#DCD6FF}
+
+.grid-m3{display:grid;grid-template-columns:1fr 1.35fr;gap:18px}
+.pool{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;min-height:70px;margin-top:18px}
+.pool:empty::after{content:"✔ Todas las tarjetas están clasificadas";color:var(--ok);font-weight:800}
+.tag{
+  display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:10px 16px;border-radius:14px;
+  background:#fff;border:2px solid var(--ink);font-weight:900;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;
+  box-shadow:0 3px 0 var(--line);transition:transform .15s,background .15s;
+}
+.tag.selected{background:var(--amar);transform:translateY(-3px) rotate(-2deg)}
+.tag.lifting{opacity:.35}
+.tag.placed{pointer-events:none;cursor:default;box-shadow:none;border-color:var(--ok);background:#fff}
+.tag.ghost{position:fixed;z-index:100;pointer-events:none;transform:translate(-50%,-50%) rotate(-4deg);background:var(--amar);box-shadow:0 10px 24px rgba(42,33,80,.25)}
+.zones{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+.zone{border:3px dashed var(--line);border-radius:var(--r-lg);padding:14px;min-height:190px;cursor:pointer;transition:border-color .2s,background .2s}
+.z-agente{background:var(--rosa-s);border-color:#F4C2D8}
+.z-factor{background:var(--azul-s);border-color:#BFDAF8}
+.zone.hover,.zone.armed{border-color:var(--ink);border-style:solid}
+.zone.armed{animation:armed 1.2s ease infinite}
+@keyframes armed{50%{box-shadow:0 0 0 5px rgba(255,211,92,.6)}}
+.zone-h b{display:block;font-size:1.15rem;font-weight:900}
+.zone-h small{color:var(--ink2);font-weight:700}
+.zone-b{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.zone-b .tag{min-height:40px;padding:6px 12px;font-size:.9rem}
+
+/* =========================================================
+   8. MISIÓN 4: MAPA MUNDIAL Y RUTA
+   ========================================================= */
+.map-card{padding:14px}
+.map-wrap{overflow-x:auto;border-radius:var(--r-md);-webkit-overflow-scrolling:touch}
+.map-wrap svg{display:block;width:100%;min-width:760px;height:auto;border-radius:var(--r-md)}
+.land{fill:#E7E1FF;stroke:#B7A9F4;stroke-width:.8;stroke-linejoin:round}
+.grat{stroke:#fff;stroke-width:1;opacity:.75}
+.equator{stroke:#fff;stroke-width:1.4;stroke-dasharray:4 5}
+.grat-lbl{font-size:9px;fill:#6E9BD6;font-weight:700}
+.cont-lbl{font-size:11.5px;font-weight:900;fill:#8374D6;letter-spacing:.14em}
+.ocean-lbl{font-size:12.5px;font-style:italic;font-weight:700;fill:#4B87CF}
+.route{fill:none;stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round;opacity:0}
+.route.mar{stroke:var(--azul-d)}
+.route.tierra{stroke:var(--rosa-d)}
+.route.aire{stroke:var(--amar-d);stroke-dasharray:7 6;stroke-width:2.6}
+.mk-path{fill:none;stroke:#fff;stroke-width:12;stroke-linecap:round}
+.pin-halo{fill:#fff;stroke:var(--ink);stroke-width:2}
+.pin-dot{fill:var(--rosa-d)}
+.pin-lbl{font-size:12.5px;font-weight:900;fill:var(--ink);paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round}
+.pin-n{opacity:0;transition:opacity .4s}
+.pin-n circle,.pin-n rect{fill:var(--amar);stroke:var(--ink);stroke-width:1.5}
+.pin-n text{font-size:10px;font-weight:900;fill:var(--ink)}
+.ordered .pin-n{opacity:1}
+.mover{font-size:21px;opacity:0}
+.inset-bg{fill:var(--azul-s);stroke:var(--ink);stroke-width:1.5}
+.inset-land{fill:#E7E1FF;stroke:#B7A9F4;stroke-width:1}
+.inset-t{font-size:11px;font-weight:900;fill:var(--ink2)}
+.leader{stroke:var(--ink);stroke-width:1.2;stroke-dasharray:3 3;fill:none}
+.zoom-box{fill:none;stroke:var(--ink);stroke-width:1.2}
+
+.chain{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px;margin-top:12px}
+.ch{font-size:.78rem;font-weight:900;letter-spacing:.03em;padding:6px 10px;border-radius:999px;background:var(--lila-s);color:var(--ink2);transition:background .3s,color .3s,transform .3s}
+.ch.on{background:var(--ink);color:#fff;transform:scale(1.06)}
+.ch.done{background:var(--lila);color:#fff}
+.ch-arrow{color:var(--lila);font-weight:900}
+.route-cap{text-align:center;font-weight:800;min-height:1.5em;margin-top:10px;color:var(--ink)}
+.legend{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 18px;margin-top:10px;font-size:.88rem;font-weight:800;color:var(--ink2)}
+.legend i{display:inline-block;width:22px;height:0;border-top:3.5px solid;vertical-align:middle;margin-right:6px;border-radius:2px}
+.lg-mar{border-color:var(--azul-d)!important}
+.lg-tierra{border-color:var(--rosa-d)!important}
+.lg-aire{border-top-style:dashed!important;border-color:var(--amar-d)!important}
+.map-note{font-size:.78rem;color:var(--ink2);text-align:center;margin-top:8px}
+.swipe-hint{display:none;font-size:.8rem;color:var(--ink2);text-align:center;margin-top:6px;font-weight:700}
+
+.slots{list-style:none;margin:14px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.slot{
+  border:2px dashed var(--line);border-radius:var(--r-md);padding:10px 12px;min-height:74px;background:var(--paper);
+  display:flex;gap:10px;align-items:flex-start;cursor:default;
+}
+.slot .s-n{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:900;background:#fff;border:2px solid var(--line);font-size:.85rem}
+.slot .s-t{font-weight:900;font-size:.95rem;line-height:1.25}
+.slot .s-d{display:block;font-weight:600;font-size:.8rem;color:var(--ink2);margin-top:2px}
+.slot.filled{border-style:solid;border-color:var(--lila);background:#fff;cursor:pointer}
+.slot.filled .s-n{background:var(--lila);border-color:var(--lila);color:#fff}
+.slot.good{border-color:var(--ok);background:var(--ok-s)}
+.slot.good .s-n{background:var(--ok);border-color:var(--ok)}
+.slot.wrong{border-color:var(--bad);background:var(--bad-s)}
+.slot.wrong .s-n{background:var(--bad);border-color:var(--bad)}
+.slot.locked{cursor:default}
+
+.stops{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+.stop{background:var(--paper);border:1.5px solid var(--line);border-radius:var(--r-md);padding:12px 14px}
+.stop-h{display:flex;align-items:center;gap:8px}
+.stop-n{width:26px;height:26px;border-radius:50%;background:var(--amar);border:1.5px solid var(--ink);display:grid;place-items:center;font-weight:900;font-size:.8rem;flex:none}
+.stop b{font-size:.98rem}
+.stop p{font-size:.88rem;color:var(--ink2);margin:.35em 0 0}
+.coord{display:block;font-size:.74rem;font-weight:800;color:var(--lila-d);margin-top:4px;font-variant-numeric:tabular-nums}
+
+/* =========================================================
+   9. MISIÓN 5: RADIOGRAFÍA
+   ========================================================= */
+.xray{background:#fff;border:2px solid var(--ink);border-radius:var(--r-lg);overflow:hidden}
+.xray-h{background:var(--ink);color:#fff;padding:16px 20px;display:flex;align-items:center;gap:12px}
+.xray-h h3{font-size:clamp(1.1rem,3.4vw,1.45rem);font-weight:900;letter-spacing:.02em}
+.xray-body{padding:6px 20px 20px}
+.rx-field{padding:16px 0;border-bottom:1.5px dashed var(--line)}
+.rx-field:last-child{border-bottom:0}
+.rx-top{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px}
+.rx-top h4{margin:0;font-size:1.05rem;font-weight:900}
+.rx-val{flex:1;min-width:140px;border-bottom:2.5px solid var(--line);padding:0 4px 2px;font-weight:800;color:var(--lila-d);min-height:1.6em}
+.rx-val.filled{border-color:var(--ok);color:var(--ok)}
+.rx-note{font-size:.85rem;color:var(--ink2);margin-top:4px}
+.rx-fb{font-size:.9rem;margin-top:8px;font-weight:700}
+.rx-fb.bad{color:var(--bad)}
+textarea{width:100%;min-height:90px;font:inherit;font-size:1rem;border:2px solid var(--line);border-radius:var(--r-md);padding:12px;resize:vertical;margin-top:8px;color:var(--ink)}
+textarea:focus{outline:none;border-color:var(--lila)}
+
+/* =========================================================
+   10. PANTALLA FINAL
+   ========================================================= */
+.final-hero{text-align:center;padding:10px 0}
+.final-hero h2{font-size:clamp(2.1rem,7vw,3.6rem);font-weight:900;letter-spacing:-.02em}
+.final-hero p{font-size:1.15rem;color:var(--ink2)}
+.score-wrap{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center}
+.ring{
+  --p:0;width:150px;height:150px;border-radius:50%;
+  background:conic-gradient(var(--lila-d) calc(var(--p)*1%),var(--lila-s) 0);
+  display:grid;place-items:center;
+}
+.ring-in{width:118px;height:118px;border-radius:50%;background:#fff;display:grid;place-items:center;text-align:center}
+.ring-in b{font-size:2.3rem;font-weight:900;line-height:1}
+.ring-in small{font-weight:800;color:var(--ink2)}
+.cat{font-size:clamp(1.3rem,4vw,1.8rem);font-weight:900}
+.cat-note{font-size:.88rem;color:var(--ink2);max-width:52ch}
+.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.sum{background:#fff;border:1.5px solid var(--line);border-radius:var(--r-md);padding:14px}
+.sum .s-e{font-size:1.6rem}
+.sum b{display:block;font-size:.9rem;color:var(--ink2);margin-top:4px}
+.sum p{font-weight:800;margin:.2em 0 0}
+.badges{display:flex;flex-wrap:wrap;gap:10px}
+.bdg{display:flex;align-items:center;gap:8px;background:var(--amar-s);border:2px dashed var(--amar-d);border-radius:999px;padding:8px 14px;font-weight:900;font-size:.9rem}
+.think{background:linear-gradient(135deg,var(--lila-s),var(--rosa-s));border-color:#E3D6F7}
+.think h3{font-size:1.4rem;font-weight:900}
+.think ul{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:8px}
+.think li{background:#fff;border-radius:12px;padding:10px 14px;font-weight:900}
+
+/* =========================================================
+   11. SELLO DE INSIGNIA, MODAL Y CONFETI
+   ========================================================= */
+.toast{position:fixed;inset:0;display:grid;place-items:center;pointer-events:none;z-index:90}
+.stamp{
+  width:210px;height:210px;border-radius:50%;background:#fff;border:5px dashed var(--lila-d);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;
+  box-shadow:0 18px 50px rgba(42,33,80,.28);animation:stamp 2.2s ease forwards;
+}
+.stamp .st-e{font-size:3.2rem;line-height:1}
+.stamp .st-k{font-size:.72rem;font-weight:900;color:var(--rosa-d);margin-top:6px;letter-spacing:.08em}
+.stamp .st-t{font-weight:900;font-size:1rem;line-height:1.2;margin-top:4px}
+@keyframes stamp{
+  0%{opacity:0;transform:scale(1.8) rotate(-18deg)}
+  18%{opacity:1;transform:scale(.95) rotate(-8deg)}
+  26%{transform:scale(1) rotate(-8deg)}
+  80%{opacity:1;transform:scale(1) rotate(-8deg)}
+  100%{opacity:0;transform:scale(.9) rotate(-8deg)}
+}
+.modal{position:fixed;inset:0;z-index:95;background:rgba(42,33,80,.45);display:none;align-items:flex-start;justify-content:center;padding:max(20px,env(safe-area-inset-top,0px)) 14px 20px;overflow-y:auto}
+.modal.open{display:flex}
+.sheet{background:#fff;border-radius:var(--r-lg);max-width:640px;width:100%;padding:22px;position:relative;animation:pop .3s ease}
+.sheet h2{font-size:1.4rem;font-weight:900;padding-right:40px}
+.sheet .x{position:absolute;top:14px;right:14px;width:40px;height:40px;border-radius:50%;border:1.5px solid var(--line);background:#fff;cursor:pointer;font-weight:900}
+.rx-row{display:flex;gap:12px;padding:12px 0;border-bottom:1.5px dashed var(--line)}
+.rx-row .rx-e{font-size:1.5rem;flex:none}
+.rx-row b{display:block}
+.rx-row p{margin:.15em 0 0;color:var(--ink2);font-weight:700}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:80;overflow:hidden}
+.confetti span{position:absolute;top:-20px;width:10px;height:16px;border-radius:3px;animation:fall 3.2s linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+
+footer{text-align:center;padding:24px 16px calc(24px + env(safe-area-inset-bottom,0px));font-size:.85rem;color:var(--ink2);font-weight:800}
+
+/* =========================================================
+   12. RESPONSIVE
+   ========================================================= */
+@media (max-width:820px){
+  .products{grid-template-columns:repeat(2,1fr)}
+  .grid-m1,.grid-m3{grid-template-columns:1fr}
+  .terr-grid{grid-template-columns:1fr}
+  .slots,.stops{grid-template-columns:1fr 1fr}
+  .summary{grid-template-columns:1fr 1fr}
+  .swipe-hint{display:block}
+}
+@media (max-width:640px){
+  .tb-title{white-space:normal;font-size:.74rem;line-height:1.2}
+  body{font-size:16px}
+  .tb-inner{grid-template-columns:1fr auto;gap:8px 10px;padding:8px 12px}
+  .brand{display:none}
+  .route-prog{max-width:none}
+  .btn-restart .lbl{display:none}
+  .pts{padding:5px 10px}
+  main{padding:18px 12px 30px}
+  .card{padding:16px}
+  .zones{gap:10px}
+  .zone{padding:10px;min-height:170px}
+  .zone-h b{font-size:1rem}
+  .slots,.stops,.summary{grid-template-columns:1fr}
+  .score-wrap{grid-template-columns:1fr;justify-items:center;text-align:center}
+  .next{justify-content:stretch}
+  .next .btn{width:100%}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition:none!important}
+  .hero-route{stroke-dashoffset:0}
+  .hero-pin{opacity:1}
+}
+@media print{
+  body{background:#fff}
+  body>*:not(.modal){display:none!important}
+  .modal{position:static;display:block;background:none;padding:0}
+  .sheet .x,.sheet .row{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- =========================================================
+     BARRA SUPERIOR
+     ========================================================= -->
+<header class="topbar">
+  <div class="tb-inner">
+    <div class="brand"><span class="brand-mark" aria-hidden="true">🧭</span><span>Laboratorio Cartográfico de Miss Viridiana</span></div>
+    <div class="tb-main">
+      <div class="tb-title">MISIÓN: SIGUE LA RUTA DEL PRODUCTO</div>
+      <div class="route-prog" id="routeProg" aria-hidden="true">
+        <span class="rp-pin">1</span><span class="rp-seg"></span>
+        <span class="rp-pin">2</span><span class="rp-seg"></span>
+        <span class="rp-pin">3</span><span class="rp-seg"></span>
+        <span class="rp-pin">4</span><span class="rp-seg"></span>
+        <span class="rp-pin">5</span>
+      </div>
+      <div class="prog-label" id="progLabel" aria-live="polite">Pantalla de inicio</div>
+    </div>
+    <div class="tb-actions">
+      <span class="pts" id="pts" title="Indicador de progreso, no es una calificación">⭐ 0</span>
+      <button class="btn-restart" id="btnRestart" type="button">🔄 <span class="lbl">Reiniciar misión</span><span class="sr">Reiniciar misión</span></button>
+    </div>
+  </div>
+</header>
+
+<main id="app" tabindex="-1"></main>
+
+<footer>Miss Viridiana | Geografía Económica</footer>
+
+<div class="toast" id="toast" aria-live="assertive"></div>
+<div class="modal" id="modal"></div>
+
+<script>
+/* =========================================================
+   A. UTILIDADES
+   ========================================================= */
+const $  = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const app = $('#app');
+const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function shuffle(arr){
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+  return a;
+}
+function shake(el){ el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); }
+function fb(host, type, html){ host.innerHTML = `<div class="fb ${type}" role="status">${html}</div>`; }
+function smoothScroll(el){ el.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'start' }); }
+
+/* Agrega una sección nueva debajo de la actual y la lleva a la vista */
+function reveal(html, host = app){
+  const div = document.createElement('div');
+  div.className = 'reveal';
+  div.innerHTML = html;
+  host.appendChild(div);
+  requestAnimationFrame(() => smoothScroll(div));
+  return div;
+}
+
+/* =========================================================
+   B. CONFIGURACIÓN DE PRODUCTOS
+   Para agregar un producto nuevo:
+   1) agregarlo a PRODUCTS con ready:true
+   2) crear DATA.<id> con la misma estructura que DATA.tenis
+      (las utilidades mkM3, mkM1q y mkInfra reutilizan contenido común)
+   ========================================================= */
+const PRODUCTS = [
+  { id:'tenis',     emoji:'👟', name:'TENIS',     ready:true,
+    pick:'Has elegido seguir la ruta de unos tenis. Prepárate: probablemente viajaron mucho más de lo que imaginas.' },
+  { id:'cafe',      emoji:'☕', name:'CAFÉ',      ready:true,
+    pick:'Has elegido seguir la ruta de un frasco de café soluble. México cultiva café… entonces, ¿por qué el de tu frasco podría venir de tan lejos?' },
+  { id:'chocolate', emoji:'🍫', name:'CHOCOLATE', ready:true,
+    pick:'Has elegido seguir la ruta de una barra de chocolate. El cacao nació en Mesoamérica, pero hoy su viaje empieza muy lejos de aquí.' },
+  { id:'celular',   emoji:'📱', name:'CELULAR',   ready:true,
+    pick:'Has elegido seguir la ruta de un celular. Cabe en tu mano, pero contiene pedacitos de medio planeta.' },
+];
+
+const BADGES = {
+  natural:{ e:'🌱', t:'Detective de factores naturales' },
+  agentes:{ e:'👥', t:'Detective de agentes' },
+  redes:  { e:'🚢', t:'Explorador de redes globales' },
+};
+
+/* Puntos por actividad (suman 100). Solo indican progreso. */
+const POINTS = { m1a:10, m1b:10, m2:15, m3:20, m4a:10, m4b:5, m4c:10, m5a:10, m5b:10 };
+
+/* =========================================================
+   C. CONTENIDO DEL RECORRIDO: TENIS
+   ========================================================= */
+const DATA = {};
+DATA.tenis = {
+  label:'los tenis',
+  illo:'sneaker',
+
+  /* ---------- Misión 1 ---------- */
+  m1:{
+    lead:'Todo producto empieza en la naturaleza, aunque al verlo en la tienda no lo parezca.',
+    caption:'¿De qué está hecho realmente un tenis?',
+    hint:'Toca todos los elementos que pueden participar en distintos tipos de calzado deportivo.',
+    prompt:'Antes de convertirse en unos tenis, necesitamos materias primas y materiales. ¿Qué elementos pueden intervenir?',
+    items:[
+      { id:'algodon',  e:'🌿', t:'Algodón',             ok:true,  why:'Agujetas, forros y algunas lonas. Su cultivo necesita clima cálido, sol y mucha agua.', hint:'Piensa en las agujetas y en el forro de tela.' },
+      { id:'caucho',   e:'🌳', t:'Caucho',              ok:true,  why:'La suela de muchos tenis. El caucho natural viene del árbol del hule, que crece en climas tropicales húmedos.', hint:'¿De qué está hecha la suela que toca el piso?' },
+      { id:'petroleo', e:'🛢️', t:'Petróleo y derivados', ok:true,  why:'De él se obtienen plásticos, espumas para amortiguar, poliéster y caucho sintético.', hint:'Muchas telas sintéticas y espumas son plásticos. ¿De dónde salen los plásticos?' },
+      { id:'minerales',e:'⛏️', t:'Minerales',           ok:true,  why:'Ojillos metálicos, pigmentos para dar color y el metal de la maquinaria de la fábrica.', hint:'Mira los ojillos por donde pasan las agujetas y piensa en los colores.' },
+      { id:'agua',     e:'💧', t:'Agua',                ok:true,  why:'Se usa para regar cultivos, teñir telas y enfriar procesos industriales.', hint:'Los cultivos se riegan y las telas se tiñen…' },
+      { id:'madera',   e:'🪵', t:'Madera',              ok:false, why:'Normalmente no forma parte del tenis. Aparece, si acaso, en la caja de cartón: eso es empaque, no el producto.' },
+      { id:'energia',  e:'⚡', t:'Energía',             ok:true,  why:'Las fábricas necesitan electricidad y combustibles para funcionar, y esa energía también sale de recursos naturales.', hint:'Ninguna máquina de la fábrica funciona sin…' },
+    ],
+    pista:'Los recursos naturales no se encuentran distribuidos de manera uniforme sobre el planeta.',
+    q:{
+      id:'m1b',
+      prompt:'¿Qué tipo de factor estamos identificando principalmente?',
+      options:[
+        { k:'A', t:'Factor natural', ok:true },
+        { k:'B', t:'Agente económico', why:'Los agentes son quienes toman decisiones: empresas, familias, gobierno. El caucho o el agua no deciden nada; son recursos.' },
+        { k:'C', t:'Medio de transporte', why:'El transporte mueve los materiales, pero aquí hablamos de los materiales mismos y de dónde se encuentran.' },
+        { k:'D', t:'Mercado', why:'El mercado es el espacio donde se compra y se vende; los recursos que identificaste existen antes de cualquier venta.' },
+      ],
+      explain:'Los recursos, el clima, el agua, el suelo, los minerales y otras condiciones naturales pueden influir en dónde se realiza una actividad productiva. Por eso el caucho natural se obtiene en zonas tropicales húmedas y no en cualquier lugar.'
+    }
+  },
+
+  /* ---------- Misión 2 ---------- */
+  m2:{
+    lead:'Las empresas no se instalan al azar: comparan territorios.',
+    prompt:'Una empresa busca instalar una etapa de producción relacionada con los tenis. ¿Qué territorio podría resultar atractivo dependiendo de lo que necesita?',
+    factors:[
+      { id:'agua', e:'💧', t:'Agua' },
+      { id:'clima', e:'🌤️', t:'Clima' },
+      { id:'mano', e:'👷', t:'Mano de obra' },
+      { id:'infra', e:'🏗️', t:'Infraestructura' },
+      { id:'transporte', e:'🚛', t:'Transporte' },
+      { id:'mercados', e:'🛒', t:'Acceso a mercados' },
+      { id:'tecnologia', e:'💻', t:'Tecnología' },
+    ],
+    territories:[
+      { id:'A', code:'A', e:'🌿', name:'Valle Verde',
+        traits:['Agua abundante','Clima templado','Buena disponibilidad de mano de obra','Carreteras','Mercado cercano'],
+        has:{ agua:'agua abundante', clima:'clima templado', mano:'buena disponibilidad de mano de obra', transporte:'carreteras', infra:'carreteras', mercados:'mercado cercano' },
+        lacks:{},
+        insight:'Valle Verde encaja con etapas que dependen del agua y del clima, como cultivar algodón o teñir telas, o con una fábrica que abastezca al mercado cercano.' },
+      { id:'B', code:'B', e:'⛰️', name:'Monte Seco', weak:true,
+        traits:['Poca disponibilidad de agua','Relieve accidentado','Transporte limitado','Poca infraestructura industrial'],
+        has:{},
+        lacks:{ agua:'poca disponibilidad de agua', transporte:'transporte limitado y relieve accidentado', infra:'poca infraestructura industrial' },
+        insight:'Monte Seco tiene más limitaciones que ventajas: poca agua, relieve accidentado y poco transporte encarecen producir y mover mercancías. Una empresa lo elegiría solo si necesitara algo que no aparece en la ficha, como un recurso mineral o terreno barato.' },
+      { id:'C', code:'C', e:'⚓', name:'Puerto Azul',
+        traits:['Puerto internacional','Carreteras','Aeropuerto cercano','Abundante infraestructura','Acceso a mercados internacionales','Mano de obra disponible'],
+        has:{ mano:'mano de obra disponible', infra:'abundante infraestructura', transporte:'puerto internacional, carreteras y aeropuerto cercano', mercados:'acceso a mercados internacionales' },
+        lacks:{},
+        insight:'Puerto Azul es atractivo para etapas que dependen de mover mercancías: ensamblar para exportar, recibir insumos del extranjero o instalar un centro de distribución.' },
+    ],
+    combo:'Ningún territorio es «el mejor» en abstracto: depende de lo que necesite cada etapa. Una plantación busca agua y clima; una fábrica de ensamble, mano de obra y transporte; un centro de exportación, un puerto. La localización productiva surge de la combinación de factores.'
+  },
+
+  /* ---------- Misión 3 ---------- */
+  m3:{
+    lead:'Detrás de cada etapa hay alguien que decide y condiciones que lo hacen posible.',
+    prompt:'Una fábrica necesita personas, dinero, tecnología, energía, infraestructura y consumidores. ¿Quiénes participan?',
+    items:[
+      { id:'empresas',     e:'🏭', t:'Empresas',            type:'agente', why:'deciden qué, dónde y cómo producir; invierten y contratan.' },
+      { id:'consumidores', e:'👨‍👩‍👧', t:'Consumidores/familias', type:'agente', why:'compran los tenis y, además, aportan su trabajo a las empresas.' },
+      { id:'gobierno',     e:'🏛️', t:'Gobierno',            type:'agente', why:'regula, cobra impuestos, construye infraestructura y firma acuerdos comerciales.' },
+      { id:'externo',      e:'🌎', t:'Sector externo',      type:'agente', why:'son empresas, gobiernos y compradores de otros países que venden, compran o invierten.' },
+      { id:'trabajo',      e:'👷', t:'Trabajo',             type:'factor', why:'es el tiempo y las habilidades de las personas: un recurso para producir. Quienes deciden contratarlo son los agentes.' },
+      { id:'capital',      e:'💰', t:'Capital',             type:'factor', why:'es el dinero, la maquinaria y las instalaciones que permiten producir.' },
+      { id:'energia',      e:'⚡', t:'Energía',             type:'factor', why:'sin electricidad ni combustibles la fábrica no funciona, pero la energía no toma decisiones.' },
+      { id:'infra',        e:'🛣️', t:'Infraestructura',     type:'factor', why:'carreteras, puertos y naves industriales facilitan producir y mover mercancías.' },
+      { id:'comunic',      e:'📡', t:'Comunicaciones',      type:'factor', why:'internet y telefonía permiten coordinar pedidos entre países.' },
+      { id:'tecno',        e:'💻', t:'Tecnología',          type:'factor', why:'máquinas y conocimientos que cambian cuánto y cómo se produce.' },
+      { id:'transp',       e:'🚢', t:'Transporte',          type:'factor', why:'mueve insumos y productos entre territorios.' },
+      { id:'regul',        e:'📋', t:'Regulación',          type:'factor', why:'son las leyes y normas. Las crea el gobierno (un agente), pero la norma en sí es una condición que favorece o limita la producción.' },
+      { id:'mercado',      e:'🛒', t:'Mercado',             type:'factor', why:'es el espacio de intercambio. Quienes compran son los consumidores (agentes); el mercado es la condición que hace posible vender.' },
+    ],
+    explain:'Los agentes son quienes participan y toman decisiones dentro del circuito; los factores son condiciones o recursos que permiten, favorecen o condicionan las actividades productivas.',
+    example:'Ejemplo: una empresa (agente) decide instalar su fábrica donde encuentra trabajo, energía e infraestructura (factores), y el gobierno (agente) fija las reglas con las que opera.'
+  },
+
+  /* ---------- Misión 4 ---------- */
+  m4:{
+    lead:'Los tenis que compras pudieron recorrer más de medio planeta antes de llegar a la tienda. Vamos a reconstruir su ruta.',
+    stages:[
+      { id:'s1', e:'🌱', t:'Materias primas',              d:'Se cultivan o extraen: caucho, algodón, petróleo.', hint:'Todo empieza en la naturaleza: algo se cultiva o se extrae.' },
+      { id:'s2', e:'🧵', t:'Transformación de materiales', d:'Se convierten en telas, espumas, hule y plásticos.', hint:'Antes de coser un tenis se necesitan telas, espumas y hule ya procesados.' },
+      { id:'s3', e:'🏭', t:'Fabricación',                  d:'Se cortan, cosen y ensamblan las piezas.', hint:'Con los materiales listos, se cortan y ensamblan las piezas.' },
+      { id:'s4', e:'🚢', t:'Transporte',                   d:'El producto terminado cruza el océano.', hint:'El tenis terminado está lejos de quien lo usará: tiene que cruzar el océano.' },
+      { id:'s5', e:'📦', t:'Distribución',                 d:'Centros de distribución reparten a las tiendas.', hint:'Al llegar al país, la mercancía se reparte a las tiendas.' },
+      { id:'s6', e:'🛍️', t:'Consumo',                      d:'Alguien compra y usa los tenis.', hint:'El recorrido termina cuando alguien los compra y los usa.' },
+    ],
+    chain:['ORIGEN','TRANSFORMACIÓN','FABRICACIÓN','TRANSPORTE','MERCADO','CONSUMO'],
+    solved:'Cada etapa depende de la anterior: sin materias primas no hay materiales, sin materiales no hay fábrica, y sin transporte el producto nunca llega al mercado.',
+
+    /* Puntos del mapa (lon, lat). n = etapa del circuito. */
+    pins:[
+      { id:'pet', lon:52.5,  lat:26.5,  n:1, lbl:'🛢️ Golfo Pérsico', dx:-12, dy:-10, a:'end' },
+      { id:'alg', lon:73.2,  lat:19.3,  n:1, lbl:'🌿 India',         dx:-12, dy:16,  a:'end' },
+      { id:'cau', lon:102.8, lat:3,     n:1, lbl:'🌳 Malasia',       dx:-12, dy:16,  a:'end' },
+      { id:'chn', lon:113.3, lat:23.1,  n:2, lbl:'🏭 Sur de China',  dx:12,  dy:-8,  a:'start' },
+      { id:'vnm', lon:106.7, lat:10.8,  n:3, lbl:'👟 Vietnam',       dx:12,  dy:16,  a:'start' },
+      { id:'mzo', lon:-104.3,lat:19.05, n:null, lbl:'⚓ México',     dx:-12, dy:-10, a:'end' },
+    ],
+    /* Etiqueta flotante de la etapa 4, vista del mapa y recuadro de acercamiento */
+    seaLabel:{ lon:178, lat:39, n:4, lbl:'🚢 Cruce del Pacífico' },
+    view:'pacific',
+    inset:{ x:620, y:250, lon0:-106, lat0:23, title:'Centro de México' },
+    note:'Ruta ilustrativa, simplificada a partir de patrones reales de la industria del calzado.',
+
+    /* Tramos de la ruta. inset:true = se dibujan en el recuadro de México */
+    legs:{
+      pet:{ mode:'mar', icon:'🚢', pts:[[52.5,26.5],[55.3,26.4],[56.3,26.65],[57.2,25.2],[60.6,23.6],[63.5,19.5],[69.5,14],[75.5,7],[80.5,5.2],[90,5.5],[97,6],[100,4.5],[102.5,1.4],[104.6,1.1],[107.5,6],[111,11],[112.2,18],[113.3,23.1]] },
+      alg:{ mode:'mar', icon:'🚢', pts:[[73.2,19.3],[71.5,18],[69.5,14],[75.5,7],[80.5,5.2],[90,5.5],[97,6],[100,4.5],[102.5,1.4],[104.6,1.1],[107.5,6],[111,11],[112.2,18],[113.3,23.1]] },
+      cau:{ mode:'mar', icon:'🚢', pts:[[102.8,3],[104.4,2.3],[107.5,6],[111,11],[112.2,18],[113.3,23.1]] },
+      cv: { mode:'tierra', icon:'🚛', pts:[[113.3,23.1],[108,23],[105.5,21],[105,18],[106.5,14],[106.7,10.8]] },
+      pac:{ mode:'mar', icon:'🚢', pts:[[106.7,10.8],[108.5,9],[113,13],[118,19.8],[122,21],[128,23.5],[140,27.5],[165,32],[-170,32],[-140,27],[-115,21],[-104.3,19.05]] },
+      air:{ mode:'aire', icon:'✈️', pts:[[106.7,10.8],[125,35],[160,52],[-165,55],[-130,42],[-99.1,19.4]] },
+      mq: { mode:'tierra', icon:'🚛', inset:true, pts:[[-104.3,19.05],[-103.35,20.67],[-100.4,20.6]] },
+      qt: { mode:'tierra', icon:'🚛', inset:true, pts:[[-100.4,20.6],[-99.8,20.1],[-99.1,19.45]] },
+    },
+    insetPins:[
+      { lon:-104.3, lat:19.05, lbl:'⚓ Manzanillo', dx:0,  dy:22, a:'middle' },
+      { lon:-100.4, lat:20.6,  lbl:'📦 Querétaro',  dx:-12, dy:-6, a:'end', n:5 },
+      { lon:-99.1,  lat:19.45, lbl:'🛍️ Tienda',     dx:14, dy:4, a:'start', n:6 },
+    ],
+    phases:[
+      { legs:['pet','alg','cau'], to:1, cap:'Las materias primas salen de distintos territorios hacia las plantas que las transforman.' },
+      { legs:['cv'],  to:2, cap:'Telas, espumas y hule viajan por carretera hasta la fábrica en Vietnam.' },
+      { legs:['pac'], to:3, cap:'Los tenis terminados cruzan el Pacífico en contenedores: varias semanas de viaje.' },
+      { legs:['air'], to:3, cap:'Algunos envíos urgentes viajan en avión: llegan antes, pero cuesta mucho más.' },
+      { legs:['mq'],  to:4, cap:'En Manzanillo se descargan los contenedores y los camiones los llevan a un centro de distribución.' },
+      { legs:['qt'],  to:5, cap:'Del centro de distribución a la tienda… y a tus manos.' },
+    ],
+    stops:[
+      { n:1, t:'Materias primas', where:'Golfo Pérsico, India y Malasia', coord:'26.5°N 52.5°E · 19.3°N 73.2°E · 3.0°N 102.8°E', d:'Petróleo, algodón y caucho: cada recurso viene del territorio donde la naturaleza lo permite.' },
+      { n:2, t:'Transformación', where:'Sur de China', coord:'23.1°N 113.3°E', d:'Plantas que convierten los recursos en telas sintéticas, espumas y hule.' },
+      { n:3, t:'Fabricación', where:'Vietnam', coord:'10.8°N 106.7°E', d:'Fábricas con mucha mano de obra cortan, cosen y ensamblan los tenis.' },
+      { n:4, t:'Transporte', where:'Océano Pacífico', coord:'más de 13,000 km de mar', d:'Barcos portacontenedores; algunos envíos urgentes, por avión.' },
+      { n:5, t:'Distribución', where:'Manzanillo → Querétaro', coord:'19.1°N 104.3°O → 20.6°N 100.4°O', d:'El puerto recibe los contenedores y un centro de distribución reparte a las tiendas.' },
+      { n:6, t:'Consumo', where:'Una tienda en tu ciudad', coord:'aquí empieza tu parte', d:'Alguien compra los tenis. Ese alguien también es un agente del circuito.' },
+    ],
+    qInfra:{
+      id:'m4b',
+      prompt:'¿Qué infraestructura permite conectar territorios que se encuentran a miles de kilómetros?',
+      options:[
+        { k:'A', t:'Los campos de cultivo y las minas', why:'Son lugares de origen de los recursos, pero no conectan territorios lejanos entre sí.' },
+        { k:'B', t:'Puertos, rutas marítimas, aeropuertos, carreteras y redes de comunicación', ok:true },
+        { k:'C', t:'Las tiendas del centro comercial', why:'Son el punto final del recorrido; no mueven mercancías entre países.' },
+        { k:'D', t:'Las oficinas de diseño de la marca', why:'Ahí se diseña el producto, pero no se transporta nada.' },
+      ],
+      explain:'Los puertos, aeropuertos y carreteras son los nodos por donde entran y salen las mercancías; los barcos portacontenedores recorren las rutas marítimas, e internet y las telecomunicaciones coordinan pedidos, pagos y horarios entre países.'
+    },
+    qRuta:{
+      id:'m4c',
+      prompt:'¿Qué demuestra esta ruta?',
+      options:[
+        { k:'A', t:'Que todo el producto se fabrica en un solo lugar.', why:'La ruta pasó por varios países: cada etapa ocurrió en un territorio distinto.' },
+        { k:'B', t:'Que diferentes territorios pueden especializarse en distintas etapas.', ok:true },
+        { k:'C', t:'Que los recursos naturales están distribuidos de manera uniforme.', why:'Es justo al revés: el petróleo, el algodón y el caucho vienen de lugares diferentes porque los recursos están distribuidos de forma desigual.' },
+        { k:'D', t:'Que el transporte no influye en los circuitos productivos.', why:'Sin barcos, camiones y aviones, las etapas no podrían conectarse.' },
+      ],
+      explain:'Un circuito global conecta diferentes territorios especializados en distintas actividades. El transporte y las redes de comunicación permiten articular esos espacios.'
+    }
+  },
+
+  /* ---------- Misión 5 ---------- */
+  m5:{
+    lead:'Es momento de reunir todas tus pistas en un solo expediente.',
+    title:'📋 RADIOGRAFÍA TERRITORIAL DE LOS TENIS',
+    placeholder:'Los tenis que uso…',
+    fields:[
+      { id:'natural', e:'🌱', t:'Factor natural', opts:[
+        { t:'Caucho del árbol del hule', ok:true },
+        { t:'Clima cálido para el algodón', ok:true },
+        { t:'Petróleo', ok:true },
+        { t:'Mano de obra', why:'La mano de obra es un factor socioeconómico: depende de la población y del trabajo, no de la naturaleza.' },
+        { t:'Puerto de Manzanillo', why:'Un puerto es infraestructura construida por la sociedad, no un factor natural.' },
+      ]},
+      { id:'socio', e:'👷', t:'Factor socioeconómico', opts:[
+        { t:'Trabajo en la fábrica', ok:true },
+        { t:'Capital para maquinaria', ok:true },
+        { t:'Tecnología', ok:true },
+        { t:'Clima tropical', why:'El clima es un factor natural.' },
+        { t:'Empresas', why:'Las empresas son agentes: toman decisiones dentro del circuito.' },
+      ]},
+      { id:'agente', e:'🏭', t:'Un agente', opts:[
+        { t:'Empresa fabricante', ok:true },
+        { t:'Consumidores', ok:true },
+        { t:'Gobierno', ok:true },
+        { t:'Sector externo', ok:true },
+        { t:'Energía', why:'La energía es un factor: una condición para producir, no alguien que decide.' },
+        { t:'Carreteras', why:'Las carreteras son infraestructura, un factor socioeconómico.' },
+      ]},
+      { id:'territorio', e:'🌎', t:'Un territorio', note:'Todos participaron en la ruta: elige el que más te llamó la atención.', opts:[
+        { t:'Golfo Pérsico', ok:true }, { t:'India', ok:true }, { t:'Malasia', ok:true },
+        { t:'Sur de China', ok:true }, { t:'Vietnam', ok:true }, { t:'México', ok:true },
+      ]},
+      { id:'transporte', e:'🚢', t:'Medio de transporte', opts:[
+        { t:'Marítimo 🚢', ok:true },
+        { t:'Terrestre 🚛', ok:true },
+        { t:'Aéreo ✈️', ok:true },
+        { t:'Correo electrónico', why:'El correo electrónico es comunicación: mueve información, no mercancías.' },
+      ]},
+      { id:'conecta', e:'🔗', t:'¿Qué conecta al circuito?', opts:[
+        { t:'Flujos de mercancías, dinero e información, a través del transporte y las comunicaciones', ok:true },
+        { t:'Solo la publicidad de la marca', why:'La publicidad ayuda a vender, pero no mueve materiales ni productos entre territorios.' },
+        { t:'La tienda donde los compras', why:'La tienda es solo el punto final del recorrido.' },
+      ]},
+    ],
+    qFinal:{
+      id:'m5b',
+      prompt:'¿Por qué podemos decir que los tenis forman parte de un circuito productivo global?',
+      options:[
+        { k:'A', t:'Porque se venden en tiendas de muchos países.', why:'Venderse en muchos lugares no basta. Lo global está en cómo se producen: etapas en distintos territorios conectadas entre sí.' },
+        { k:'B', t:'Porque las marcas de tenis son famosas en todo el mundo.', why:'La fama de una marca es publicidad; no explica el recorrido territorial del producto.' },
+        { k:'C', t:'Porque sus diferentes etapas se realizan en distintos territorios, conectados mediante relaciones productivas, comerciales y de transporte.', ok:true },
+        { k:'D', t:'Porque todas sus materias primas vienen del mismo país.', why:'Es al revés: vienen de territorios distintos, porque los recursos están repartidos de forma desigual.' },
+      ],
+      explain:'Un circuito productivo global existe cuando las etapas (obtener recursos, transformar, fabricar, transportar, distribuir y consumir) ocurren en distintos territorios y están unidas por flujos de mercancías, dinero e información.'
+    }
+  },
+
+  /* ---------- Resumen final ---------- */
+  summary:{
+    territorios:'Golfo Pérsico, India, Malasia, sur de China, Vietnam y México',
+    transporte:'Marítimo, terrestre y aéreo',
+    escala:'Asia y América conectadas: más de 13,000 km de mar entre la fábrica y la tienda.'
+  }
+};
+
+/* =========================================================
+   C2. Utilidades para reutilizar contenido entre productos
+   ========================================================= */
+/* Misión 3: mismas tarjetas, con explicaciones adaptadas a cada producto */
+function mkM3(prompt, whyOverrides){
+  return Object.assign({}, DATA.tenis.m3, {
+    prompt,
+    items: DATA.tenis.m3.items.map(i => Object.assign({}, i, { why: whyOverrides[i.id] || i.why }))
+  });
+}
+/* Pregunta del tipo de factor (Misión 1) con explicación propia */
+function mkM1q(explain){ return Object.assign({}, DATA.tenis.m1.q, { explain }); }
+/* Pregunta de infraestructura (Misión 4) con explicación propia */
+function mkInfra(explain){ return Object.assign({}, DATA.tenis.m4.qInfra, { explain }); }
+/* Opciones de "¿Qué conecta al circuito?" (Misión 5), iguales para todos */
+const RX_CONECTA = DATA.tenis.m5.fields.find(f => f.id === 'conecta');
+
+/* =========================================================
+   C3. CONTENIDO DEL RECORRIDO: CAFÉ SOLUBLE
+   Ruta ilustrativa: grano de Chiapas, Brasil y Vietnam →
+   planta de café soluble cerca del puerto de Veracruz → centro de México
+   ========================================================= */
+DATA.cafe = {
+  label:'el café soluble',
+  illo:'coffee',
+
+  m1:{
+    lead:'Todo producto empieza en la naturaleza, aunque al verlo en un frasco no lo parezca.',
+    caption:'¿De qué está hecho realmente un frasco de café?',
+    prompt:'Antes de llegar a tu taza, el café necesita materias primas y materiales. ¿Qué elementos pueden intervenir?',
+    hint:'Toca todos los elementos que pueden participar en la producción de un frasco de café soluble.',
+    items:[
+      { id:'grano',   e:'🫘', t:'Granos de café',      ok:true,  why:'Son la semilla del fruto del cafeto, un arbusto que crece en montañas tropicales con lluvia y sombra.', hint:'¿Qué ingrediente principal crece en un arbusto de las montañas?' },
+      { id:'agua',    e:'💧', t:'Agua',                ok:true,  why:'Riega los cafetales, lava el grano en el beneficio y sirve para extraer el café en la planta.', hint:'El grano se lava y el café se extrae con…' },
+      { id:'suelo',   e:'🟫', t:'Suelo fértil',        ok:true,  why:'Los suelos volcánicos, ricos en nutrientes, favorecen el cultivo del café en Chiapas y Veracruz.', hint:'¿En qué crece la planta del café?' },
+      { id:'arena',   e:'🏖️', t:'Arena sílica',        ok:true,  why:'Es la materia prima del vidrio del frasco: un mineral que también se extrae de la naturaleza.', hint:'Mira el frasco: ¿de qué está hecho el vidrio?' },
+      { id:'petroleo',e:'🛢️', t:'Petróleo y derivados', ok:true,  why:'De él salen la tapa y la etiqueta de plástico, y el combustible de barcos y camiones.', hint:'La tapa es de plástico… ¿de dónde salen los plásticos?' },
+      { id:'energia', e:'⚡', t:'Energía',             ok:true,  why:'Tostar, extraer y secar el café para volverlo polvo consume muchísima energía.', hint:'Tostar y secar el café requiere mucho calor y electricidad.' },
+      { id:'algodon', e:'🌿', t:'Algodón',             ok:false, why:'No forma parte del café ni de su frasco. Es materia prima de telas, no de alimentos.' },
+    ],
+    pista:'Los recursos naturales no se encuentran distribuidos de manera uniforme sobre el planeta.',
+    q: mkM1q('El café arábica crece mejor en montañas tropicales de entre 600 y 1,700 metros de altitud, con lluvias abundantes, sombra y suelos fértiles, como en Chiapas, Veracruz, Oaxaca o Puebla. Por eso no se cultiva en cualquier lugar.')
+  },
+
+  m2:{
+    lead:'Las empresas no se instalan al azar: comparan territorios.',
+    prompt:'Una empresa quiere instalar una etapa del circuito del café. ¿Qué territorio podría resultar atractivo dependiendo de lo que necesita?',
+    factors:[
+      { id:'agua', e:'💧', t:'Agua' },
+      { id:'clima', e:'🌤️', t:'Clima' },
+      { id:'suelo', e:'🟫', t:'Suelo' },
+      { id:'mano', e:'👷', t:'Mano de obra' },
+      { id:'infra', e:'🏗️', t:'Infraestructura' },
+      { id:'transporte', e:'🚛', t:'Transporte' },
+      { id:'mercados', e:'🛒', t:'Acceso a mercados' },
+    ],
+    territories:[
+      { id:'A', code:'A', e:'⛰️', name:'Sierra Húmeda',
+        traits:['Montañas a 1,200 m de altitud','Lluvias abundantes','Suelo volcánico fértil','Familias campesinas con experiencia','Caminos de terracería'],
+        has:{ clima:'montañas templadas a 1,200 m de altitud', agua:'lluvias abundantes', suelo:'suelo volcánico fértil', mano:'familias campesinas con experiencia' },
+        lacks:{ transporte:'solo caminos de terracería', infra:'caminos de terracería y ninguna industria' },
+        insight:'Sierra Húmeda es ideal para cultivar café y para los beneficios que lo convierten en café verde. Para una planta industrial grande tendría problemas: sin buenos caminos es difícil recibir insumos y sacar el producto.' },
+      { id:'B', code:'B', e:'🌵', name:'Llanura Árida', weak:true,
+        traits:['Lluvias escasas','Calor extremo','Suelo arenoso','Lejos de puertos y carreteras'],
+        has:{},
+        lacks:{ agua:'lluvias escasas', clima:'calor extremo', suelo:'suelo arenoso', transporte:'lejos de puertos y carreteras', infra:'lejos de puertos y carreteras' },
+        insight:'Llanura Árida tiene más limitaciones que ventajas: el cafeto no soporta la sequía ni el calor extremo, y sin puertos ni carreteras tampoco conviene instalar una planta. Una empresa la elegiría solo si necesitara algo que no aparece en la ficha.' },
+      { id:'C', code:'C', e:'⚓', name:'Puerto Golfo',
+        traits:['Puerto en el Golfo de México','Carreteras y ferrocarril','Energía eléctrica suficiente','Mano de obra disponible','Cerca de regiones cafetaleras','Conexión con el centro del país'],
+        has:{ transporte:'puerto, carreteras y ferrocarril', infra:'puerto, carreteras, ferrocarril y energía suficiente', mano:'mano de obra disponible', mercados:'conexión con el centro del país y puerto para vender al extranjero' },
+        lacks:{},
+        insight:'Puerto Golfo es atractivo para una planta de café soluble: puede recibir grano de las regiones cafeteras cercanas y grano importado por el puerto, tiene energía y está conectado con las grandes ciudades.' },
+    ],
+    combo:'Ningún territorio es «el mejor» en abstracto: depende de la etapa. El cafetal busca montaña, lluvia y suelo fértil; la planta de café soluble, un puerto, energía y buenas conexiones. La localización productiva surge de la combinación de factores.'
+  },
+
+  m3: mkM3('Del cafetal a tu taza participan campesinos, empresas, gobierno y compradores, y se necesitan muchas condiciones. ¿Quiénes participan?', {
+    empresas:'deciden dónde comprar el grano, dónde instalar la planta y a quién vender.',
+    consumidores:'compran el café y, además, aportan su trabajo a las empresas.',
+    externo:'son los productores y exportadores de Brasil y Vietnam que venden grano a México, y los compradores extranjeros del café mexicano.',
+    trabajo:'es el esfuerzo de quienes cortan el café a mano y de quienes operan la planta: un recurso para producir. Quienes deciden contratarlo son los agentes.',
+    capital:'es el dinero, la maquinaria y las instalaciones, como los beneficios y la planta de café soluble.',
+  }),
+
+  m4:{
+    lead:'Aunque México cultiva café, parte del grano de tu frasco pudo cruzar medio planeta. Vamos a reconstruir su ruta.',
+    stages:[
+      { id:'s1', e:'🌱', t:'Cultivo',            d:'Se siembra el cafeto y se cosecha el fruto a mano.', hint:'Todo empieza en la naturaleza: algo se siembra y se cosecha.' },
+      { id:'s2', e:'🫘', t:'Beneficio',          d:'El fruto se despulpa, se lava y se seca: queda el café verde.', hint:'Antes de viajar, el fruto se limpia y se seca cerca del cafetal para convertirse en café verde.' },
+      { id:'s3', e:'🚢', t:'Transporte del grano', d:'El café verde viaja desde Chiapas, Brasil y Vietnam hasta la planta.', hint:'La planta está lejos de muchos cafetales: primero el grano tiene que llegar hasta ella.' },
+      { id:'s4', e:'🏭', t:'Fabricación',        d:'Se tuesta, se extrae y se seca hasta volverse polvo; se envasa.', hint:'Cuando el grano ya llegó a la planta, se tuesta y se convierte en polvo soluble.' },
+      { id:'s5', e:'📦', t:'Distribución',       d:'Centros de distribución reparten los frascos a las tiendas.', hint:'Los frascos terminados se reparten a las tiendas.' },
+      { id:'s6', e:'☕', t:'Consumo',            d:'Alguien compra el frasco y prepara su café.', hint:'El recorrido termina cuando alguien lo compra y se lo toma.' },
+    ],
+    chain:['ORIGEN','TRANSFORMACIÓN','TRANSPORTE','FABRICACIÓN','MERCADO','CONSUMO'],
+    solved:'Cada etapa depende de la anterior. ¿Notaste que aquí el transporte del grano ocurre <b>antes</b> de fabricar? El orden de las etapas cambia según dónde se ubica cada una.',
+
+    pins:[
+      { id:'vnm', lon:108,   lat:12.7,  n:'1-2', lbl:'🌱 Vietnam',  dx:12,  dy:16,  a:'start' },
+      { id:'bra', lon:-40.6, lat:-19.5, n:'1-2', lbl:'🌱 Brasil',   dx:-12, dy:4,   a:'end' },
+      { id:'ver', lon:-96.1, lat:19.2,  n:null,  lbl:'⚓ Veracruz', dx:-12, dy:-10, a:'end' },
+    ],
+    seaLabel:{ lon:-150, lat:20, n:3, lbl:'🚢 Hacia el Canal de Panamá' },
+    view:'pacific',
+    inset:{ x:600, y:238, w:195, h:125, s:20, lon0:-101.6, lat0:22.1, title:'Centro y sur de México' },
+    note:'Ruta ilustrativa, simplificada a partir de patrones reales del comercio de café.',
+
+    legs:{
+      vnt:{ mode:'tierra', icon:'🚛', pts:[[108,12.7],[107.3,11.6],[106.7,10.8]] },
+      vn: { mode:'mar', icon:'🚢', pts:[[106.7,10.8],[108.5,9],[113,13],[118,19.8],[122,21],[128,23.5],[140,22],[165,16],[-165,12],[-135,9],[-105,7],[-88,6],[-80.5,7.2],[-79.6,8.9],[-79.9,9.6],[-80.5,11],[-82,14.5],[-84.5,18],[-86,21.6],[-89,23.3],[-93,21.5],[-96.1,19.2]] },
+      br: { mode:'mar', icon:'🚢', pts:[[-40.6,-19.5],[-39.6,-20.3],[-38,-16],[-36.5,-11],[-34.3,-7],[-34.5,-4.5],[-38,-2.3],[-44,-0.5],[-50,3.5],[-55,7.5],[-60,11.5],[-66,14],[-75,15],[-82,16.5],[-86,21.6],[-89,23.3],[-93,21.5],[-96.1,19.2]] },
+      chs:{ mode:'tierra', icon:'🚛', inset:true, pts:[[-92.6,16.2],[-93.2,16.8],[-94.6,17.6],[-95.6,18.4],[-96.1,19.2]] },
+      vp: { mode:'tierra', icon:'🚛', inset:true, pts:[[-96.1,19.2],[-97.1,18.9],[-98.2,19.05]] },
+      pc: { mode:'tierra', icon:'🚛', inset:true, pts:[[-98.2,19.05],[-98.7,19.3],[-99.13,19.43]] },
+    },
+    insetPins:[
+      { lon:-92.6,  lat:16.2,  lbl:'🌱 Chiapas',  dx:-12, dy:4,   a:'end',    n:'1-2' },
+      { lon:-96.1,  lat:19.2,  lbl:'🏭 Veracruz', dx:12,  dy:18,  a:'start',  n:4 },
+      { lon:-98.2,  lat:19.05, lbl:'📦 Puebla',   dx:0,   dy:22,  a:'middle', n:5 },
+      { lon:-99.13, lat:19.43, lbl:'🛍️ Tienda',   dx:2,   dy:-12, a:'start',  n:6, bx:-10, by:-10 },
+    ],
+    phases:[
+      { legs:['vnt'], to:1, cap:'En Vietnam, Brasil y Chiapas se cosecha el fruto y, en los beneficios, se convierte en café verde.' },
+      { legs:['vn','br'], to:2, cap:'El café verde viaja en barco: desde Vietnam cruza el Pacífico y el Canal de Panamá; desde Brasil sube por el Atlántico hasta el Golfo de México.' },
+      { legs:['chs'], to:3, cap:'Desde Chiapas el grano llega en camión. En la planta de Veracruz se tuesta, se extrae y se seca hasta volverse polvo.' },
+      { legs:['vp'],  to:4, cap:'Los frascos viajan por carretera a un centro de distribución.' },
+      { legs:['pc'],  to:5, cap:'Del centro de distribución a la tienda… y a tu taza.' },
+    ],
+    stops:[
+      { n:1, t:'Cultivo', where:'Chiapas, Brasil y Vietnam', coord:'16.2°N 92.6°O · 19.5°S 40.6°O · 12.7°N 108.0°E', d:'Montañas y mesetas tropicales con lluvia y suelos fértiles. Brasil y Vietnam son los mayores productores de café del mundo.' },
+      { n:2, t:'Beneficio', where:'Junto a los cafetales', coord:'en las mismas regiones', d:'El fruto se despulpa, se lava y se seca. El café verde pesa menos y aguanta meses de viaje.' },
+      { n:3, t:'Transporte del grano', where:'Pacífico, Canal de Panamá, Atlántico y carreteras', coord:'unos 20,000 km de mar desde Vietnam', d:'Barcos con contenedores de grano verde; desde Chiapas, camiones.' },
+      { n:4, t:'Fabricación', where:'Veracruz', coord:'19.2°N 96.1°O', d:'Planta de café soluble cerca del puerto: recibe grano importado y grano de las regiones cafetaleras de México.' },
+      { n:5, t:'Distribución', where:'Veracruz → Puebla', coord:'19.2°N 96.1°O → 19.0°N 98.2°O', d:'Un centro de distribución reparte los frascos a las tiendas del centro del país.' },
+      { n:6, t:'Consumo', where:'Una tienda en tu ciudad', coord:'aquí empieza tu parte', d:'Alguien compra el frasco. Ese alguien también es un agente del circuito.' },
+    ],
+    qInfra: mkInfra('Los puertos, las carreteras y el ferrocarril son los nodos por donde entra y sale el café; el Canal de Panamá acorta miles de kilómetros entre el Pacífico y el Atlántico, e internet coordina compras, pagos y envíos entre países.'),
+    qRuta:{
+      id:'m4c',
+      prompt:'¿Qué demuestra esta ruta?',
+      options:[
+        { k:'A', t:'Que todo el café se produce y se procesa en un solo lugar.', why:'La ruta pasó por varios países: el grano se cultivó en tres territorios y se procesó en otro.' },
+        { k:'B', t:'Que diferentes territorios pueden especializarse en distintas etapas.', ok:true },
+        { k:'C', t:'Que el café puede cultivarse en cualquier parte del mundo.', why:'Es al revés: el café solo crece en montañas y mesetas tropicales con ciertas condiciones de clima, lluvia y suelo.' },
+        { k:'D', t:'Que el transporte no influye en los circuitos productivos.', why:'Sin barcos, el Canal de Panamá y los camiones, el grano nunca llegaría a la planta.' },
+      ],
+      explain:'Un circuito global conecta diferentes territorios especializados en distintas actividades: unos cultivan, otros procesan, otros consumen. El transporte y las redes de comunicación permiten articular esos espacios.'
+    }
+  },
+
+  m5:{
+    lead:'Es momento de reunir todas tus pistas en un solo expediente.',
+    title:'📋 RADIOGRAFÍA TERRITORIAL DEL CAFÉ',
+    placeholder:'El café que se toma en mi casa…',
+    fields:[
+      { id:'natural', e:'🌱', t:'Factor natural', opts:[
+        { t:'Clima de montaña tropical', ok:true },
+        { t:'Suelo volcánico fértil', ok:true },
+        { t:'Lluvias abundantes', ok:true },
+        { t:'Cortadores de café', why:'Las personas que cosechan aportan trabajo: es un factor socioeconómico, no natural.' },
+        { t:'Puerto de Veracruz', why:'Un puerto es infraestructura construida por la sociedad, no un factor natural.' },
+      ]},
+      { id:'socio', e:'👷', t:'Factor socioeconómico', opts:[
+        { t:'Trabajo de cortadores y obreros', ok:true },
+        { t:'Capital para la planta', ok:true },
+        { t:'Tecnología para secar el café', ok:true },
+        { t:'Altitud de las montañas', why:'La altitud es una condición del relieve: un factor natural.' },
+        { t:'Consumidores', why:'Los consumidores son agentes: toman decisiones dentro del circuito.' },
+      ]},
+      { id:'agente', e:'🏭', t:'Un agente', opts:[
+        { t:'Productores de café', ok:true },
+        { t:'Empresa que fabrica el café soluble', ok:true },
+        { t:'Consumidores', ok:true },
+        { t:'Gobierno', ok:true },
+        { t:'Energía', why:'La energía es un factor: una condición para producir, no alguien que decide.' },
+        { t:'Canal de Panamá', why:'El canal es infraestructura de transporte: un factor que conecta territorios.' },
+      ]},
+      { id:'territorio', e:'🌎', t:'Un territorio', note:'Todos participaron en la ruta: elige el que más te llamó la atención.', opts:[
+        { t:'Chiapas', ok:true }, { t:'Brasil', ok:true }, { t:'Vietnam', ok:true },
+        { t:'Panamá', ok:true }, { t:'Veracruz', ok:true }, { t:'Centro de México', ok:true },
+      ]},
+      { id:'transporte', e:'🚢', t:'Medio de transporte', opts:[
+        { t:'Marítimo 🚢', ok:true },
+        { t:'Terrestre 🚛', ok:true },
+        { t:'Aéreo ✈️', why:'En esta ruta el café no viaja en avión: es pesado, se mueve en grandes cantidades y aguanta semanas de viaje, así que el barco es mucho más barato.' },
+        { t:'Correo electrónico', why:'El correo electrónico es comunicación: mueve información, no mercancías.' },
+      ]},
+      RX_CONECTA,
+    ],
+    qFinal:{
+      id:'m5b',
+      prompt:'¿Por qué podemos decir que el café soluble forma parte de un circuito productivo global, aunque México también produce café?',
+      options:[
+        { k:'A', t:'Porque México no produce café.', why:'México sí produce café, sobre todo en Chiapas, Veracruz, Oaxaca y Puebla. Aun así, la industria también compra grano de otros países.' },
+        { k:'B', t:'Porque el café es una bebida que se toma en todo el mundo.', why:'Que se consuma en muchos lugares no basta. Lo global está en cómo se produce: etapas en distintos territorios conectadas entre sí.' },
+        { k:'C', t:'Porque sus etapas conectan territorios de varios continentes mediante relaciones productivas, comerciales y de transporte.', ok:true },
+        { k:'D', t:'Porque todo el café viaja en avión.', why:'El café viaja sobre todo en barco y camión. El medio de transporte no es lo que lo vuelve global.' },
+      ],
+      explain:'Aunque México cultiva café, la planta combina grano nacional con grano de Brasil y Vietnam. Un circuito productivo global existe cuando las etapas ocurren en distintos territorios unidos por flujos de mercancías, dinero e información.'
+    }
+  },
+
+  summary:{
+    territorios:'Chiapas, Brasil, Vietnam, el Canal de Panamá, Veracruz, Puebla y el centro de México',
+    transporte:'Marítimo y terrestre',
+    escala:'Asia, América del Sur y México conectados: el grano de Vietnam puede recorrer unos 20,000 km de mar.'
+  }
+};
+
+/* =========================================================
+   C4. CONTENIDO DEL RECORRIDO: BARRA DE CHOCOLATE
+   Ruta ilustrativa: cacao de Costa de Marfil → molienda en Ámsterdam →
+   Atlántico → Veracruz; cacao de Ecuador y Tabasco → fábrica en Puebla
+   ========================================================= */
+DATA.chocolate = {
+  label:'la barra de chocolate',
+  illo:'choco',
+
+  m1:{
+    lead:'Todo producto empieza en la naturaleza, aunque al verlo envuelto no lo parezca.',
+    caption:'¿Qué hay realmente dentro de una barra de chocolate?',
+    prompt:'Antes de convertirse en una barra de chocolate con leche, necesitamos materias primas y materiales. ¿Qué elementos pueden intervenir?',
+    hint:'Toca todos los elementos que pueden participar en la producción de una barra de chocolate con leche.',
+    items:[
+      { id:'cacao',   e:'🫘', t:'Cacao',               ok:true,  why:'Es la semilla de la mazorca del árbol de cacao, que solo crece en climas cálidos y húmedos cerca del ecuador.', hint:'¿Cuál es el ingrediente que le da sabor a chocolate?' },
+      { id:'cana',    e:'🎋', t:'Caña de azúcar',      ok:true,  why:'De ella se obtiene el azúcar. Se cultiva en climas cálidos, como en Veracruz, San Luis Potosí o Jalisco.', hint:'El chocolate es dulce… ¿de dónde sale el azúcar?' },
+      { id:'leche',   e:'🥛', t:'Leche',               ok:true,  why:'Viene del ganado, que necesita pastos, agua y forraje: también depende de recursos naturales.', hint:'Es chocolate «con leche».' },
+      { id:'agua',    e:'💧', t:'Agua',                ok:true,  why:'Riega los cultivos, da de beber al ganado y se usa para limpiar y enfriar en la fábrica.', hint:'Los cultivos se riegan y el ganado bebe…' },
+      { id:'energia', e:'⚡', t:'Energía',             ok:true,  why:'Tostar, moler, mezclar y enfriar el chocolate requiere electricidad y combustibles.', hint:'Ninguna máquina de la fábrica funciona sin…' },
+      { id:'petroleo',e:'🛢️', t:'Petróleo y derivados', ok:true,  why:'De él se hace la envoltura de plástico y el combustible de barcos y camiones.', hint:'Mira la envoltura: ¿de dónde salen los plásticos?' },
+      { id:'algodon', e:'🌿', t:'Algodón',             ok:false, why:'No forma parte del chocolate ni de su envoltura. Es materia prima de telas, no de alimentos.' },
+    ],
+    pista:'Los recursos naturales no se encuentran distribuidos de manera uniforme sobre el planeta.',
+    q: mkM1q('El árbol de cacao necesita calor y humedad todo el año, lluvias abundantes y sombra: solo crece en una franja de unos 20° al norte y al sur del ecuador. Por eso se cultiva en Costa de Marfil, Ghana, Ecuador o Tabasco, y no en cualquier lugar.')
+  },
+
+  m2:{
+    lead:'Las empresas no se instalan al azar: comparan territorios.',
+    prompt:'Una empresa quiere instalar una etapa del circuito del chocolate. ¿Qué territorio podría resultar atractivo dependiendo de lo que necesita?',
+    factors:[
+      { id:'agua', e:'💧', t:'Agua' },
+      { id:'clima', e:'🌤️', t:'Clima' },
+      { id:'mano', e:'👷', t:'Mano de obra' },
+      { id:'infra', e:'🏗️', t:'Infraestructura' },
+      { id:'energia', e:'⚡', t:'Energía' },
+      { id:'transporte', e:'🚛', t:'Transporte' },
+      { id:'mercados', e:'🛒', t:'Acceso a mercados' },
+    ],
+    territories:[
+      { id:'A', code:'A', e:'🌴', name:'Selva Húmeda',
+        traits:['Clima cálido y húmedo todo el año','Lluvias abundantes','Árboles que dan sombra','Familias con tradición de cultivo','Caminos rurales'],
+        has:{ clima:'clima cálido y húmedo todo el año', agua:'lluvias abundantes', mano:'familias con tradición de cultivo' },
+        lacks:{ infra:'solo caminos rurales', transporte:'solo caminos rurales' },
+        insight:'Selva Húmeda es ideal para cultivar cacao, fermentarlo y secarlo. Una fábrica grande tendría problemas: con caminos rurales es difícil recibir azúcar y leche y llevar el chocolate a las ciudades.' },
+      { id:'B', code:'B', e:'❄️', name:'Altiplano Frío', weak:true,
+        traits:['Heladas en invierno','Poca lluvia','Lejos de puertos','Pocas carreteras'],
+        has:{},
+        lacks:{ clima:'heladas en invierno', agua:'poca lluvia', transporte:'lejos de puertos y pocas carreteras', infra:'pocas carreteras' },
+        insight:'Altiplano Frío tiene más limitaciones que ventajas: el árbol de cacao no soporta las heladas y, sin carreteras ni puertos cercanos, una fábrica tendría costos altísimos. Una empresa lo elegiría solo si necesitara algo que no aparece en la ficha.' },
+      { id:'C', code:'C', e:'🏙️', name:'Ciudad Industrial',
+        traits:['Parques industriales','Energía eléctrica suficiente','Autopista hacia un puerto y hacia la capital','Mano de obra disponible','Millones de consumidores a pocas horas'],
+        has:{ infra:'parques industriales', energia:'energía eléctrica suficiente', transporte:'autopista hacia un puerto y hacia la capital', mano:'mano de obra disponible', mercados:'millones de consumidores a pocas horas' },
+        lacks:{},
+        insight:'Ciudad Industrial es atractiva para una fábrica de chocolate: recibe por autopista el cacao que llega al puerto, tiene energía y trabajadores, y está cerca de los millones de consumidores de las grandes ciudades.' },
+    ],
+    combo:'Ningún territorio es «el mejor» en abstracto: depende de la etapa. El cacao necesita calor, humedad y lluvia; la fábrica, energía, carreteras y consumidores cerca. La localización productiva surge de la combinación de factores.'
+  },
+
+  m3: mkM3('De la mazorca de cacao a la barra participan familias productoras, empresas, gobierno y compradores, y se necesitan muchas condiciones. ¿Quiénes participan?', {
+    empresas:'compran cacao, lo muelen, fabrican las barras y deciden dónde instalarse.',
+    consumidores:'compran el chocolate y, además, aportan su trabajo a las empresas.',
+    externo:'son los productores, comerciantes y empresas de Costa de Marfil, Ecuador y Países Bajos con los que México comercia.',
+    trabajo:'es el esfuerzo de quienes cosechan las mazorcas y de quienes operan la fábrica: un recurso para producir. Quienes deciden contratarlo son los agentes.',
+  }),
+
+  m4:{
+    lead:'El cacao nació en Mesoamérica, pero el de tu chocolate pudo cruzar el océano dos veces. Vamos a reconstruir su ruta.',
+    stages:[
+      { id:'s1', e:'🌱', t:'Cultivo del cacao', d:'Se cosecha la mazorca; el grano se fermenta y se seca.', hint:'Todo empieza en la naturaleza: algo se cultiva y se cosecha.' },
+      { id:'s2', e:'⚙️', t:'Molienda',          d:'El grano se tuesta y se muele: licor, manteca y polvo de cacao.', hint:'Antes de hacer chocolate, el grano seco tiene que tostarse y molerse.' },
+      { id:'s3', e:'🚢', t:'Transporte',        d:'El cacao molido cruza el océano hasta México.', hint:'La molienda ocurrió en Europa, pero la fábrica está en México: ¿qué tiene que pasar antes de fabricar?' },
+      { id:'s4', e:'🏭', t:'Fabricación',       d:'Se mezcla con azúcar y leche, se moldea y se envuelve.', hint:'Cuando el cacao molido ya está en México, se mezcla con azúcar y leche.' },
+      { id:'s5', e:'📦', t:'Distribución',      d:'Centros de distribución reparten las barras a las tiendas.', hint:'Las barras terminadas se reparten a las tiendas.' },
+      { id:'s6', e:'🍫', t:'Consumo',           d:'Alguien compra la barra y se la come.', hint:'El recorrido termina cuando alguien la compra.' },
+    ],
+    chain:['ORIGEN','TRANSFORMACIÓN','TRANSPORTE','FABRICACIÓN','MERCADO','CONSUMO'],
+    solved:'Cada etapa depende de la anterior. ¿Notaste que aquí el transporte ocurre <b>antes</b> de fabricar? El orden de las etapas cambia según dónde se ubica cada una.',
+
+    pins:[
+      { id:'civ', lon:-6.6,  lat:5.8,  n:1,    lbl:'🌱 Costa de Marfil', dx:12,  dy:18, a:'start' },
+      { id:'ecu', lon:-79.6, lat:-1.5, n:1,    lbl:'🌱 Ecuador',         dx:12,  dy:6,  a:'start' },
+      { id:'ams', lon:4.9,   lat:52.4, n:2,    lbl:'⚙️ Ámsterdam',       dx:12,  dy:16, a:'start' },
+      { id:'ver', lon:-96.1, lat:19.2, n:null, lbl:'⚓ Veracruz',        dx:-10, dy:-10, a:'end' },
+    ],
+    seaLabel:{ lon:-38, lat:41, n:3, lbl:'🚢 Cruce del Atlántico' },
+    view:'atlantic',
+    inset:{ x:12, y:292, w:200, h:120, s:24, lon0:-100.3, lat0:21.5, title:'Centro y sureste de México' },
+    note:'Ruta ilustrativa, simplificada a partir de patrones reales del comercio de cacao.',
+
+    legs:{
+      ci: { mode:'mar', icon:'🚢', pts:[[-6.6,5.8],[-6.6,4.7],[-9,4],[-14,8],[-18,14],[-18.5,21],[-15,28],[-12,34],[-10,37],[-10,42],[-8,45.5],[-6,48.6],[-3,49.9],[0,50.3],[1.5,51.1],[3,51.9],[4.4,52.4],[4.9,52.4]] },
+      atl:{ mode:'mar', icon:'🚢', pts:[[4.9,52.4],[3.5,52.2],[2,51.3],[1.4,51],[-1,50.2],[-4,49.7],[-6.5,49],[-15,45],[-30,38],[-50,30],[-65,26.5],[-76,25],[-80,24],[-83,23.8],[-86,23.5],[-90,23],[-94,21.3],[-96.1,19.2]] },
+      ec: { mode:'mar', icon:'🚢', pts:[[-79.6,-1.5],[-80.2,-2.2],[-81.2,-2],[-81,0.5],[-80,3],[-79.8,6],[-79.6,8.9],[-79.9,9.6],[-80.5,11],[-82,14.5],[-84.5,18],[-86,21.6],[-89,23.3],[-93,21.5],[-96.1,19.2]] },
+      tp: { mode:'tierra', icon:'🚛', inset:true, pts:[[-93.4,18.1],[-94.5,18.1],[-95.8,18.5],[-97.2,18.8],[-98.2,19.05]] },
+      vp: { mode:'tierra', icon:'🚛', inset:true, pts:[[-96.1,19.2],[-97.1,18.9],[-98.2,19.05]] },
+      pc: { mode:'tierra', icon:'🚛', inset:true, pts:[[-98.2,19.05],[-98.7,19.3],[-99.13,19.43]] },
+    },
+    insetPins:[
+      { lon:-93.4,  lat:18.1,  lbl:'🌱 Tabasco',  dx:0,  dy:22,  a:'middle', n:1 },
+      { lon:-96.1,  lat:19.2,  lbl:'⚓ Veracruz', dx:12, dy:5,   a:'start' },
+      { lon:-98.2,  lat:19.05, lbl:'🏭 Puebla',   dx:4,  dy:22,  a:'middle', n:4 },
+      { lon:-99.13, lat:19.43, lbl:'🛍️ Tienda',   dx:2,  dy:-12, a:'start',  n:'5-6', bx:-24, by:-4 },
+    ],
+    phases:[
+      { legs:['ci'], to:1, cap:'En Costa de Marfil el cacao se cosecha, se fermenta y se seca. Después viaja en barco a Ámsterdam, uno de los mayores puertos cacaoteros del mundo.' },
+      { legs:['atl','ec'], to:2, cap:'En Ámsterdam el grano se muele. El licor y la manteca de cacao cruzan el Atlántico hacia Veracruz; desde Ecuador llega más cacao por el Canal de Panamá.' },
+      { legs:['vp','tp'], to:3, cap:'En camión, el cacao que llegó al puerto y el cacao de Tabasco viajan a la fábrica de Puebla, donde se mezclan con azúcar y leche.' },
+      { legs:['pc'], to:5, cap:'Las barras salen hacia los centros de distribución y las tiendas… y llegan a tus manos.' },
+    ],
+    stops:[
+      { n:1, t:'Cultivo del cacao', where:'Costa de Marfil, Ecuador y Tabasco', coord:'5.8°N 6.6°O · 1.5°S 79.6°O · 18.1°N 93.4°O', d:'Costa de Marfil produce cerca de 4 de cada 10 granos de cacao del mundo. El cacao es originario de Mesoamérica, pero hoy se cultiva sobre todo en África occidental.' },
+      { n:2, t:'Molienda', where:'Ámsterdam (Países Bajos)', coord:'52.4°N 4.9°E', d:'Un gran puerto donde el cacao se almacena, se tuesta y se muele, aunque ahí no crece ni un solo árbol de cacao.' },
+      { n:3, t:'Transporte', where:'Océano Atlántico y Canal de Panamá', coord:'más de 9,000 km de Ámsterdam a Veracruz', d:'Barcos con contenedores; al llegar a Veracruz, camiones.' },
+      { n:4, t:'Fabricación', where:'Puebla', coord:'19.0°N 98.2°O', d:'La fábrica queda entre el puerto de Veracruz y el gran mercado del centro del país; ahí se agregan azúcar de caña y leche.' },
+      { n:5, t:'Distribución', where:'Puebla → Ciudad de México', coord:'19.0°N 98.2°O → 19.4°N 99.1°O', d:'Un centro de distribución reparte las barras a tiendas y supermercados.' },
+      { n:6, t:'Consumo', where:'Una tienda en tu ciudad', coord:'aquí empieza tu parte', d:'Alguien compra la barra. Ese alguien también es un agente del circuito.' },
+    ],
+    qInfra: mkInfra('Los puertos de Ámsterdam y Veracruz son los nodos por donde sale y entra el cacao; los barcos recorren las rutas del Atlántico, el Canal de Panamá acorta el viaje desde Ecuador, las carreteras llevan el cacao a la fábrica e internet coordina pedidos y pagos.'),
+    qRuta:{
+      id:'m4c',
+      prompt:'¿Qué demuestra esta ruta?',
+      options:[
+        { k:'A', t:'Que el chocolate se produce completo en el mismo lugar donde crece el cacao.', why:'La ruta pasó por varios continentes: el cacao creció en un lugar, se molió en otro y se convirtió en chocolate en otro.' },
+        { k:'B', t:'Que diferentes territorios pueden especializarse en distintas etapas.', ok:true },
+        { k:'C', t:'Que el cacao puede cultivarse en cualquier clima.', why:'Es al revés: el cacao solo crece cerca del ecuador, con calor y humedad todo el año. Por eso Ámsterdam lo muele, pero no lo cultiva.' },
+        { k:'D', t:'Que el transporte no influye en los circuitos productivos.', why:'Sin barcos y camiones, el cacao nunca saldría de las zonas donde crece.' },
+      ],
+      explain:'Un circuito global conecta diferentes territorios especializados en distintas actividades: unos cultivan, otros transforman, otros fabrican y otros consumen. El transporte y las redes de comunicación permiten articular esos espacios.'
+    }
+  },
+
+  m5:{
+    lead:'Es momento de reunir todas tus pistas en un solo expediente.',
+    title:'📋 RADIOGRAFÍA TERRITORIAL DEL CHOCOLATE',
+    placeholder:'El chocolate que compro…',
+    fields:[
+      { id:'natural', e:'🌱', t:'Factor natural', opts:[
+        { t:'Clima cálido y húmedo todo el año', ok:true },
+        { t:'Lluvias abundantes', ok:true },
+        { t:'Suelo fértil de la selva', ok:true },
+        { t:'Puerto de Ámsterdam', why:'Un puerto es infraestructura construida por la sociedad, no un factor natural.' },
+        { t:'Familias productoras', why:'Las familias aportan trabajo y toman decisiones: no son un factor natural.' },
+      ]},
+      { id:'socio', e:'👷', t:'Factor socioeconómico', opts:[
+        { t:'Trabajo en la fábrica', ok:true },
+        { t:'Capital para maquinaria', ok:true },
+        { t:'Tecnología de molienda', ok:true },
+        { t:'Clima tropical', why:'El clima es un factor natural.' },
+        { t:'Consumidores', why:'Los consumidores son agentes: toman decisiones dentro del circuito.' },
+      ]},
+      { id:'agente', e:'🏭', t:'Un agente', opts:[
+        { t:'Familias productoras de cacao', ok:true },
+        { t:'Empresa chocolatera', ok:true },
+        { t:'Consumidores', ok:true },
+        { t:'Gobierno', ok:true },
+        { t:'Azúcar', why:'El azúcar es un insumo, una materia prima: no toma decisiones.' },
+        { t:'Carreteras', why:'Las carreteras son infraestructura, un factor socioeconómico.' },
+      ]},
+      { id:'territorio', e:'🌎', t:'Un territorio', note:'Todos participaron en la ruta: elige el que más te llamó la atención.', opts:[
+        { t:'Costa de Marfil', ok:true }, { t:'Ecuador', ok:true }, { t:'Países Bajos', ok:true },
+        { t:'Tabasco', ok:true }, { t:'Veracruz', ok:true }, { t:'Puebla', ok:true },
+      ]},
+      { id:'transporte', e:'🚢', t:'Medio de transporte', opts:[
+        { t:'Marítimo 🚢', ok:true },
+        { t:'Terrestre 🚛', ok:true },
+        { t:'Aéreo ✈️', why:'En esta ruta no se usa el avión: el cacao es pesado y se mueve en grandes cantidades, así que el barco es mucho más barato.' },
+        { t:'Correo electrónico', why:'El correo electrónico es comunicación: mueve información, no mercancías.' },
+      ]},
+      RX_CONECTA,
+    ],
+    qFinal:{
+      id:'m5b',
+      prompt:'¿Por qué podemos decir que una barra de chocolate forma parte de un circuito productivo global?',
+      options:[
+        { k:'A', t:'Porque el chocolate es un producto que conoce todo el mundo.', why:'Que sea famoso no basta. Lo global está en cómo se produce: etapas en distintos territorios conectadas entre sí.' },
+        { k:'B', t:'Porque el cacao solo crece en México.', why:'El cacao es originario de Mesoamérica, pero hoy se cultiva sobre todo en África occidental, además de Ecuador, Brasil, México y otros países tropicales.' },
+        { k:'C', t:'Porque sus etapas se reparten entre África, Europa, América del Sur y México, conectadas por relaciones productivas, comerciales y de transporte.', ok:true },
+        { k:'D', t:'Porque se fabrica completo en el mismo lugar donde crece el cacao.', why:'Es al revés: el cacao crece en un lugar, se muele en otro y se convierte en chocolate en otro.' },
+      ],
+      explain:'Un circuito productivo global existe cuando las etapas (cultivar, transformar, fabricar, transportar, distribuir y consumir) ocurren en distintos territorios y están unidas por flujos de mercancías, dinero e información.'
+    }
+  },
+
+  summary:{
+    territorios:'Costa de Marfil, Ecuador, Países Bajos, Tabasco, Veracruz, Puebla y la Ciudad de México',
+    transporte:'Marítimo y terrestre',
+    escala:'África, Europa, América del Sur y México conectados: el cacao puede recorrer más de 15,000 km antes de volverse chocolate.'
+  }
+};
+
+/* =========================================================
+   C5. CONTENIDO DEL RECORRIDO: CELULAR
+   Ruta ilustrativa: litio de Chile y cobalto del Congo → baterías y
+   pantallas en Corea, chips en Taiwán → ensamble en China → avión a México
+   ========================================================= */
+DATA.celular = {
+  label:'el celular',
+  illo:'phone',
+
+  m1:{
+    lead:'Todo producto empieza en la naturaleza, aunque un celular parezca pura tecnología.',
+    caption:'¿De qué está hecho realmente un celular?',
+    prompt:'Antes de convertirse en un celular, necesitamos materias primas y materiales. ¿Qué elementos pueden intervenir?',
+    hint:'Toca todos los elementos que pueden participar en la fabricación de un celular.',
+    items:[
+      { id:'litio',   e:'🔋', t:'Litio',               ok:true,  why:'Es el corazón de la batería. Buena parte se obtiene de salares en desiertos, como el de Atacama en Chile.', hint:'¿De qué está hecha la batería recargable?' },
+      { id:'cobalto', e:'⛏️', t:'Cobalto',             ok:true,  why:'También está en la batería. La mayor parte del cobalto del mundo se extrae en la República Democrática del Congo.', hint:'La batería necesita otro mineral además del litio…' },
+      { id:'cobre',   e:'🟠', t:'Cobre',               ok:true,  why:'Conduce la electricidad en cables y circuitos. Chile, Perú y México son grandes productores.', hint:'¿Qué metal conduce la electricidad dentro de los circuitos?' },
+      { id:'silicio', e:'🪨', t:'Silicio',             ok:true,  why:'Los chips se fabrican con silicio muy puro, que se obtiene del cuarzo.', hint:'El «cerebro» del celular es un chip hecho de…' },
+      { id:'plata',   e:'🥈', t:'Plata',               ok:true,  why:'Pequeñas cantidades en los circuitos. México es el mayor productor de plata del mundo.', hint:'Un metal precioso en el que México es líder mundial…' },
+      { id:'petroleo',e:'🛢️', t:'Petróleo y derivados', ok:true,  why:'De él salen plásticos de la carcasa, la funda y el combustible de aviones y camiones.', hint:'Carcasas y fundas de plástico… ¿de dónde salen los plásticos?' },
+      { id:'energia', e:'⚡', t:'Energía',             ok:true,  why:'Fabricar chips es de las actividades industriales que más electricidad y agua consumen.', hint:'Ninguna fábrica de chips funciona sin…' },
+      { id:'algodon', e:'🌿', t:'Algodón',             ok:false, why:'No forma parte del celular. Es materia prima de telas; una funda de tela sería un accesorio, no el celular.' },
+    ],
+    pista:'Los recursos naturales no se encuentran distribuidos de manera uniforme sobre el planeta.',
+    q: mkM1q('Los minerales están donde la geología los formó: el litio en salares de desiertos como Atacama, el cobalto en el sur del Congo, la plata en las sierras de México. Por eso la extracción no puede hacerse en cualquier lugar.')
+  },
+
+  m2:{
+    lead:'Las empresas no se instalan al azar: comparan territorios.',
+    prompt:'Una empresa busca instalar una etapa de producción relacionada con los celulares. ¿Qué territorio podría resultar atractivo dependiendo de lo que necesita?',
+    factors:[
+      { id:'minerales', e:'⛏️', t:'Recursos minerales' },
+      { id:'clima', e:'🌤️', t:'Clima' },
+      { id:'mano', e:'👩‍🔧', t:'Mano de obra calificada' },
+      { id:'energia', e:'⚡', t:'Energía' },
+      { id:'comunic', e:'📡', t:'Comunicaciones' },
+      { id:'transporte', e:'✈️', t:'Transporte' },
+      { id:'tecnologia', e:'💻', t:'Tecnología' },
+    ],
+    territories:[
+      { id:'A', code:'A', e:'🧂', name:'Salar Blanco',
+        traits:['Grandes reservas de litio bajo el salar','Clima muy seco y soleado','Poca población','Carretera hacia un puerto'],
+        has:{ minerales:'grandes reservas de litio', clima:'clima muy seco y soleado, que ayuda a evaporar el agua salada y obtener el litio', transporte:'carretera hacia un puerto' },
+        lacks:{ mano:'poca población' },
+        insight:'Salar Blanco sirve para extraer litio: la naturaleza decide dónde está el mineral. Pero no sería buen lugar para fabricar chips: hay poca población y ninguna industria.' },
+      { id:'B', code:'B', e:'🌫️', name:'Cerro Nublado', weak:true,
+        traits:['Sin minerales conocidos','Electricidad intermitente','Sin internet','Caminos de terracería'],
+        has:{},
+        lacks:{ minerales:'sin minerales conocidos', energia:'electricidad intermitente', comunic:'sin internet', transporte:'caminos de terracería' },
+        insight:'Cerro Nublado tiene más limitaciones que ventajas: una fábrica de alta tecnología no puede funcionar con apagones y sin internet, y no hay minerales para extraer. Una empresa lo elegiría solo si necesitara algo que no aparece en la ficha.' },
+      { id:'C', code:'C', e:'🏙️', name:'Ciudad Tecnológica',
+        traits:['Universidades y personal calificado','Energía eléctrica confiable','Fibra óptica e internet veloz','Aeropuerto de carga','Parques industriales'],
+        has:{ mano:'universidades y personal calificado', energia:'energía eléctrica confiable', comunic:'fibra óptica e internet veloz', transporte:'aeropuerto de carga', tecnologia:'universidades y parques industriales' },
+        lacks:{},
+        insight:'Ciudad Tecnológica es atractiva para fabricar componentes o ensamblar: tiene personal calificado, energía estable, internet y un aeropuerto para mover piezas ligeras y valiosas.' },
+    ],
+    combo:'Ningún territorio es «el mejor» en abstracto: depende de la etapa. La mina busca el mineral; la fábrica de chips, energía, personal calificado y tecnología; el ensamble, mucha mano de obra y transporte. La localización productiva surge de la combinación de factores.'
+  },
+
+  m3: mkM3('Un celular necesita mineras, fábricas de alta tecnología, trabajadores y compradores en muchos países. ¿Quiénes participan?', {
+    empresas:'diseñan el celular, fabrican chips y baterías, lo ensamblan y deciden en qué país conviene cada etapa.',
+    consumidores:'compran el celular y, además, aportan su trabajo a las empresas.',
+    externo:'son las empresas y gobiernos de Chile, Congo, Corea, Taiwán y China con los que México comercia, y la empresa extranjera que diseña el celular.',
+    comunic:'internet y telefonía permiten coordinar a cientos de proveedores en distintos países.',
+    tecno:'máquinas y conocimientos para fabricar chips más pequeños que una uña con miles de millones de piezas.',
+  }),
+
+  m4:{
+    lead:'El celular que cabe en tu mano reúne minerales y piezas de cuatro continentes. Vamos a reconstruir su ruta.',
+    stages:[
+      { id:'s1', e:'⛏️', t:'Extracción de minerales', d:'Se extraen litio, cobalto, cobre y otros minerales.', hint:'Todo empieza en la naturaleza: algo se extrae del suelo.' },
+      { id:'s2', e:'🔋', t:'Fabricación de componentes', d:'Chips, pantallas y baterías se producen en plantas especializadas.', hint:'Antes de armar el celular se necesitan sus piezas: chips, pantallas y baterías.' },
+      { id:'s3', e:'📱', t:'Ensamble',                d:'Miles de personas arman las piezas en una gran fábrica.', hint:'Con las piezas listas, alguien tiene que armar el celular.' },
+      { id:'s4', e:'✈️', t:'Transporte',              d:'El celular terminado viaja en avión de carga.', hint:'El celular terminado está lejos de quien lo usará: tiene que cruzar el océano.' },
+      { id:'s5', e:'📦', t:'Distribución',            d:'Centros de distribución reparten a las tiendas.', hint:'Al llegar al país, la mercancía se reparte a las tiendas.' },
+      { id:'s6', e:'🤳', t:'Consumo',                 d:'Alguien compra y usa el celular.', hint:'El recorrido termina cuando alguien lo compra y lo usa.' },
+    ],
+    chain:['ORIGEN','TRANSFORMACIÓN','FABRICACIÓN','TRANSPORTE','MERCADO','CONSUMO'],
+    solved:'Cada etapa depende de la anterior: sin minerales no hay componentes, sin componentes no hay ensamble, y sin transporte el celular nunca llega al mercado.',
+
+    pins:[
+      { id:'chl', lon:-68.2, lat:-23.5, n:1,    lbl:'⛏️ Chile',              dx:12,  dy:6,   a:'start' },
+      { id:'cod', lon:25.5,  lat:-10.7, n:1,    lbl:'⛏️ R. D. del Congo',   dx:12,  dy:6,   a:'start' },
+      { id:'kor', lon:127.3, lat:36.5,  n:2,    lbl:'🔋 Corea del Sur',      dx:12,  dy:14,  a:'start' },
+      { id:'twn', lon:121,   lat:24.8,  n:2,    lbl:'💾 Taiwán',             dx:12,  dy:14,  a:'start' },
+      { id:'chn', lon:113.6, lat:34.7,  n:3,    lbl:'📱 China',              dx:-12, dy:4,   a:'end' },
+      { id:'mex', lon:-99.0, lat:19.7,  n:null, lbl:'✈️ Valle de México',  dx:-12, dy:-10, a:'end' },
+    ],
+    seaLabel:{ lon:-178, lat:61, n:4, lbl:'✈️ Vuelo de carga' },
+    view:'pacific',
+    inset:{ x:612, y:248, w:198, h:108, s:36, lon0:-101.6, lat0:21.6, title:'Centro de México' },
+    note:'Ruta ilustrativa, simplificada a partir de patrones reales de la industria electrónica.',
+
+    legs:{
+      cl:  { mode:'mar', icon:'🚢', pts:[[-68.2,-23.5],[-70.4,-23.6],[-76,-18],[-84,-8],[-100,0],[-130,8],[-160,14],[175,18],[150,22],[140,25],[130,30],[128.5,33],[128.9,34.8],[127.3,36.5]] },
+      cdt: { mode:'tierra', icon:'🚛', pts:[[25.5,-10.7],[28.5,-10.5],[31.5,-9.5],[34.5,-8.5],[37,-7.5],[39.3,-6.8]] },
+      cdm: { mode:'mar', icon:'🚢', pts:[[39.3,-6.8],[42,-6],[50,-2],[62,3],[75,5.5],[80.5,5.2],[90,5.5],[97,6],[100,4.5],[102.5,1.4],[104.6,1.1],[107.5,6],[111,11],[113,17],[117,21.5],[118.5,22.5],[120,25.2],[122.5,29],[123.5,33],[125.5,35.5],[127.3,36.5]] },
+      tw:  { mode:'aire', icon:'✈️', pts:[[121,24.8],[118,30.5],[113.6,34.7]] },
+      kr:  { mode:'aire', icon:'✈️', pts:[[127.3,36.5],[121,38],[113.6,34.7]] },
+      air: { mode:'aire', icon:'✈️', pts:[[113.6,34.7],[125,43],[145,51],[170,56],[-170,56],[-150,51],[-128,41],[-112,29],[-99,19.7]] },
+      aq:  { mode:'tierra', icon:'🚛', inset:true, pts:[[-99.02,19.74],[-99.4,20],[-99.9,20.3],[-100.4,20.6]] },
+      qt:  { mode:'tierra', icon:'🚛', inset:true, pts:[[-100.4,20.6],[-100.2,19.9],[-99.9,19.25]] },
+    },
+    insetPins:[
+      { lon:-99.02, lat:19.74, lbl:'✈️ Aeropuerto', dx:12,  dy:5,   a:'start' },
+      { lon:-100.4, lat:20.6,  lbl:'📦 Querétaro',   dx:12,  dy:4,   a:'start', n:5 },
+      { lon:-99.9,  lat:19.25, lbl:'🛍️ Tienda',      dx:0,   dy:21,  a:'middle', n:6 },
+    ],
+    phases:[
+      { legs:['cdt'], to:0, cap:'El cobalto se extrae en el Congo y viaja en camión hasta el puerto de Dar es-Salam, en Tanzania.' },
+      { legs:['cl','cdm'], to:1, cap:'El litio de Chile y el cobalto del Congo cruzan los océanos hacia Corea del Sur, donde se fabrican baterías y pantallas. En Taiwán se fabrican los chips.' },
+      { legs:['tw','kr'], to:2, cap:'Chips, pantallas y baterías vuelan a China, donde miles de personas ensamblan los celulares.' },
+      { legs:['air'], to:3, cap:'Los celulares terminados viajan en avión de carga: son ligeros, muy valiosos y conviene que lleguen rápido.' },
+      { legs:['aq'],  to:4, cap:'Del aeropuerto, los camiones los llevan a un centro de distribución en Querétaro.' },
+      { legs:['qt'],  to:5, cap:'Del centro de distribución a la tienda… y a tu bolsillo.' },
+    ],
+    stops:[
+      { n:1, t:'Extracción de minerales', where:'Chile y R. D. del Congo', coord:'23.5°S 68.2°O · 10.7°S 25.5°E', d:'El litio sale de los salares del desierto de Atacama; el cobalto, de minas del sur del Congo. La geología decide dónde están los minerales.' },
+      { n:2, t:'Componentes', where:'Corea del Sur y Taiwán', coord:'36.5°N 127.3°E · 24.8°N 121.0°E', d:'Baterías y pantallas en Corea; chips en Taiwán, en fábricas de altísima tecnología.' },
+      { n:3, t:'Ensamble', where:'China (Zhengzhou)', coord:'34.7°N 113.6°E', d:'Ahí funciona una de las fábricas de ensamble de celulares más grandes del mundo, con cientos de miles de trabajadores.' },
+      { n:4, t:'Transporte', where:'Sobre el océano Pacífico', coord:'unos 13,000 km en avión', d:'Aviones de carga: más caros que el barco, pero mucho más rápidos para una mercancía ligera y valiosa.' },
+      { n:5, t:'Distribución', where:'Aeropuerto del Valle de México → Querétaro', coord:'19.7°N 99.0°O → 20.6°N 100.4°O', d:'El aeropuerto recibe la carga y un centro de distribución reparte a las tiendas.' },
+      { n:6, t:'Consumo', where:'Una tienda en tu ciudad', coord:'aquí empieza tu parte', d:'Alguien compra el celular. Ese alguien también es un agente del circuito.' },
+    ],
+    qInfra: mkInfra('Los aeropuertos de carga, los puertos y las carreteras son los nodos por donde entran y salen las mercancías; aviones y barcos recorren las rutas entre continentes, e internet y las telecomunicaciones coordinan a cientos de proveedores en distintos países.'),
+    qRuta:{
+      id:'m4c',
+      prompt:'¿Qué demuestra esta ruta?',
+      options:[
+        { k:'A', t:'Que todo el celular se fabrica en un solo lugar.', why:'La ruta pasó por varios países: minerales, componentes y ensamble ocurrieron en territorios distintos.' },
+        { k:'B', t:'Que diferentes territorios pueden especializarse en distintas etapas.', ok:true },
+        { k:'C', t:'Que los minerales están distribuidos de manera uniforme.', why:'Es justo al revés: el litio y el cobalto vienen de lugares específicos porque los minerales están distribuidos de forma desigual.' },
+        { k:'D', t:'Que el transporte no influye en los circuitos productivos.', why:'Sin barcos, aviones y camiones, las piezas y el celular no podrían moverse entre países.' },
+      ],
+      explain:'Un circuito global conecta diferentes territorios especializados en distintas actividades. El transporte y las redes de comunicación permiten articular esos espacios.'
+    }
+  },
+
+  m5:{
+    lead:'Es momento de reunir todas tus pistas en un solo expediente.',
+    title:'📋 RADIOGRAFÍA TERRITORIAL DEL CELULAR',
+    placeholder:'El celular que uso…',
+    fields:[
+      { id:'natural', e:'🌱', t:'Factor natural', opts:[
+        { t:'Litio en los salares', ok:true },
+        { t:'Cobalto en el subsuelo', ok:true },
+        { t:'Clima seco del desierto de Atacama', ok:true },
+        { t:'Trabajadores de la fábrica', why:'Los trabajadores aportan trabajo: es un factor socioeconómico, no natural.' },
+        { t:'Aeropuerto de carga', why:'Un aeropuerto es infraestructura construida por la sociedad, no un factor natural.' },
+      ]},
+      { id:'socio', e:'👷', t:'Factor socioeconómico', opts:[
+        { t:'Trabajo en la fábrica de ensamble', ok:true },
+        { t:'Tecnología para fabricar chips', ok:true },
+        { t:'Capital para las fábricas', ok:true },
+        { t:'Yacimientos de litio', why:'Los yacimientos son un recurso de la naturaleza: un factor natural.' },
+        { t:'Empresas de tecnología', why:'Las empresas son agentes: toman decisiones dentro del circuito.' },
+      ]},
+      { id:'agente', e:'🏭', t:'Un agente', opts:[
+        { t:'Empresa que diseña el celular', ok:true },
+        { t:'Empresa que lo ensambla', ok:true },
+        { t:'Consumidores', ok:true },
+        { t:'Gobierno', ok:true },
+        { t:'Internet', why:'Internet es comunicación: un factor que permite coordinar, no alguien que decide.' },
+        { t:'Litio', why:'El litio es un recurso natural: no toma decisiones.' },
+      ]},
+      { id:'territorio', e:'🌎', t:'Un territorio', note:'Todos participaron en la ruta: elige el que más te llamó la atención.', opts:[
+        { t:'Chile', ok:true }, { t:'R. D. del Congo', ok:true }, { t:'Corea del Sur', ok:true },
+        { t:'Taiwán', ok:true }, { t:'China', ok:true }, { t:'México', ok:true },
+      ]},
+      { id:'transporte', e:'✈️', t:'Medio de transporte', opts:[
+        { t:'Aéreo ✈️', ok:true },
+        { t:'Marítimo 🚢', ok:true },
+        { t:'Terrestre 🚛', ok:true },
+        { t:'Correo electrónico', why:'El correo electrónico es comunicación: mueve información, no mercancías.' },
+      ]},
+      RX_CONECTA,
+    ],
+    qFinal:{
+      id:'m5b',
+      prompt:'¿Por qué podemos decir que el celular forma parte de un circuito productivo global?',
+      options:[
+        { k:'A', t:'Porque se puede usar en cualquier país.', why:'Usarlo en muchos lugares no basta. Lo global está en cómo se produce: etapas en distintos territorios conectadas entre sí.' },
+        { k:'B', t:'Porque se conecta a internet de todo el mundo.', why:'Conectarse a internet es una forma de usarlo; no explica el recorrido territorial de su producción.' },
+        { k:'C', t:'Porque sus diferentes etapas se realizan en distintos territorios, conectados mediante relaciones productivas, comerciales y de transporte.', ok:true },
+        { k:'D', t:'Porque todas sus piezas se fabrican en una sola fábrica.', why:'Es al revés: minerales, chips, pantallas, baterías y ensamble vienen de lugares distintos.' },
+      ],
+      explain:'Un circuito productivo global existe cuando las etapas (extraer recursos, fabricar componentes, ensamblar, transportar, distribuir y consumir) ocurren en distintos territorios y están unidas por flujos de mercancías, dinero e información.'
+    }
+  },
+
+  summary:{
+    territorios:'Chile, R. D. del Congo, Tanzania, Corea del Sur, Taiwán, China y México',
+    transporte:'Aéreo, marítimo y terrestre',
+    escala:'Cuatro continentes conectados: minerales de América del Sur y África, componentes y ensamble en Asia, consumo en México.'
+  }
+};
+
+/* =========================================================
+   D. ESTADO DE LA ACTIVIDAD
+   (solo en memoria: al recargar la página se reinicia)
+   ========================================================= */
+function freshState(){
+  return { screen:'home', product:null, scores:{}, answers:{ rx:{} }, badges:[], flags:{} };
+}
+let S = freshState();
+const P = () => DATA[S.product];
+const total = () => Object.values(S.scores).reduce((a, b) => a + b, 0);
+
+/* Puntaje según intentos: 1.º intento completo, luego disminuye */
+function award(id, tries){
+  const f = [1, .6, .35, .2][Math.min(tries, 3)];
+  S.scores[id] = Math.round(POINTS[id] * f);
+  updateTopbar();
+}
+function setScore(id, pts){ S.scores[id] = pts; updateTopbar(); }
+
+/* =========================================================
+   E. NAVEGACIÓN Y BARRA SUPERIOR
+   ========================================================= */
+const RENDER = {
+  home:renderHome, choose:renderChoose,
+  m1:renderM1, m2:renderM2, m3:renderM3, m4:renderM4, m5:renderM5,
+  final:renderFinal
+};
+function go(screen){
+  S.screen = screen;
+  app.innerHTML = '';
+  RENDER[screen]();
+  updateTopbar();
+  window.scrollTo({ top:0, behavior: REDUCED ? 'auto' : 'smooth' });
+  app.focus({ preventScroll:true });
+}
+function updateTopbar(){
+  const n = { m1:1, m2:2, m3:3, m4:4, m5:5 }[S.screen] || (S.screen === 'final' ? 6 : 0);
+  $$('#routeProg .rp-pin').forEach((p, i) => {
+    p.classList.toggle('done', i + 1 < n);
+    p.classList.toggle('active', i + 1 === n);
+    p.textContent = i + 1 < n ? '✓' : i + 1;
+  });
+  $$('#routeProg .rp-seg').forEach((s, i) => s.classList.toggle('done', i + 2 <= n));
+  $('#progLabel').textContent =
+    S.screen === 'home'   ? 'Pantalla de inicio' :
+    S.screen === 'choose' ? 'Misión 0: elige tu producto' :
+    S.screen === 'final'  ? '¡Misión completada!' : `Misión ${n} de 5`;
+  $('#pts').textContent = `⭐ ${total()}`;
+}
+$('#btnRestart').addEventListener('click', () => {
+  if (S.screen === 'home' || confirm('¿Reiniciar la misión? Se borrará tu avance.')) restart();
+});
+function restart(){ S = freshState(); go('home'); }
+
+/* Encabezado común de cada misión */
+function shell(n, emoji, title, lead){
+  return `<section class="m-head">
+    <span class="m-tag">Misión ${n}</span>
+    <h2><span aria-hidden="true">${emoji}</span> ${title}</h2>
+    ${lead ? `<p class="lead">${lead}</p>` : ''}
+  </section>`;
+}
+function nextBtn(host, label, fn){
+  host.insertAdjacentHTML('beforeend', `<div class="next"><button class="btn primary big" type="button">${label}</button></div>`);
+  host.querySelector('.next:last-child button').addEventListener('click', fn);
+}
+
+/* =========================================================
+   F. COMPONENTES REUTILIZABLES
+   ========================================================= */
+
+/* Pregunta de opción múltiple con reintento y explicación */
+function mcq(host, q, onDone){
+  let tries = 0;
+  host.innerHTML = `<div class="card">
+    <p class="q-prompt">${q.prompt}</p>
+    <div class="opts">${q.options.map((o, i) =>
+      `<button class="opt" type="button" data-i="${i}"><span class="opt-k">${o.k}</span><span>${o.t}</span></button>`).join('')}
+    </div>
+    <div class="fb-slot"></div>
+  </div>`;
+  const slot = host.querySelector('.fb-slot');
+  host.querySelectorAll('.opt').forEach(b => b.addEventListener('click', () => {
+    const o = q.options[+b.dataset.i];
+    if (o.ok){
+      award(q.id, tries);
+      S.answers[q.id] = o.t;
+      host.querySelectorAll('.opt').forEach(x => x.disabled = true);
+      b.classList.add('is-ok');
+      fb(slot, 'ok', `<strong>¡Bien razonado!</strong> ${q.explain}`);
+      onDone && onDone();
+    } else {
+      tries++;
+      b.classList.add('is-bad'); b.disabled = true; shake(b);
+      fb(slot, 'bad', `<strong>Todavía no.</strong> ${o.why} Vuelve a intentarlo.`);
+    }
+  }));
+}
+
+/* Insignia: sello animado + tarjeta dentro de la misión */
+function giveBadge(key, host){
+  if (!S.badges.includes(key)) S.badges.push(key);
+  const b = BADGES[key];
+  host.insertAdjacentHTML('beforeend', `<div class="badge-inline"><span class="b-e" aria-hidden="true">${b.e}</span><div><small>Insignia obtenida</small><strong>${b.t.toUpperCase()}</strong></div></div>`);
+  const toast = $('#toast');
+  toast.innerHTML = `<div class="stamp"><span class="st-e">${b.e}</span><span class="st-k">INSIGNIA</span><span class="st-t">${b.t}</span></div>`;
+  setTimeout(() => { toast.innerHTML = ''; }, REDUCED ? 1400 : 2300);
+}
+
+/* =========================================================
+   G. ILUSTRACIONES SVG (sin archivos externos)
+   ========================================================= */
+const SVG_SNEAKER = `<svg viewBox="0 0 320 190" role="img" aria-label="Ilustración de un tenis">
+  <ellipse cx="165" cy="168" rx="135" ry="9" fill="#C9DDF7"/>
+  <path d="M32 128 Q28 152 56 156 L272 156 Q302 154 300 132 L296 124 L38 124 Z" fill="#fff" stroke="#2A2150" stroke-width="3"/>
+  <path d="M40 146 L292 146" stroke="#F29BC0" stroke-width="6" stroke-linecap="round"/>
+  <path d="M40 126 Q38 92 72 84 L118 70 Q138 64 148 48 Q156 34 178 38 L204 45 Q220 50 226 66 Q236 86 264 96 Q298 106 296 126 Z" fill="#8E7CF0" stroke="#2A2150" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M226 66 Q236 86 264 96 Q298 106 296 126 L250 126 Q246 104 222 92 Z" fill="#B3A6F7"/>
+  <path d="M40 126 Q38 96 66 86 L70 126 Z" fill="#6B58D6"/>
+  <path d="M84 110 Q150 86 214 104" fill="none" stroke="#FFD35C" stroke-width="7" stroke-linecap="round"/>
+  <path d="M96 122 Q152 100 222 116" fill="none" stroke="#5FA8F5" stroke-width="5" stroke-linecap="round"/>
+  <g stroke="#fff" stroke-width="4" stroke-linecap="round">
+    <line x1="152" y1="54" x2="170" y2="68"/><line x1="166" y1="50" x2="182" y2="66"/>
+    <line x1="180" y1="48" x2="194" y2="64"/><line x1="194" y1="50" x2="206" y2="66"/>
+  </g>
+  <g fill="#FFD35C" stroke="#2A2150" stroke-width="1.5">
+    <circle cx="150" cy="58" r="3.2"/><circle cx="164" cy="54" r="3.2"/><circle cx="178" cy="52" r="3.2"/><circle cx="192" cy="54" r="3.2"/>
+  </g>
+  <path d="M176 38 Q182 18 196 20" fill="none" stroke="#2A2150" stroke-width="3" stroke-linecap="round"/>
+  <text x="246" y="36" font-size="26">❓</text>
+</svg>`;
+
+const SVG_COFFEE = `<svg viewBox="0 0 320 190" role="img" aria-label="Ilustración de un frasco de café soluble y una taza">
+  <ellipse cx="160" cy="170" rx="130" ry="9" fill="#C9DDF7"/>
+  <rect x="62" y="30" width="86" height="22" rx="6" fill="#F29BC0" stroke="#2A2150" stroke-width="3"/>
+  <path d="M58 60 Q58 52 68 52 L142 52 Q152 52 152 60 L156 150 Q156 164 142 164 L68 164 Q54 164 54 150 Z" fill="#fff" stroke="#2A2150" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M60 92 L150 92 L153 148 Q153 158 142 158 L68 158 Q57 158 57 148 Z" fill="#8B5E3C"/>
+  <rect x="68" y="98" width="74" height="40" rx="8" fill="#FFD35C" stroke="#2A2150" stroke-width="2.5"/>
+  <text x="105" y="124" font-size="18" text-anchor="middle">☕</text>
+  <g fill="#6B4226"><circle cx="72" cy="150" r="2.2"/><circle cx="92" cy="148" r="2"/><circle cx="118" cy="151" r="2.2"/><circle cx="138" cy="148" r="2"/></g>
+  <path d="M188 104 L276 104 L268 158 Q266 166 256 166 L208 166 Q198 166 196 158 Z" fill="#8E7CF0" stroke="#2A2150" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M276 116 Q300 118 296 136 Q292 150 270 148" fill="none" stroke="#2A2150" stroke-width="3"/>
+  <ellipse cx="232" cy="106" rx="42" ry="7" fill="#6B4226" stroke="#2A2150" stroke-width="2.5"/>
+  <g fill="none" stroke="#B3A6F7" stroke-width="3.5" stroke-linecap="round">
+    <path d="M218 92 Q210 80 218 70 Q226 60 218 48"/><path d="M240 92 Q232 80 240 70 Q248 60 240 48"/>
+  </g>
+  <text x="270" y="40" font-size="26">❓</text>
+</svg>`;
+
+const SVG_CHOCO = `<svg viewBox="0 0 320 190" role="img" aria-label="Ilustración de una barra de chocolate y una mazorca de cacao">
+  <ellipse cx="160" cy="170" rx="130" ry="9" fill="#C9DDF7"/>
+  <g transform="rotate(-8 130 110)">
+    <rect x="40" y="58" width="170" height="96" rx="10" fill="#7A4A2B" stroke="#2A2150" stroke-width="3"/>
+    <g fill="#8E5A36" stroke="#5B341C" stroke-width="2">
+      <rect x="52" y="68" width="42" height="34" rx="5"/><rect x="104" y="68" width="42" height="34" rx="5"/><rect x="156" y="68" width="42" height="34" rx="5"/>
+      <rect x="52" y="110" width="42" height="34" rx="5"/><rect x="104" y="110" width="42" height="34" rx="5"/>
+    </g>
+    <path d="M150 154 L150 116 L210 110 L210 154 Z" fill="#F29BC0" stroke="#2A2150" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M150 116 L210 110" stroke="#fff" stroke-width="4"/>
+    <text x="180" y="142" font-size="14" text-anchor="middle">🍫</text>
+  </g>
+  <g transform="translate(236 70) rotate(18)">
+    <ellipse cx="0" cy="40" rx="30" ry="52" fill="#FFD35C" stroke="#2A2150" stroke-width="3"/>
+    <path d="M0 -10 Q-12 40 0 90 M-18 0 Q-26 40 -18 82 M18 0 Q26 40 18 82" fill="none" stroke="#E0A800" stroke-width="3"/>
+    <path d="M0 -12 L4 -24" stroke="#2A2150" stroke-width="3" stroke-linecap="round"/>
+  </g>
+  <text x="272" y="36" font-size="26">❓</text>
+</svg>`;
+
+const SVG_PHONE = `<svg viewBox="0 0 320 190" role="img" aria-label="Ilustración de un celular con sus componentes">
+  <ellipse cx="160" cy="172" rx="130" ry="9" fill="#C9DDF7"/>
+  <rect x="112" y="16" width="96" height="152" rx="16" fill="#2A2150" stroke="#2A2150" stroke-width="3"/>
+  <rect x="120" y="30" width="80" height="120" rx="8" fill="#E4F1FF"/>
+  <rect x="146" y="21" width="28" height="5" rx="2.5" fill="#6B58D6"/>
+  <g font-size="16" text-anchor="middle"><text x="140" y="60">🔋</text><text x="180" y="60">💾</text><text x="140" y="96">📶</text><text x="180" y="96">📷</text></g>
+  <rect x="128" y="112" width="64" height="26" rx="6" fill="#8E7CF0"/>
+  <path d="M136 125 L150 125 L156 118 L164 132 L170 125 L184 125" fill="none" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/>
+  <rect x="150" y="156" width="20" height="4" rx="2" fill="#B3A6F7"/>
+  <g stroke="#2A2150" stroke-width="2.5" stroke-linejoin="round">
+    <path d="M40 120 L64 108 L84 124 L62 140 Z" fill="#DDD6FB"/>
+    <path d="M252 116 L276 104 L292 126 L268 138 Z" fill="#FFD35C"/>
+    <path d="M46 70 L72 62 L78 84 L52 90 Z" fill="#F29BC0"/>
+  </g>
+  <g fill="none" stroke="#5FA8F5" stroke-width="2.5" stroke-dasharray="5 5">
+    <path d="M84 124 Q100 124 112 110"/><path d="M252 116 Q232 114 208 104"/><path d="M78 76 Q96 72 112 70"/>
+  </g>
+  <text x="268" y="40" font-size="26">❓</text>
+</svg>`;
+
+const SVG_FACTORY = `<svg viewBox="0 0 320 200" role="img" aria-label="Escena de una fábrica con trabajadores, energía y un camión">
+  <rect x="0" y="160" width="320" height="40" fill="#C9DDF7"/>
+  <circle cx="276" cy="36" r="18" fill="#FFD35C"/>
+  <rect x="200" y="46" width="16" height="70" fill="#F29BC0" stroke="#2A2150" stroke-width="2.5"/>
+  <circle cx="210" cy="36" r="8" fill="#fff" stroke="#DDD6FB" stroke-width="2"/><circle cx="222" cy="24" r="10" fill="#fff" stroke="#DDD6FB" stroke-width="2"/>
+  <path d="M30 160 V96 L70 74 V96 L110 74 V96 L150 74 V96 L190 74 V160 Z" fill="#EEEAFF" stroke="#2A2150" stroke-width="3" stroke-linejoin="round"/>
+  <g fill="#5FA8F5" stroke="#2A2150" stroke-width="2">
+    <rect x="44" y="108" width="24" height="18" rx="3"/><rect x="82" y="108" width="24" height="18" rx="3"/>
+    <rect x="120" y="108" width="24" height="18" rx="3"/><rect x="156" y="108" width="24" height="18" rx="3"/>
+  </g>
+  <rect x="96" y="134" width="30" height="26" fill="#8E7CF0" stroke="#2A2150" stroke-width="2.5"/>
+  <line x1="12" y1="160" x2="12" y2="70" stroke="#2A2150" stroke-width="3"/><line x1="2" y1="78" x2="22" y2="78" stroke="#2A2150" stroke-width="3"/>
+  <text x="2" y="66" font-size="16">⚡</text>
+  <g transform="translate(222 124)">
+    <rect x="0" y="6" width="56" height="30" rx="3" fill="#fff" stroke="#2A2150" stroke-width="2.5"/>
+    <path d="M56 14 H76 L88 26 V36 H56 Z" fill="#FFD35C" stroke="#2A2150" stroke-width="2.5" stroke-linejoin="round"/>
+    <circle cx="16" cy="38" r="7" fill="#2A2150"/><circle cx="72" cy="38" r="7" fill="#2A2150"/>
+    <text x="14" y="28" font-size="14">📦</text>
+  </g>
+  <text x="36" y="186" font-size="20">👷</text><text x="70" y="188" font-size="20">👩‍🔧</text><text x="150" y="188" font-size="20">🧑‍💼</text>
+  <text x="248" y="112" font-size="20">🛒</text>
+</svg>`;
+
+const ILLOS = { sneaker:SVG_SNEAKER, coffee:SVG_COFFEE, choco:SVG_CHOCO, phone:SVG_PHONE };
+
+const SVG_HERO = `<svg viewBox="0 0 640 230" aria-hidden="true">
+  <defs><linearGradient id="hg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#E4F1FF"/><stop offset="1" stop-color="#EEEAFF"/></linearGradient></defs>
+  <rect x="10" y="10" width="620" height="210" rx="26" fill="url(#hg)" stroke="#DDD6FB" stroke-width="2"/>
+  <g stroke="#fff" stroke-width="1.5">
+    <line x1="10" y1="80" x2="630" y2="80"/><line x1="10" y1="150" x2="630" y2="150"/>
+    <line x1="130" y1="10" x2="130" y2="220"/><line x1="250" y1="10" x2="250" y2="220"/><line x1="370" y1="10" x2="370" y2="220"/><line x1="490" y1="10" x2="490" y2="220"/>
+  </g>
+  <path d="M40 140 Q30 90 90 80 Q140 70 150 120 Q170 170 220 150 Q250 100 300 140 L330 170 Q380 190 400 130 Q420 90 470 110 Q520 130 510 170 Q560 190 600 120 L610 150 Q600 200 520 205 L60 205 Q30 190 40 140Z" fill="#E7E1FF" opacity=".7"/>
+  <path class="hero-route" d="M70 150 C120 60, 170 60, 200 110 S 300 170, 330 110 S 430 50, 460 120 S 540 170, 575 90" fill="none" stroke="#DC5F97" stroke-width="4" stroke-linecap="round" stroke-dasharray="10 10"/>
+  <g font-size="30" text-anchor="middle">
+    <text class="hero-pin" x="70"  y="140" style="animation-delay:.3s">🌱</text>
+    <text class="hero-pin" x="200" y="100" style="animation-delay:.8s">🏭</text>
+    <text class="hero-pin" x="330" y="100" style="animation-delay:1.3s">🚢</text>
+    <text class="hero-pin" x="460" y="110" style="animation-delay:1.8s">📦</text>
+    <text class="hero-pin" x="575" y="80"  style="animation-delay:2.4s">🛍️</text>
+  </g>
+  <g class="hero-pin" style="animation-delay:2.6s"><circle cx="575" cy="94" r="7" fill="#FFD35C" stroke="#2A2150" stroke-width="2"/></g>
+  <text x="30" y="40" font-size="13" font-weight="800" fill="#6B58D6">19.4°N 99.1°O</text>
+  <text x="610" y="206" font-size="22" text-anchor="end">🧭</text>
+</svg>`;
+
+/* =========================================================
+   H. MAPA MUNDIAL ESTILIZADO
+   Proyección equirectangular. Cada producto elige una "vista":
+   · pacific: centrada en el Pacífico; América se desplaza +360°
+     para que las rutas Asia → México sean continuas.
+   · atlantic: centrada en el Atlántico (América, Europa y África),
+     con más acercamiento.
+   ========================================================= */
+const VIEWS = {
+  pacific:{ LON0:-25, LAT0:80, K:1000/370, H:375, shift:true,
+    conts:[['AMÉRICA DEL NORTE', -100, 47], ['AMÉRICA DEL SUR', -60, -12], ['EUROPA', 15, 55], ['ÁFRICA', 20, 8], ['ASIA', 92, 55], ['OCEANÍA', 134, -26]],
+    oceans:[['Océano Pacífico', -155, -5, 'middle'], ['Océano Índico', 75, -22, 'middle'], ['Océano Atlántico', 'R', 32, 'end']] },
+  atlantic:{ LON0:-125, LAT0:64, K:5, H:420, shift:false,
+    conts:[['AMÉRICA DEL NORTE', -102, 45], ['AMÉRICA DEL SUR', -58, -8], ['EUROPA', 22, 56], ['ÁFRICA', 22, 12], ['ASIA', 62, 48]],
+    oceans:[['Océano Atlántico', -42, 26, 'middle'], ['Océano Pacífico', -114, 14, 'middle']] },
+};
+const MAP = { W:1000 };
+let VIEW = VIEWS.pacific;
+function proj(lon, lat, forceShift){
+  const V = VIEW;
+  const L = V.shift && (forceShift || lon < -30) ? lon + 360 : lon;
+  return [ +((L - V.LON0) * V.K).toFixed(1), +((V.LAT0 - lat) * V.K).toFixed(1) ];
+}
+/* Recuadro de acercamiento (posición y zona definidas por cada producto en m4.inset) */
+const INSET_DEF = { w:170, h:102, s:17 };
+let INSET = null;
+function projInset(lon, lat){
+  return [ +(INSET.x + (lon - INSET.lon0) * INSET.s).toFixed(1), +(INSET.y + (INSET.lat0 - lat) * INSET.s).toFixed(1) ];
+}
+
+/* Contornos simplificados de masas continentales (lon, lat) */
+const GEO = [
+  { am:true, pts:[[-168,65.6],[-164.5,67.9],[-166,68.9],[-161,70.3],[-156.5,71.3],[-152,70.8],[-143,70.1],[-137,69],[-128,70.2],[-121,69.5],[-114,68.4],[-108,68.7],[-100,67.8],[-95.5,68.5],[-90,68.8],[-86.6,66.5],[-84,66],[-87,64.2],[-90.6,63.6],[-94,61],[-93,58.7],[-92.3,57],[-88.5,56.4],[-85,55.3],[-82.3,55.1],[-82,52.9],[-79.3,51.5],[-79,54.5],[-76.9,56.3],[-77.5,58],[-78.5,58.8],[-77.6,60.4],[-78.2,62.3],[-73.5,62.2],[-70,61.1],[-69.2,59],[-66,58.8],[-64.5,60.3],[-61.8,56.5],[-57.4,54.4],[-55.8,52.2],[-59,50.1],[-64,50.2],[-66.5,49.4],[-64.3,47.9],[-66,45.1],[-67,44.5],[-70,43.7],[-70.7,42.1],[-70,41.7],[-74,40.6],[-74.1,39.5],[-75.5,38.4],[-76.3,37],[-75.5,35.3],[-77.9,33.9],[-80.8,32],[-81.4,30.5],[-80,26.8],[-80.3,25.2],[-81.2,25.4],[-82.7,27.8],[-82.9,29.2],[-84.4,30],[-86.5,30.4],[-89.6,30.2],[-89.4,29.1],[-91.5,29.5],[-94,29.6],[-97,28],[-97.4,25.9],[-97.7,22],[-96,19.3],[-94.5,18.2],[-92,18.6],[-90.7,19.6],[-90.4,21.1],[-87.1,21.5],[-87.5,19.8],[-88.2,17.4],[-88.3,15.8],[-85.7,15.9],[-83.3,15],[-83.6,12.5],[-83.8,10.9],[-82.2,9.2],[-79.6,9.6],[-77.4,8.7],[-78.4,8.2],[-79.9,7.3],[-81.3,7.5],[-83.6,8.4],[-85.7,9.9],[-85.8,11.2],[-87.6,12.9],[-89.8,13.4],[-91.5,14],[-92.3,14.6],[-94,16],[-96.5,15.7],[-98.8,16.5],[-101.5,17.3],[-103.4,18.3],[-104.3,19],[-105.3,20.4],[-105.4,21.9],[-106.3,23.3],[-108,25],[-109.3,26.4],[-110.6,27.9],[-112.2,29],[-113.1,31.2],[-114.8,31.8],[-114.2,30.4],[-112.9,28.6],[-112.2,27.1],[-111,25.5],[-109.9,22.9],[-111.5,24.4],[-112.3,26],[-114.1,27.7],[-114.2,28.8],[-115.8,30.4],[-117.1,32.5],[-118.5,34],[-120.6,34.6],[-121.9,36.6],[-122.5,37.8],[-123.8,39.8],[-124.3,42],[-124,46.2],[-124.7,48.4],[-127.5,50.8],[-130.2,54.7],[-133,57.2],[-136.5,58.1],[-139.9,59.7],[-146,60.8],[-148.5,60.2],[-151.5,59.2],[-154,59],[-157.3,58.2],[-161.8,58.7],[-164.8,60.5],[-165.3,62.6],[-163.8,64.2],[-166.2,64.6]] },
+  { am:true, pts:[[-80,73.7],[-72,71.5],[-67.6,69.5],[-62,66.9],[-64.5,63.5],[-68,63.1],[-71.5,63.8],[-73.4,65.8],[-77,65.5],[-73.5,67.5],[-78.5,69.5],[-85,69.9],[-89,71.2],[-88,73.2]] },
+  { am:true, pts:[[-118,69.5],[-110,68.8],[-102,69.2],[-101,70.3],[-105,73],[-113,72.9],[-118.5,71.5]] },
+  { am:true, pts:[[-90,76.5],[-80,76.2],[-74.5,78.5],[-67,80.5],[-62,82],[-75,83],[-90,81.8],[-95,79]] },
+  { am:true, pts:[[-73,78],[-66,80],[-60,82],[-40,83.5],[-22,82],[-19,79.5],[-21,76],[-19,74.5],[-22,72.5],[-22,70.2],[-26,68.4],[-32,68],[-38,65.7],[-41.5,63.5],[-43.5,60],[-47.5,61],[-50.5,64.3],[-53,66.7],[-53.5,69],[-55,71.5],[-58,75.5],[-66,76.1]] },
+  { am:true, pts:[[-59.3,47.6],[-56,49.6],[-55.5,51.6],[-53,49.3],[-52.7,47.5],[-55.9,46.9]] },
+  { am:true, pts:[[-84.9,21.9],[-82,23.1],[-78.4,22.4],[-74.2,20.2],[-77.7,19.9],[-80.5,21.6]] },
+  { am:true, pts:[[-74.4,19.8],[-72.8,19.9],[-70,19.7],[-68.4,18.6],[-71.3,17.9],[-74.3,18.3]] },
+  { am:true, pts:[[-77.3,8.7],[-76,9.5],[-75.5,10.6],[-73.3,11.3],[-71.6,12.4],[-70,12.2],[-68.2,10.6],[-64.5,10.3],[-61.8,10.6],[-61,9.8],[-60,8.4],[-57.5,6.2],[-54,5.8],[-51.5,4.4],[-50,1.8],[-50.5,0],[-48.4,-1.2],[-44.8,-1.6],[-41.8,-2.9],[-38.5,-3.7],[-35.2,-5.5],[-34.8,-7.6],[-35.3,-9.4],[-37.1,-11],[-39,-13.8],[-39.2,-17.5],[-40.8,-21.6],[-42,-22.9],[-44.6,-23.3],[-47.9,-25.4],[-48.6,-28.2],[-50.7,-31],[-52.5,-33.7],[-54.2,-34.7],[-56.8,-36.3],[-57.6,-38.2],[-62.1,-38.9],[-62.3,-40.6],[-65,-41],[-63.5,-42.6],[-65.3,-44.5],[-67.5,-46.2],[-65.8,-47.9],[-68.9,-51.6],[-68.4,-53],[-68.6,-54.8],[-71.5,-54.1],[-74.6,-52.8],[-75.2,-50],[-74,-46.8],[-73.5,-43.5],[-73.7,-40],[-72.7,-35.5],[-71.4,-32.4],[-71.5,-28.5],[-70.5,-25],[-70.1,-21.5],[-70.3,-18.3],[-72.3,-17],[-76,-14.3],[-77.2,-12],[-79.5,-7.9],[-81.2,-6],[-81,-4.2],[-80.3,-3.4],[-80.9,-1.5],[-80,0.9],[-78.9,1.5],[-77.6,3.8],[-77.3,6.7],[-77.9,7.2]] },
+  /* Eurasia */
+  { pts:[[-9.5,43],[-9,38.7],[-8.8,37],[-6,36.2],[-2,36.8],[0,38.8],[3.2,42],[5,43.3],[8,43.8],[10.5,43],[12.5,41.5],[15.6,38],[16.5,39.5],[18.5,40.2],[16,41.5],[13.5,44],[12.3,45.3],[13.7,45.6],[15,44.5],[19.5,41.8],[20,39.5],[22,37],[23.5,38],[24,40.5],[26,40.8],[26.2,40],[27.5,37],[30,36.3],[34,36.5],[36,36.8],[35.8,34.5],[35,33],[34.3,31.3],[34.9,29.5],[35.5,28],[39,21.5],[42.8,14],[43.5,12.7],[45,13],[52,16],[55.5,17.8],[57.8,19],[59.8,22.5],[58.5,23.6],[56.4,24.8],[56.2,26.2],[55,25.3],[53,24.2],[51.5,24],[51,26.2],[50,26.4],[48.5,28.3],[48,29.8],[50,30.2],[51.5,27.9],[54,26.7],[56.4,27.1],[57.5,25.7],[61.5,25.2],[66.5,25.4],[68,23.7],[69,22.3],[70.5,20.8],[72.5,21],[72.6,19],[73.3,16.5],[74.3,14],[75.5,11.5],[76.5,9],[77.5,8],[78.3,9],[79.8,10.3],[80.2,13.5],[80.3,15.5],[82.3,17],[85,19.5],[87,21.5],[89,21.8],[91.8,22.4],[92.3,20.7],[94.2,18],[94.3,16],[95.5,15.8],[97.6,16.5],[98.5,13.3],[98.5,10],[98.3,8],[100.3,6.2],[101.3,3],[103.3,1.3],[104.3,1.5],[103.5,4],[103.3,5.5],[102,6.2],[101,6.9],[100.4,8.4],[99.2,9.3],[99.5,12],[100,13.4],[100.9,12.7],[102.2,12.1],[103,10.6],[104.8,10.4],[104.8,8.8],[106.2,9.5],[107,10.4],[109.2,11.6],[109.4,13],[108.8,15.3],[108,16.3],[106.5,17.9],[105.7,19],[106.6,20.3],[108,21.5],[109.8,21.4],[110.4,20.3],[111,21.5],[113.5,22.2],[116.5,22.9],[119,25],[120.5,27.5],[122,29.8],[121,31.5],[120.3,34.3],[119.2,35],[120.6,36.1],[122.5,36.9],[121.2,37.6],[118.9,37.6],[117.7,38.4],[118.5,39.1],[121,40.8],[121.8,39.3],[124.3,40],[125.3,39.5],[124.7,38.1],[126.4,37],[126.4,34.6],[127.8,34.7],[129.4,35.4],[129.4,36.8],[128.3,38.6],[127.5,39.7],[129.7,40.9],[129.9,42.4],[131.3,42.8],[133.1,42.8],[135.5,43.9],[137.7,45.5],[140.5,48.5],[141,52.5],[140.3,53.8],[137.5,54],[135.2,54.7],[137.2,56.5],[141,59],[145.5,59.3],[149,59.6],[152.8,59.2],[155,59.3],[156,61.5],[163.5,62.5],[160,58],[156.5,51],[158.5,52.5],[162.5,56.1],[163.3,59.5],[170,60],[172.6,61],[177.5,62.6],[179.5,62.3],[180,65],[180,68.5],[172,69.9],[166,69.5],[160.8,69.6],[155,71],[150,71.3],[140,72.5],[132,71.5],[128.6,72.9],[125,73.6],[113.4,73.4],[110,74],[112,76.3],[105,77.7],[100,76.3],[95,76.2],[89,75.5],[80.5,73.6],[80.7,72.2],[78.4,72.4],[76,71.2],[73,71.9],[72.8,72.8],[69.9,73],[68.5,71.9],[66.9,69.4],[64,69.2],[60,69.9],[57.3,68.5],[54,68.8],[53.7,68.2],[48.3,67.6],[44,68.3],[43.8,66],[40.3,64.8],[38.5,64.3],[36.8,64.9],[37,66.5],[41,66.8],[39.8,68],[35,69.2],[33,69.4],[28.2,71],[23.6,70.7],[20,70],[16.5,69],[14,68],[12.4,65.9],[10,64],[5.5,62],[5,59],[6,58.1],[8.4,58.3],[10.4,59.4],[11,58.5],[12,56.3],[12.5,55.4],[14,55.4],[15.3,56.1],[16.5,57.6],[16.8,59.9],[18.8,60.1],[17.3,61.4],[17.6,62.5],[20.8,64.1],[22.2,65.7],[25.3,65.1],[25,64],[21.3,62.5],[21.6,61],[22.9,59.9],[25.6,60.4],[28,60.5],[29,59.9],[28,59.5],[23.5,59.2],[23.4,58.5],[24.3,57.8],[21.5,57.4],[21,56.8],[21,55.9],[19.9,54.9],[18.6,54.4],[14.2,53.9],[11,54],[10.5,55],[10.6,57.7],[8.6,57.1],[8.1,55.5],[8.9,54],[7,53.6],[5,53.3],[4.2,52],[3.3,51.3],[1.6,50.9],[0.2,49.7],[-1.3,49.6],[-1.9,48.7],[-4.7,48.4],[-2.2,47.1],[-1.2,46],[-1.5,43.6],[-3.8,43.4],[-8,43.7]] },
+  /* África */
+  { pts:[[-17,21],[-16.8,19.5],[-16.3,17],[-17.5,14.7],[-16.8,12.5],[-15,11],[-13.5,9.5],[-12.3,7.4],[-10.5,6.2],[-7.5,4.4],[-4,5.2],[-1,5],[1.5,6.2],[4.5,6.3],[6.5,4.3],[8.5,4.5],[9.6,3.5],[9.5,1],[9.2,-1],[11.5,-3.8],[12.2,-5.9],[13.3,-8.5],[13.5,-11.5],[12.3,-14],[11.8,-17.2],[14.3,-22.5],[15.2,-26.7],[17,-29.5],[18.4,-33.9],[20,-34.8],[22.5,-34],[25.6,-33.8],[28,-32.7],[30.5,-30.5],[32.5,-28.5],[32.8,-26],[35.5,-24],[35.5,-21.5],[34.7,-19.8],[36.8,-17.9],[40.5,-15],[40.5,-11],[39.3,-8],[39.2,-4.7],[41,-2],[43.2,0.5],[46,2.5],[49,6],[51.2,10.5],[51,11.9],[48,11.2],[45,10.5],[43.3,11.6],[42.8,12.8],[41,14.8],[39.3,15.8],[38.5,18],[37.2,21],[36.8,22.5],[35.5,23.5],[34.8,25.8],[33.8,27.5],[32.6,29.9],[32.3,31.3],[29.8,31.2],[27.5,31.3],[25,31.8],[23,32.6],[20.5,32.4],[19.5,30.5],[17.5,31],[15.3,32.3],[13,32.9],[11,33.2],[10.2,34.4],[11,37],[9.5,37.3],[6.5,36.9],[3,36.8],[0,35.9],[-2,35.1],[-5.5,35.8],[-6.5,34],[-9.5,32.5],[-9.8,29.8],[-12.5,28],[-14.5,26],[-16,23.8]] },
+  { pts:[[49.3,-12],[50.4,-15.5],[49.4,-17.6],[48.5,-20.5],[47.1,-24.9],[45.2,-25.5],[43.7,-23.5],[43.4,-21.3],[44.4,-19.8],[44,-17],[46.3,-15.8],[48,-13.8]] },
+  /* Islas de Europa */
+  { pts:[[-5.7,50],[1.4,51.2],[1.7,52.7],[0.2,53.5],[-0.4,54.5],[-1.6,55.6],[-2.1,57.2],[-1.8,57.6],[-4,57.7],[-3,58.6],[-5,58.6],[-6.2,57.5],[-5.6,56.3],[-6.2,55.7],[-4.8,54.7],[-3.3,54.9],[-3.3,53.8],[-4.6,53.3],[-4.5,52.4],[-5.3,51.7],[-3.1,51.4],[-4.2,51.2]] },
+  { pts:[[-6,52.2],[-6.2,53.9],[-5.6,54.6],[-7.3,55.3],[-8.5,54.9],[-10,54.2],[-9.8,53.3],[-10.3,51.8],[-8.2,51.6]] },
+  { pts:[[-22.5,64],[-24,65.4],[-22,66.4],[-16.2,66.5],[-13.6,65.1],[-14.9,64.3],[-18.7,63.4]] },
+  /* Asia insular */
+  { pts:[[79.8,8.1],[80.1,9.8],[81.9,7.5],[81.2,6.2],[80.1,6]] },
+  { pts:[[95.3,5.6],[97.5,5.2],[100.4,2.2],[103.8,-1],[106,-3],[105.8,-5.8],[104.5,-5.9],[102,-4],[100.3,-1],[98.6,1.8],[95.3,4]] },
+  { pts:[[105.2,-6.8],[108,-6.3],[111,-6.4],[114.5,-7.7],[114.4,-8.7],[111,-8.2],[108,-7.8],[105.5,-7]] },
+  { pts:[[109,1.5],[109.6,-1],[110.3,-3],[114.5,-4],[116.5,-2.5],[117.8,0.8],[119,5],[117,7],[115.5,5.2],[113,3.2],[111,1.6]] },
+  { pts:[[119.5,-5.5],[120.5,-3],[121,1.2],[124.8,1.4],[121.7,-1],[123.3,-4],[121.5,-4.8],[120.4,-5.5]] },
+  { pts:[[131,-1.3],[134,-0.9],[138,-1.6],[141,-2.6],[145.8,-5],[147.5,-6.3],[150.5,-10.5],[147.5,-10],[144,-7.8],[141,-9.1],[138.5,-8.3],[137.7,-5.2],[134,-4],[132.2,-2.3]] },
+  { pts:[[120,18.5],[122.3,18.4],[122.2,16.2],[121.6,14],[124,12.5],[125.5,10],[126.3,7],[125.4,5.8],[123,7],[121.9,7.3],[123.5,9.5],[122,11.5],[120.6,14.3],[119.9,16]] },
+  { pts:[[120.1,23],[121,25.2],[122,25],[121.4,22.3],[120.7,22]] },
+  { pts:[[108.7,19.2],[110.5,20.1],[111,19.6],[110,18.3],[109,18.4]] },
+  { pts:[[129.8,33.4],[131,31.2],[131.9,32.9],[133.5,33.9],[135.2,33.5],[136.9,34.3],[139.8,35],[140.8,36],[141,38.3],[142,39.6],[141.4,41.4],[140,41.4],[139.9,40],[139.5,38.4],[137,36.9],[136,35.8],[133,35.5],[131,34.4]] },
+  { pts:[[140,41.6],[141.5,42.5],[143.3,42],[145.5,43.3],[144.5,44],[141.8,45.4],[141.3,43.5],[140,42.8]] },
+  /* Oceanía */
+  { pts:[[113.5,-22],[114,-26.5],[115,-29.5],[115.1,-33.6],[117,-35],[120,-33.9],[124,-33],[126.2,-32.3],[131.2,-31.5],[134.2,-32.8],[135.8,-34.8],[137.8,-33],[138,-35.6],[140,-37.9],[143.5,-38.8],[146.3,-39.1],[150,-37.5],[151.3,-33.9],[153.1,-30.5],[153.4,-27.5],[151,-23.5],[149.5,-21.8],[146.3,-19],[145.4,-15],[143.5,-14],[142.5,-10.7],[141.6,-13.6],[141.5,-17],[140.2,-17.7],[137.7,-16],[135.9,-15],[136.9,-12.3],[132.5,-11.4],[131,-12.2],[129.4,-14.9],[127.1,-13.8],[125.1,-14.6],[122.2,-17.1],[121,-19.5],[117.5,-20.6]] },
+  { pts:[[144.6,-40.7],[148.3,-40.9],[148,-43.2],[146,-43.6],[145,-42.3]] },
+  { pts:[[172.7,-34.4],[174.5,-36.2],[176,-37.6],[178.5,-37.7],[177,-39.3],[175.9,-41.4],[174.6,-41.3],[174.9,-39.9],[173.8,-39.2],[174.7,-37.4]] },
+  { pts:[[172.7,-40.5],[174.3,-41.7],[172.8,-43.6],[171.3,-44.4],[169.4,-46.6],[166.7,-46.2],[168.3,-44],[170.6,-42.9]] },
+];
+
+/* Convierte puntos en una curva suave (Catmull-Rom → Bézier) */
+function smoothPath(P){
+  if (P.length < 3) return `M${P[0].join(',')} L${P[1].join(',')}`;
+  let d = `M${P[0][0]},${P[0][1]}`;
+  for (let i = 0; i < P.length - 1; i++){
+    const p0 = P[i - 1] || P[i], p1 = P[i], p2 = P[i + 1], p3 = P[i + 2] || p2;
+    const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6];
+    const c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
+    d += ` C${c1[0].toFixed(1)},${c1[1].toFixed(1)} ${c2[0].toFixed(1)},${c2[1].toFixed(1)} ${p2[0]},${p2[1]}`;
+  }
+  return d;
+}
+const polyPath = (pts, fn) => 'M' + pts.map(p => fn(p).join(',')).join('L') + 'Z';
+
+/* Número de etapa: círculo para "3", píldora para "1-2" */
+function numBadge(n, x, y){
+  const t = String(n), w = 8 + t.length * 5;
+  const shape = t.length > 1 ? `<rect x="${-w / 2}" y="-8" width="${w}" height="16" rx="8"/>` : '<circle r="8"/>';
+  return `<g class="pin-n" transform="translate(${x + (t.length > 1 ? w / 2 - 8 : 0)} ${y})">${shape}<text text-anchor="middle" dy="3.5">${t}</text></g>`;
+}
+function pinSVG(x, y, lbl, dx, dy, a, n, bx = 9, by = -11){
+  return `<g transform="translate(${x} ${y})">
+    <circle class="pin-halo" r="7.5"/><circle class="pin-dot" r="3.8"/>
+    <text class="pin-lbl" x="${dx}" y="${dy}" text-anchor="${a}">${lbl}</text>
+    ${n ? numBadge(n, bx, by) : ''}
+  </g>`;
+}
+
+function buildMap(d, label){
+  VIEW = VIEWS[d.view || 'pacific'];
+  INSET = Object.assign({}, INSET_DEF, d.inset);
+  MAP.H = VIEW.H;
+  const nAm = GEO.map(g => `<path class="land" d="${polyPath(g.pts, p => proj(p[0], p[1], g.am))}"/>`).join('');
+  /* Retícula de coordenadas */
+  let grat = '';
+  const lonSpan = MAP.W / VIEW.K;
+  for (let L = Math.ceil(VIEW.LON0 / 30) * 30; L <= VIEW.LON0 + lonSpan; L += 30){
+    const x = ((L - VIEW.LON0) * VIEW.K).toFixed(1);
+    grat += `<line class="grat" x1="${x}" y1="0" x2="${x}" y2="${MAP.H}"/>`;
+  }
+  [60, 30, -30].forEach(lat => { const y = ((VIEW.LAT0 - lat) * VIEW.K).toFixed(1); if (y < 8 || y > MAP.H - 4) return; grat += `<line class="grat" x1="0" y1="${y}" x2="${MAP.W}" y2="${y}"/><text class="grat-lbl" x="4" y="${(+y - 3)}">${Math.abs(lat)}°${lat > 0 ? 'N' : 'S'}</text>`; });
+  const eqY = (VIEW.LAT0 * VIEW.K).toFixed(1);
+  grat += `<line class="equator" x1="0" y1="${eqY}" x2="${MAP.W}" y2="${eqY}"/><text class="grat-lbl" x="4" y="${eqY - 3}">Ecuador 0°</text>`;
+
+  /* Tramos: línea visible + máscara que se "dibuja" + icono móvil */
+  let defs = '', routes = '', movers = '';
+  Object.entries(d.legs).forEach(([id, leg]) => {
+    const pts = leg.pts.map(p => leg.inset ? projInset(p[0], p[1]) : proj(p[0], p[1]));
+    const path = smoothPath(pts);
+    defs += `<mask id="mk-${id}" maskUnits="userSpaceOnUse" x="0" y="0" width="${MAP.W}" height="${MAP.H}"><path class="mk-path" d="${path}"/></mask>`;
+    routes += `<path id="rt-${id}" class="route ${leg.mode}" d="${path}" mask="url(#mk-${id})" ${leg.inset ? 'clip-path="url(#insetClip)"' : ''}/>`;
+    movers += `<text id="mv-${id}" class="mover" text-anchor="middle" dominant-baseline="central">${leg.icon}</text>`;
+  });
+
+  const pins = d.pins.map(p => { const [x, y] = proj(p.lon, p.lat); return pinSVG(x, y, p.lbl, p.dx, p.dy, p.a, p.n, p.bx, p.by); }).join('');
+  /* Etiqueta flotante de la etapa de transporte (sobre el océano) */
+  const pl = d.seaLabel, [plx, ply] = proj(pl.lon, pl.lat);
+  const pacLbl = `<g transform="translate(${plx} ${ply})"><text class="pin-lbl" text-anchor="middle">${pl.lbl}</text>${numBadge(pl.n, 0, -24)}</g>`;
+
+  /* Recuadro del centro de México */
+  const I = INSET;
+  const zb1 = proj(I.lon0, I.lat0), zb2 = proj(I.lon0 + I.w / I.s, I.lat0 - I.h / I.s);
+  const mexico = GEO[0];
+  const insetPins = d.insetPins.map(p => { const [x, y] = projInset(p.lon, p.lat); return pinSVG(x, y, p.lbl, p.dx, p.dy, p.a, p.n, p.bx, p.by); }).join('');
+  const inset = `
+    <rect class="zoom-box" x="${zb1[0]}" y="${zb1[1]}" width="${(zb2[0] - zb1[0]).toFixed(1)}" height="${(zb2[1] - zb1[1]).toFixed(1)}" rx="2"/>
+    <path class="leader" d="M${((zb1[0] + zb2[0]) / 2).toFixed(1)},${I.y > zb2[1] ? zb2[1] : zb1[1]} L${I.x + I.w / 2},${I.y > zb2[1] ? I.y : I.y + I.h}"/>
+    <rect class="inset-bg" x="${I.x}" y="${I.y}" width="${I.w}" height="${I.h}" rx="10"/>
+    <path class="inset-land" clip-path="url(#insetClip)" d="${polyPath(mexico.pts, p => projInset(p[0], p[1]))}"/>
+    <text class="inset-t" x="${I.x + 8}" y="${I.y + 15}">${I.title || 'Centro de México'}</text>`;
+
+  const cont = VIEW.conts
+    .map(([t, lo, la]) => { const [x, y] = proj(lo, la); return `<text class="cont-lbl" x="${x}" y="${y}" text-anchor="middle">${t}</text>`; }).join('');
+  const oceans = VIEW.oceans.map(([t, lo, la, a]) => {
+    const [x, y] = lo === 'R' ? [MAP.W - 5, proj(0, la)[1]] : proj(lo, la);
+    return `<text class="ocean-lbl" x="${x}" y="${y}" text-anchor="${a}">${t}</text>`;
+  }).join('');
+
+  return `<svg id="worldMap" viewBox="0 0 ${MAP.W} ${MAP.H}" role="img" aria-label="Mapa mundial con la ruta de ${label}">
+    <defs>
+      <linearGradient id="oceanG" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#EAF4FF"/><stop offset="1" stop-color="#D8EAFD"/></linearGradient>
+      <clipPath id="insetClip"><rect x="${I.x}" y="${I.y}" width="${I.w}" height="${I.h}" rx="10"/></clipPath>
+      ${defs}
+    </defs>
+    <rect width="${MAP.W}" height="${MAP.H}" fill="url(#oceanG)"/>
+    ${grat}${nAm}${cont}${oceans}${inset}
+    ${routes}${pins}${pacLbl}${insetPins}${movers}
+  </svg>`;
+}
+
+/* Anima un tramo: dibuja la línea y mueve el icono sobre ella */
+function animateLeg(id, speed = 1){
+  return new Promise(res => {
+    const vis = $('#rt-' + id), mk = $(`#mk-${id} path`), mv = $('#mv-' + id);
+    const L = vis.getTotalLength();
+    mk.style.strokeDasharray = L; mk.style.strokeDashoffset = L;
+    vis.style.opacity = 1;
+    if (REDUCED){ mk.style.strokeDashoffset = 0; return res(); }
+    const dur = Math.min(3400, Math.max(1300, L * 6)) / speed;
+    mv.style.opacity = 1;
+    const t0 = performance.now();
+    (function frame(t){
+      const k = Math.min(1, (t - t0) / dur);
+      const e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+      mk.style.strokeDashoffset = L * (1 - e);
+      const p = vis.getPointAtLength(L * e);
+      mv.setAttribute('transform', `translate(${p.x} ${p.y})`);
+      if (k < 1) requestAnimationFrame(frame); else { mv.style.opacity = 0; res(); }
+    })(t0);
+  });
+}
+function resetRoutes(){
+  $$('#worldMap .route').forEach(r => r.style.opacity = 0);
+  $$('#worldMap .mover').forEach(m => m.style.opacity = 0);
+}
+
+/* =========================================================
+   I. PANTALLA DE INICIO
+   ========================================================= */
+function renderHome(){
+  app.innerHTML = `<section class="hero">
+    <div class="hero-art">${SVG_HERO}</div>
+    <p class="hero-brand">Laboratorio Cartográfico de Miss Viridiana</p>
+    <h1>🌎 MISIÓN: SIGUE LA RUTA DEL PRODUCTO</h1>
+    <p class="hero-sub">“Nada de lo que compras aparece mágicamente en una tienda…”</p>
+    <p class="hero-intro">Tu misión es descubrir qué territorios, recursos, personas, empresas y medios de transporte hacen posible que un producto llegue hasta tus manos. Sigue las pistas, toma decisiones y reconstruye su circuito productivo global.</p>
+    <div class="hero-meta"><span>⏱️ 15 a 20 minutos</span><span>🗺️ 5 misiones</span><span>🏅 3 insignias</span></div>
+    <button class="btn primary big" id="start" type="button">Aceptar la misión →</button>
+    <p class="hero-topic">Tema 1.3: agentes y factores naturales y socioeconómicos en circuitos productivos globales</p>
+  </section>`;
+  $('#start').addEventListener('click', () => go('choose'));
+}
+
+/* =========================================================
+   J. MISIÓN 0: ELIGE TU PRODUCTO
+   ========================================================= */
+function renderChoose(){
+  app.innerHTML = `<section class="m-head">
+      <span class="m-tag">Misión 0</span>
+      <h2><span aria-hidden="true">🎒</span> Elige tu producto</h2>
+      <p class="lead">Cada objeto guarda un recorrido. ¿Cuál quieres investigar?</p>
+    </section>
+    <div class="products">${PRODUCTS.map(p => `
+      <button class="prod ${p.ready ? '' : 'soon'}" data-id="${p.id}" type="button" aria-pressed="false">
+        <span class="p-e" aria-hidden="true">${p.emoji}</span>
+        <span class="p-n">${p.name}</span>
+        <span class="p-s">${p.ready ? 'Ruta disponible' : 'Ruta en preparación'}</span>
+      </button>`).join('')}
+    </div>
+    <div id="chooseMsg"></div>`;
+
+  $$('.prod').forEach(b => b.addEventListener('click', () => {
+    const p = PRODUCTS.find(x => x.id === b.dataset.id);
+    const msg = $('#chooseMsg');
+    if (!p.ready){
+      shake(b);
+      fb(msg, 'info', `<strong>${p.emoji} La ruta de ${p.name.toLowerCase()} todavía está en preparación.</strong> Por ahora elige otro producto.`);
+      return;
+    }
+    $$('.prod').forEach(x => { x.classList.remove('on'); x.setAttribute('aria-pressed', 'false'); });
+    b.classList.add('on'); b.setAttribute('aria-pressed', 'true');
+    S.product = p.id;
+    msg.innerHTML = `<div class="card" style="margin-top:18px;text-align:center">
+      <p class="q-prompt" style="margin:0 auto">${p.emoji} ${p.pick}</p>
+      <div class="row" style="justify-content:center"><button class="btn primary big" id="begin" type="button">COMENZAR MISIÓN →</button></div>
+    </div>`;
+    $('#begin').addEventListener('click', () => go('m1'));
+    smoothScroll(msg);
+  }));
+}
+
+/* =========================================================
+   K. MISIÓN 1: ¿DÓNDE COMIENZA?
+   ========================================================= */
+function renderM1(){
+  const d = P().m1;
+  app.innerHTML = shell(1, '🔍', '¿Dónde comienza?', d.lead) + `
+    <div class="grid-m1">
+      <figure class="card illo">${ILLOS[P().illo]}<figcaption>${d.caption}</figcaption></figure>
+      <div class="card">
+        <p class="q-prompt">${d.prompt}</p>
+        <p class="hint">${d.hint}</p>
+        <div class="chips" id="m1chips">${d.items.map(it =>
+          `<button class="chip" type="button" data-id="${it.id}" aria-pressed="false"><span aria-hidden="true">${it.e}</span>${it.t}</button>`).join('')}
+        </div>
+        <div class="row"><button class="btn primary" id="m1check" type="button" disabled>Revisar mi selección</button><span class="counter" id="m1count">0 seleccionados</span></div>
+        <div id="m1fb"></div>
+      </div>
+    </div>`;
+
+  const chips = $$('#m1chips .chip');
+  const sel = new Set();
+  let tries = 0, solved = false;
+
+  chips.forEach(c => c.addEventListener('click', () => {
+    if (solved) return;
+    const id = c.dataset.id;
+    sel.has(id) ? sel.delete(id) : sel.add(id);
+    c.classList.toggle('on', sel.has(id));
+    c.setAttribute('aria-pressed', sel.has(id));
+    chips.forEach(x => x.classList.remove('good', 'badc'));
+    $('#m1count').textContent = `${sel.size} seleccionado${sel.size === 1 ? '' : 's'}`;
+    $('#m1check').disabled = sel.size === 0;
+  }));
+
+  $('#m1check').addEventListener('click', () => {
+    const wrong = d.items.filter(i => !i.ok && sel.has(i.id));
+    const missing = d.items.filter(i => i.ok && !sel.has(i.id));
+    const good = d.items.filter(i => i.ok && sel.has(i.id));
+    chips.forEach(c => { const it = d.items.find(i => i.id === c.dataset.id); if (sel.has(it.id)) c.classList.add(it.ok ? 'good' : 'badc'); });
+
+    if (!wrong.length && !missing.length){
+      solved = true;
+      award('m1a', tries);
+      S.answers.m1 = good.map(i => i.t);
+      chips.forEach(c => c.disabled = true);
+      $('#m1check').parentElement.remove();
+      fb($('#m1fb'), 'ok', `<strong>¡Rastro encontrado!</strong> Cada material tiene un origen distinto:
+        <ul class="why">${d.items.map(i => `<li>${i.ok ? '✔' : '✖'} <b>${i.t}:</b> ${i.why}</li>`).join('')}</ul>`);
+      m1Step2(d);
+      return;
+    }
+    tries++;
+    let html = `<strong>Sigue investigando.</strong> Llevas ${good.length} acierto${good.length === 1 ? '' : 's'}.`;
+    if (wrong.length) html += `<ul class="why">${wrong.map(i => `<li>✖ <b>${i.t}:</b> ${i.why} Quítalo de tu selección.</li>`).join('')}</ul>`;
+    if (missing.length) html += `<p>Te falta${missing.length > 1 ? 'n' : ''} ${missing.length} elemento${missing.length > 1 ? 's' : ''}. Pistas:</p><ul class="why">${missing.map(i => `<li>🔎 ${i.hint}</li>`).join('')}</ul>`;
+    fb($('#m1fb'), 'bad', html);
+  });
+}
+function m1Step2(d){
+  const box = reveal(`
+    <div class="card pista"><div class="pista-h">🧭 PISTA GEOGRÁFICA</div><p class="pista-t">“${d.pista}”</p></div>
+    <div id="m1q"></div><div id="m1end"></div>`);
+  mcq($('#m1q', box), d.q, () => {
+    const end = $('#m1end', box);
+    giveBadge('natural', end);
+    nextBtn(end, 'Continuar a la Misión 2 →', () => go('m2'));
+  });
+}
+
+/* =========================================================
+   L. MISIÓN 2: ¿POR QUÉ AQUÍ Y NO ALLÁ?
+   ========================================================= */
+function renderM2(){
+  const d = P().m2;
+  app.innerHTML = shell(2, '🗺️', '¿Por qué aquí y no allá?', d.lead) + `
+    <p class="q-prompt">${d.prompt}</p>
+    <p class="hint">No hay una sola respuesta correcta: lo importante es que tu elección tenga evidencia.</p>
+    <div class="terr-grid">${d.territories.map(t => `
+      <button class="terr t-${t.id}" type="button" data-t="${t.id}" aria-pressed="false">
+        <div class="terr-top"><span class="terr-emoji" aria-hidden="true">${t.e}</span><span class="terr-code">Territorio ${t.code}</span><span class="terr-name">${t.name}</span></div>
+        <ul>${t.traits.map(x => `<li>${x}</li>`).join('')}</ul>
+      </button>`).join('')}
+    </div>
+    <div id="m2rest"></div>`;
+
+  let tId = null, justified = false;
+  const fac = new Set();
+
+  $$('.terr').forEach(b => b.addEventListener('click', () => {
+    tId = b.dataset.t;
+    $$('.terr').forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-pressed', x === b); });
+    if (!$('#m2fcard')) buildFactors();
+    else $('#m2name').textContent = d.territories.find(t => t.id === tId).name;
+  }));
+
+  function buildFactors(){
+    const box = reveal(`<div class="card" id="m2fcard">
+        <p class="q-prompt">Elegiste <span id="m2name">${d.territories.find(t => t.id === tId).name}</span>. Selecciona hasta 3 factores que influyeron en tu decisión:</p>
+        <div class="chips" id="m2chips">${d.factors.map(f => `<button class="chip" type="button" data-f="${f.id}" aria-pressed="false"><span aria-hidden="true">${f.e}</span>${f.t}</button>`).join('')}</div>
+        <div class="row"><button class="btn primary" id="m2go" type="button" disabled>Justificar mi decisión</button><span class="counter" id="m2count">0 de 3</span></div>
+        <div id="m2fb"></div>
+      </div><div id="m2end"></div>`, $('#m2rest'));
+
+    $$('#m2chips .chip', box).forEach(c => c.addEventListener('click', () => {
+      const f = c.dataset.f;
+      if (fac.has(f)) fac.delete(f);
+      else if (fac.size >= 3){ shake(c); $('#m2count').textContent = 'Máximo 3: quita uno primero'; return; }
+      else fac.add(f);
+      c.classList.toggle('on', fac.has(f)); c.setAttribute('aria-pressed', fac.has(f));
+      $('#m2count').textContent = `${fac.size} de 3`;
+      $('#m2go').disabled = fac.size === 0;
+    }));
+    $('#m2go').addEventListener('click', justify);
+  }
+
+  function justify(){
+    const t = d.territories.find(x => x.id === tId);
+    let supported = 0;
+    const lines = [...fac].map(fid => {
+      const f = d.factors.find(x => x.id === fid);
+      if (t.has[fid]){ supported++; return `<li>✔ <b>${f.t}:</b> ${t.name} lo tiene: «${t.has[fid]}».</li>`; }
+      if (t.lacks[fid]) return `<li>✖ <b>${f.t}:</b> aquí es una desventaja: «${t.lacks[fid]}».</li>`;
+      return `<li>✖ <b>${f.t}:</b> la ficha de ${t.name} no lo menciona, así que sería una suposición sin evidencia.</li>`;
+    });
+    const type = supported === fac.size ? 'ok' : supported > 0 ? 'info' : 'bad';
+    const head = supported === fac.size ? 'Tu decisión está bien fundamentada.' : supported > 0 ? 'Parte de tu argumento tiene evidencia.' : 'Tu elección necesita más evidencia.';
+    fb($('#m2fb'), type, `<strong>${head}</strong><ul class="why">${lines.join('')}</ul><p>${t.insight}</p><p>Puedes cambiar de territorio o de factores y volver a justificar para comparar.</p>`);
+    $('#m2go').textContent = 'Justificar de nuevo';
+
+    S.answers.m2 = { name:t.name, factors:[...fac].map(id => d.factors.find(f => f.id === id).t) };
+    if (!S.flags.m2scored){
+      S.flags.m2scored = true;
+      setScore('m2', t.weak ? 5 : Math.min(POINTS.m2, supported * 5));
+    }
+    if (!justified){
+      justified = true;
+      const end = $('#m2end');
+      end.innerHTML = `<div class="card quote" style="margin-top:18px">
+        <p class="big-quote">En Geografía Económica no basta con preguntar <b>DÓNDE</b> se produce. También debemos preguntar <b>POR QUÉ</b> ahí.</p>
+        <p>${d.combo}</p></div>`;
+      nextBtn(end, 'Continuar a la Misión 3 →', () => go('m3'));
+    }
+  }
+}
+
+/* =========================================================
+   M. MISIÓN 3: ¿QUIÉN MUEVE EL CIRCUITO?
+   Clasificación por arrastre (mouse y dedo) o por toque.
+   ========================================================= */
+function renderM3(){
+  const d = P().m3;
+  app.innerHTML = shell(3, '👥', '¿Quién mueve el circuito?', d.lead) + `
+    <div class="grid-m3">
+      <figure class="card illo">${SVG_FACTORY}</figure>
+      <div class="card">
+        <p class="q-prompt">${d.prompt}</p>
+        <p class="hint">Arrastra cada tarjeta a <b>AGENTE</b> o <b>FACTOR</b>. También puedes tocar una tarjeta y después tocar la caja donde va.</p>
+        <div id="m3fb" aria-live="polite"></div>
+      </div>
+    </div>
+    <div class="card pool" id="pool">${shuffle(d.items).map(it =>
+      `<button class="tag" type="button" data-id="${it.id}"><span aria-hidden="true">${it.e}</span>${it.t}</button>`).join('')}
+    </div>
+    <div class="zones">
+      <div class="zone z-agente" data-z="agente" role="button" tabindex="0" aria-label="Colocar en Agente">
+        <div class="zone-h"><b>🧑‍💼 AGENTE</b><small>¿Quién participa?</small></div><div class="zone-b"></div>
+      </div>
+      <div class="zone z-factor" data-z="factor" role="button" tabindex="0" aria-label="Colocar en Factor">
+        <div class="zone-h"><b>⚙️ FACTOR</b><small>¿Qué condición lo permite?</small></div><div class="zone-b"></div>
+      </div>
+    </div>
+    <div id="m3end"></div>`;
+
+  const items = Object.fromEntries(d.items.map(i => [i.id, i]));
+  let selected = null, drag = null, errors = 0, placed = 0;
+  const zones = $$('.zone');
+  const zoneAt = (x, y) => { const el = document.elementFromPoint(x, y); return el ? el.closest('.zone') : null; };
+
+  function select(tag){
+    if (selected === tag){ tag.classList.remove('selected'); selected = null; }
+    else { if (selected) selected.classList.remove('selected'); selected = tag; tag.classList.add('selected'); }
+    zones.forEach(z => z.classList.toggle('armed', !!selected));
+  }
+  function place(tag, z){
+    const it = items[tag.dataset.id];
+    tag.classList.remove('selected'); selected = null;
+    zones.forEach(x => x.classList.remove('armed'));
+    if (it.type === z){
+      tag.disabled = true; tag.classList.add('placed');
+      $(`.zone[data-z="${z}"] .zone-b`).appendChild(tag);
+      placed++;
+      fb($('#m3fb'), 'ok', `✔ <b>${it.t}</b> es ${z === 'agente' ? 'un agente' : 'un factor'}: ${it.why}`);
+      if (placed === d.items.length) finish();
+    } else {
+      errors++;
+      shake(tag);
+      fb($('#m3fb'), 'bad', `<b>${it.t}</b> no va en ${z === 'agente' ? 'AGENTE' : 'FACTOR'}. Piénsalo así: ${it.why}`);
+    }
+  }
+
+  $$('#pool .tag').forEach(tag => {
+    tag.addEventListener('pointerdown', e => {
+      if (tag.disabled) return;
+      drag = { tag, x:e.clientX, y:e.clientY, ghost:null };
+      tag.setPointerCapture(e.pointerId);
+    });
+    tag.addEventListener('pointermove', e => {
+      if (!drag || drag.tag !== tag) return;
+      if (!drag.ghost){
+        if (Math.hypot(e.clientX - drag.x, e.clientY - drag.y) < 8) return;
+        drag.ghost = tag.cloneNode(true);
+        drag.ghost.classList.add('ghost');
+        drag.ghost.classList.remove('selected');
+        document.body.appendChild(drag.ghost);
+        tag.classList.add('lifting');
+      }
+      drag.ghost.style.left = e.clientX + 'px';
+      drag.ghost.style.top = e.clientY + 'px';
+      const z = zoneAt(e.clientX, e.clientY);
+      zones.forEach(x => x.classList.toggle('hover', x === z));
+    });
+    const endDrag = e => {
+      if (!drag || drag.tag !== tag) return;
+      if (drag.ghost){
+        drag.ghost.remove();
+        tag.classList.remove('lifting');
+        zones.forEach(x => x.classList.remove('hover'));
+        tag._suppress = performance.now() + 400; // evita que el 'click' tras soltar seleccione esta misma tarjeta
+        const z = e.type === 'pointerup' ? zoneAt(e.clientX, e.clientY) : null;
+        if (z) place(tag, z.dataset.z);
+      }
+      drag = null;
+    };
+    tag.addEventListener('pointerup', endDrag);
+    tag.addEventListener('pointercancel', endDrag);
+    tag.addEventListener('click', () => {
+      if (performance.now() < (tag._suppress || 0) || tag.disabled) return;
+      select(tag);
+    });
+  });
+  zones.forEach(z => {
+    z.addEventListener('click', () => { if (selected) place(selected, z.dataset.z); });
+    z.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && selected){ e.preventDefault(); place(selected, z.dataset.z); } });
+  });
+
+  function finish(){
+    setScore('m3', Math.max(6, POINTS.m3 - 2 * errors));
+    S.answers.m3 = { errors };
+    const box = reveal(`<div class="card pista">
+        <div class="pista-h">🔎 LO QUE DESCUBRISTE</div>
+        <p class="pista-t">“${d.explain}”</p>
+        <p>${d.example}</p>
+      </div><div id="m3badge"></div>`, $('#m3end'));
+    const end = $('#m3badge', box);
+    giveBadge('agentes', end);
+    nextBtn(end, 'Continuar a la Misión 4 →', () => go('m4'));
+  }
+}
+
+/* =========================================================
+   N. MISIÓN 4: ¿CÓMO SE MUEVE?
+   ========================================================= */
+function renderM4(){
+  const d = P().m4;
+  app.innerHTML = shell(4, '🚢', '¿Cómo se mueve?', d.lead) + `
+    <div class="card map-card" id="mapCard">
+      <div class="map-wrap">${buildMap(d, P().label)}</div>
+      <p class="swipe-hint">↔ Desliza el mapa para verlo completo</p>
+      <div class="chain" id="chain">${d.chain.map((c, i) => `<span class="ch" data-i="${i}">${c}</span>`).join('<span class="ch-arrow" aria-hidden="true">→</span>')}</div>
+      <p class="route-cap" id="routeCap" aria-live="polite"></p>
+      <div class="legend">${[['mar', '🚢 Marítimo'], ['tierra', '🚛 Terrestre'], ['aire', '✈️ Aéreo']]
+        .filter(([m]) => Object.values(d.legs).some(l => l.mode === m))
+        .map(([m, t]) => `<span><i class="lg-${m}"></i>${t}</span>`).join('')}</div>
+      <p class="map-note">${d.note}</p>
+    </div>
+    <div class="card" id="m4order" style="margin-top:18px">
+      <p class="q-prompt">Ordena las etapas del circuito: toca cada etapa en el orden en que ocurre.</p>
+      <p class="hint">Si te equivocas, toca una casilla ocupada para devolver esa etapa.</p>
+      <ol class="slots" id="slots">${d.stages.map((_, i) => `<li class="slot" data-n="${i}"><span class="s-n">${i + 1}</span><span class="s-t">Etapa ${i + 1}<span class="s-d">Vacía</span></span></li>`).join('')}</ol>
+      <div class="chips" id="stagePool"></div>
+      <div class="row"><button class="btn primary" id="m4check" type="button" disabled>Revisar el orden</button><button class="btn ghost" id="m4clear" type="button">Vaciar</button></div>
+      <div id="m4fb"></div>
+    </div>
+    <div id="m4rest"></div>`;
+
+  /* ----- Ordenar etapas ----- */
+  let pool;
+  do { pool = shuffle(d.stages); } while (pool.every((s, i) => s.id === d.stages[i].id));
+  const seq = [];
+  let tries = 0, solved = false;
+
+  function drawOrder(){
+    $('#stagePool').innerHTML = pool.filter(s => !seq.includes(s)).map(s =>
+      `<button class="chip" type="button" data-id="${s.id}"><span aria-hidden="true">${s.e}</span>${s.t}</button>`).join('');
+    $$('#slots .slot').forEach((slot, i) => {
+      const s = seq[i];
+      slot.classList.toggle('filled', !!s);
+      slot.classList.remove('good', 'wrong');
+      slot.querySelector('.s-t').innerHTML = s ? `${s.e} ${s.t}<span class="s-d">${s.d}</span>` : `Etapa ${i + 1}<span class="s-d">Vacía</span>`;
+    });
+    $('#m4check').disabled = seq.length !== d.stages.length;
+    $$('#stagePool .chip').forEach(c => c.addEventListener('click', () => {
+      if (solved) return;
+      seq.push(d.stages.find(s => s.id === c.dataset.id));
+      drawOrder();
+    }));
+  }
+  $$('#slots .slot').forEach((slot, i) => slot.addEventListener('click', () => {
+    if (solved || !seq[i]) return;
+    seq.splice(i, 1);
+    drawOrder();
+  }));
+  $('#m4clear').addEventListener('click', () => { if (!solved){ seq.length = 0; drawOrder(); } });
+  $('#m4check').addEventListener('click', () => {
+    const ok = seq.map((s, i) => s.id === d.stages[i].id);
+    const nOk = ok.filter(Boolean).length;
+    $$('#slots .slot').forEach((slot, i) => { slot.classList.add(ok[i] ? 'good' : 'wrong'); });
+    if (nOk === d.stages.length){
+      solved = true;
+      award('m4a', tries);
+      $$('#slots .slot').forEach(s => s.classList.add('locked'));
+      $('#stagePool').remove();
+      $('#m4check').parentElement.remove();
+      $('#worldMap').classList.add('ordered');
+      fb($('#m4fb'), 'ok', `<strong>¡Circuito reconstruido!</strong> ${d.solved} Ahora mira en el mapa <b>dónde</b> ocurre cada etapa.`);
+      m4Route(d);
+      return;
+    }
+    tries++;
+    const first = ok.findIndex(v => !v);
+    fb($('#m4fb'), 'bad', `<strong>${nOk} de ${d.stages.length} etapas están en su lugar.</strong> Pista para la etapa ${first + 1}: ${d.stages[first].hint} Toca las casillas en rojo para devolverlas.`);
+  });
+  drawOrder();
+}
+
+function m4Route(d){
+  const box = reveal(`<div class="card">
+      <p class="q-prompt">Ahora observa cómo se conectan los territorios.</p>
+      <div class="row"><button class="btn primary big" id="playRoute" type="button">▶ Ver la ruta animada</button></div>
+      <div class="stops">${d.stops.map(s => `<div class="stop"><div class="stop-h"><span class="stop-n">${s.n}</span><b>${s.t}</b></div>
+        <p><b>${s.where}</b><span class="coord">${s.coord}</span></p><p>${s.d}</p></div>`).join('')}</div>
+    </div><div id="m4q1"></div><div id="m4q2"></div><div id="m4end"></div>`, $('#m4rest'));
+
+  let playing = false, played = false;
+  $('#playRoute').addEventListener('click', async () => {
+    if (playing) return;
+    playing = true;
+    const btn = $('#playRoute');
+    btn.disabled = true;
+    smoothScroll($('#mapCard'));
+    resetRoutes();
+    const chips = $$('#chain .ch');
+    chips.forEach(c => c.classList.remove('on', 'done'));
+    chips[0].classList.add('on');
+    for (const ph of d.phases){
+      $('#routeCap').textContent = ph.cap;
+      await Promise.all(ph.legs.map(id => animateLeg(id)));
+      chips.forEach((c, i) => { c.classList.toggle('done', i < ph.to); c.classList.toggle('on', i === ph.to); });
+      await new Promise(r => setTimeout(r, REDUCED ? 0 : 350));
+    }
+    $('#routeCap').textContent = d.chain.join(' → ') + ': un solo producto, muchos territorios.';
+    btn.disabled = false; btn.textContent = '↻ Repetir la ruta';
+    playing = false;
+    if (!played){
+      played = true;
+      m4Questions(d, box);
+      requestAnimationFrame(() => smoothScroll($('#m4q1')));
+    }
+  });
+}
+function m4Questions(d, box){
+  mcq($('#m4q1', box), d.qInfra, () => {
+    mcq($('#m4q2', box), d.qRuta, () => {
+      const end = $('#m4end', box);
+      giveBadge('redes', end);
+      nextBtn(end, 'Continuar a la Misión 5 →', () => go('m5'));
+    });
+    requestAnimationFrame(() => smoothScroll($('#m4q2')));
+  });
+}
+
+/* =========================================================
+   O. MISIÓN 5: LA RADIOGRAFÍA DEL CIRCUITO
+   ========================================================= */
+function renderM5(){
+  const d = P().m5;
+  const m2 = S.answers.m2;
+  app.innerHTML = shell(5, '🌎', 'La radiografía del circuito', d.lead) + `
+    <div class="xray">
+      <div class="xray-h"><h3>${d.title}</h3></div>
+      <div class="xray-body">${d.fields.map(f => `
+        <div class="rx-field" data-f="${f.id}">
+          <div class="rx-top"><h4><span aria-hidden="true">${f.e}</span> ${f.t}:</h4><span class="rx-val" id="rxv-${f.id}"></span></div>
+          ${f.note ? `<p class="rx-note">${f.note}</p>` : ''}
+          ${f.id === 'territorio' && m2 ? `<p class="rx-note">En la Misión 2 elegiste ${m2.name}; aquí elige un territorio real de la ruta.</p>` : ''}
+          <div class="chips">${f.opts.map((o, i) => `<button class="chip small" type="button" data-i="${i}">${o.t}</button>`).join('')}</div>
+          <div class="rx-fb" role="status"></div>
+        </div>`).join('')}
+      </div>
+    </div>
+    <div id="m5rest"></div>`;
+
+  const clean = {}; /* campos resueltos sin error */
+  const filled = {};
+  let finished = false;
+
+  $$('.rx-field').forEach(field => {
+    const f = d.fields.find(x => x.id === field.dataset.f);
+    clean[f.id] = true;
+    const fbx = $('.rx-fb', field);
+    $$('.chip', field).forEach(c => c.addEventListener('click', () => {
+      const o = f.opts[+c.dataset.i];
+      if (o.ok){
+        $$('.chip', field).forEach(x => x.classList.remove('good'));
+        c.classList.add('good');
+        const v = $('#rxv-' + f.id);
+        v.textContent = o.t; v.classList.add('filled');
+        fbx.textContent = ''; fbx.className = 'rx-fb';
+        S.answers.rx[f.id] = o.t;
+        filled[f.id] = true;
+        checkDone();
+      } else {
+        clean[f.id] = false;
+        c.classList.add('badc'); c.disabled = true; shake(c);
+        fbx.className = 'rx-fb bad';
+        fbx.textContent = '✖ ' + o.why;
+      }
+    }));
+  });
+
+  function checkDone(){
+    if (finished || Object.keys(filled).length < d.fields.length) return;
+    finished = true;
+    const n = Object.values(clean).filter(Boolean).length;
+    setScore('m5a', Math.round(POINTS.m5a * n / d.fields.length));
+    const box = reveal(`<div class="card">
+        <p class="q-prompt">✍️ Resume el circuito con tus palabras (opcional)</p>
+        <p class="hint">Por ejemplo: qué recurso te sorprendió, qué territorio no esperabas o qué conecta todo.</p>
+        <label class="sr" for="m5text">Resumen con tus palabras</label>
+        <textarea id="m5text" placeholder="${d.placeholder}"></textarea>
+      </div>
+      <blockquote class="card quote" style="margin:18px 0 0"><p class="big-quote">“${d.qFinal.prompt}”</p></blockquote>
+      <div id="m5q"></div><div id="m5end"></div>`, $('#m5rest'));
+    $('#m5text').addEventListener('input', e => { S.answers.m5text = e.target.value.trim(); });
+    mcq($('#m5q', box), d.qFinal, () => {
+      nextBtn($('#m5end', box), 'Terminar la misión 🎉', () => go('final'));
+    });
+  }
+}
+
+/* =========================================================
+   P. PANTALLA FINAL
+   ========================================================= */
+function category(score){
+  if (score >= 90) return { e:'🌎', t:'EXPLORADOR GLOBAL' };
+  if (score >= 70) return { e:'🗺️', t:'DETECTIVE TERRITORIAL' };
+  if (score >= 50) return { e:'🔎', t:'INVESTIGADOR EN FORMACIÓN' };
+  return { e:'🧭', t:'SIGUE EXPLORANDO' };
+}
+function renderFinal(){
+  const d = P(), rx = S.answers.rx, m2 = S.answers.m2;
+  const score = total(), cat = category(score);
+  app.innerHTML = `
+    <section class="final-hero">
+      <h2>🎉 ¡MISIÓN COMPLETADA!</h2>
+      <p>Acabas de seguir la ruta de un producto a través del territorio.</p>
+    </section>
+    <div class="stack">
+      <div class="card score-wrap">
+        <div class="ring" id="ring" style="--p:0"><div class="ring-in"><div><b id="scoreNum">0</b><br><small>de 100</small></div></div></div>
+        <div>
+          <p class="cat">${cat.e} ${cat.t}</p>
+          <p class="cat-note">Este número solo muestra cuánto avanzaste dentro de la misión y cuántos intentos usaste. No es una calificación ni mide tu capacidad: es el nombre divertido de tu etapa como explorador o exploradora.</p>
+        </div>
+      </div>
+      <div class="summary">
+        <div class="sum"><span class="s-e">🌱</span><b>Factor natural identificado</b><p>${rx.natural || '—'}</p></div>
+        <div class="sum"><span class="s-e">👥</span><b>Agente identificado</b><p>${rx.agente || '—'}</p></div>
+        <div class="sum"><span class="s-e">🏭</span><b>Factor socioeconómico identificado</b><p>${rx.socio || '—'}</p></div>
+        <div class="sum"><span class="s-e">🗺️</span><b>Territorios involucrados</b><p>${d.summary.territorios}${m2 ? `. Además, analizaste ${m2.name}.` : ''}</p></div>
+        <div class="sum"><span class="s-e">🚢</span><b>Transporte</b><p>${d.summary.transporte}</p></div>
+        <div class="sum"><span class="s-e">🌎</span><b>Escala global</b><p>${d.summary.escala}</p></div>
+      </div>
+      <div class="card">
+        <p class="q-prompt" style="margin-top:0">Insignias obtenidas</p>
+        <div class="badges" style="margin-top:10px">${S.badges.map(k => `<span class="bdg">${BADGES[k].e} ${BADGES[k].t}</span>`).join('') || '<span>—</span>'}</div>
+      </div>
+      <div class="card think">
+        <h3>💭 PIENSA COMO GEÓGRAFO</h3>
+        <p>Cuando vuelvas a mirar un producto en una tienda, pregúntate:</p>
+        <ul>
+          <li>🌱 ¿De dónde vienen sus recursos?</li>
+          <li>👥 ¿Quiénes participan?</li>
+          <li>📍 ¿Por qué se produce ahí?</li>
+          <li>🗺️ ¿Qué territorios conecta?</li>
+          <li>🚢 ¿Cómo llegó hasta mí?</li>
+        </ul>
+      </div>
+      <div class="row" style="justify-content:center">
+        <button class="btn primary big" id="seeRx" type="button">📊 Ver mi radiografía</button>
+        <button class="btn ghost big" id="again" type="button">🔄 Reiniciar misión</button>
+      </div>
+    </div>`;
+
+  $('#seeRx').addEventListener('click', openRadiografia);
+  $('#again').addEventListener('click', restart);
+
+  /* Contador animado del puntaje */
+  const ring = $('#ring'), num = $('#scoreNum');
+  if (REDUCED){ ring.style.setProperty('--p', score); num.textContent = score; }
+  else {
+    const t0 = performance.now();
+    (function tick(t){
+      const k = Math.min(1, (t - t0) / 1400), v = Math.round(score * (1 - Math.pow(1 - k, 3)));
+      ring.style.setProperty('--p', v); num.textContent = v;
+      if (k < 1) requestAnimationFrame(tick);
+    })(t0);
+    confetti();
+  }
+}
+function confetti(){
+  const c = document.createElement('div');
+  c.className = 'confetti';
+  const colors = ['#8E7CF0', '#F29BC0', '#5FA8F5', '#FFD35C', '#fff'];
+  for (let i = 0; i < 44; i++){
+    const s = document.createElement('span');
+    s.style.left = Math.random() * 100 + 'vw';
+    s.style.background = colors[i % colors.length];
+    s.style.animationDelay = (Math.random() * .8) + 's';
+    s.style.animationDuration = (2.4 + Math.random() * 1.4) + 's';
+    c.appendChild(s);
+  }
+  document.body.appendChild(c);
+  setTimeout(() => c.remove(), 4500);
+}
+
+/* =========================================================
+   Q. MODAL: VER MI RADIOGRAFÍA
+   ========================================================= */
+function openRadiografia(){
+  const d = P(), rx = S.answers.rx, m2 = S.answers.m2;
+  const modal = $('#modal');
+  const rows = d.m5.fields.map(f => `<div class="rx-row"><span class="rx-e">${f.e}</span><div><b>${f.t}</b><p>${rx[f.id] || '—'}</p></div></div>`).join('');
+  modal.innerHTML = `<div class="sheet" role="dialog" aria-modal="true" aria-labelledby="rxTitle">
+    <button class="x" type="button" aria-label="Cerrar">✕</button>
+    <h2 id="rxTitle">📋 Radiografía territorial de ${d.label}</h2>
+    ${rows}
+    ${m2 ? `<div class="rx-row"><span class="rx-e">🗺️</span><div><b>Mi decisión de localización</b><p>${m2.name}, por: ${m2.factors.join(', ').toLowerCase()}</p></div></div>` : ''}
+    <div class="rx-row"><span class="rx-e">🌎</span><div><b>¿Por qué es un circuito productivo global?</b><p>${S.answers.m5b || '—'}</p></div></div>
+    ${S.answers.m5text ? `<div class="rx-row"><span class="rx-e">✍️</span><div><b>Con mis palabras</b><p>${escapeHTML(S.answers.m5text)}</p></div></div>` : ''}
+    <p class="hint" style="margin-top:12px">Progreso en la misión: ${total()} de 100</p>
+    <div class="row"><button class="btn ghost" id="printRx" type="button">🖨️ Imprimir</button><button class="btn primary" id="closeRx" type="button">Cerrar</button></div>
+  </div>`;
+  modal.classList.add('open');
+  const close = () => { modal.classList.remove('open'); modal.innerHTML = ''; $('#seeRx') && $('#seeRx').focus(); };
+  $('.x', modal).addEventListener('click', close);
+  $('#closeRx').addEventListener('click', close);
+  $('#printRx').addEventListener('click', () => window.print());
+  modal.onclick = e => { if (e.target === modal) close(); };
+  $('#closeRx').focus();
+}
+function escapeHTML(s){ return s.replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c])); }
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && $('#modal').classList.contains('open')) $('#modal .x').click();
+});
+
+/* =========================================================
+   R. INICIO
+   ========================================================= */
+go('home');
+</script>
+</body>
+</html>

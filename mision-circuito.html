@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Geoeconomía: Misión Circuito</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#14284b; --ink2:#2b3d63; --mut:#5c6a85; --line:#d9e1ec;
+  --paper:#eef2f6; --card:#ffffff;
+  --azul:#2d6cdf; --azul-l:#e3ecfc;
+  --verde:#1a9e74; --verde-l:#ddf4eb;
+  --lila:#8a6ee8; --lila-l:#eee9fd;
+  --amar:#ffd36b; --amar-l:#fff5d9;
+  --rojo:#d9534f; --rojo-l:#fce8e7;
+  --font:"Archivo",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font-family:var(--font);font-size:16px;line-height:1.55;color:var(--ink);background:var(--paper);
+  background-image:radial-gradient(circle at 1px 1px,#d5deea 1px,transparent 0);background-size:22px 22px;
+  padding-bottom:env(safe-area-inset-bottom,0px)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--lila);outline-offset:2px}
+h1,h2,h3{line-height:1.15;margin:0 0 .4em;font-stretch:112%}
+h2{font-size:clamp(1.35rem,3.4vw,1.85rem);font-weight:800}
+h3{font-size:1.08rem;font-weight:750}
+p{margin:.3em 0 .8em}
+.small{font-size:.86rem}.muted{color:var(--mut)}
+.wrap{max-width:1040px;margin:0 auto;padding:0 16px}
+
+/* Barra superior */
+.top{position:sticky;top:0;z-index:30;background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top,0px);box-shadow:0 2px 0 #0b1a36}
+.top-in{display:flex;align-items:center;gap:12px;padding:10px 16px;max-width:1040px;margin:0 auto;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:8px;font-weight:800;font-stretch:118%;cursor:pointer;background:none;border:0;color:#fff;padding:0}
+.brand span{font-size:1.4rem}
+.clues{margin-left:auto;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);padding:4px 10px;border-radius:999px;font-size:.88rem;white-space:nowrap}
+.track{display:flex;gap:6px;overflow-x:auto;padding:0 16px 10px;max-width:1040px;margin:0 auto;scrollbar-width:none}
+.track::-webkit-scrollbar{display:none}
+.tk{flex:0 0 auto;border:1px solid rgba(255,255,255,.22);background:transparent;color:#c8d3ea;border-radius:10px;padding:5px 10px;font-size:.78rem;line-height:1.2;text-align:left;cursor:pointer}
+.tk b{display:block;font-size:.84rem;color:#fff}
+.tk.done{background:var(--verde);border-color:var(--verde);color:#eafff6}
+.tk.cur{background:var(--amar);border-color:var(--amar);color:var(--ink)}.tk.cur b{color:var(--ink)}
+.tk.lock{opacity:.45;cursor:not-allowed}
+
+/* Hero */
+.hero{background:var(--ink);color:#fff;position:relative;overflow:hidden}
+.hero svg.topo{position:absolute;inset:0;width:100%;height:100%;opacity:.9}
+.hero-in{position:relative;max-width:1040px;margin:0 auto;padding:46px 16px 54px;display:grid;gap:26px}
+.hero h1{font-size:clamp(2.3rem,8vw,4.6rem);font-weight:800;font-stretch:125%;letter-spacing:-.01em;margin:0}
+.hero h1 small{display:block;font-size:.42em;font-weight:600;font-stretch:100%;color:var(--amar);letter-spacing:.02em;margin-bottom:6px}
+.hero .q{font-size:clamp(1.15rem,3vw,1.5rem);color:#d9e4ff;max-width:34ch;margin:8px 0 0}
+.hero .lead{max-width:58ch;color:#c3cfea}
+.route-path{stroke-dasharray:1400;stroke-dashoffset:1400;animation:draw 3.2s ease-out .3s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@media (prefers-reduced-motion:reduce){.route-path{animation:none;stroke-dashoffset:0}*{scroll-behavior:auto!important}}
+
+/* Botones */
+.btn{border:2px solid var(--ink);background:#fff;color:var(--ink);border-radius:12px;padding:10px 18px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:8px;min-height:44px;transition:transform .08s}
+.btn:active{transform:translateY(1px)}
+.btn.primary{background:var(--azul);border-color:var(--azul);color:#fff}
+.btn.go{background:var(--amar);border-color:var(--amar);color:var(--ink);font-size:1.08rem;padding:13px 24px}
+.btn.green{background:var(--verde);border-color:var(--verde);color:#fff}
+.btn.ghost{border-color:var(--line);background:#fff}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:12px 0}
+
+/* Contenedores */
+main{padding:22px 0 60px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;margin:0 0 16px}
+.card.case{border-left:6px solid var(--lila)}
+.mhead{display:flex;gap:14px;align-items:flex-start;margin:6px 0 18px}
+.mhead .ic{font-size:2rem;width:56px;height:56px;flex:0 0 56px;display:grid;place-items:center;background:#fff;border:2px solid var(--ink);border-radius:16px}
+.mhead .num{font-size:.85rem;font-weight:700;color:var(--azul)}
+.step{border-top:2px dashed var(--line);padding-top:16px;margin-top:18px}
+.step-t{display:flex;align-items:center;gap:8px;font-weight:750;margin-bottom:6px}
+.step-t i{font-style:normal;background:var(--ink);color:#fff;border-radius:8px;padding:1px 8px;font-size:.8rem}
+.concept{background:var(--amar-l);border:1px solid #f1dc9c;border-radius:14px;padding:14px 16px;margin:12px 0}
+.concept b:first-child{display:block;margin-bottom:2px}
+.sim{display:inline-block;background:var(--lila);color:#fff;font-weight:800;font-size:.75rem;letter-spacing:.04em;padding:3px 9px;border-radius:6px}
+.real{background:var(--verde-l);border:1px solid #b8e5d3;border-radius:12px;padding:10px 14px;font-size:.92rem;margin:10px 0}
+details.src{margin-top:18px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 14px}
+details.src summary{cursor:pointer;font-weight:700}
+details.src li{margin:4px 0}
+.grid2{display:grid;gap:14px;grid-template-columns:1fr}
+.grid3{display:grid;gap:12px;grid-template-columns:1fr}
+@media(min-width:720px){.grid2{grid-template-columns:1fr 1fr}.grid3{grid-template-columns:repeat(3,1fr)}}
+
+/* Formularios */
+label.q{display:block;font-weight:650;margin:12px 0 4px}
+textarea,input[type=text],select{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;background:#fbfcfe;min-height:44px}
+textarea{min-height:76px;resize:vertical}
+textarea:focus,select:focus,input:focus{border-color:var(--azul);outline:none;background:#fff}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0}
+.pill{border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:9px 13px;cursor:pointer;text-align:left;min-height:44px;line-height:1.3}
+.pill:hover{border-color:var(--azul)}
+.pill.sel{border-color:var(--azul);background:var(--azul-l);font-weight:650}
+.pill.ok{border-color:var(--verde);background:var(--verde-l)}
+.pill.bad{border-color:var(--rojo);background:var(--rojo-l)}
+.pills.col{flex-direction:column}.pills.col .pill{width:100%}
+
+/* Retroalimentación */
+.fb{border-radius:14px;padding:12px 14px;margin:12px 0;font-size:.95rem;border:1px solid}
+.fb.ok{background:var(--verde-l);border-color:#a9dfc9}
+.fb.bad{background:var(--rojo-l);border-color:#f2b9b6}
+.fb.info{background:var(--azul-l);border-color:#bcd0f6}
+.fb ul{margin:6px 0 0;padding-left:18px}.fb li{margin:5px 0}
+.okl{color:#0f5e45}.badl{color:#8e2a26}
+
+/* Clasificador */
+.pool{min-height:64px;border:2px dashed #b8c5da;border-radius:14px;padding:10px;display:flex;flex-wrap:wrap;gap:8px;background:#f7f9fc;margin:8px 0}
+.bins{display:grid;gap:10px;grid-template-columns:1fr}
+@media(min-width:620px){.bins.b2{grid-template-columns:1fr 1fr}.bins.b5{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:960px){.bins.b5{grid-template-columns:repeat(5,1fr)}}
+.bin{border:2px solid var(--line);border-radius:14px;background:#fff;min-height:96px;padding:8px;cursor:pointer;transition:border-color .15s,background .15s}
+.bin.armed{border-color:var(--azul);background:#f4f8ff}
+.bin.over{border-color:var(--lila);background:var(--lila-l)}
+.bin-h{font-weight:800;font-size:.92rem;margin-bottom:6px}
+.bin-body{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1.5px solid var(--ink2);background:#fff;border-radius:10px;padding:7px 10px;font-size:.88rem;cursor:grab;text-align:left;line-height:1.25;min-height:40px;touch-action:manipulation}
+.chip.sel{background:var(--ink);color:#fff}
+.chip.ok{border-color:var(--verde);background:var(--verde-l);color:#0f5e45}
+.chip.bad{border-color:var(--rojo);background:var(--rojo-l);color:#8e2a26}
+.hint-line{font-size:.88rem;color:var(--mut);margin:4px 0}
+
+/* Productos */
+.prods{display:grid;gap:10px;grid-template-columns:repeat(2,1fr)}
+@media(min-width:620px){.prods{grid-template-columns:repeat(4,1fr)}}
+.prod{background:#fff;border:2px solid var(--line);border-radius:16px;padding:14px 10px;cursor:pointer;text-align:center;font-weight:700}
+.prod .e{font-size:2.3rem;display:block}
+.prod small{display:block;font-weight:500;color:var(--mut);font-size:.78rem}
+.prod:hover,.prod.sel{border-color:var(--azul);background:var(--azul-l)}
+.dossier{display:flex;gap:16px;align-items:center;background:var(--ink);color:#fff;border-radius:18px;padding:16px 18px;margin-bottom:16px;position:relative;overflow:hidden}
+.dossier .e{font-size:3rem}
+.dossier .tag{font-size:.8rem;color:var(--amar);font-weight:700}
+.dossier h3{font-size:1.4rem;margin:0}
+
+/* Territorios */
+.terr{border:2px solid var(--line);border-radius:16px;padding:14px;background:#fff;cursor:pointer;text-align:left;width:100%}
+.terr.sel{border-color:var(--verde);background:#f3fbf7}
+.terr h3{display:flex;gap:6px;align-items:center}
+.terr dl{margin:0;font-size:.88rem;display:grid;grid-template-columns:auto 1fr;gap:3px 8px}
+.terr dt{font-weight:700;color:var(--ink2)}.terr dd{margin:0;color:var(--mut)}
+
+/* Agentes */
+.agents{display:grid;gap:8px;grid-template-columns:repeat(2,1fr)}
+@media(min-width:720px){.agents{grid-template-columns:repeat(3,1fr)}}
+.agent{background:var(--lila-l);border-radius:12px;padding:9px 11px;font-size:.88rem}
+.chain{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:.9rem;margin-top:8px}
+.chain span{background:#fff;border:1.5px solid var(--verde);border-radius:10px;padding:5px 9px}
+.chain em{font-style:normal;color:var(--verde);font-weight:800}
+
+/* Circuito */
+.route{display:flex;flex-direction:column;gap:6px;margin:8px 0;counter-reset:st}
+.slot{display:flex;align-items:center;gap:10px;border:2px solid var(--line);border-radius:12px;background:#fff;padding:8px 10px;cursor:pointer;text-align:left;width:100%}
+.slot::before{counter-increment:st;content:counter(st);width:28px;height:28px;flex:0 0 28px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:800;font-size:.85rem}
+.slot.ok{border-color:var(--verde);background:var(--verde-l)}.slot.bad{border-color:var(--rojo);background:var(--rojo-l)}
+.slot small{display:block;color:var(--mut)}
+.mapbox{background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px;overflow-x:auto}
+.mapbox svg{display:block;width:100%;min-width:520px;height:auto}
+.flow{stroke-dasharray:8 6;animation:flow 1.2s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-28}}
+@media (prefers-reduced-motion:reduce){.flow{animation:none}}
+.sentence{background:var(--azul-l);border-radius:12px;padding:10px 14px;font-weight:600;margin:10px 0}
+
+/* Datos */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:#fff}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:.92rem}
+th,td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:right}
+th:first-child,td:first-child{text-align:left}
+th{background:#f4f7fb;font-weight:700;vertical-align:bottom}
+th small{display:block;font-weight:500;color:var(--mut)}
+tr:last-child td{border-bottom:0}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+.tab{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;cursor:pointer;font-size:.86rem}
+.tab.sel{background:var(--ink);color:#fff;border-color:var(--ink)}
+.bars{display:flex;flex-direction:column;gap:8px;margin:8px 0}
+.bar{display:grid;grid-template-columns:110px 1fr;gap:8px;align-items:center;font-size:.88rem}
+.bar .tr{background:#eef2f8;border-radius:8px;height:26px;overflow:hidden}
+.bar .fl{height:100%;background:var(--azul);border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;color:#fff;font-weight:700;font-size:.8rem;transition:width .5s;min-width:34px}
+.lvl{border:1px solid var(--line);border-radius:14px;padding:14px;margin:12px 0;background:#fff}
+.lvl .lt{font-weight:800;color:var(--lila);font-size:.85rem}
+
+/* Mapas */
+.maps{display:grid;gap:14px;grid-template-columns:1fr}
+@media(min-width:860px){.maps{grid-template-columns:1fr 1fr}}
+.map{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px}
+.map h3{margin-bottom:2px}
+.map svg{width:100%;height:auto;display:block}
+.map svg .reg{stroke:#fff;stroke-width:2.5;stroke-linejoin:round;cursor:pointer}
+.map svg .reg:hover,.map svg .reg.hl{stroke:var(--ink);stroke-width:3}
+.legend{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:.8rem;margin-top:6px}
+.legend i{display:inline-block;width:16px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:4px;border:1px solid #c9d2e0}
+.mapinfo{min-height:24px;font-size:.88rem;color:var(--ink2);margin-top:6px}
+.reading{display:flex;flex-wrap:wrap;gap:6px}
+
+/* Presión */
+.pchain{display:flex;flex-direction:column;gap:4px;align-items:stretch;max-width:560px}
+.pchain .ar{text-align:center;color:var(--mut);font-weight:800}
+.pchain label{font-size:.8rem;font-weight:800;color:var(--lila);margin:0}
+
+/* Expediente */
+.exp-sec{border-left:4px solid var(--azul);padding:4px 0 4px 14px;margin:14px 0}
+.exp-sec h3{margin-bottom:2px}
+.rub td:last-child,.rub th:last-child{text-align:center;width:90px}
+.final{background:var(--ink);color:#fff;border-radius:20px;padding:28px 22px;text-align:center}
+.final p{max-width:46ch;margin:.5em auto;color:#dbe4fa}
+.final h2{color:var(--amar)}
+.notes li{margin:6px 0}
+.teacher summary{cursor:pointer;font-weight:800;font-size:1.05rem}
+.teacher ul{padding-left:20px}
+
+.stops{display:grid;gap:8px;grid-template-columns:repeat(2,1fr)}
+@media(min-width:720px){.stops{grid-template-columns:repeat(4,1fr)}}
+.stop{border:1.5px solid var(--line);border-radius:12px;padding:8px 12px;background:#fff}
+.stop b{display:block}.stop.done{border-color:var(--verde);background:var(--verde-l)}
+.slot.clue::before{content:"🔎";background:var(--amar-l)}
+[hidden]{display:none!important}
+.card.lab{border:2px solid var(--verde);background:#f3fbf7}
+.labq{font-weight:700;color:#0f5e45;border-left:4px solid var(--verde);padding-left:12px}
+.linkbtn{background:none;border:0;color:var(--azul);font-weight:700;text-decoration:underline;cursor:pointer;padding:0}
+.mapguide{background:var(--amar-l);border:1px solid #f1dc9c;border-radius:14px;padding:12px 14px;margin-top:6px}
+.checks{display:grid;gap:6px;grid-template-columns:1fr}
+@media(min-width:620px){.checks{grid-template-columns:1fr 1fr}}
+.chk{display:flex;gap:8px;align-items:center;background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:8px 10px;font-size:.92rem;cursor:pointer;min-height:44px}
+.chk input{width:20px;height:20px;accent-color:var(--verde)}
+.learn{display:grid;gap:8px;grid-template-columns:repeat(2,1fr)}
+@media(min-width:720px){.learn{grid-template-columns:repeat(4,1fr)}}
+.lrn{border:1.5px solid var(--line);border-radius:12px;padding:10px;background:#fff;display:flex;flex-direction:column;gap:2px}
+.lrn-i{font-size:1.5rem}
+.didlist{display:grid;gap:8px;grid-template-columns:1fr}
+@media(min-width:720px){.didlist{grid-template-columns:repeat(2,1fr)}}
+.did{display:flex;gap:10px;align-items:center;background:var(--verde-l);border-radius:12px;padding:8px 12px}
+.did>span{width:28px;height:28px;flex:0 0 28px;border-radius:50%;background:var(--verde);color:#fff;display:grid;place-items:center;font-weight:800}
+.hallazgo{border-left:6px solid var(--azul)}
+.resetbtn{background:transparent;border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:999px;padding:4px 12px;font-size:.85rem;cursor:pointer;min-height:32px;white-space:nowrap}
+.resetbtn:hover{background:rgba(255,255,255,.12)}
+/* Toast */
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,120px);background:var(--ink);color:#fff;border-radius:14px;padding:12px 18px;font-weight:700;z-index:50;transition:transform .35s;box-shadow:0 6px 0 #0b1a36;max-width:92vw;text-align:center}
+.toast.show{transform:translate(-50%,0)}
+.toast small{display:block;font-weight:500;color:var(--amar)}
+.foot{text-align:center;font-size:.8rem;color:var(--mut);padding:20px 16px 30px}
+@media print{.top,.toast,.noprint,.foot{display:none!important}body{background:#fff}.card{break-inside:avoid;border-color:#bbb}}
+</style>
+</head>
+<body>
+<header class="top" id="top"></header>
+<div id="app"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="foot">Laboratorio Cartográfico de Miss Viridiana · Geografía Económica</div>
+<script>
+"use strict";
+/* =========================================================
+   DATOS DEL CASO
+   Las coordenadas x,y de cada etapa son para un esquema (no a escala).
+   o = orden de la etapa; etapas con el mismo "o" pueden intercambiarse.
+   ========================================================= */
+const TERR = ['Valle Verde','Monte Frío','Tierra Cálida','Puerto Azul'];
+
+const SRC = {
+  siap:'SIAP – Servicio de Información Agroalimentaria y Pesquera (gob.mx/siap)',
+  fao:'FAOSTAT – Organización de las Naciones Unidas para la Alimentación y la Agricultura (fao.org/faostat)',
+  inegi:'INEGI – Censos Económicos y Censo Agropecuario (inegi.org.mx)',
+  comtrade:'UN Comtrade – Base de datos de comercio internacional de la ONU (comtradeplus.un.org)',
+  dm:'Data México – Secretaría de Economía (economia.gob.mx/datamexico)',
+  usgs:'USGS – Mineral Commodity Summaries, Servicio Geológico de EE. UU. (usgs.gov)',
+  bm:'Banco Mundial – Indicadores del desarrollo mundial (datos.bancomundial.org)'
+};
+
+const PRODUCTS = [
+ {id:'celular',name:'Teléfono celular',e:'📱',type:'ind',
+  prim:'Extracción de litio y cobalto',sec:'Ensamblaje de teléfonos en una fábrica',
+  m2:'instalar una planta de ensamblaje de teléfonos celulares',
+  stages:[
+   {t:'Diseño y software',p:'Centros de diseño e investigación de empresas tecnológicas (p. ej., EE. UU., Corea del Sur)',x:95,y:70,o:1},
+   {t:'Extracción de minerales',p:'Minas de litio y cobalto (p. ej., Chile, R. D. del Congo)',x:250,y:250,o:1},
+   {t:'Fabricación de componentes',p:'Fábricas de chips, pantallas y baterías en Asia oriental',x:500,y:80,o:2},
+   {t:'Ensamblaje',p:'Plantas de ensamblaje (p. ej., China, India)',x:440,y:150,o:3},
+   {t:'Transporte marítimo',p:'Ruta transpacífica hacia un puerto mexicano del Pacífico',x:300,y:150,o:4},
+   {t:'Distribución',p:'Centros logísticos, tiendas y comercio en línea en México',x:150,y:170,o:5},
+   {t:'Consumo',p:'Tu ciudad: compra, uso y desecho',x:120,y:230,o:6}],
+  scale:['global'],
+  why:'Participan muchos territorios de varios continentes, cada uno especializado en una etapa (diseño, minería, componentes, ensamblaje). Las etapas dependen de flujos internacionales de mercancías, capital e información.',
+  ctx:'La República Democrática del Congo es el principal productor mundial de cobalto, mineral usado en baterías.',ctxSrc:'USGS, Mineral Commodity Summaries',
+  acts:[['Extracción de minerales para baterías',['minerales','agua','vegetacion']],['Fabricación de chips y componentes',['energia','agua','aire']],['Desecho de aparatos electrónicos',['urbano','minerales']]],
+  src:['usgs','comtrade','inegi','dm']},
+
+ {id:'tenis',name:'Tenis',e:'👟',type:'ind',
+  prim:'Extracción de petróleo y recolección de hule natural',sec:'Corte, costura y pegado de tenis',
+  m2:'instalar una fábrica de tenis',
+  stages:[
+   {t:'Diseño',p:'Oficinas de diseño de marcas deportivas',x:90,y:80,o:1},
+   {t:'Materias primas',p:'Petróleo (hules sintéticos), algodón y hule natural del Sudeste asiático',x:520,y:230,o:1},
+   {t:'Fabricación de materiales',p:'Plantas de textiles, espumas y suelas',x:470,y:110,o:2},
+   {t:'Ensamblaje del calzado',p:'Fábricas en Asia (p. ej., Vietnam, China) o en León, Guanajuato',x:400,y:170,o:3},
+   {t:'Transporte',p:'Barco y tráiler hasta centros de distribución',x:280,y:150,o:4},
+   {t:'Distribución y venta',p:'Tiendas departamentales, deportivas y en línea',x:160,y:170,o:5},
+   {t:'Consumo',p:'Tu ciudad: uso y desecho',x:120,y:235,o:6}],
+  scale:['global'],
+  why:'El diseño, las materias primas, la fabricación de materiales y el ensamblaje suelen ocurrir en territorios distintos y lejanos, conectados por transporte internacional. Aun cuando el ensamblaje sea en León, muchos materiales se importan.',
+  ctx:'León, Guanajuato, es el principal centro productor de calzado en México.',ctxSrc:'INEGI, Censos Económicos',
+  acts:[['Fabricación de espumas, suelas y pegamentos',['energia','aire','agua']],['Cultivo de algodón para textiles',['agua','suelo']]],
+  src:['inegi','dm','comtrade']},
+
+ {id:'cafe',name:'Café',e:'☕',type:'agro',
+  prim:'Cultivo y cosecha del cafeto',sec:'Tostado y molido del café',
+  m2:'establecer una zona de cultivo de café',
+  stages:[
+   {t:'Cultivo',p:'Fincas en la Sierra de Chiapas, Veracruz u Oaxaca',x:250,y:255,o:1},
+   {t:'Beneficio',p:'Despulpado, lavado y secado cerca de las fincas',x:305,y:225,o:2},
+   {t:'Acopio y comercialización',p:'Cooperativas y comercializadoras regionales',x:350,y:180,o:3},
+   {t:'Tostado y empaque',p:'Plantas tostadoras en ciudades',x:300,y:120,o:4},
+   {t:'Transporte',p:'Camiones por carretera hacia las ciudades',x:220,y:110,o:5},
+   {t:'Distribución',p:'Supermercados, cafeterías y tiendas',x:150,y:80,o:6},
+   {t:'Consumo',p:'Hogares y cafeterías de tu ciudad',x:95,y:120,o:7}],
+  scale:['regional','global'],
+  why:'Si el café se consume en México, conecta varias regiones del país (zonas de montaña productoras, ciudades donde se tuesta y consume): es un circuito regional. Si el grano se exporta, el mismo circuito se vuelve global.',
+  ctx:'Chiapas es el principal estado productor de café en México.',ctxSrc:'SIAP',
+  acts:[['Cultivo de café en laderas',['suelo','vegetacion','agua']],['Beneficio húmedo del grano',['agua']],['Tostado industrial',['energia','aire']]],
+  src:['siap','fao','inegi']},
+
+ {id:'chocolate',name:'Chocolate',e:'🍫',type:'agro',
+  prim:'Cultivo y cosecha de cacao',sec:'Fabricación de chocolate (molienda y mezcla)',
+  m2:'establecer una zona de cultivo de cacao',
+  stages:[
+   {t:'Cultivo de cacao',p:'Plantaciones en Tabasco y Chiapas o en África occidental',x:330,y:250,o:1},
+   {t:'Fermentación y secado',p:'Cerca de las plantaciones',x:380,y:215,o:2},
+   {t:'Transporte del grano',p:'Hacia puertos y plantas procesadoras',x:300,y:160,o:3},
+   {t:'Transformación',p:'Molienda y mezcla con azúcar y leche en plantas industriales',x:200,y:100,o:4},
+   {t:'Empaque y distribución',p:'Centros de distribución y tiendas',x:140,y:150,o:5},
+   {t:'Consumo',p:'Hogares y tiendas de tu ciudad',x:100,y:220,o:6}],
+  scale:['global','regional'],
+  why:'Gran parte del cacao del mundo se cultiva en territorios tropicales y se procesa o consume en otros países, lo que crea un circuito global. Un chocolate elaborado con cacao de Tabasco y vendido en México formaría un circuito regional.',
+  ctx:'Costa de Marfil y Ghana concentran gran parte de la producción mundial de cacao.',ctxSrc:'FAOSTAT',
+  acts:[['Expansión de plantaciones de cacao',['vegetacion','suelo']],['Molienda y procesamiento industrial',['energia','aire']]],
+  src:['fao','siap','comtrade']},
+
+ {id:'jeans',name:'Jeans',e:'👖',type:'ind',
+  prim:'Cultivo de algodón',sec:'Confección de pantalones de mezclilla',
+  m2:'instalar una maquila de confección de jeans',
+  stages:[
+   {t:'Cultivo de algodón',p:'Campos de algodón (p. ej., Chihuahua o EE. UU.)',x:140,y:70,o:1},
+   {t:'Hilado y tejido',p:'Fábricas textiles que producen mezclilla',x:230,y:110,o:2},
+   {t:'Confección',p:'Maquilas y talleres (p. ej., Tehuacán, Puebla)',x:300,y:190,o:3},
+   {t:'Lavado y acabado',p:'Lavanderías industriales',x:360,y:230,o:4},
+   {t:'Transporte',p:'Carretera y frontera norte',x:250,y:250,o:5},
+   {t:'Venta',p:'Tiendas, tianguis y comercio en línea',x:160,y:220,o:6},
+   {t:'Consumo',p:'Tu ciudad: uso y desecho',x:90,y:180,o:7}],
+  scale:['regional','global'],
+  why:'Puede integrar regiones de México y de América del Norte (algodón, tejido, confección y venta). Si la mezclilla o los jeans se importan de Asia, el circuito se vuelve global.',
+  ctx:'Chihuahua es el principal estado productor de algodón en México.',ctxSrc:'SIAP',
+  acts:[['Lavado y teñido de mezclilla',['agua','energia']],['Cultivo de algodón',['agua','suelo']]],
+  src:['siap','inegi','comtrade']},
+
+ {id:'aguacate',name:'Aguacate',e:'🥑',type:'agro',
+  prim:'Cultivo de aguacate en huertas',sec:'Elaboración industrial de guacamole',
+  m2:'establecer huertas de aguacate',
+  stages:[
+   {t:'Cultivo',p:'Huertas en Michoacán y Jalisco',x:200,y:240,o:1},
+   {t:'Corte y acopio',p:'Cuadrillas de corte y centros de acopio',x:240,y:205,o:2},
+   {t:'Selección y empaque',p:'Empacadoras (p. ej., Uruapan)',x:280,y:170,o:3},
+   {t:'Transporte refrigerado',p:'Tráileres por carreteras del centro y norte',x:250,y:110,o:4},
+   {t:'Cruce fronterizo o central de abasto',p:'Frontera norte o centrales de abasto',x:180,y:60,o:5},
+   {t:'Distribución',p:'Supermercados de México y del extranjero',x:110,y:90,o:6},
+   {t:'Consumo',p:'Hogares en México, EE. UU. y otros países',x:80,y:150,o:7}],
+  scale:['global','regional'],
+  why:'Una parte importante del aguacate mexicano se exporta: el circuito conecta huertas de Michoacán con consumidores de otros países mediante transporte refrigerado y comercio internacional. El aguacate que se vende en México forma un circuito regional.',
+  ctx:'México es el principal productor mundial de aguacate y Michoacán concentra la mayor parte de la producción nacional.',ctxSrc:'FAOSTAT; SIAP',
+  acts:[['Expansión de huertas de aguacate',['vegetacion','suelo','agua']],['Riego de huertas',['agua']]],
+  src:['siap','fao','comtrade']},
+
+ {id:'nopal',name:'Nopal',e:'🌵',type:'agro',
+  prim:'Cultivo y corte de nopal',sec:'Elaboración de nopales en salmuera',
+  m2:'establecer una zona de cultivo de nopal',
+  stages:[
+   {t:'Cultivo',p:'Parcelas en Milpa Alta (CDMX) y Tlalnepantla (Morelos)',x:300,y:240,o:1},
+   {t:'Corte y limpieza',p:'Desespinado en la parcela o en casa',x:330,y:200,o:2},
+   {t:'Transporte',p:'Camionetas hacia la ciudad',x:300,y:150,o:3},
+   {t:'Central de abasto',p:'Mercado mayorista de la ciudad',x:250,y:110,o:4},
+   {t:'Mercados y tianguis',p:'Mercados, tianguis y recauderías de colonia',x:200,y:140,o:5},
+   {t:'Consumo',p:'Hogares de la zona metropolitana',x:180,y:190,o:6}],
+  scale:['local','regional'],
+  why:'Pocos territorios cercanos participan (zonas productoras del sur del Valle de México y la ciudad que lo consume), con pocas etapas y transporte corto. Se considera local, o regional si incluye a Morelos y otros estados.',
+  ctx:'La Ciudad de México (Milpa Alta) y Morelos están entre las principales zonas productoras de nopal verdura.',ctxSrc:'SIAP',
+  acts:[['Cultivo intensivo de nopal',['suelo','agua']],['Uso de abonos y estiércol',['suelo','aire']]],
+  src:['siap','inegi']},
+
+ {id:'tortilla',name:'Tortilla',e:'🫓',type:'agro',
+  prim:'Cultivo de maíz',sec:'Nixtamalización y elaboración de tortillas',
+  m2:'establecer una zona de cultivo de maíz',
+  stages:[
+   {t:'Cultivo de maíz',p:'Sinaloa, Jalisco o milpas de la región',x:130,y:90,o:1},
+   {t:'Acopio y almacenamiento',p:'Bodegas y silos',x:190,y:120,o:2},
+   {t:'Transporte del grano',p:'Tren y camiones hacia las ciudades',x:250,y:150,o:3},
+   {t:'Molienda o nixtamalización',p:'Molinos e industria de harina de maíz',x:300,y:190,o:4},
+   {t:'Elaboración en tortillería',p:'Tortillería de tu colonia',x:330,y:230,o:5},
+   {t:'Consumo',p:'Tu hogar, a unas cuadras',x:280,y:255,o:6}],
+  scale:['regional','local','global'],
+  why:'La tortilla se elabora y consume en la misma colonia (escala local), pero el maíz o la harina suelen venir de otras regiones del país, lo que lo hace regional. Cuando se usa maíz importado, se conecta con circuitos globales.',
+  ctx:'México produce sobre todo maíz blanco para consumo humano e importa grandes volúmenes de maíz amarillo, principalmente de EE. UU.',ctxSrc:'SIAP; Secretaría de Economía',
+  acts:[['Cultivo de maíz con fertilizantes',['suelo','agua']],['Nixtamalización industrial',['agua','energia']]],
+  src:['siap','dm','comtrade']},
+
+ {id:'jitomate',name:'Jitomate',e:'🍅',type:'agro',
+  prim:'Cultivo de jitomate',sec:'Elaboración de puré y salsas de tomate',
+  m2:'instalar invernaderos de jitomate',
+  stages:[
+   {t:'Cultivo',p:'Campos de Sinaloa e invernaderos en varios estados',x:110,y:80,o:1},
+   {t:'Cosecha, selección y empaque',p:'Empacadoras cercanas a los campos',x:160,y:120,o:2},
+   {t:'Transporte refrigerado',p:'Tráileres por carretera',x:230,y:150,o:3},
+   {t:'Central de abasto o exportación',p:'Centrales de abasto o frontera norte',x:300,y:120,o:4},
+   {t:'Mercados y supermercados',p:'Mercados de colonia y supermercados',x:350,y:180,o:5},
+   {t:'Consumo',p:'Hogares y restaurantes',x:320,y:235,o:6}],
+  scale:['regional','global'],
+  why:'Para el consumo nacional, conecta regiones productoras (como Sinaloa) con ciudades lejanas: es regional. La parte que se exporta forma un circuito global.',
+  ctx:'México es uno de los principales exportadores de jitomate del mundo y Sinaloa es uno de los principales estados productores.',ctxSrc:'SIAP; UN Comtrade',
+  acts:[['Riego de cultivos de jitomate',['agua']],['Uso de agroquímicos en el cultivo',['suelo','agua']]],
+  src:['siap','fao','comtrade']},
+
+ {id:'shampoo',name:'Shampoo',e:'🧴',type:'ind',
+  prim:'Extracción de petróleo y cultivo de palma de aceite',sec:'Formulación química y envasado de shampoo',
+  m2:'instalar una planta de producción de shampoo',
+  stages:[
+   {t:'Materias primas',p:'Petróleo y aceites de palma y coco (Sudeste asiático)',x:510,y:230,o:1},
+   {t:'Industria química',p:'Plantas que producen tensoactivos y fragancias',x:430,y:120,o:2},
+   {t:'Fabricación de envases',p:'Plantas de plástico',x:320,y:90,o:2},
+   {t:'Formulación y envasado',p:'Planta de cosméticos (p. ej., en el centro de México)',x:220,y:160,o:3},
+   {t:'Transporte',p:'Camiones hacia centros de distribución',x:170,y:110,o:4},
+   {t:'Distribución',p:'Supermercados y farmacias',x:110,y:150,o:5},
+   {t:'Consumo y desecho',p:'Tu hogar: uso y desecho del envase',x:110,y:230,o:6}],
+  scale:['global'],
+  why:'Sus insumos químicos y vegetales provienen de distintos países y continentes, aunque el envasado y la venta ocurran en México. La red de territorios y el intercambio internacional lo hacen global.',
+  ctx:'Indonesia y Malasia concentran la mayor parte de la producción mundial de aceite de palma.',ctxSrc:'FAOSTAT',
+  acts:[['Expansión de plantaciones de palma',['vegetacion','suelo']],['Producción química de tensoactivos',['energia','aire','agua']]],
+  src:['fao','inegi','comtrade']},
+
+ {id:'computadora',name:'Computadora',e:'💻',type:'ind',
+  prim:'Extracción de cobre, silicio y tierras raras',sec:'Fabricación de chips y ensamblaje de computadoras',
+  m2:'instalar una planta de ensamblaje de computadoras',
+  stages:[
+   {t:'Diseño y software',p:'Empresas tecnológicas y centros de investigación',x:95,y:75,o:1},
+   {t:'Extracción de minerales',p:'Minas de cobre, silicio y tierras raras (varios continentes)',x:260,y:250,o:1},
+   {t:'Fabricación de chips',p:'Fábricas de semiconductores (p. ej., Taiwán, Corea del Sur)',x:520,y:110,o:2},
+   {t:'Ensamblaje',p:'Plantas en China o en México (p. ej., Chihuahua, Jalisco)',x:410,y:170,o:3},
+   {t:'Transporte',p:'Barco, avión y tráiler',x:290,y:150,o:4},
+   {t:'Distribución',p:'Tiendas y comercio en línea',x:160,y:160,o:5},
+   {t:'Consumo',p:'Escuelas, oficinas y hogares',x:110,y:225,o:6}],
+  scale:['global'],
+  why:'Integra muchas etapas especializadas en territorios de distintos continentes, conectados por intercambio internacional de componentes, conocimiento y capital.',
+  ctx:'Varios estados del norte y occidente de México, como Chihuahua y Jalisco, albergan plantas de manufactura electrónica.',ctxSrc:'Data México, Secretaría de Economía',
+  acts:[['Extracción de minerales para componentes',['minerales','agua','vegetacion']],['Fabricación de chips',['energia','agua']],['Desecho de aparatos electrónicos',['urbano','minerales']]],
+  src:['usgs','dm','comtrade','inegi']},
+
+ {id:'bicicleta',name:'Bicicleta',e:'🚲',type:'ind',
+  prim:'Extracción de bauxita y mineral de hierro',sec:'Fabricación del cuadro y ensamble de la bicicleta',
+  m2:'instalar una planta de ensamble de bicicletas',
+  stages:[
+   {t:'Extracción de minerales',p:'Minas de bauxita y hierro (p. ej., Australia, Guinea, Brasil)',x:300,y:250,o:1},
+   {t:'Producción de aluminio y acero',p:'Fundidoras y acerías',x:380,y:200,o:2},
+   {t:'Fabricación de componentes',p:'Cuadros, frenos, cambios y llantas (muchos en Asia oriental)',x:500,y:110,o:3},
+   {t:'Ensamble final',p:'Planta de ensamble',x:330,y:110,o:4},
+   {t:'Transporte',p:'Barco y tráiler',x:230,y:150,o:5},
+   {t:'Venta',p:'Tiendas de bicicletas y en línea',x:150,y:170,o:6},
+   {t:'Consumo',p:'Calles de tu ciudad',x:110,y:225,o:7}],
+  scale:['global'],
+  why:'Minerales, metales y componentes provienen de distintos países y se integran mediante comercio internacional antes del ensamble y la venta.',
+  ctx:'Australia y Guinea están entre los principales productores mundiales de bauxita, mineral del que se obtiene el aluminio.',ctxSrc:'USGS, Mineral Commodity Summaries',
+  acts:[['Fundición de aluminio',['energia','aire']],['Extracción de bauxita',['minerales','vegetacion','suelo']]],
+  src:['usgs','comtrade','inegi']}
+];
+
+/* ---------- Misión 1: sectores ---------- */
+const SECTORS=[{k:'pri',l:'Primario',i:'🌾'},{k:'sec',l:'Secundario',i:'🏭'},{k:'ter',l:'Terciario',i:'🚚'},{k:'cua',l:'Cuaternario',i:'🧠'},{k:'qui',l:'Quinario',i:'🏛️'}];
+function sectorItems(p){return [
+ {id:'s1',l:'Extracción de minerales',ok:['pri'],why:'obtiene recursos directamente de la naturaleza, sin transformarlos.'},
+ {id:'s2',l:p.prim,ok:['pri'],why:'aprovecha directamente un recurso natural (suelo, agua, clima o subsuelo) para obtener materia prima.'},
+ {id:'s3',l:p.sec,ok:['sec'],why:'transforma materias primas o componentes en un producto con mayor valor.'},
+ {id:'s4',l:'Fabricación de envases y empaques',ok:['sec'],why:'es una actividad industrial: transforma plástico, cartón o metal en un nuevo producto.'},
+ {id:'s5',l:'Transporte de mercancías',ok:['ter'],why:'presta un servicio que permite conectar la producción con otros territorios.'},
+ {id:'s6',l:'Comercio en tiendas y supermercados',ok:['ter'],why:'es un servicio que acerca el producto a quienes lo consumen; no produce ni transforma bienes.'},
+ {id:'s7',l:'Servicios públicos esenciales (agua potable, salud y educación públicas)',ok:['qui'],why:'agrupa los servicios públicos esenciales, que garantizan las condiciones básicas de vida de la población, incluidas las personas que trabajan en el circuito.'},
+ {id:'s8',l:'Investigación científica y tecnológica',ok:['cua'],why:'genera conocimiento e información que después se aplica a la producción.'},
+ {id:'s9',l:'Diseño del producto y desarrollo de software',ok:['cua'],why:'es un servicio intensivo en conocimiento, creatividad y tecnologías de la información.'},
+ {id:'s10',l:'Labores domésticas y de cuidado no remuneradas',ok:['qui'],why:'incluye las labores domésticas y de cuidado no remuneradas, que sostienen diariamente la vida de quienes producen, transportan, venden y consumen.'},
+ {id:'s11',l:'Asociación civil sin fines de lucro que apoya a productores y comunidades',ok:['qui'],why:'reúne actividades sin fines de lucro: su propósito es el beneficio social, no obtener ganancias.'}
+];}
+
+/* ---------- Misión 2: factores ---------- */
+const FBINS=[{k:'nat',l:'Factor natural',i:'🌿'},{k:'soc',l:'Factor socioeconómico',i:'🏭'}];
+const FACTORS=[
+ {id:'f1',l:'Clima',ok:['nat'],why:'depende de la temperatura, la lluvia y la latitud, que no fueron creadas por la sociedad.'},
+ {id:'f2',l:'Agua',ok:['nat'],why:'es un recurso del medio físico (ríos, lagos, acuíferos), aunque su distribución pueda modificarse con obras.'},
+ {id:'f3',l:'Relieve',ok:['nat'],why:'es la forma de la superficie terrestre (llanuras, montañas, valles).'},
+ {id:'f4',l:'Suelo',ok:['nat'],why:'se forma por procesos naturales y determina la fertilidad de un territorio.'},
+ {id:'f5',l:'Minerales',ok:['nat'],why:'son recursos del subsuelo formados por procesos geológicos.'},
+ {id:'f6',l:'Ubicación',ok:['nat','soc'],why:'la posición geográfica (latitud, cercanía al mar) es natural, pero la ubicación relativa respecto a ciudades, puertos y mercados es socioeconómica. Ambas lecturas son válidas si puedes explicarlas.'},
+ {id:'f7',l:'Mano de obra',ok:['soc'],why:'son las personas que trabajan; depende de la población, su formación y sus salarios.'},
+ {id:'f8',l:'Capital',ok:['soc'],why:'es el dinero, la maquinaria y los bienes que se invierten para producir.'},
+ {id:'f9',l:'Infraestructura',ok:['soc'],why:'son obras construidas por la sociedad: carreteras, puertos, redes eléctricas, parques industriales.'},
+ {id:'f10',l:'Energía',ok:['soc','nat'],why:'aunque proviene de recursos naturales (sol, viento, petróleo, ríos), su disponibilidad para producir depende de plantas, redes y tarifas. Se analiza sobre todo como factor socioeconómico.'},
+ {id:'f11',l:'Transporte',ok:['soc'],why:'es un servicio organizado por la sociedad que conecta territorios.'},
+ {id:'f12',l:'Tecnología',ok:['soc'],why:'es conocimiento aplicado, desarrollado por personas e instituciones.'},
+ {id:'f13',l:'Comunicaciones',ok:['soc'],why:'son redes (internet, telefonía) creadas por la sociedad para mover información.'},
+ {id:'f14',l:'Financiamiento',ok:['soc'],why:'depende de bancos, inversionistas y programas públicos.'},
+ {id:'f15',l:'Regulación',ok:['soc'],why:'son leyes y normas establecidas por el gobierno.'},
+ {id:'f16',l:'Mercado',ok:['soc'],why:'son las personas y empresas dispuestas a comprar; depende de la población y su poder adquisitivo.'}
+];
+
+const TERRS=[
+ {n:'Valle Verde',e:'🌾',d:[['Clima','Templado, lluvias en verano'],['Agua','Río permanente y acuífero'],['Relieve y suelo','Valle plano, suelos fértiles'],['Infraestructura','Carretera regional; sin tren'],['Mano de obra','Población rural con experiencia agrícola'],['Ubicación','A 350 km del puerto y de la ciudad principal']]},
+ {n:'Monte Frío',e:'🏔️',d:[['Clima','Frío y húmedo, heladas en invierno'],['Agua','Abundante por deshielo, difícil de conducir'],['Relieve y suelo','Montañoso, pendientes fuertes, suelos delgados'],['Recursos','Yacimientos de hierro y cobre'],['Infraestructura','Camino sinuoso; presa hidroeléctrica'],['Mano de obra','Población pequeña; universidad técnica'],['Ubicación','Aislado, a 500 km del puerto']]},
+ {n:'Tierra Cálida',e:'🌇',d:[['Clima','Cálido, lluvias escasas'],['Agua','Limitada; pozos en un acuífero sobreexplotado'],['Relieve y suelo','Plano, suelos poco profundos'],['Infraestructura','Autopista, ferrocarril, parque industrial e internet de alta velocidad'],['Mano de obra','Ciudad grande, mano de obra abundante y técnica'],['Ubicación','A 60 km del puerto; gran mercado consumidor']]}
+];
+const TFB={
+ agro:{
+  'Valle Verde':{pro:'Suelos fértiles, agua permanente y clima templado favorecen la producción agrícola.',con:'La distancia al puerto y a la ciudad aumenta los costos de transporte; si el producto es perecedero, se necesitaría transporte refrigerado.'},
+  'Monte Frío':{pro:'Hay agua y algunos cultivos de altura aprovechan las laderas; la universidad técnica podría apoyar con innovación.',con:'Las heladas, las pendientes y los suelos delgados limitan la agricultura; el aislamiento encarece sacar la producción.'},
+  'Tierra Cálida':{pro:'La infraestructura, el puerto y el gran mercado facilitan vender y exportar.',con:'El agua es escasa: un cultivo necesitaría riego con pozos y aumentaría la presión sobre un acuífero ya sobreexplotado.'}},
+ ind:{
+  'Valle Verde':{pro:'Hay agua y terreno plano; la mano de obra podría capacitarse.',con:'Le falta infraestructura (sin tren) y está lejos del puerto y del mercado, lo que encarece recibir insumos y enviar productos.'},
+  'Monte Frío':{pro:'Tiene minerales, energía hidroeléctrica y una universidad técnica.',con:'El relieve y el aislamiento hacen costoso el transporte; la población es pequeña para una planta grande.'},
+  'Tierra Cálida':{pro:'Concentra infraestructura, conectividad, mano de obra, cercanía al puerto y un gran mercado.',con:'El agua es limitada y la llegada de más industria puede aumentar la presión sobre el acuífero y la expansión urbana.'}}
+};
+
+/* ---------- Misión 3: agentes ---------- */
+const AGENTS=[
+ {k:'empresas',l:'Empresas',d:'Invierten capital, organizan y deciden qué, cómo y dónde producir.'},
+ {k:'familias',l:'Familias',d:'Aportan trabajo, ahorran y consumen; también realizan trabajo de cuidado.'},
+ {k:'trabajadores',l:'Trabajadores',d:'Aportan su fuerza de trabajo a cambio de un salario.'},
+ {k:'consumidores',l:'Consumidores',d:'Compran bienes y servicios; con su demanda impulsan la producción.'},
+ {k:'gobierno',l:'Gobierno',d:'Regula, cobra impuestos, construye infraestructura y presta servicios públicos.'},
+ {k:'externo',l:'Sector externo',d:'Empresas y gobiernos de otros países que compran, venden o invierten.'}
+];
+function situations(p){const n=p.name.toLowerCase();return [
+ {s:`Una empresa decide construir una planta para producir o procesar ${n} en las afueras de una ciudad.`,ag:['empresas'],
+  ac:[['Invierte capital y organiza la producción',1],['Regula el uso del suelo de la zona',0],['Compra el producto para usarlo',0]],
+  ef:[['Cambia el uso del suelo, genera empleos y atrae población y servicios',1],['El territorio permanece igual porque solo es una construcción',0],['Disminuye de inmediato el número de habitantes',0]]},
+ {s:'El gobierno construye una carretera que conecta la zona productora con el puerto.',ag:['gobierno'],
+  ac:[['Construye infraestructura pública',1],['Vende el producto en el extranjero',0],['Aporta su fuerza de trabajo a cambio de un salario',0]],
+  ef:[['Mejora la conexión territorial y reduce tiempos y costos de transporte',1],['Aísla a la zona productora del resto del país',0],['Solo beneficia a quienes viven junto a la carretera',0]]},
+ {s:`Una familia compra ${n} en un supermercado de su colonia.`,ag:['familias','consumidores'],
+  ac:[['Consume y genera demanda',1],['Organiza la producción del bien',0],['Regula el precio del producto',0]],
+  ef:[['La demanda sostiene la distribución y el comercio en la ciudad, y conecta su colonia con los lugares de producción',1],['No tiene ningún efecto sobre otros territorios',0],['Hace que el producto se fabrique en su colonia',0]]},
+ {s:`Una empresa de otro país vende insumos o componentes que se usan para elaborar ${n} en México.`,ag:['externo'],
+  ac:[['Intercambia mercancías con otros países',1],['Construye carreteras en México',0],['Consume el producto final',0]],
+  ef:[['Conecta el territorio con circuitos globales y crea dependencia de insumos externos',1],['Hace que el circuito sea únicamente local',0],['Elimina la necesidad de transporte',0]]},
+ {s:'Cada día, cientos de personas viajan desde municipios cercanos para trabajar en la planta.',ag:['trabajadores'],
+  ac:[['Aportan su fuerza de trabajo a cambio de un salario',1],['Deciden dónde instalar la planta',0],['Cobran impuestos a la empresa',0]],
+  ef:[['Generan flujos diarios de movilidad y demanda de transporte entre municipios',1],['Reducen el tránsito en la región',0],['No modifican la organización del territorio',0]]},
+ {s:'El gobierno establece una norma que obliga a tratar el agua residual de las plantas productivas.',ag:['gobierno'],
+  ac:[['Regula la actividad económica',1],['Invierte para producir el bien',0],['Compra el producto',0]],
+  ef:[['Reduce la contaminación de ríos y suelos cercanos',1],['Aumenta automáticamente la producción',0],['Traslada la planta a otro país',0]]}
+];}
+
+/* ---------- Misión 5: indicadores (DATOS SIMULADOS) ---------- */
+const DATA={
+ agro:{ind:[{l:'Producción',u:'miles de toneladas'},{l:'Población ocupada',u:'miles de personas'},{l:'Superficie cultivada',u:'miles de hectáreas'},{l:'Consumo de agua',u:'millones de m³'}],
+  rows:[[120,18,40,260],[85,30,45,150],[40,9,12,95],[15,6,8,20]],
+  n2:{q:'¿Qué territorio obtiene más producción por cada hectárea cultivada (rendimiento)?',num:0,den:2,u:'toneladas por hectárea'},
+  rel:'Los territorios con mayor producción tienden a consumir más agua',relIdx:3},
+ ind:{ind:[{l:'Producción',u:'miles de unidades'},{l:'Empleo',u:'miles de personas'},{l:'Valor de exportaciones',u:'millones de dólares'},{l:'Emisiones',u:'miles de t de CO₂ equivalente'}],
+  rows:[[900,12,410,85],[600,25,120,60],[250,4,190,20],[80,3,10,15]],
+  n2:{q:'¿Qué territorio obtiene mayor valor de exportación por cada unidad producida?',num:2,den:0,u:'miles de dólares por unidad producida (aprox.)'},
+  rel:'Los territorios con mayor producción tienden a generar más emisiones',relIdx:3}
+};
+
+/* ---------- Misión 6: mapas esquemáticos (DATOS SIMULADOS) ---------- */
+const REGIONS=[
+ {n:'Llanos del Norte',pts:'30,60 120,35 125,155 20,150',c:[72,100]},
+ {n:'Monte Frío',pts:'120,35 210,45 205,140 125,155',c:[165,92]},
+ {n:'Sierra Alta',pts:'210,45 300,30 295,160 205,140',c:[252,92]},
+ {n:'Costa Norte',pts:'300,30 380,70 390,150 295,160',c:[340,102]},
+ {n:'Valle Verde',pts:'20,150 125,155 115,275 45,250',c:[76,210]},
+ {n:'Bajío Sur',pts:'125,155 205,140 215,265 115,275',c:[165,212]},
+ {n:'Tierra Cálida',pts:'205,140 295,160 290,280 215,265',c:[251,214]},
+ {n:'Puerto Azul',pts:'295,160 390,150 370,240 290,280',c:[333,208]}
+];
+const MAPS={
+ agro:{A:{t:'Mapa A. Producción agrícola por región',v:[1,0,0,1,3,3,2,1]},
+       B:{t:'Mapa B. Disponibilidad de agua por región',v:[0,2,2,1,3,2,0,1],lab:'disponibilidad de agua'},
+  q1:[['En el suroeste: Valle Verde y Bajío Sur',1],['En el norte montañoso: Monte Frío y Sierra Alta',0],['En la costa este: Costa Norte y Puerto Azul',0],['Se reparte de forma homogénea',0]],
+  q2:[['Concentrado: se agrupa en un núcleo de regiones vecinas junto al río',1],['Disperso: aparece por igual en todo el territorio',0],['Aleatorio: no se observa ningún orden',0]],
+  q4:[['En general coinciden: donde hay más agua hay más producción, aunque hay una excepción',1],['Son opuestos: donde hay más agua hay menos producción',0],['No existe ninguna coincidencia entre los mapas',0]],
+  fb4:'Valle Verde y Bajío Sur tienen alta producción y buena disponibilidad de agua. La excepción es Tierra Cálida: produce bastante con poca agua, lo que sugiere riego con pozos y presión sobre el acuífero (lo analizarás en la Misión 7).'},
+ ind:{A:{t:'Mapa A. Producción industrial por región',v:[0,0,1,2,0,1,3,3]},
+      B:{t:'Mapa B. Infraestructura y conectividad por región',v:[0,1,1,2,1,1,3,3],lab:'infraestructura y conectividad'},
+  q1:[['En el sureste: Tierra Cálida y Puerto Azul',1],['En el suroeste agrícola: Valle Verde y Bajío Sur',0],['En el norte montañoso: Monte Frío y Sierra Alta',0],['Se reparte de forma homogénea',0]],
+  q2:[['Concentrado a lo largo del corredor que lleva al puerto',1],['Disperso: aparece por igual en todo el territorio',0],['Aleatorio: no se observa ningún orden',0]],
+  q4:[['Coinciden: las regiones con más producción tienen más infraestructura y conectividad',1],['Son opuestos: donde hay más infraestructura hay menos producción',0],['No existe ninguna coincidencia entre los mapas',0]],
+  fb4:'La industria se concentra donde hay autopista, ferrocarril, puerto y ciudad. La coincidencia no prueba por sí sola una causa: la infraestructura atrae industria, pero la industria también impulsa que se construya más infraestructura.'}
+};
+const CLS=['Muy baja','Baja','Media','Alta'];
+const COLA=['#e8eefc','#a9c0f5','#5d86e8','#1f4fbf'];
+const COLB=['#f2edff','#cfc1fa','#a084ee','#6844c9'];
+
+/* ---------- Misión 7: presión territorial ---------- */
+const RES={
+ agua:{l:'💧 Agua',pres:['Mayor extracción de agua de ríos y acuíferos','Descarga de aguas residuales'],cons:['Disminución de la disponibilidad de agua para la población','Contaminación de ríos, lagos y acuíferos'],kw:/agua|riego|goteo|reutiliz|recicl|trata|capta|lluvia|acuifer|pozo|ahorr|consumo/},
+ suelo:{l:'🟫 Suelo',pres:['Uso intensivo de fertilizantes y monocultivo','Compactación y pérdida de la capa fértil'],cons:['Erosión y pérdida de fertilidad del suelo','Menor productividad agrícola a largo plazo'],kw:/suelo|rotaci|abono|compost|organic|fertiliz|terraza|cobertura|descans|erosi|policultivo|milpa/},
+ vegetacion:{l:'🌳 Vegetación y biodiversidad',pres:['Tala de bosques y selvas para cultivar o construir','Fragmentación de ecosistemas por caminos y cercas'],cons:['Pérdida de biodiversidad y hábitats','Menor captura de carbono y alteración del ciclo del agua'],kw:/arbol|refores|bosque|selva|conserv|area natural|protec|sombra|corredor|vegetaci|tala|biodivers/},
+ minerales:{l:'⛏️ Minerales',pres:['Extracción minera a gran escala','Acumulación de jales y residuos mineros'],cons:['Agotamiento de yacimientos no renovables','Contaminación de suelos y agua cercanos a la mina'],kw:/recicl|reutiliz|miner|jales|restaur|recupera|repar|vida util|residuo|reacondic/},
+ energia:{l:'⚡ Energía',pres:['Alto consumo de electricidad y combustibles','Mayor demanda de generación eléctrica'],cons:['Mayor dependencia de combustibles fósiles','Aumento de costos y riesgo de cortes de energía'],kw:/solar|eolic|renovable|eficien|ahorr|energ|panel/},
+ aire:{l:'🌫️ Aire y clima',pres:['Emisiones de gases de efecto invernadero','Emisión de partículas y contaminantes'],cons:['Contribución al cambio climático','Problemas respiratorios en la población cercana'],kw:/emisi|filtro|renovable|electric|tren|ferrocarril|transporte publico|contamin|aire|carbono|verific/},
+ infra:{l:'🛣️ Infraestructura y transporte',pres:['Aumento del tránsito de camiones pesados','Saturación de carreteras y puertos'],cons:['Deterioro de carreteras y congestión vial','Accidentes y ruido en las comunidades por donde pasa la ruta'],kw:/ferrocarril|tren|horario|ruta|mantenimiento|carretera|logistic|local|cercan|libramiento|transporte|camion/},
+ urbano:{l:'🏙️ Espacio urbano y residuos',pres:['Expansión urbana sobre zonas agrícolas o naturales','Generación de residuos de productos y envases'],cons:['Pérdida de tierras agrícolas y áreas verdes','Acumulación de basura y contaminación en tiraderos'],kw:/recicl|reutiliz|separ|retorn|planea|plan|uso de suelo|residuo|basura|envase|compost|granel|repar/}
+};
+const GEN_ACTS=[['Transporte de mercancías por carretera',['infra','aire','energia']],['Consumo y desecho del producto y su empaque',['urbano']]];
+
+/* =========================================================
+   ESTADO Y UTILIDADES
+   ========================================================= */
+const KEY='geoeco-mision-circuito-v1';
+let S={prod:null,done:[0,0,0,0,0,0,0],notes:{},screen:'home'};
+try{const raw=localStorage.getItem(KEY);if(raw){const o=JSON.parse(raw);if(o&&Array.isArray(o.done)&&o.done.length===7)S=Object.assign(S,o);}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+const P=()=>PRODUCTS.find(p=>p.id===S.prod);
+const $=(s,r=document)=>r.querySelector(s);
+const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const norm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+const fmt=n=>Number(n).toLocaleString('es-MX',{maximumFractionDigits:2});
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+const MISS=[{n:1,t:'Producto'},{n:2,t:'Factores'},{n:3,t:'Agentes'},{n:4,t:'Circuito'},{n:5,t:'Datos'},{n:6,t:'Mapas'},{n:7,t:'Territorio'}];
+const MSGS=['¡Pista encontrada!','Has identificado un nuevo elemento del circuito.','Los actores del circuito salen a la luz.','El territorio comienza a revelar su historia.','Los números confirman una pista.','El mapa revela un patrón.','Investigación completada.'];
+const clues=()=>S.done.filter(Boolean).length;
+function unlocked(k){if(!S.prod)return false;if(k===1)return true;if(k===8)return S.done.every(Boolean);return !!S.done[k-2];}
+const reduceMotion=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function scrollToEl(el){if(el)el.scrollIntoView({behavior:reduceMotion?'auto':'smooth',block:'start'});}
+
+let toastT=null;
+function toast(msg,sub){const t=$('#toast');t.innerHTML=esc(msg)+(sub?`<small>${esc(sub)}</small>`:'');t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),3200);}
+
+function go(screen){S.screen=screen;save();render();window.scrollTo(0,0);}
+function complete(k){const first=!S.done[k-1];S.done[k-1]=1;save();renderTop();if(first)toast(MSGS[k-1],k<7?`🔓 Pista ${k} de 7 encontrada`:'🔓 Expediente geoeconómico desbloqueado');}
+function nextBtn(k){return k<7?`<div class="row"><button class="btn go" data-go="m${k+1}">Ir a la Misión ${k+1}</button></div>`:`<div class="row"><button class="btn go" data-go="cierre">🔓 Ver cierre de la investigación</button></div>`;}
+function head(k,ic,t,lead){return `${S.done[k-1]?'<div class="fb ok small">✓ Ya completaste esta misión. Puedes repasarla o continuar con la siguiente.</div>':''}<div class="mhead"><div class="ic" aria-hidden="true">${ic}</div><div><div class="num">Misión ${k} de 7</div><h2>${t}</h2>${lead?`<p class="muted">${lead}</p>`:''}</div></div>`;}
+function dossier(p){return `<div class="dossier"><div class="e" aria-hidden="true">${p.e}</div><div><div class="tag">Producto bajo investigación</div><h3>${esc(p.name)}</h3></div></div>`;}
+function sourcesBox(p){return `<details class="src"><summary>📚 Fuentes del caso</summary><p class="small">Los valores numéricos de las misiones 5 y 6 son <b>datos simulados para análisis</b>: sirven para practicar la interpretación, no son estadísticas reales. Para investigar datos reales sobre ${esc(p.name.toLowerCase())}, consulta:</p><ul class="small">${p.src.map(s=>`<li>${SRC[s]}</li>`).join('')}</ul><p class="small"><b>Dato de contexto:</b> ${esc(p.ctx)} <i>(Fuente: ${esc(p.ctxSrc)})</i></p></details>`;}
+
+/* =========================================================
+   BARRA SUPERIOR
+   ========================================================= */
+function renderTop(){
+  const cur=S.screen,p=P();
+  $('#top').innerHTML=`<div class="top-in"><button class="brand" data-go="home" aria-label="Ir al inicio"><span aria-hidden="true">🌎</span>Misión Circuito</button>
+  ${p?`<span class="small" style="color:#c8d3ea">${p.e} ${esc(p.name)}</span>`:''}
+  <span class="clues">🔎 Pistas encontradas: ${clues()}/7</span><button class="resetbtn" data-reset title="Reiniciar la investigación">🔄 Reiniciar</button></div>
+  <nav class="track" aria-label="Progreso de la investigación">${MISS.map(m=>{const k='m'+m.n;let cls=S.done[m.n-1]?'done':(unlocked(m.n)?'':'lock');if(cur===k)cls+=' cur';return `<button class="tk ${cls}" data-go="${k}">Misión ${m.n}${S.done[m.n-1]?' ✓':''}<b>${m.t}</b></button>`;}).join('')}
+  <button class="tk ${unlocked(8)?'done':'lock'} ${cur==='exp'?'cur':''}" data-go="exp">Expediente ${unlocked(8)?'🔓':'🔒'}<b>Final</b></button></nav>`;
+}
+
+/* =========================================================
+   CLASIFICADOR (tocar o arrastrar)
+   ========================================================= */
+function classifier(root,items,bins,cfg){
+  const place={};items.forEach(i=>place[i.id]=null);
+  const order=shuffle(items.map(i=>i.id));
+  let sel=null,checked={},fb='',locked=false;
+  const it=id=>items.find(i=>i.id===id);
+  const chip=id=>{const st=checked[id];return `<button type="button" class="chip ${sel===id?'sel':''} ${st===true?'ok':st===false?'bad':''}" draggable="${locked?'false':'true'}" data-id="${id}">${st===true?'✓ ':st===false?'✗ ':''}${esc(it(id).l)}</button>`;};
+  function draw(){
+    const free=order.filter(id=>!place[id]);
+    root.innerHTML=`<p class="hint-line">Toca una tarjeta y después toca el grupo donde la colocarías. En computadora también puedes arrastrarla.</p>
+    <div class="pool drop" data-bin="">${free.map(chip).join('')||'<span class="muted small">Todas las tarjetas están colocadas.</span>'}</div>
+    <div class="bins b${bins.length}">${bins.map(b=>`<div class="bin drop ${sel?'armed':''}" data-bin="${b.k}" role="button" tabindex="0" aria-label="Colocar en ${b.l}"><div class="bin-h">${b.i} ${b.l}</div><div class="bin-body">${order.filter(id=>place[id]===b.k).map(chip).join('')}</div></div>`).join('')}</div>
+    ${locked?'':`<div class="row"><button type="button" class="btn primary" data-act="check">Revisar clasificación</button>${Object.values(checked).includes(false)?'<button type="button" class="btn ghost" data-act="retry">Devolver las incorrectas</button>':''}</div>`}
+    <div>${fb}</div>`;
+  }
+  function put(id,bin){if(locked||!id)return;place[id]=bin||null;delete checked[id];sel=null;draw();}
+  root.addEventListener('click',e=>{
+    if(locked)return;
+    const c=e.target.closest('.chip');
+    if(c){sel=(sel===c.dataset.id)?null:c.dataset.id;draw();return;}
+    const a=e.target.closest('[data-act]');
+    if(a){if(a.dataset.act==='check')check();else retry();return;}
+    const d=e.target.closest('.drop');
+    if(d&&sel)put(sel,d.dataset.bin);
+  });
+  root.addEventListener('keydown',e=>{const d=e.target.closest('.bin');if(d&&sel&&(e.key==='Enter'||e.key===' ')){e.preventDefault();put(sel,d.dataset.bin);}});
+  root.addEventListener('dragstart',e=>{const c=e.target.closest('.chip');if(c&&!locked){e.dataTransfer.setData('text/plain',c.dataset.id);e.dataTransfer.effectAllowed='move';}});
+  root.addEventListener('dragover',e=>{const d=e.target.closest('.drop');if(d){e.preventDefault();d.classList.add('over');}});
+  root.addEventListener('dragleave',e=>{const d=e.target.closest('.drop');if(d)d.classList.remove('over');});
+  root.addEventListener('drop',e=>{const d=e.target.closest('.drop');if(d){e.preventDefault();put(e.dataTransfer.getData('text/plain'),d.dataset.bin);}});
+  function check(){
+    const un=items.filter(i=>!place[i.id]);
+    if(un.length){fb=`<div class="fb info">Aún faltan ${un.length} tarjeta(s) por colocar.</div>`;draw();return;}
+    const good=[],bad=[];
+    items.forEach(i=>{const ok=i.ok.includes(place[i.id]);checked[i.id]=ok;(ok?good:bad).push(i);});
+    if(!bad.length){
+      locked=true;
+      fb=`<div class="fb ok"><b>¡Clasificación completa!</b><ul>${good.map(i=>`<li class="okl"><b>${esc(i.l)}:</b> ${cfg.ok(i,place[i.id])}</li>`).join('')}</ul></div>`;
+      draw();cfg.done();
+    }else{
+      fb=`<div class="fb bad"><b>${good.length} de ${items.length} bien ubicadas.</b> Revisa las marcadas con ✗:<ul>${bad.map(i=>`<li class="badl"><b>${esc(i.l)}:</b> ${cfg.hint(i)}</li>`).join('')}</ul></div>
+      <div class="fb ok"><ul>${good.map(i=>`<li class="okl"><b>${esc(i.l)}:</b> ${cfg.ok(i,place[i.id])}</li>`).join('')}</ul></div>`;
+      draw();
+    }
+  }
+  function retry(){items.forEach(i=>{if(checked[i.id]===false){place[i.id]=null;delete checked[i.id];}});fb='';draw();}
+  draw();
+}
+
+/* =========================================================
+   INICIO
+   ========================================================= */
+function topoSVG(){
+  let rings='';
+  const centers=[[180,120,9],[760,90,7],[560,330,8],[930,300,5]];
+  centers.forEach(([cx,cy,n])=>{for(let i=1;i<=n;i++){const rx=i*38,ry=i*26;rings+=`<path d="M${cx-rx},${cy} C${cx-rx},${cy-ry*1.1} ${cx+rx*0.8},${cy-ry} ${cx+rx},${cy-ry*0.1} S${cx+rx*0.2},${cy+ry*1.2} ${cx-rx},${cy}Z" fill="none" stroke="#2c4778" stroke-width="1"/>`;}});
+  const stops=[[90,330],[260,250],[430,280],[600,170],[780,210],[930,90]];
+  const d='M'+stops.map(s=>s.join(',')).join(' L');
+  return `<svg class="topo" viewBox="0 0 1000 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${rings}
+  <path class="route-path" d="${d}" fill="none" stroke="#ffd36b" stroke-width="3" stroke-dasharray="1400" stroke-linecap="round"/>
+  ${stops.map((s,i)=>`<circle cx="${s[0]}" cy="${s[1]}" r="${i===stops.length-1?9:6}" fill="${i===stops.length-1?'#ffd36b':'#14284b'}" stroke="#ffd36b" stroke-width="3"/>`).join('')}</svg>`;
+}
+function renderHome(app){
+  const started=S.prod&&clues()>0;
+  app.innerHTML=`<section class="hero">${topoSVG()}<div class="hero-in"><div>
+   <h1><small>🌎 Geoeconomía</small>Misión Circuito</h1>
+   <p class="q">¿Quién está detrás de lo que consumimos?</p></div>
+   <p class="lead">Tu misión será reconstruir el recorrido territorial de un producto y descubrir qué factores, agentes, actividades económicas y territorios hacen posible que llegue hasta tus manos.</p>
+   <div class="row"><button class="btn go" data-go="select">🔎 Comenzar misión</button>${started?`<button class="btn" style="background:transparent;color:#fff;border-color:#fff" id="resume">Continuar investigación (${clues()}/7)</button><button class="btn" style="background:transparent;color:#fff;border-color:rgba(255,255,255,.5)" data-reset>🔄 Reiniciar desde cero</button>`:''}</div></div></section>
+  <div class="wrap"><main>
+   <div class="card lab"><h3>🧪 Esto es un laboratorio de investigación geoeconómica</h3><p><b>La aplicación no es el producto final.</b> Aquí reunirás información, decisiones, datos, mapas y conclusiones. Después los usarás para elaborar tu propio <b>expediente geoeconómico</b>.</p><p class="labq">Completar las misiones no significa que tu proyecto haya terminado. La aplicación te proporciona las pistas y evidencias; tú debes utilizarlas para construir tu propio análisis geoeconómico.</p></div>
+   <div class="card case"><h3>El caso</h3><p>Hay un producto frente a ti. Lo compras en una tienda, en el supermercado o por internet. Pero detrás de ese producto existe una red de territorios, recursos, trabajadores, empresas, transporte, infraestructura y consumidores.</p><p><b>Tu misión es reconstruir ese circuito territorial y descubrir cómo la actividad económica transforma el territorio.</b> Te convertirás en detective geoeconómico y, al final, armarás tu propio expediente.</p></div>
+   <div class="card"><h3>Ruta de la investigación</h3><div class="stops">${MISS.map(m=>`<div class="stop ${S.done[m.n-1]?'done':''}"><span class="small muted">Misión ${m.n}</span><b>${m.t}${S.done[m.n-1]?' ✓':''}</b></div>`).join('')}<div class="stop ${unlocked(8)?'done':''}"><span class="small muted">Cierre</span><b>Expediente final ${unlocked(8)?'🔓':'🔒'}</b></div></div></div>
+   <div class="card teacher"><details><summary>👩‍🏫 Para la docente</summary>
+    <p><b>Propósito.</b> Que el alumnado reconstruya el circuito territorial de un producto y explique cómo la actividad económica organiza y presiona el territorio, movilizando conceptos en lugar de memorizarlos.</p>
+    <p><b>Contenidos.</b> 1.1 Geografía económica y organización territorial · 1.2 Sectores en interacción, factores y agentes, circuitos territoriales y presión sobre los recursos · 1.3 Identificación de agentes y factores en circuitos locales, regionales y globales · 1.4 Uso e interpretación de indicadores y productos cartográficos.</p>
+    <p><b>Producto final.</b> Expediente geoeconómico individual o en parejas (en libreta o documento) con un mapa esquemático elaborado a mano. La aplicación es la herramienta de investigación; el análisis lo construye cada estudiante. Al final se muestra una rúbrica.</p>
+    <p><b>Duración sugerida.</b> 2 a 3 sesiones: sesión 1, misiones 1–3; sesión 2, misiones 4–5; sesión 3, misiones 6–7 e inicio del expediente. El expediente se termina fuera de clase.</p>
+    <p><b>Instrucciones para estudiantes.</b></p><ul><li><b>La aplicación es un laboratorio de investigación geoeconómica, no el producto final.</b> Completar las misiones no significa que tu proyecto haya terminado. La aplicación te proporciona las pistas y evidencias; tú debes utilizarlas para construir tu propio análisis geoeconómico.</li><li>Elige un producto (procura que en el grupo haya productos distintos).</li><li>Completa las misiones en orden y lee la retroalimentación: ahí está la explicación de cada concepto.</li><li>Tus respuestas abiertas se guardan en este dispositivo y aparecen como notas en el expediente.</li><li>Elabora el expediente con tus propias palabras.</li></ul>
+    <p class="small muted">Los datos de las misiones 5 y 6 son simulados y están marcados como tales; cada caso incluye fuentes oficiales para consultar datos reales.</p>
+    <div class="row"><button class="btn ghost" id="wipe">Borrar el progreso guardado en este dispositivo</button></div>
+   </details></div>
+  </main></div>`;
+  const r=$('#resume');if(r)r.onclick=()=>{const k=S.done.findIndex(d=>!d);go(k===-1?'cierre':'m'+(k+1));};
+  $('#wipe').onclick=()=>{if(confirm('¿Borrar todo el progreso y las respuestas guardadas en este dispositivo?')){S={prod:null,done:[0,0,0,0,0,0,0],notes:{},screen:'home'};save();go('home');toast('Progreso borrado');}};
+}
+
+/* =========================================================
+   SELECCIÓN DE PRODUCTO
+   ========================================================= */
+function renderSelect(app){
+  app.innerHTML=`<div class="wrap"><main><div class="mhead"><div class="ic" aria-hidden="true">🧾</div><div><div class="num">Antes de empezar</div><h2>Elige el producto que vas a investigar</h2><p class="muted">Cada producto tiene un circuito distinto. Si trabajan en pareja, elijan uno juntos y procuren que otras parejas del grupo investiguen productos diferentes.</p></div></div>
+  <div class="prods">${PRODUCTS.map(p=>`<button class="prod ${S.prod===p.id?'sel':''}" data-p="${p.id}"><span class="e" aria-hidden="true">${p.e}</span>${p.name}<small>${p.type==='agro'?'Agroalimentario':'Manufactura'}</small></button>`).join('')}</div></main></div>`;
+  $$('.prod',app).forEach(b=>b.onclick=()=>{
+    const id=b.dataset.p;
+    if(S.prod&&S.prod!==id&&clues()>0&&!confirm('Si cambias de producto se reinicia tu progreso y tus respuestas. ¿Continuar?'))return;
+    if(S.prod!==id){S.done=[0,0,0,0,0,0,0];S.notes={};}
+    S.prod=id;save();go('m1');
+  });
+}
+
+/* =========================================================
+   MISIÓN 1
+   ========================================================= */
+function m1(app){
+  const p=P();
+  const Q=[['m1q1','¿Qué actividades económicas participan en su producción?'],['m1q2','¿Qué materias primas necesita?'],['m1q3','¿Dónde podría comenzar su circuito?'],['m1q4','¿Qué actividades ocurren antes de que llegue a quien lo consume?']];
+  app.innerHTML=`<div class="wrap"><main>${head(1,'🔎','¿Qué hay detrás del producto?','Antes de clasificar, plantea tus hipótesis. No tienen que ser perfectas: las irás comprobando en cada misión.')}${dossier(p)}
+  <div class="card"><div class="step-t"><i>Paso 1</i> Hipótesis iniciales</div>
+  ${Q.map(([k,q],i)=>`<label class="q" for="${k}">${i+1}. ${q}</label><textarea id="${k}" data-note="${k}" rows="2">${esc(S.notes[k]||'')}</textarea>`).join('')}
+  <div class="row"><button class="btn primary" id="h1">Registrar hipótesis</button></div><div id="h1fb"></div></div>
+  <div class="card" id="m1b" ${S.notes.m1h||S.done[0]?'':'hidden'}><div class="step-t"><i>Paso 2</i> Clasifica las actividades del circuito</div>
+  <p>Todas estas actividades participan, de forma directa o indirecta, en el circuito de ${esc(p.name.toLowerCase())}. ¿A qué sector económico pertenece cada una?</p><div id="cls1"></div><div id="m1c"></div></div>
+  ${sourcesBox(p)}</main></div>`;
+  $('#h1').onclick=()=>{
+    const miss=Q.filter(([k])=>(S.notes[k]||'').trim().length<4).length;
+    if(miss){$('#h1fb').innerHTML=`<div class="fb bad">Te falta responder ${miss} pregunta(s). Escribe al menos una idea breve en cada una.</div>`;return;}
+    S.notes.m1h=1;save();
+    $('#h1fb').innerHTML='<div class="fb ok">Hipótesis registradas. Ahora ponlas a prueba: ¿qué tipo de actividades imaginaste?</div>';
+    $('#m1b').hidden=false;scrollToEl($('#m1b'));
+  };
+  classifier($('#cls1'),sectorItems(p),SECTORS,{
+    ok:(i,b)=>`Correcto. Pertenece al sector ${SECTORS.find(s=>s.k===b).l.toLowerCase()} porque ${i.why}`,
+    hint:()=>'Revisa nuevamente la función de esta actividad. Pregúntate si obtiene recursos de la naturaleza, transforma materias primas, presta un servicio con fines de lucro, genera conocimiento o información, o bien si es una actividad sin fines de lucro, un servicio público esencial o una labor doméstica y de cuidado no remunerada.',
+    done:()=>{
+      $('#m1c').innerHTML=`<div class="concept"><b>🧩 Concepto: sectores en continua interacción</b>Ningún sector funciona solo. Para que exista ${esc(p.name.toLowerCase())} se necesitan recursos (primario), transformación (secundario), servicios como transporte y comercio (terciario), conocimiento y diseño (cuaternario) y, finalmente, actividades sin fines de lucro, servicios públicos esenciales y labores domésticas y de cuidado no remuneradas que sostienen la vida de todas las personas del circuito (quinario).</div>
+      <div class="concept"><b>🔁 Vuelve a tus hipótesis</b>Compara lo que escribiste en el paso 1 con lo que acabas de clasificar. ¿Qué actividades no habías considerado?</div>${nextBtn(1)}`;
+      complete(1);
+    }
+  });
+}
+
+/* =========================================================
+   MISIÓN 2
+   ========================================================= */
+function m2(app){
+  const p=P();
+  app.innerHTML=`<div class="wrap"><main>${head(2,'🌱','¿Por qué se produce aquí?','Las actividades económicas no se distribuyen al azar. Los territorios ofrecen diferentes condiciones naturales y socioeconómicas.')}${dossier(p)}
+  <div class="card"><div class="step-t"><i>Paso 1</i> Clasifica los factores</div><p>Antes de elegir un lugar para producir, una empresa revisa estos factores. ¿Cuáles son naturales y cuáles socioeconómicos?</p><div id="cls2"></div><div id="m2c"></div></div>
+  <div class="card" id="m2b" hidden><div class="step-t"><i>Paso 2</i> Toma una decisión territorial</div>
+  <p><b>Tres territorios quieren atraer una actividad productiva.</b> Una organización necesita ${esc(p.m2)}. ¿Qué territorio le recomendarías?</p>
+  <div class="grid3">${TERRS.map(t=>`<button type="button" class="terr" data-t="${t.n}"><h3><span aria-hidden="true">${t.e}</span> ${t.n}</h3><dl>${t.d.map(([a,b])=>`<dt>${a}</dt><dd>${b}</dd>`).join('')}</dl></button>`).join('')}</div>
+  <label class="q">¿Qué factores influyeron en tu decisión? Elige hasta 3.</label><div class="pills" id="fsel">${FACTORS.map(f=>`<button type="button" class="pill" data-f="${f.l}">${f.l}</button>`).join('')}</div>
+  <label class="q" for="m2just">Justifica tu elección considerando varios factores:</label><textarea id="m2just" data-note="m2just" placeholder="Recomiendo… porque…">${esc(S.notes.m2just||'')}</textarea>
+  <div class="row"><button class="btn primary" id="m2go">Enviar decisión</button></div><div id="m2fb"></div></div>
+  ${sourcesBox(p)}</main></div>`;
+  let terr=S.notes.m2terr||null,fs=(S.notes.m2factors||[]).slice();
+  const paint=()=>{$$('.terr',app).forEach(b=>b.classList.toggle('sel',b.dataset.t===terr));$$('#fsel .pill',app).forEach(b=>b.classList.toggle('sel',fs.includes(b.dataset.f)));};
+  paint();
+  $$('.terr',app).forEach(b=>b.onclick=()=>{terr=b.dataset.t;paint();});
+  $$('#fsel .pill',app).forEach(b=>b.onclick=()=>{const f=b.dataset.f;if(fs.includes(f))fs=fs.filter(x=>x!==f);else if(fs.length<3)fs.push(f);else{toast('Puedes elegir hasta 3 factores','Quita uno para cambiarlo');return;}paint();});
+  if(S.done[1])$('#m2b').hidden=false;
+  classifier($('#cls2'),FACTORS,FBINS,{
+    ok:(i,b)=>`Correcto. Es un factor ${b==='nat'?'natural':'socioeconómico'}: ${i.why}`,
+    hint:()=>'Revisa nuevamente. Pregúntate: ¿este factor existe en la naturaleza sin intervención humana, o es resultado de la organización social, económica, tecnológica o política?',
+    done:()=>{$('#m2c').innerHTML=`<div class="concept"><b>🧩 Concepto: factores del proceso productivo</b>Los <b>factores naturales</b> provienen del medio físico; los <b>socioeconómicos</b> son creados por la sociedad. Ningún territorio los tiene todos: por eso las actividades se localizan donde la combinación de factores les resulta más conveniente.</div>`;$('#m2b').hidden=false;}
+  });
+  $('#m2go').onclick=()=>{
+    const just=(S.notes.m2just||'').trim(),errs=[];
+    if(!terr)errs.push('elige un territorio');
+    if(!fs.length)errs.push('selecciona al menos un factor');
+    if(just.length<30)errs.push('escribe una justificación más completa (una o dos oraciones)');
+    if(errs.length){$('#m2fb').innerHTML=`<div class="fb bad">Para enviar tu decisión: ${errs.join('; ')}.</div>`;return;}
+    S.notes.m2terr=terr;S.notes.m2factors=fs;save();
+    const t=TFB[p.type][terr];
+    const nat=fs.filter(f=>FACTORS.find(x=>x.l===f).ok[0]==='nat').length,soc=fs.length-nat;
+    const fcom=nat&&soc?'Combinaste factores naturales y socioeconómicos: así se analiza la localización de una actividad.':nat?'Tu decisión se basó solo en factores naturales. ¿Qué pasaría con el transporte, el mercado o la mano de obra?':'Tu decisión se basó solo en factores socioeconómicos. ¿Qué condiciones naturales (agua, clima, suelo, relieve) necesita esta actividad?';
+    $('#m2fb').innerHTML=`<div class="fb info"><b>Análisis de tu elección: ${terr}</b><ul><li><b>Ventajas:</b> ${t.pro}</li><li><b>Limitaciones:</b> ${t.con}</li><li><b>Tus factores (${fs.join(', ')}):</b> ${fcom}</li></ul></div>
+    <div class="concept"><b>🧩 No hay una sola respuesta correcta</b>Cada territorio ofrece ventajas y limitaciones. ${p.type==='agro'?'En las actividades agrícolas los factores naturales pesan mucho, pero sin transporte ni mercado la producción no llega a quien la consume.':'En las actividades industriales suelen pesar más los factores socioeconómicos (infraestructura, mano de obra, mercado), pero también necesitan agua, energía y suelo.'} Lo que vuelve sólida tu decisión es que la justifiques con varios factores y reconozcas sus costos.</div>${nextBtn(2)}`;
+    complete(2);
+  };
+}
+
+/* =========================================================
+   MISIÓN 3
+   ========================================================= */
+const SIT_X=['Las empresas deciden dónde localizar la producción; al hacerlo transforman el uso del suelo y atraen nuevas actividades.','El gobierno crea infraestructura pública que reorganiza los flujos entre territorios.','Como consumidoras, las familias cierran el circuito: sin demanda no hay distribución ni comercio.','El sector externo vincula el territorio con otros países mediante el comercio internacional.','Los trabajadores conectan su lugar de residencia con su lugar de trabajo y generan movilidad cotidiana.','Además de construir, el gobierno regula: sus normas pueden disminuir la presión sobre los recursos.'];
+function m3(app){
+  const p=P();
+  const sits=situations(p).map(s=>Object.assign({},s,{ac:shuffle(s.ac),ef:shuffle(s.ef)}));
+  const st=sits.map(()=>({ag:'',ac:-1,ef:-1,ok:false}));
+  app.innerHTML=`<div class="wrap"><main>${head(3,'👥','Los actores del circuito','Detrás de cada etapa hay alguien que decide, invierte, trabaja, regula o consume.')}${dossier(p)}
+  <div class="card"><h3>Directorio de agentes</h3><div class="agents">${AGENTS.map(a=>`<div class="agent"><b>${a.l}</b><br>${a.d}</div>`).join('')}</div></div>
+  <p>Analiza cada situación e identifica la cadena <b>agente → acción → efecto territorial</b>.</p>
+  ${sits.map((s,i)=>`<div class="card" id="sit${i}"><div class="step-t"><i>Situación ${i+1}</i></div><p><b>${esc(s.s)}</b></p>
+   <label class="q" for="ag${i}">¿Qué agente participa?</label><select id="ag${i}" data-i="${i}" class="agsel"><option value="">Elige un agente…</option>${AGENTS.map(a=>`<option value="${a.k}">${a.l}</option>`).join('')}</select>
+   <label class="q">¿Qué acción realiza?</label><div class="pills col" data-i="${i}" data-g="ac">${s.ac.map((o,j)=>`<button type="button" class="pill" data-j="${j}">${o[0]}</button>`).join('')}</div>
+   <label class="q">¿Qué efecto territorial produce?</label><div class="pills col" data-i="${i}" data-g="ef">${s.ef.map((o,j)=>`<button type="button" class="pill" data-j="${j}">${o[0]}</button>`).join('')}</div>
+   <div class="row"><button type="button" class="btn primary" data-chk="${i}">Verificar</button></div><div class="sfb"></div></div>`).join('')}
+  <div id="m3end"></div>${sourcesBox(p)}</main></div>`;
+  $$('.agsel',app).forEach(s=>s.onchange=()=>{st[+s.dataset.i].ag=s.value;});
+  $$('.pills[data-g] .pill',app).forEach(b=>b.onclick=()=>{
+    const g=b.parentElement,i=+g.dataset.i;if(st[i].ok)return;
+    st[i][g.dataset.g]=+b.dataset.j;
+    $$('.pill',g).forEach(x=>{x.classList.remove('ok','bad');x.classList.toggle('sel',x===b);});
+  });
+  $$('[data-chk]',app).forEach(btn=>btn.onclick=()=>{
+    const i=+btn.dataset.chk,s=sits[i],a=st[i],box=$('#sit'+i),fb=$('.sfb',box);
+    if(!a.ag||a.ac<0||a.ef<0){fb.innerHTML='<div class="fb info">Completa las tres partes: agente, acción y efecto.</div>';return;}
+    const agOk=s.ag.includes(a.ag),acOk=!!s.ac[a.ac][1],efOk=!!s.ef[a.ef][1];
+    const gA=$('[data-g="ac"]',box),gE=$('[data-g="ef"]',box);
+    gA.children[a.ac].classList.add(acOk?'ok':'bad');gE.children[a.ef].classList.add(efOk?'ok':'bad');
+    if(agOk&&acOk&&efOk){
+      a.ok=true;btn.disabled=true;$('select',box).disabled=true;
+      const agL=AGENTS.find(x=>x.k===a.ag).l;
+      fb.innerHTML=`<div class="fb ok"><b>Correcto.</b> ${SIT_X[i]}<div class="chain"><span>${agL}</span><em>→</em><span>${s.ac[a.ac][0]}</span><em>→</em><span>${s.ef[a.ef][0]}</span></div></div>`;
+      if(st.every(x=>x.ok)){
+        $('#m3end').innerHTML=`<div class="card"><div class="concept"><b>🧩 Concepto: agentes del proceso productivo</b>Empresas, familias, trabajadores, consumidores, gobierno y sector externo toman decisiones que se expresan en el territorio: dónde se produce, por dónde se transporta, qué se regula y dónde se consume. Por eso el circuito no es solo económico: también es territorial.</div>${nextBtn(3)}</div>`;
+        complete(3);scrollToEl($('#m3end'));
+      }
+    }else{
+      const tips=[];
+      if(!agOk)tips.push('<b>Agente:</b> ¿quién toma la decisión o realiza la acción en esta situación? Consulta el directorio de agentes.');
+      if(!acOk)tips.push('<b>Acción:</b> piensa en la función que cumple este agente dentro del circuito.');
+      if(!efOk)tips.push('<b>Efecto:</b> ¿cómo cambia la organización del territorio, los flujos o el uso de los recursos?');
+      fb.innerHTML=`<div class="fb bad">Revisa tu cadena:<ul>${tips.map(t=>`<li>${t}</li>`).join('')}</ul></div>`;
+    }
+  });
+}
+
+/* =========================================================
+   MISIÓN 4
+   ========================================================= */
+function routeSVG(p,order){
+  const pts=order.map(i=>p.stages[i]);let lines='';
+  for(let i=0;i<pts.length-1;i++){
+    const a=pts[i],b=pts[i+1],dx=b.x-a.x,dy=b.y-a.y,L=Math.hypot(dx,dy)||1,r=17;
+    lines+=`<line x1="${(a.x+dx/L*r).toFixed(1)}" y1="${(a.y+dy/L*r).toFixed(1)}" x2="${(b.x-dx/L*r).toFixed(1)}" y2="${(b.y-dy/L*r).toFixed(1)}" stroke="#2d6cdf" stroke-width="3" class="flow" marker-end="url(#ah)"/>`;
+  }
+  let grid='';for(let x=50;x<600;x+=50)grid+=`<line x1="${x}" y1="0" x2="${x}" y2="320" stroke="#e1e8f2"/>`;for(let y=50;y<320;y+=50)grid+=`<line x1="0" y1="${y}" x2="600" y2="${y}" stroke="#e1e8f2"/>`;
+  return `<svg viewBox="0 0 600 320" role="img" aria-label="Esquema del recorrido territorial de ${esc(p.name)}">
+  <defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2d6cdf"/></marker></defs>
+  <rect width="600" height="320" fill="#f4f8fd"/>${grid}
+  <path d="M40,40 C120,10 210,40 230,110 C250,190 160,220 120,280 C80,300 30,250 40,190 C50,130 10,90 40,40Z" fill="#e2ecdf"/>
+  <path d="M380,40 C470,20 580,40 575,120 C570,180 500,170 470,210 C430,250 370,200 380,150 C390,110 330,70 380,40Z" fill="#e2ecdf"/>
+  <path d="M250,200 C300,180 360,210 350,260 C340,300 280,305 255,280 C235,255 220,215 250,200Z" fill="#e2ecdf"/>
+  <text x="12" y="20" font-size="12" font-weight="700" fill="#14284b">Esquema del recorrido de ${esc(p.name.toLowerCase())}</text>
+  <text x="12" y="34" font-size="10" fill="#5c6a85">No está a escala · Las áreas verdes son masas de tierra esquemáticas</text>
+  <g transform="translate(565,40)"><path d="M0,-16 L6,4 L0,0 L-6,4Z" fill="#14284b"/><text x="0" y="18" font-size="11" text-anchor="middle" font-weight="700" fill="#14284b">N</text></g>
+  ${lines}
+  ${pts.map((s,i)=>`<g><circle cx="${s.x}" cy="${s.y}" r="14" fill="${i===0?'#1a9e74':i===pts.length-1?'#8a6ee8':'#14284b'}" stroke="#fff" stroke-width="2.5"/><text x="${s.x}" y="${s.y+4}" font-size="12" font-weight="800" text-anchor="middle" fill="#fff">${i+1}</text><text x="${s.x}" y="${s.y+29}" font-size="11" font-weight="700" text-anchor="middle" fill="#14284b" stroke="#f4f8fd" stroke-width="4" paint-order="stroke">${esc(s.t)}</text></g>`).join('')}
+  </svg>`;
+}
+function m4(app){
+  const p=P(),N=p.stages.length;
+  const target=p.stages.map(s=>s.o).sort((a,b)=>a-b);
+  let pool=shuffle(p.stages.map((_,i)=>i)),route=[],marks=[],solved=false;
+  app.innerHTML=`<div class="wrap"><main>${head(4,'🗺️','Sigue la ruta','Un producto recorre territorios antes de llegar a ti. Reconstruye ese recorrido.')}${dossier(p)}
+  <div class="card"><div class="step-t"><i>Paso 1</i> Reconstruye el recorrido</div>
+  <p>Encontraste ${N} pistas sueltas sobre el recorrido de ${esc(p.name.toLowerCase())}. Tócalas en el orden en que ocurren, desde la materia prima hasta el consumo. Si te equivocas, toca una etapa de tu recorrido para regresarla.</p>
+  <div class="grid2"><div><h3 class="small">Pistas encontradas</h3><div id="pool4" class="route"></div></div><div><h3 class="small">Tu recorrido</h3><div id="route4" class="route"></div></div></div>
+  <div class="row"><button class="btn primary" id="chk4">Verificar recorrido</button><button class="btn ghost" id="clr4">Empezar de nuevo</button></div>
+  <div id="fb4"></div><div id="map4"></div></div>
+  <div class="card" id="m4b" hidden><div class="step-t"><i>Paso 2</i> ¿Qué escala tiene este circuito?</div>
+  <p>Observa tu esquema. Antes de decidir, piensa en cuántos territorios participan, cómo se relacionan, cuántas etapas hay, qué transporte se usa y si existe intercambio con otros países.</p>
+  <div class="pills" id="sc">${['local','regional','global'].map(x=>`<button type="button" class="pill" data-s="${x}">${x[0].toUpperCase()+x.slice(1)}</button>`).join('')}</div>
+  <label class="q">¿Qué criterios consideraste? Elige al menos 2.</label>
+  <div class="pills" id="crit">${['Número de territorios','Relaciones entre territorios','Etapas productivas','Transporte','Intercambio comercial','Escala espacial (local, nacional, mundial)'].map(c=>`<button type="button" class="pill" data-c="${c}">${c}</button>`).join('')}</div>
+  <div class="sentence" id="sent">Considero que este circuito es ____ porque…</div>
+  <textarea id="m4why" data-note="m4why" aria-label="Justificación de la escala" placeholder="…participan territorios de…, las etapas…, el transporte…">${esc(S.notes.m4why||'')}</textarea>
+  <div class="row"><button class="btn primary" id="m4go">Enviar mi conclusión</button></div><div id="m4fb"></div></div>
+  ${sourcesBox(p)}</main></div>`;
+  const slot=(i,cls,clue)=>`<button type="button" class="slot ${clue?'clue':''} ${cls||''}" data-k="${i}"><span><b>${esc(p.stages[i].t)}</b><small>${esc(p.stages[i].p)}</small></span></button>`;
+  function draw(){
+    $('#pool4').innerHTML=pool.map(i=>slot(i,'',true)).join('')||'<p class="muted small">Todas las pistas están en tu recorrido.</p>';
+    $('#route4').innerHTML=route.map((i,k)=>slot(i,marks[k])).join('')||'<p class="muted small">Toca la primera etapa del circuito.</p>';
+  }
+  $('#pool4').onclick=e=>{const b=e.target.closest('.slot');if(!b||solved)return;const k=+b.dataset.k;pool=pool.filter(x=>x!==k);route.push(k);marks=[];draw();};
+  $('#route4').onclick=e=>{const b=e.target.closest('.slot');if(!b||solved)return;const k=+b.dataset.k;route=route.filter(x=>x!==k);pool.push(k);marks=[];draw();};
+  $('#clr4').onclick=()=>{if(solved)return;pool=shuffle(p.stages.map((_,i)=>i));route=[];marks=[];$('#fb4').innerHTML='';draw();};
+  $('#chk4').onclick=()=>{
+    if(solved)return;
+    if(route.length<N){$('#fb4').innerHTML=`<div class="fb info">Faltan ${N-route.length} etapa(s) por colocar en tu recorrido.</div>`;return;}
+    marks=route.map((i,k)=>p.stages[i].o===target[k]?'ok':'bad');draw();
+    const bad=marks.filter(m=>m==='bad').length;
+    if(bad){$('#fb4').innerHTML=`<div class="fb bad"><b>${bad} etapa(s) fuera de lugar.</b> Pregúntate qué necesita existir antes de cada etapa: no se puede transformar algo que aún no se ha obtenido, ni distribuir algo que todavía no se ha transportado. Toca las etapas marcadas para regresarlas y vuelve a intentarlo.</div>`;return;}
+    solved=true;$('#clr4').disabled=true;$('#chk4').disabled=true;
+    $('#fb4').innerHTML=`<div class="fb ok"><b>¡Recorrido reconstruido!</b> Cada etapa ocurre en un territorio distinto y depende de la anterior: materia prima, transformación, transporte, distribución y consumo forman una cadena conectada.${p.stages.some((s,i,a)=>a.findIndex(x=>x.o===s.o)!==i)?' Algunas etapas pueden ocurrir al mismo tiempo, por eso aceptan más de un orden.':''}</div>`;
+    $('#map4').innerHTML=`<div class="mapbox">${routeSVG(p,route)}</div><p class="small muted">Verde: inicio del circuito · Lila: consumo. Las flechas indican flujos de mercancías.</p>`;
+    $('#m4b').hidden=false;
+  };
+  draw();
+  let scale=S.notes.m4scale||'',crit=(S.notes.m4crit||[]).slice();
+  const paint=()=>{$$('#sc .pill').forEach(b=>b.classList.toggle('sel',b.dataset.s===scale));$$('#crit .pill').forEach(b=>b.classList.toggle('sel',crit.includes(b.dataset.c)));$('#sent').textContent=`Considero que este circuito es ${scale||'____'} porque…`;};
+  paint();
+  $$('#sc .pill').forEach(b=>b.onclick=()=>{scale=b.dataset.s;paint();});
+  $$('#crit .pill').forEach(b=>b.onclick=()=>{const c=b.dataset.c;crit=crit.includes(c)?crit.filter(x=>x!==c):crit.concat(c);paint();});
+  if(S.done[3]){solved=true;route=p.stages.map((_,i)=>i).sort((a,b)=>p.stages[a].o-p.stages[b].o);pool=[];marks=route.map(()=>'ok');draw();$('#map4').innerHTML=`<div class="mapbox">${routeSVG(p,route)}</div>`;$('#m4b').hidden=false;$('#clr4').disabled=true;$('#chk4').disabled=true;}
+  $('#m4go').onclick=()=>{
+    const why=(S.notes.m4why||'').trim(),errs=[];
+    if(!scale)errs.push('elige una escala');
+    if(crit.length<2)errs.push('selecciona al menos 2 criterios');
+    if(why.length<25)errs.push('completa tu justificación');
+    if(errs.length){$('#m4fb').innerHTML=`<div class="fb bad">Para enviar: ${errs.join('; ')}.</div>`;return;}
+    S.notes.m4scale=scale;S.notes.m4crit=crit;save();
+    const match=p.scale.includes(scale),main=p.scale[0];
+    const onlyDist=crit.length===1||(crit.every(c=>c.startsWith('Escala')||c==='Transporte'));
+    $('#m4fb').innerHTML=`<div class="fb ${match?'ok':'info'}"><b>${match?'Tu clasificación es consistente con el caso.':`La escala sugerida para este caso es ${main}.`}</b> ${p.why}${match?'':' Si tu justificación considera territorios, relaciones y etapas, compárala con esta explicación y decide si la ajustas.'}${onlyDist?'<br><br>Observa que te basaste sobre todo en distancia o transporte: también importan cuántos territorios participan y cómo se relacionan.':''}</div>
+    <div class="concept"><b>🧩 Concepto: escalas del circuito</b>Un circuito <b>local</b> reúne pocas etapas en lugares cercanos; uno <b>regional</b> integra varios territorios de un país o de una región; uno <b>global</b> conecta territorios de distintos países mediante intercambio internacional. La distancia por sí sola no basta: un circuito puede ser global aunque compres el producto a la vuelta de tu casa.</div>${nextBtn(4)}`;
+    complete(4);
+  };
+}
+
+/* =========================================================
+   MISIÓN 5
+   ========================================================= */
+function m5(app){
+  const p=P(),D=DATA[p.type],idx=PRODUCTS.indexOf(p);
+  const names=TERR.map((_,i)=>TERR[(i+idx)%4]);
+  const col=j=>D.rows.map(r=>r[j]);
+  const argmax=a=>a.indexOf(Math.max.apply(null,a));
+  const ratios=D.rows.map(r=>r[D.n2.num]/r[D.n2.den]);
+  const best2=argmax(ratios);
+  const I=D.ind;
+  const L=[
+   {id:'l1',lvl:'Nivel 1 · Observa',q:`¿Qué territorio presenta el valor más alto de ${I[0].l.toLowerCase()}?`,opts:names.map((n,i)=>[n,i===argmax(col(0))?1:0]),
+    ok:`Correcto. ${names[argmax(col(0))]} registra ${fmt(Math.max.apply(null,col(0)))} ${I[0].u}. Observar es el primer paso, pero el valor más alto no explica por qué ocurre ni si es "mejor".`,
+    bad:`Revisa la columna de ${I[0].l.toLowerCase()} y compara todas las filas antes de decidir.`},
+   {id:'l2',lvl:'Nivel 2 · Compara',q:D.n2.q,opts:names.map((n,i)=>[n,i===best2?1:0]),
+    ok:`Correcto. Al dividir ${I[D.n2.num].l.toLowerCase()} entre ${I[D.n2.den].l.toLowerCase()} se obtiene: ${names.map((n,i)=>`${n} ≈ ${fmt(ratios[i])}`).join('; ')} (${D.n2.u}). Un territorio con menos producción total puede ser más eficiente: comparar cocientes permite contrastar territorios de distinto tamaño.`,
+    bad:'No basta con ver el número más grande. Para comparar territorios de distinto tamaño, divide un indicador entre otro para cada territorio y compara los resultados.',
+    open:['m5n2',`Ahora describe con tus palabras: ¿qué diferencias observas entre ${names[0]} y ${names[1]}?`]},
+   {id:'l3',lvl:'Nivel 3 · Relaciona',q:'¿Qué relación podría existir entre los indicadores?',opts:[[D.rel,1],[`${I[1].l} y producción siempre aumentan en la misma proporción`,0],['Los indicadores no tienen ninguna relación entre sí',0]],
+    ok:`Correcto. ${D.rel.toLowerCase()}: ${I[D.relIdx].l.toLowerCase()} acompaña el nivel de producción. Esto anticipa la presión que la actividad ejerce sobre el territorio.`,
+    bad:`Revisa ${names[1]}: tiene más ${I[1].l.toLowerCase()} que ${names[0]}, pero menos producción. Busca qué indicador sí cambia junto con la producción en todos los territorios.`},
+   {id:'l4',lvl:'Nivel 4 · Interpreta',q:`${names[1]} tiene más ${I[1].l.toLowerCase()} que ${names[0]}, pero menor producción. ¿Qué permite comprender este contraste?`,
+    opts:[['Puede reflejar distintas formas de producir: más maquinaria y tecnología en un territorio, más trabajo manual en el otro',1],[`Que las personas de ${names[1]} trabajan menos`,0],['Que los datos están equivocados',0]],
+    ok:'Correcto. Los datos no dicen que alguien trabaje menos: sugieren diferencias en tecnología, capital y organización de la producción. Interpretar es proponer explicaciones que los datos permitan sostener.',
+    bad:'Cuidado con las conclusiones que los datos no permiten afirmar. Piensa en la tecnología, la maquinaria y la forma de organizar la producción.',
+    open:['m5n4','¿Qué nos permiten comprender estos datos sobre la actividad económica de estos territorios?']},
+   {id:'l5',lvl:'Nivel 5 · Argumenta',q:'¿Los datos permiten afirmar que un territorio tiene mayor importancia económica que los demás?',opts:[['Sí',2],['No',2],['Depende',2]],
+    open:['m5n5','Explica tu postura usando al menos dos indicadores:']}
+  ];
+  const state={};
+  const th=I.map(x=>`<th>${x.l}<small>${x.u}</small></th>`).join('');
+  app.innerHTML=`<div class="wrap"><main>${head(5,'📊','Los números también cuentan historias','Un mismo producto puede tener una importancia muy distinta en cada territorio. Los indicadores ayudan a contrastarlo.')}${dossier(p)}
+  <div class="card"><div class="row" style="margin-top:0"><span class="sim">DATOS SIMULADOS PARA ANÁLISIS</span></div>
+  <h3>Indicadores de ${esc(p.name.toLowerCase())} en cuatro territorios</h3>
+  <p class="small muted">Valores ficticios diseñados para practicar la lectura de indicadores. Los territorios son los mismos de la Misión 2 y de los mapas de la Misión 6.</p>
+  <div class="tbl"><table><thead><tr><th>Territorio</th>${th}</tr></thead><tbody>${D.rows.map((r,i)=>`<tr><td><b>${names[i]}</b></td>${r.map(v=>`<td>${fmt(v)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>
+  <h3 style="margin-top:16px">Gráfica comparativa</h3><div class="tabs" id="tabs5">${I.map((x,j)=>`<button type="button" class="tab ${j===0?'sel':''}" data-j="${j}">${x.l}</button>`).join('')}</div><div id="bars5"></div>
+  <div class="real">📌 <b>Dato real de contexto:</b> ${esc(p.ctx)} <i>(Fuente: ${esc(p.ctxSrc)})</i></div></div>
+  ${L.map(l=>`<div class="lvl" id="${l.id}"><div class="lt">${l.lvl}</div><p><b>${l.q}</b></p><div class="pills">${l.opts.map((o,j)=>`<button type="button" class="pill" data-j="${j}">${o[0]}</button>`).join('')}</div>
+   ${l.open?`<label class="q" for="${l.open[0]}">${l.open[1]}</label><textarea id="${l.open[0]}" data-note="${l.open[0]}">${esc(S.notes[l.open[0]]||'')}</textarea>`:''}
+   <div class="row"><button type="button" class="btn primary" data-chk>Verificar</button></div><div class="lfb"></div></div>`).join('')}
+  <div id="m5end"></div>${sourcesBox(p)}</main></div>`;
+  function bars(j){const v=col(j),mx=Math.max.apply(null,v);$('#bars5').innerHTML=`<div class="bars" role="img" aria-label="Gráfica de ${I[j].l}">${v.map((x,i)=>`<div class="bar"><span>${names[i]}</span><div class="tr"><div class="fl" style="width:${Math.max(6,x/mx*100)}%;background:${['#2d6cdf','#1a9e74','#8a6ee8','#d9a400'][j]}">${fmt(x)}</div></div></div>`).join('')}</div><p class="small muted">${I[j].l} (${I[j].u}). Datos simulados.</p>`;}
+  bars(0);
+  $$('#tabs5 .tab').forEach(t=>t.onclick=()=>{$$('#tabs5 .tab').forEach(x=>x.classList.toggle('sel',x===t));bars(+t.dataset.j);});
+  L.forEach(l=>{
+    const box=$('#'+l.id);state[l.id]={sel:-1,ok:false};
+    $$('.pills .pill',box).forEach(b=>b.onclick=()=>{if(state[l.id].ok)return;state[l.id].sel=+b.dataset.j;$$('.pills .pill',box).forEach(x=>{x.classList.remove('ok','bad');x.classList.toggle('sel',x===b);});});
+    $('[data-chk]',box).onclick=()=>{
+      const s=state[l.id],fb=$('.lfb',box);
+      if(s.sel<0){fb.innerHTML='<div class="fb info">Elige una opción.</div>';return;}
+      const txt=l.open?(S.notes[l.open[0]]||'').trim():'';
+      const minLen=l.id==='l5'?40:25;
+      if(l.id==='l5'){
+        if(txt.length<minLen){fb.innerHTML='<div class="fb info">Desarrolla tu argumento: menciona al menos dos indicadores y explica qué muestra cada uno.</div>';return;}
+        const ch=l.opts[s.sel][0];S.notes.m5n5c=ch;save();
+        s.ok=true;$$('.pills .pill',box)[s.sel].classList.add('ok');
+        fb.innerHTML=`<div class="fb ok"><b>Argumento registrado.</b> ${ch==='Depende'?'Buen criterio: la respuesta depende del indicador que se use.':`Tu postura (“${ch}”) puede sostenerse si la argumentas con datos, pero considera que la respuesta cambia según el indicador.`} Un territorio puede destacar en producción, otro en empleo y otro en exportaciones; además, el mayor volumen también puede implicar mayor presión ambiental. La “importancia económica” depende de qué se mida y para quién.</div>`;
+        finish();return;
+      }
+      const ok=!!l.opts[s.sel][1];
+      $$('.pills .pill',box)[s.sel].classList.add(ok?'ok':'bad');
+      if(!ok){fb.innerHTML=`<div class="fb bad">${l.bad}</div>`;return;}
+      if(l.open&&txt.length<minLen){fb.innerHTML=`<div class="fb ok">${l.ok}</div><div class="fb info">Para completar este nivel, responde también la pregunta abierta con una o dos oraciones.</div>`;return;}
+      s.ok=true;fb.innerHTML=`<div class="fb ok">${l.ok}</div>`;finish();
+    };
+  });
+  function finish(){
+    if(!L.every(l=>state[l.id].ok))return;
+    $('#m5end').innerHTML=`<div class="card"><div class="concept"><b>🧩 Concepto: indicadores</b>Los indicadores pueden ser <b>económicos</b> (producción, exportaciones), <b>sociales</b> (empleo, población ocupada), <b>territoriales</b> (superficie, infraestructura) y <b>ambientales</b> (agua, emisiones). Un solo indicador cuenta una parte de la historia; combinarlos permite contrastar actividades y territorios.</div>${nextBtn(5)}</div>`;
+    complete(5);scrollToEl($('#m5end'));
+  }
+}
+
+/* =========================================================
+   MISIÓN 6
+   ========================================================= */
+function mapSVG(vals,cols,id){
+  return `<svg viewBox="0 0 470 310" role="img" aria-label="Mapa esquemático">
+  <rect width="470" height="310" fill="#dcebf8"/><text x="425" y="190" font-size="12" fill="#5c87b8" font-style="italic" text-anchor="middle">Mar</text>
+  ${REGIONS.map((r,i)=>`<polygon class="reg" data-r="${i}" data-m="${id}" points="${r.pts}" fill="${cols[vals[i]]}"/>`).join('')}
+  <path d="M155,40 C150,90 135,120 140,160 C145,200 110,230 75,300" fill="none" stroke="#3b8fd9" stroke-width="3" pointer-events="none"/>
+  <path d="M251,214 C290,215 330,222 372,222" fill="none" stroke="#14284b" stroke-width="2.5" stroke-dasharray="6 4" pointer-events="none"/>
+  <text x="160" y="80" font-size="15" pointer-events="none">▲</text><text x="245" y="72" font-size="15" pointer-events="none">▲</text><text x="265" y="125" font-size="13" pointer-events="none">▲</text>
+  <circle cx="251" cy="214" r="6" fill="#14284b" stroke="#fff" stroke-width="2" pointer-events="none"/>
+  <text x="380" y="228" font-size="16" pointer-events="none">⚓</text>
+  ${REGIONS.map(r=>`<text x="${r.c[0]}" y="${r.c[1]+(r.n==='Tierra Cálida'?-14:0)}" font-size="10.5" font-weight="700" text-anchor="middle" fill="#14284b" stroke="#fff" stroke-width="3" paint-order="stroke" pointer-events="none">${r.n}</text>`).join('')}
+  <g transform="translate(440,34)" pointer-events="none"><path d="M0,-16 L6,4 L0,0 L-6,4Z" fill="#14284b"/><text y="18" font-size="11" text-anchor="middle" font-weight="700" fill="#14284b">N</text></g>
+  <g transform="translate(16,290)" pointer-events="none"><rect width="40" height="5" fill="#14284b"/><rect x="40" width="40" height="5" fill="#fff" stroke="#14284b"/><text y="-4" font-size="9" fill="#14284b">0</text><text x="80" y="-4" font-size="9" text-anchor="middle" fill="#14284b">100 km</text></g>
+  </svg>`;
+}
+function m6(app){
+  const p=P(),M=MAPS[p.type];
+  const legend=cols=>`<div class="legend">${CLS.map((c,i)=>`<span><i style="background:${cols[i]}"></i>${c}</span>`).join('')}</div>`;
+  const sym=`<div class="legend"><span>▲ Montañas</span><span>● Ciudad principal</span><span>⚓ Puerto</span><span><i style="background:#3b8fd9;height:4px;border:0"></i>Río</span><span><i style="background:repeating-linear-gradient(90deg,#14284b 0 5px,transparent 5px 8px);height:3px;border:0"></i>Autopista</span></div>`;
+  const TIPS={'Título':'Indica el tema y el lugar. Antes de interpretar, pregúntate qué representa cada mapa.','Leyenda':'Explica el significado de los colores: en estos mapas, el color más intenso indica el valor más alto.','Símbolos':'Representan elementos puntuales o lineales: montañas, ciudad, puerto, río y autopista. Te ayudan a explicar la distribución.','Distribución':'Observa dónde aparece el fenómeno en todo el territorio: ¿en qué partes hay valores altos y bajos?','Concentración':'Busca dónde se agrupan los valores altos: ¿están juntos o separados?','Contraste espacial':'Compara regiones con valores muy distintos: ¿qué tienen unas que no tengan las otras?'};
+  const Q=[{k:'q1',q:'1. ¿Dónde se concentra la actividad productiva (Mapa A)?',o:M.q1,ok:'Correcto. Los colores más intensos del Mapa A se agrupan en esa zona.',bad:'Busca los colores más intensos del Mapa A y ubica en qué parte del territorio están (usa la flecha del norte).'},
+   {k:'q2',q:'2. ¿Qué patrón espacial observas?',o:M.q2,ok:'Correcto. Un patrón concentrado indica que ciertas condiciones del territorio atraen la actividad.',bad:'Observa si los colores intensos están juntos, repartidos por todo el mapa o sin ningún orden.'},
+   {k:'q3',q:'3. ¿Hay territorios que destaquen? ¿Cuáles y por qué llaman tu atención?',open:'m6q3'},
+   {k:'q4',q:`4. ¿Qué relación encuentras entre el Mapa A y el Mapa B (${M.B.lab})?`,o:M.q4,ok:'Correcto. '+M.fb4,bad:'Compara región por región: ¿las zonas oscuras del Mapa A también son oscuras en el Mapa B?'},
+   {k:'q5',q:'5. ¿Qué podría explicar esa distribución? Usa los símbolos del mapa y lo que aprendiste sobre factores.',open:'m6q5'}];
+  app.innerHTML=`<div class="wrap"><main>${head(6,'🗺️','El territorio habla','Los mapas muestran dónde ocurren las cosas. Leerlos bien permite descubrir patrones que una tabla no revela.')}${dossier(p)}
+  <div class="card"><div class="step-t"><i>Paso 1</i> Lectura guiada</div><p>Toca cada elemento para aprender a leerlo en estos mapas:</p>
+  <div class="reading pills">${Object.keys(TIPS).map(k=>`<button type="button" class="pill" data-tip="${k}">${k}</button>`).join('')}</div><div id="tip6" class="fb info" hidden></div></div>
+  <div class="row" style="margin:0 0 8px"><span class="sim">DATOS SIMULADOS PARA ANÁLISIS</span><span class="small muted">República esquemática de Geolandia. Toca una región para ver sus valores.</span></div>
+  <div class="maps"><div class="map"><h3>${M.A.t}</h3>${mapSVG(M.A.v,COLA,'A')}${legend(COLA)}</div><div class="map"><h3>${M.B.t}</h3>${mapSVG(M.B.v,COLB,'B')}${legend(COLB)}</div></div>
+  <div class="card" style="margin-top:12px">${sym}<div class="mapinfo" id="info6">Toca una región en cualquiera de los mapas.</div></div>
+  <div class="card"><div class="step-t"><i>Paso 2</i> Analiza los mapas</div>
+  ${Q.map(q=>`<div class="lvl" id="${q.k}"><p><b>${q.q}</b></p>${q.o?`<div class="pills col">${q.o.map((o,j)=>`<button type="button" class="pill" data-j="${j}">${o[0]}</button>`).join('')}</div>`:`<textarea id="${q.open}" data-note="${q.open}" aria-label="${esc(q.q)}">${esc(S.notes[q.open]||'')}</textarea>`}<div class="qfb"></div></div>`).join('')}
+  <div class="row"><button class="btn primary" id="chk6">Revisar mi análisis</button></div><div id="fb6"></div></div>
+  ${sourcesBox(p)}</main></div>`;
+  $$('[data-tip]').forEach(b=>b.onclick=()=>{b.classList.add('ok');const t=$('#tip6');t.hidden=false;t.innerHTML=`<b>${b.dataset.tip}:</b> ${TIPS[b.dataset.tip]}`;});
+  $$('.reg').forEach(r=>r.onclick=()=>{const i=+r.dataset.r;$$('.reg').forEach(x=>x.classList.toggle('hl',+x.dataset.r===i));$('#info6').innerHTML=`<b>${REGIONS[i].n}</b> · Producción: ${CLS[M.A.v[i]].toLowerCase()} · ${M.B.lab[0].toUpperCase()+M.B.lab.slice(1)}: ${CLS[M.B.v[i]].toLowerCase()}`;});
+  const sel={};
+  Q.filter(q=>q.o).forEach(q=>{const box=$('#'+q.k);$$('.pill',box).forEach(b=>b.onclick=()=>{sel[q.k]=+b.dataset.j;$$('.pill',box).forEach(x=>{x.classList.remove('ok','bad');x.classList.toggle('sel',x===b);});});});
+  $('#chk6').onclick=()=>{
+    let allOk=true;
+    Q.forEach(q=>{
+      const fb=$('.qfb',$('#'+q.k));
+      if(q.o){
+        if(sel[q.k]==null){fb.innerHTML='<div class="fb info">Elige una opción.</div>';allOk=false;return;}
+        const ok=!!q.o[sel[q.k]][1];$$('.pill',$('#'+q.k))[sel[q.k]].classList.add(ok?'ok':'bad');
+        fb.innerHTML=`<div class="fb ${ok?'ok':'bad'}">${ok?q.ok:q.bad}</div>`;if(!ok)allOk=false;
+      }else{
+        const t=(S.notes[q.open]||'').trim(),min=q.k==='q5'?30:15;
+        if(t.length<min){fb.innerHTML=`<div class="fb info">Escribe tu respuesta${q.k==='q5'?' relacionando al menos un factor natural o socioeconómico':' nombrando las regiones'}.</div>`;allOk=false;}
+        else fb.innerHTML='<div class="fb ok">Respuesta registrada. Compárala con tus respuestas cerradas: ¿son coherentes?</div>';
+      }
+    });
+    if(!allOk){$('#fb6').innerHTML='<div class="fb bad">Revisa las preguntas marcadas y vuelve a intentarlo.</div>';return;}
+    $('#fb6').innerHTML=`<div class="concept"><b>🧩 Concepto: patrones espaciales</b>La distribución de una actividad casi nunca es homogénea: se <b>concentra</b> donde coinciden ciertos factores. Comparar dos mapas permite proponer relaciones, pero una coincidencia no demuestra por sí sola una causa: hay que argumentarla con evidencia.</div>${nextBtn(6)}`;
+    complete(6);
+  };
+}
+
+/* =========================================================
+   MISIÓN 7
+   ========================================================= */
+function m7(app){
+  const p=P(),acts=p.acts.concat(GEN_ACTS);
+  const allP=shuffle([].concat(...Object.values(RES).map(r=>r.pres))),allC=shuffle([].concat(...Object.values(RES).map(r=>r.cons)));
+  const opt=(arr,ph)=>`<option value="">${ph}</option>`+arr.map(a=>`<option value="${esc(a)}">${esc(a)}</option>`).join('');
+  app.innerHTML=`<div class="wrap"><main>${head(7,'⚠️','El costo territorial','Las actividades económicas generan beneficios, pero también pueden ejercer presión sobre los territorios y sus recursos.')}${dossier(p)}
+  <div class="card"><div class="step-t"><i>Paso 1</i> Construye una cadena de presión</div>
+  <p>Elige una actividad del circuito de ${esc(p.name.toLowerCase())} y sigue su efecto sobre el territorio.</p>
+  <div class="concept small"><b>Ejemplo</b>Aumento de producción → mayor consumo de agua → presión sobre el recurso hídrico → disminución de la disponibilidad.</div>
+  <div class="pchain">
+   <label for="a7">Actividad económica</label><select id="a7">${opt(acts.map(a=>a[0]),'Elige una actividad…')}</select><div class="ar">↓</div>
+   <label for="r7">Recurso o territorio</label><select id="r7"><option value="">Elige un recurso…</option>${Object.entries(RES).map(([k,r])=>`<option value="${k}">${r.l}</option>`).join('')}</select><div class="ar">↓</div>
+   <label for="p7">Presión</label><select id="p7">${opt(allP,'Elige la presión…')}</select><div class="ar">↓</div>
+   <label for="c7">Consecuencia</label><select id="c7">${opt(allC,'Elige la consecuencia…')}</select>
+  </div>
+  <div class="row"><button class="btn primary" id="chk7">Verificar cadena</button></div><div id="fb7"></div></div>
+  <div class="card" id="m7b" hidden><div class="step-t"><i>Paso 2</i> Propón una medida</div>
+  <p><b>¿Qué medida podría reducir esta presión?</b> No hay una única respuesta: lo importante es que tu propuesta tenga relación lógica con el problema.</p>
+  <label class="q">¿En qué parte de la cadena actúa tu medida?</label><div class="pills" id="part7">${['Cambiar la forma de realizar la actividad','Proteger o restaurar el recurso','Disminuir la presión','Atender las consecuencias'].map(x=>`<button type="button" class="pill" data-x="${x}">${x}</button>`).join('')}</div>
+  <label class="q" for="m7medida">Describe tu medida: qué se haría, quién la aplicaría y cómo reduciría la presión.</label><textarea id="m7medida" data-note="m7medida">${esc(S.notes.m7medida||'')}</textarea>
+  <div class="row"><button class="btn primary" id="go7">Enviar propuesta</button></div><div id="fb7b"></div></div>
+  ${sourcesBox(p)}</main></div>`;
+  let rec=null,part='',tries=0;
+  $('#chk7').onclick=()=>{
+    const a=$('#a7').value,r=$('#r7').value,pr=$('#p7').value,c=$('#c7').value;
+    if(!a||!r||!pr||!c){$('#fb7').innerHTML='<div class="fb info">Completa los cuatro eslabones de la cadena.</div>';return;}
+    const act=acts.find(x=>x[0]===a),R=RES[r],errs=[];
+    if(!act[1].includes(r))errs.push(`La actividad “${esc(a)}” no se relaciona de forma directa con ${R.l}. Piensa qué recurso usa, transforma o modifica esa actividad.`);
+    if(!R.pres.includes(pr))errs.push(`La presión elegida no corresponde a ${R.l}. ¿Qué le ocurre a ese recurso cuando aumenta la actividad?`);
+    if(!R.cons.includes(c))errs.push(`La consecuencia elegida no se deriva de una presión sobre ${R.l}. ¿Qué efecto tendría para la población o el territorio?`);
+    if(errs.length){$('#fb7').innerHTML=`<div class="fb bad">Tu cadena tiene eslabones que no se conectan:<ul>${errs.map(e=>`<li>${e}</li>`).join('')}</ul></div>`;return;}
+    rec=r;S.notes.m7chain=`${a} → ${R.l.replace(/^\S+\s/,'')} → ${pr} → ${c}`;save();
+    $('#fb7').innerHTML=`<div class="fb ok"><b>Cadena coherente.</b> Cada eslabón explica al siguiente.<div class="chain"><span>${esc(a)}</span><em>→</em><span>${R.l}</span><em>→</em><span>${esc(pr)}</span><em>→</em><span>${esc(c)}</span></div></div>`;
+    $('#m7b').hidden=false;scrollToEl($('#m7b'));
+  };
+  $$('#part7 .pill').forEach(b=>b.onclick=()=>{part=b.dataset.x;$$('#part7 .pill').forEach(x=>x.classList.toggle('sel',x===b));});
+  $('#go7').onclick=()=>{
+    const t=(S.notes.m7medida||'').trim();
+    if(!part||t.length<20){$('#fb7b').innerHTML='<div class="fb info">Elige en qué parte de la cadena actúa tu medida y descríbela con al menos una oración completa.</div>';return;}
+    const R=RES[rec],hit=R.kw.test(norm(t));tries++;
+    if(!hit&&tries<2){$('#fb7b').innerHTML=`<div class="fb bad">No queda claro cómo tu medida atiende la presión sobre <b>${R.l}</b>. Explica qué cambiaría tu medida en ese recurso o en la actividad que lo presiona, y vuelve a enviarla.</div>`;return;}
+    $('#fb7b').innerHTML=`<div class="fb ${hit?'ok':'info'}">${hit?`<b>Propuesta coherente.</b> Tu medida se relaciona con ${R.l} y actúa sobre: ${part.toLowerCase()}.`:'<b>Propuesta registrada.</b> Revisa en tu expediente que la relación entre tu medida y el recurso afectado quede explícita.'} Pregúntate también: ¿quién pagaría el costo de aplicarla y qué agente tendría que participar (empresas, gobierno, consumidores)?</div>
+    <div class="concept"><b>🧩 Concepto: presión sobre el territorio</b>Toda actividad económica usa y transforma recursos. Cuando la intensidad de uso supera la capacidad del territorio para recuperarse, aparece la <b>presión territorial</b>: escasez, contaminación, pérdida de suelo o de biodiversidad, saturación de infraestructura. Analizarla permite pensar cómo producir y consumir de otra manera.</div>${nextBtn(7)}`;
+    complete(7);
+  };
+}
+
+/* =========================================================
+   EXPEDIENTE FINAL
+   ========================================================= */
+function renderExp(app){
+  const p=P();
+  const SEC=[
+   ['1. Identidad del producto',['Nombre (tuyo o de la pareja)','Producto investigado','¿Dónde se consume?']],
+   ['2. Sectores económicos','Identifica los sectores que participan y da un ejemplo de actividad de cada uno.'],
+   ['3. Factores','Identifica factores naturales y socioeconómicos que explican dónde se produce.'],
+   ['4. Agentes','Identifica a los principales agentes y explica qué hace cada uno en el circuito.'],
+   ['5. Circuito territorial','Construye la secuencia: materia prima → producción → transformación → transporte → distribución → consumo, indicando en qué territorio ocurre cada etapa.'],
+   ['6. Escala','Determina si el circuito es local, regional o global y justifícalo con territorios, relaciones, etapas e intercambio (no solo con la distancia).'],
+   ['7. Mapa esquemático ⭐ Parte central de tu expediente',MAPBLOCK],
+   ['8. Análisis de indicadores','Elige dos indicadores de la Misión 5 y explica qué muestran y qué no permiten afirmar.'],
+   ['9. Análisis cartográfico','Explica el patrón espacial que observaste en los mapas y qué podría explicarlo.'],
+   ['10. Presión territorial','Explica: actividad económica → recurso afectado → presión → consecuencia, e incluye tu medida.'],
+   ['11. Conclusión geoeconómica','Responde en 8 a 10 líneas: “¿Qué descubriste sobre la relación entre economía y territorio que no era evidente cuando simplemente consumías este producto?”']
+  ];
+  const NL=[['m1q1','Actividades que imaginaste al inicio'],['m1q3','Dónde pensabas que comenzaba el circuito'],['m2terr','Territorio que elegiste en la Misión 2'],['m2factors','Factores de tu decisión'],['m2just','Tu justificación territorial'],['m4scale','Escala que asignaste al circuito'],['m4why','Por qué'],['m5n2','Diferencias entre territorios'],['m5n4','Lo que muestran los datos'],['m5n5','Tu argumento sobre la importancia económica'],['m6q3','Territorios que destacan en los mapas'],['m6q5','Explicación de la distribución'],['m7chain','Tu cadena de presión'],['m7medida','Tu medida'],['datomapa','Del dato al mapa'],['hallazgo','Mi principal hallazgo']];
+  const notes=NL.filter(([k])=>S.notes[k]&&String(S.notes[k]).trim()).map(([k,l])=>`<li><b>${l}:</b> ${esc(Array.isArray(S.notes[k])?S.notes[k].join(', '):S.notes[k])}</li>`).join('');
+  const RUB=[['Sectores económicos',10],['Factores y agentes',15],['Circuito territorial',20],['Indicadores',20],['Análisis cartográfico',15],['Presión territorial',10],['Conclusión geoeconómica',10]];
+  app.innerHTML=`<div class="wrap"><main>
+  <div class="mhead"><div class="ic" aria-hidden="true">🔓</div><div><div class="num">Investigación de ${esc(p.name.toLowerCase())}</div><h2>Expediente geoeconómico desbloqueado</h2><p class="muted">Ahora te toca a ti: construye tu expediente en tu libreta o en un documento. Esta guía te dice qué debe contener.</p></div></div>
+  <div class="card lab"><p class="labq" style="margin-top:0">✍️ Este expediente debe elaborarse con tus propias palabras. No copies las explicaciones del HTML.</p><p class="small" style="margin-bottom:0">Completar las misiones no significa que tu proyecto haya terminado. La aplicación te proporciona las pistas y evidencias; tú debes utilizarlas para construir tu propio análisis geoeconómico. <button class="linkbtn noprint" data-go="cierre">Ver el cierre de la investigación</button></p></div>
+  <div class="card">${SEC.map(([t,d])=>`<div class="exp-sec"><h3>${t}</h3>${d===MAPBLOCK?mapBlock():Array.isArray(d)?`<ul class="small">${d.map(x=>`<li>${x}:</li>`).join('')}</ul>`:`<p class="small">${d}</p>`}</div>`).join('')}</div>
+  <div class="card"><h3>🗒️ Tus notas de investigación</h3><p class="small muted">Son tus respuestas durante las misiones. Úsalas como punto de partida: revísalas, mejóralas y desarróllalas; no las copies tal cual.</p>${notes?`<ul class="notes small">${notes}</ul>`:'<p class="small muted">No hay notas guardadas en este dispositivo.</p>'}</div>
+  <div class="card"><h3>📋 Rúbrica del expediente</h3><p class="small muted">Se evalúa sobre todo tu capacidad de análisis, no el diseño visual.</p>
+  <div class="tbl"><table class="rub" style="min-width:0"><thead><tr><th>Criterio</th><th>Valor</th></tr></thead><tbody>${RUB.map(([c,v])=>`<tr><td>${c}</td><td>${v}%</td></tr>`).join('')}<tr><td><b>Total</b></td><td><b>100%</b></td></tr></tbody></table></div></div>
+  <div class="card hallazgo"><h3>🔎 Mi principal hallazgo</h3><p>Si tuvieras que explicar en una sola idea qué relación existe entre ${esc(p.name.toLowerCase())} y el territorio, ¿qué dirías?</p><textarea id="hallazgo" data-note="hallazgo" rows="5" placeholder="Escribe de 3 a 5 líneas…">${esc(S.notes.hallazgo||'')}</textarea><p class="small muted">Se guarda en este dispositivo. Cópialo después en tu expediente.</p></div>
+  <div class="card"><h3>📚 ¿Qué aprendí?</h3><div class="learn">${LEARN.map(([n,i,c])=>`<div class="lrn"><span class="lrn-i" aria-hidden="true">${i}</span><span class="small muted">Misión ${n}</span><b>${c}</b></div>`).join('')}</div></div>
+  ${sourcesBox(p)}
+  <div class="final" style="margin-top:16px"><h2>🌎 Investigación completada</h2>
+  <p>Ahora sabes que detrás de un producto no existe solamente una fábrica o una tienda.</p>
+  <p>Existe un territorio.<br>Existen recursos.<br>Existen personas.<br>Existen decisiones.<br>Existen relaciones entre lugares.</p>
+  <p>Y existe un circuito económico que conecta todos esos elementos.</p>
+  <p style="color:#fff;font-weight:700;margin-top:18px">Tu reto ahora es llevar esta historia del mundo digital a tu mapa.</p>
+  <p style="color:var(--amar);font-weight:800;font-size:1.1rem">🗺️ Elabora tu mapa esquemático y construye tu expediente geoeconómico.</p></div>
+  <div class="row noprint" style="justify-content:center;margin-top:18px"><button class="btn primary" id="descargar">⬇️ Descargar mi guía</button><button class="btn" id="print">🖨️ Imprimir o guardar esta guía en PDF</button><button class="btn ghost" data-go="select">Investigar otro producto</button><button class="btn ghost" data-reset>🔄 Reiniciar investigación</button></div>
+  </main></div>`;
+  $('#print').onclick=()=>window.print();
+  $('#descargar').onclick=()=>{
+    const live=[...document.querySelectorAll('textarea')].map(t=>t.value);
+    const doc=document.documentElement.cloneNode(true);
+    doc.querySelectorAll('script,.noprint,.top,.toast,.foot').forEach(n=>n.remove());
+    doc.querySelectorAll('textarea').forEach((t,i)=>{t.textContent=live[i]||'';t.setAttribute('readonly','');});
+    const limpio=s=>(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^A-Za-z0-9]+/g,'_').replace(/^_|_$/g,'');
+    const prod=limpio(document.querySelector('.mhead .num')?.textContent.replace('Investigación de',''))||'producto';
+    try{const url=URL.createObjectURL(new Blob(['<!DOCTYPE html>\n'+doc.outerHTML],{type:'text/html'}));const a=document.createElement('a');a.href=url;a.download=`Guia_Mision_Circuito_${prod}.html`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);toast('Guía descargada');}
+    catch(e){toast('No se pudo descargar','Usa Imprimir o guardar en PDF');}
+  };
+}
+
+
+/* =========================================================
+   AJUSTES: MAPA ESQUEMÁTICO, CIERRE Y "DEL DATO AL MAPA"
+   ========================================================= */
+const MAPBLOCK='__mapa__';
+const MAPCHK=['Título','Territorios involucrados','Origen y destino','Etapas del circuito','Flechas o rutas','Símbolos','Leyenda','Escala espacial: local, regional o global','Nombre del producto'];
+const LEARN=[[1,'🔎','Sectores económicos'],[2,'🌱','Factores naturales y socioeconómicos'],[3,'👥','Agentes del proceso productivo'],[4,'🗺️','Circuitos territoriales'],[5,'📊','Indicadores económicos y territoriales'],[6,'🧭','Interpretación cartográfica'],[7,'⚠️','Presión sobre el territorio y los recursos']];
+function mapBlock(){
+  const got=S.notes.mapchk||[];
+  return `<div class="mapguide"><p><b>Elabora en tu libreta un mapa esquemático del circuito territorial de tu producto.</b></p>
+  <p class="small">Debe incluir obligatoriamente (marca cada elemento cuando lo tengas en tu mapa):</p>
+  <div class="checks">${MAPCHK.map((c,i)=>`<label class="chk"><input type="checkbox" data-mc="${i}" ${got.includes(i)?'checked':''}> ${c}</label>`).join('')}</div>
+  <p class="small" id="mcount">${got.length} de ${MAPCHK.length} elementos marcados.</p>
+  <p class="small muted">Tu mapa NO necesita tener la precisión de un mapa cartográfico profesional. Su propósito es representar espacialmente las relaciones del circuito productivo.</p></div>`;
+}
+document.addEventListener('change',e=>{
+  const c=e.target.closest&&e.target.closest('[data-mc]');if(!c)return;
+  const i=+c.dataset.mc;let a=(S.notes.mapchk||[]).filter(x=>x!==i);if(c.checked)a.push(i);S.notes.mapchk=a;save();
+  const m=$('#mcount');if(m)m.textContent=`${a.length} de ${MAPCHK.length} elementos marcados.${a.length===MAPCHK.length?' ✓ Tu mapa tiene todos los elementos obligatorios.':''}`;
+});
+const DM_STEPS=['Datos','Patrón espacial','Mapa','Interpretación','Conclusión'];
+const DM_EX={
+ agro:['La tabla muestra que un territorio produce mucho más que los demás y también consume más agua.','La producción se concentra en el suroeste, en regiones vecinas junto al río.','El mapa hace visible esa concentración y permite contrastarla con la disponibilidad de agua.','La actividad se localiza donde coinciden suelo fértil y agua; Tierra Cálida produce con poca agua gracias a pozos.','La producción depende de factores naturales y ejerce presión sobre el agua del territorio.'],
+ ind:['La tabla muestra que un territorio produce y exporta mucho más que los demás, pero también emite más.','La producción se concentra en un corredor del sureste que lleva al puerto.','El mapa hace visible esa concentración y permite contrastarla con la infraestructura.','La industria se localiza donde hay autopista, puerto, ciudad y mano de obra.','La producción depende sobre todo de factores socioeconómicos y concentra la presión ambiental en pocas regiones.']
+};
+function renderCierre(app){
+  const p=P(),ex=DM_EX[p.type];
+  let pool=shuffle([0,1,2,3,4]);while(pool.join()==='0,1,2,3,4')pool=shuffle(pool);
+  let seq=[],solved=false;
+  const did=['Identificaste sectores económicos','Analizaste factores naturales y socioeconómicos','Identificaste agentes','Reconstruiste un circuito territorial','Analizaste indicadores','Interpretaste mapas','Identificaste presiones sobre el territorio'];
+  app.innerHTML=`<section class="hero">${topoSVG()}<div class="hero-in"><div><h1><small>${p.e} ${esc(p.name)}</small>🔓 Investigación completada</h1>
+   <p class="q">Has reunido las pistas necesarias para reconstruir el circuito territorial de tu producto.</p></div></div></section>
+  <div class="wrap"><main>
+  <div class="card"><h3>💻 Lo que hiciste en el laboratorio</h3><div class="didlist">${did.map((d,i)=>`<div class="did"><span>✓</span><div><span class="small muted">Misión ${i+1}</span><br>${d}</div></div>`).join('')}</div></div>
+  <div class="card lab"><p class="labq" style="margin:0">Completar las misiones no significa que tu proyecto haya terminado. La aplicación te proporcionó las pistas y evidencias; ahora tú debes utilizarlas para construir tu propio análisis geoeconómico.</p></div>
+  <div class="card"><div class="step-t"><i>Antes del expediente</i> 🗺️ Del dato al mapa</div>
+  <p>Un mapa no solamente sirve para localizar lugares: sirve para identificar <b>relaciones, concentraciones, contrastes y patrones espaciales</b>. ¿En qué orden se pasa de un dato a una conclusión? Toca los pasos en orden.</p>
+  <div class="grid2"><div><h3 class="small">Pasos</h3><div id="dmpool" class="pills col"></div></div><div><h3 class="small">Tu secuencia</h3><div id="dmseq" class="route"></div></div></div>
+  <div class="row"><button class="btn primary" id="dmchk">Verificar secuencia</button><button class="btn ghost" id="dmclr">Empezar de nuevo</button></div>
+  <div id="dmfb"></div></div>
+  <div class="card" id="evid" hidden><h3>🗺️ Ahora construye tu evidencia</h3><p><b>Utiliza lo que descubriste para elaborar tu Expediente Geoeconómico.</b> Su parte central es un mapa esquemático del circuito de ${esc(p.name.toLowerCase())}, hecho por ti en tu libreta.</p>
+  <label class="q" for="datomapa">Practica con tu caso: escribe una secuencia breve (dato → patrón → mapa → interpretación → conclusión) usando algo que descubriste.</label>
+  <textarea id="datomapa" data-note="datomapa" rows="4">${esc(S.notes.datomapa||'')}</textarea>
+  <div class="row"><button class="btn go" data-go="exp">📁 Ir a mi expediente geoeconómico</button></div></div>
+  </main></div>`;
+  function draw(){
+    $('#dmpool').innerHTML=pool.map(i=>`<button type="button" class="pill" data-k="${i}">${DM_STEPS[i]}</button>`).join('')||'<p class="small muted">Todos los pasos están en tu secuencia.</p>';
+    $('#dmseq').innerHTML=seq.map(i=>`<button type="button" class="slot ${solved?'ok':''}" data-k="${i}"><span><b>${DM_STEPS[i]}</b>${solved?`<small>${ex[i]}</small>`:''}</span></button>`).join('')||'<p class="small muted">Toca el primer paso.</p>';
+  }
+  $('#dmpool').onclick=e=>{const b=e.target.closest('[data-k]');if(!b||solved)return;const k=+b.dataset.k;pool=pool.filter(x=>x!==k);seq.push(k);draw();};
+  $('#dmseq').onclick=e=>{const b=e.target.closest('[data-k]');if(!b||solved)return;const k=+b.dataset.k;seq=seq.filter(x=>x!==k);pool.push(k);draw();};
+  $('#dmclr').onclick=()=>{if(solved)return;pool=shuffle([0,1,2,3,4]);seq=[];$('#dmfb').innerHTML='';draw();};
+  $('#dmchk').onclick=()=>{
+    if(solved)return;
+    if(seq.length<5){$('#dmfb').innerHTML=`<div class="fb info">Faltan ${5-seq.length} paso(s).</div>`;return;}
+    if(seq.join()!=='0,1,2,3,4'){$('#dmfb').innerHTML='<div class="fb bad">Revisa el orden. Pregúntate: ¿puedo ver un patrón sin datos? ¿Puedo interpretar algo que todavía no he representado? Toca un paso de tu secuencia para regresarlo.</div>';return;}
+    solved=true;draw();$('#dmclr').disabled=true;$('#dmchk').disabled=true;
+    $('#dmfb').innerHTML=`<div class="fb ok"><b>Correcto.</b> Arriba ves cada paso aplicado a tu caso. Los <b>datos</b> revelan un <b>patrón espacial</b>; el <b>mapa</b> lo hace visible y permite compararlo; la <b>interpretación</b> propone por qué ocurre, y la <b>conclusión</b> responde qué nos dice sobre la relación entre economía y territorio.</div>`;
+    S.notes.dm=1;save();$('#evid').hidden=false;scrollToEl($('#evid'));
+  };
+  draw();
+  if(S.notes.dm){seq=[0,1,2,3,4];pool=[];solved=true;draw();$('#dmclr').disabled=true;$('#dmchk').disabled=true;$('#evid').hidden=false;}
+}
+
+/* =========================================================
+   ARRANQUE
+   ========================================================= */
+const SCREENS={home:renderHome,select:renderSelect,m1,m2,m3,m4,m5,m6,m7,cierre:renderCierre,exp:renderExp};
+function render(){
+  if(S.screen!=='home'&&S.screen!=='select'&&!S.prod)S.screen='home';
+  if(/^m\d$/.test(S.screen)&&!unlocked(+S.screen[1]))S.screen='home';
+  if((S.screen==='exp'||S.screen==='cierre')&&!unlocked(8))S.screen='home';
+  renderTop();
+  const app=$('#app');app.innerHTML='';
+  (SCREENS[S.screen]||renderHome)(app);
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(!g)return;
+  const t=g.dataset.go;
+  if(t==='home'||t==='select'){go(t);return;}
+  if(t==='exp'||t==='cierre'){if(unlocked(8))go(t);else toast('Completa las 7 misiones','para abrir el expediente');return;}
+  const k=+t.slice(1);
+  if(unlocked(k))go(t);else toast(S.prod?'Misión bloqueada':'Primero elige un producto',S.prod?'Completa la misión anterior para desbloquearla':'');
+});
+document.addEventListener('click',e=>{
+  if(!e.target.closest('[data-reset]'))return;
+  if(!confirm('¿Reiniciar la investigación? Se borrarán tu producto, tu progreso y tus respuestas guardadas en este dispositivo.'))return;
+  S={prod:null,done:[0,0,0,0,0,0,0],notes:{},screen:'home'};save();go('home');toast('Investigación reiniciada','Puedes elegir un producto nuevo');
+});
+document.addEventListener('input',e=>{const k=e.target.dataset&&e.target.dataset.note;if(k){S.notes[k]=e.target.value;save();}});
+render();
+</script>
+</body>
+</html>

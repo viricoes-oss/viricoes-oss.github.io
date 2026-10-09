@@ -1,0 +1,1376 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Guía de estudio · Geografía</title>
+<meta name="description" content="Guía de estudio interactiva para el primer parcial de Geografía. Preparatoria UNAM.">
+<style>
+:root{
+  --bg:#f4f0e4; --paper:#fffdf8; --ink:#1e2d43; --muted:#5f6c7c; --line:#e3dccb; --line2:#d3cab4;
+  --sea:#d7ebf2; --land:#d6e6c0;
+  --teal:#1c7f78; --teal-d:#14625c; --teal-l:#e2f2ef;
+  --ocre:#c98624; --ocre-l:#fbefd8;
+  --coral:#c4553d; --coral-l:#fbe6e0;
+  --green:#2f8a49; --green-l:#e2f3e5;
+  --yellow:#d8a11a;
+  --r:18px; --r2:12px;
+  --sh:0 1px 0 rgba(30,45,67,.05),0 6px 22px rgba(30,45,67,.08);
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--bg);line-height:1.5;font-size:16px;min-height:100vh;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420' viewBox='0 0 420 420'%3E%3Cg fill='none' stroke='%23c9bea2' stroke-opacity='.28' stroke-width='1'%3E%3Cpath d='M-20 80c60-40 120 30 190 0s110-60 180-20 90 40 90 40'/%3E%3Cpath d='M-20 110c70-40 120 30 190 0s120-50 180-10 90 40 90 40'/%3E%3Cpath d='M-20 260c50 30 120-30 200 0s120 60 180 20 80-30 80-30'/%3E%3Cpath d='M-20 290c50 30 120-30 200 0s120 60 180 20 80-30 80-30'/%3E%3Cpath d='M-20 320c50 30 120-30 200 0s120 60 180 20 80-30 80-30'/%3E%3Cellipse cx='300' cy='170' rx='40' ry='22'/%3E%3Cellipse cx='300' cy='170' rx='22' ry='11'/%3E%3C/g%3E%3C/svg%3E");}
+button{font:inherit;color:inherit}
+h1,h2,h3{font-family:var(--serif);line-height:1.15;margin:0;letter-spacing:-.01em}
+.wrap{max-width:920px;margin:0 auto;padding:0 16px 80px}
+.hidden{display:none!important}
+
+/* top bar */
+.top{position:sticky;top:0;z-index:20;background:rgba(244,240,228,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top-in{max-width:920px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:10px}
+.brand{display:flex;align-items:center;gap:8px;font-family:var(--serif);font-weight:700;font-size:1.05rem;cursor:pointer;background:none;border:0;padding:4px 0}
+.brand small{font-family:var(--sans);font-weight:500;color:var(--muted);font-size:.78rem}
+.top .sp{flex:1}
+.chip-pct{font-weight:700;font-size:.85rem;background:var(--paper);border:1px solid var(--line);padding:5px 10px;border-radius:999px;white-space:nowrap}
+.ibtn{border:1px solid var(--line);background:var(--paper);border-radius:12px;padding:7px 10px;cursor:pointer;font-size:.9rem;white-space:nowrap}
+.ibtn:hover{border-color:var(--line2)}
+@media (max-width:520px){.brand small{display:none}.ibtn .lbl{display:none}}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1.5px solid var(--line2);background:var(--paper);border-radius:14px;padding:12px 18px;font-weight:650;cursor:pointer;min-height:48px;transition:transform .08s ease,box-shadow .15s ease,background .15s}
+.btn:hover{box-shadow:var(--sh)}
+.btn:active{transform:translateY(1px)}
+.btn:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
+.btn.primary{background:var(--teal);border-color:var(--teal);color:#fff}
+.btn.primary:hover{background:var(--teal-d)}
+.btn.ocre{background:var(--ocre);border-color:var(--ocre);color:#fff}
+.btn.danger{color:var(--coral);border-color:#e7b9ad}
+.btn.big{font-size:1.1rem;padding:16px 30px;min-height:58px;border-radius:16px}
+.btn.pulse{animation:pulse 1.4s ease 2}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(28,127,120,.0)}50%{box-shadow:0 0 0 6px rgba(28,127,120,.18)}}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.row.c{justify-content:center}
+
+.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:20px}
+.muted{color:var(--muted)}
+.mt{margin-top:16px}.mt2{margin-top:28px}
+
+/* home */
+.hero{text-align:center;padding:42px 0 10px}
+.hero .globe-logo{width:150px;height:150px;margin:0 auto 10px;display:block}
+.hero h1{font-size:clamp(2rem,6vw,3.1rem)}
+.hero .sub{font-family:var(--serif);font-style:italic;font-size:clamp(1.1rem,3.4vw,1.35rem);color:var(--teal-d);margin:8px 0 14px}
+.hero p.lead{max-width:520px;margin:0 auto 26px;color:var(--muted);font-size:1.05rem}
+.spin{animation:spin 40s linear infinite;transform-origin:75px 75px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.needle{animation:wob 4s ease-in-out infinite;transform-origin:75px 75px}
+@keyframes wob{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(10deg)}}
+.welcome{max-width:520px;margin:22px auto 0;text-align:left}
+.welcome .row{margin-top:12px}
+.foot{text-align:center;color:var(--muted);font-size:.85rem;margin-top:40px}
+.warn{background:var(--ocre-l);border:1px solid #efd4a4;border-radius:12px;padding:10px 14px;font-size:.92rem;margin:14px auto;max-width:560px}
+
+/* menu */
+.dash{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center}
+.ring{width:118px;height:118px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{background:var(--bg);border-radius:12px;padding:10px 12px}
+.stat b{display:block;font-size:1.35rem;font-family:var(--serif)}
+.stat span{font-size:.8rem;color:var(--muted)}
+@media (max-width:560px){.dash{grid-template-columns:1fr;justify-items:center;text-align:center}.stats{width:100%}}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.86rem;color:var(--muted);margin:18px 2px 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:12px}
+.bcard{position:relative;text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:14px 14px 12px;cursor:pointer;box-shadow:var(--sh);display:flex;flex-direction:column;gap:6px;min-height:118px;transition:transform .1s,border-color .15s}
+.bcard:hover{transform:translateY(-2px);border-color:var(--line2)}
+.bcard .bn{font-size:.75rem;font-weight:700;color:var(--muted);letter-spacing:.04em}
+.bcard .be{font-size:1.5rem;line-height:1}
+.bcard .bt{font-weight:700;font-size:1rem;line-height:1.25}
+.bcard .bs{font-size:.8rem;color:var(--muted);margin-top:auto}
+.bcard.done{border-color:#b9dcc1;background:linear-gradient(180deg,#fbfffb,var(--paper))}
+.bcard.final{background:linear-gradient(135deg,#fff7e6,#fffdf8);border-color:#ecd3a2}
+.bar{height:7px;border-radius:9px;background:#ece6d6;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--teal);border-radius:9px;transition:width .4s}
+.bcard.done .bar i{background:var(--green)}
+.weakbox h3{font-size:1.25rem;margin-bottom:8px}
+.weak-list{list-style:none;padding:0;margin:8px 0 14px;display:grid;gap:6px}
+.weak-list li{display:flex;justify-content:space-between;gap:10px;background:var(--coral-l);border-radius:10px;padding:8px 12px;font-size:.95rem}
+.weak-list li b{white-space:nowrap}
+
+/* block */
+.bhead{padding:22px 0 8px}
+.back{background:none;border:0;color:var(--teal-d);font-weight:650;cursor:pointer;padding:6px 0;font-size:.95rem}
+.bhead h2{font-size:clamp(1.5rem,4.6vw,2.1rem);margin:6px 0 10px}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;font-weight:650;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:4px 10px}
+.mastery{display:flex;align-items:center;gap:10px;margin-top:10px;font-size:.88rem;color:var(--muted)}
+.mastery .bar{flex:1;max-width:280px}
+details.idea{background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--ocre);border-radius:14px;margin:14px 0;box-shadow:var(--sh)}
+details.idea summary{cursor:pointer;padding:12px 16px;font-weight:700;list-style:none;display:flex;justify-content:space-between;align-items:center}
+details.idea summary::-webkit-details-marker{display:none}
+details.idea summary::after{content:"＋";color:var(--ocre);font-weight:800}
+details.idea[open] summary::after{content:"－"}
+.idea-b{padding:0 16px 16px;font-size:.96rem}
+.idea-b .kgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.idea-b .k{background:var(--bg);border-radius:12px;padding:10px 12px}
+.idea-b .k b{display:block;margin-bottom:2px}
+.idea-b .figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;text-align:center;font-size:.88rem}
+.idea-b .figs svg{width:100%;height:auto;max-height:170px;background:var(--bg);border-radius:10px}
+.formula{font-family:var(--serif);font-size:1.1rem;background:var(--teal-l);border-radius:12px;padding:10px 14px;margin:8px 0}
+.levels{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 12px}
+.lv{border:1.5px solid var(--line2);background:var(--paper);border-radius:999px;padding:8px 14px;font-weight:650;cursor:pointer;font-size:.9rem}
+.lv.on{background:var(--ink);border-color:var(--ink);color:#fff}
+
+/* exercise */
+.ex{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:20px;margin-top:6px}
+.ex-tag{display:inline-block;font-size:.74rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--teal-d);background:var(--teal-l);border-radius:999px;padding:4px 10px;margin-bottom:12px}
+.ctx{background:var(--bg);border-left:4px solid var(--teal);border-radius:10px;padding:12px 14px;margin-bottom:12px;font-size:1.02rem}
+.ex-q{font-weight:650;font-size:1.08rem;margin-bottom:14px}
+.fig-wrap{margin:4px 0 14px;text-align:center}
+.fig-wrap svg{width:100%;max-width:520px;height:auto;border-radius:12px}
+.opts{display:grid;gap:10px}
+.opts.cards{grid-template-columns:repeat(2,1fr)}
+@media (min-width:700px){.opts.cards{grid-template-columns:repeat(4,1fr)}}
+.opt{display:flex;gap:12px;align-items:flex-start;text-align:left;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;cursor:pointer;min-height:52px;transition:border-color .12s,background .12s}
+.opt:hover:not(:disabled){border-color:var(--teal);background:#fbfefd}
+.opt .ol{flex:none;width:26px;height:26px;border-radius:8px;background:var(--bg);display:grid;place-items:center;font-weight:800;font-size:.82rem;color:var(--muted)}
+.opts.cards .opt{flex-direction:column;align-items:center;text-align:center;justify-content:center;font-weight:700;padding:16px 10px}
+.opts.cards .opt .ol{display:none}
+.opt.ok{border-color:var(--green);background:var(--green-l)}
+.opt.ok .ol{background:var(--green);color:#fff}
+.opt.bad{border-color:var(--coral);background:var(--coral-l)}
+.opt.bad .ol{background:var(--coral);color:#fff}
+.opt:disabled{cursor:default}
+.tfrow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tfrow .opt{justify-content:center;align-items:center;font-weight:700;font-size:1.05rem}
+.hint{font-size:.85rem;color:var(--muted);margin:2px 0 10px}
+.actions{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
+
+/* sort */
+.pool{display:flex;flex-wrap:wrap;gap:8px;min-height:54px;padding:10px;border:1.5px dashed var(--line2);border-radius:14px;background:var(--bg)}
+.pool:empty::before{content:"✓ Todas las tarjetas están colocadas";color:var(--muted);font-size:.88rem;align-self:center}
+.chip{border:1.5px solid var(--line2);background:#fff;border-radius:12px;padding:8px 12px;cursor:pointer;font-size:.93rem;text-align:left;line-height:1.3;touch-action:manipulation}
+.chip.sel{border-color:var(--teal);box-shadow:0 0 0 3px rgba(28,127,120,.2);background:var(--teal-l)}
+.chip.ok{border-color:var(--green);background:var(--green-l)}
+.chip.bad{border-color:var(--coral);background:var(--coral-l)}
+.chip small{display:block;font-weight:700;color:var(--coral);font-size:.8rem}
+.bins{display:grid;gap:10px;margin-top:12px;grid-template-columns:1fr}
+@media (min-width:640px){.bins.c2{grid-template-columns:1fr 1fr}.bins.c4{grid-template-columns:1fr 1fr}.bins.c5{grid-template-columns:repeat(3,1fr)}}
+.bin{border:1.5px solid var(--line);border-radius:14px;padding:10px;background:#fff;min-height:84px;cursor:pointer;transition:border-color .12s,background .12s}
+.bins.armed .bin{border-color:var(--teal);border-style:dashed;background:#fbfefd}
+.bin.over{background:var(--teal-l)}
+.bin-h{font-weight:750;font-size:.92rem;margin-bottom:8px}
+.zone{display:flex;flex-wrap:wrap;gap:6px}
+
+/* match */
+.match{display:grid;gap:10px}
+.mrow{display:grid;grid-template-columns:1fr 1.2fr;gap:10px;align-items:center;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:10px 12px}
+@media (max-width:600px){.mrow{grid-template-columns:1fr}}
+.ml{font-weight:650}
+select{font:inherit;width:100%;padding:10px;border-radius:10px;border:1.5px solid var(--line2);background:var(--paper);min-height:46px;color:var(--ink)}
+.mrow.ok{border-color:var(--green);background:var(--green-l)}
+.mrow.bad{border-color:var(--coral);background:var(--coral-l)}
+.mfix{grid-column:1/-1;font-size:.88rem;font-weight:700;color:var(--green)}
+
+/* order */
+.olist{display:grid;gap:8px}
+.oitem{display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:8px 10px}
+.oitem .on{width:28px;height:28px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:800;font-size:.85rem;flex:none}
+.oitem .ot{flex:1}
+.ob{border:1px solid var(--line2);background:var(--paper);border-radius:10px;width:40px;height:38px;cursor:pointer}
+.ob:disabled{opacity:.3}
+.oitem.ok{border-color:var(--green);background:var(--green-l)}
+.oitem.bad{border-color:var(--coral);background:var(--coral-l)}
+
+/* fill */
+.sent{font-size:1.12rem;font-family:var(--serif);line-height:1.7;margin:0 0 14px}
+.blank{display:inline-block;min-width:110px;border-bottom:2.5px solid var(--teal);padding:0 8px;color:var(--muted);text-align:center;font-family:var(--sans);font-weight:700}
+.blank.filled{color:var(--teal-d)}
+.blank.ok{color:var(--green);border-color:var(--green)}
+.blank.bad{color:var(--coral);border-color:var(--coral)}
+.wbank{display:flex;flex-wrap:wrap;gap:8px}
+
+/* two & checks */
+.step{margin-top:6px}
+.step+.step{margin-top:16px;padding-top:14px;border-top:1px dashed var(--line2)}
+.step-q{font-weight:700;margin-bottom:10px}
+.ck{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:8px}
+.ck .yn{display:flex;gap:6px}
+.ck .yn button{border:1.5px solid var(--line2);background:var(--paper);border-radius:10px;padding:8px 14px;font-weight:700;cursor:pointer;min-width:58px}
+.ck .yn button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.ck.ok{border-color:var(--green);background:var(--green-l)}
+.ck.bad{border-color:var(--coral);background:var(--coral-l)}
+
+/* num */
+.numrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+input.num,input.txt{font:inherit;font-size:1.2rem;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line2);background:#fff;width:200px;max-width:100%;color:var(--ink)}
+input.txt{width:100%;font-size:1.05rem}
+input.num:focus,input.txt:focus,select:focus{outline:3px solid rgba(28,127,120,.25);border-color:var(--teal)}
+.unit{font-weight:700;font-size:1.1rem}
+input.num.ok{border-color:var(--green);background:var(--green-l)}
+input.num.bad{border-color:var(--coral);background:var(--coral-l)}
+
+/* rosa */
+.rosa{display:grid;grid-template-columns:repeat(3,64px);grid-template-rows:repeat(3,64px);gap:6px;justify-content:center;margin:6px auto 0}
+.rosa button{border:1.5px solid var(--line2);background:#fff;border-radius:14px;font-weight:800;cursor:pointer;font-size:.95rem}
+.rosa button:hover:not(:disabled){border-color:var(--teal)}
+.rosa .mid{display:grid;place-items:center;font-size:1.8rem}
+.rosa button.ok{background:var(--green-l);border-color:var(--green)}
+.rosa button.bad{background:var(--coral-l);border-color:var(--coral)}
+
+/* pick */
+.pick svg{cursor:pointer}
+.pick [data-k]{transition:opacity .15s}
+svg .hitl{stroke:transparent;stroke-width:16;fill:none}
+svg .lbl{opacity:0;transition:opacity .3s;pointer-events:none}
+svg.revealed .lbl{opacity:1}
+.hit-ok .vis,.hit-ok.vis{stroke:var(--green)!important}
+.hit-show .vis{stroke:var(--green)!important;stroke-width:4!important}
+.hit-show.area{fill:rgba(47,138,73,.28)!important}
+.hit-bad.area{fill:rgba(196,85,61,.25)!important}
+.hit-bad .vis{stroke:var(--coral)!important;stroke-width:4!important}
+.hit-show .dot{fill:var(--green)!important}
+.hit-bad .dot{fill:var(--coral)!important}
+.hit-show .box{stroke:var(--green)!important;stroke-width:3!important;fill:rgba(47,138,73,.12)!important}
+.hit-bad .box{stroke:var(--coral)!important;stroke-width:3!important;fill:rgba(196,85,61,.12)!important}
+.pt .ring{fill:none;stroke:none}
+.hit-show .ring{stroke:var(--green);stroke-width:3}
+.hit-bad .ring{stroke:var(--coral);stroke-width:3}
+.globe .area{fill:transparent}
+.globe.lines .area{pointer-events:none}
+.globe.areas .lnk{pointer-events:none}
+
+/* feedback */
+.fb{margin-top:16px;border-radius:14px;padding:14px 16px;animation:pop .25s ease}
+.fb.ok{background:var(--green-l);border:1.5px solid #b6dcbf}
+.fb.bad{background:#fff4e2;border:1.5px solid #f0d6a6}
+.fb-h{font-weight:800;font-size:1.08rem;margin-bottom:4px}
+.fb-b{font-size:.98rem}
+.steps{margin-top:10px;background:#fff;border-radius:10px;padding:10px 12px;font-size:.95rem}
+.steps ol{margin:6px 0 0;padding-left:22px}
+@keyframes pop{from{transform:translateY(6px);opacity:0}to{transform:none;opacity:1}}
+.nav{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.counter{font-size:.85rem;color:var(--muted);margin:14px 0 6px;display:flex;justify-content:space-between;gap:10px}
+.motiv{margin-top:12px;text-align:center;font-family:var(--serif);font-style:italic;color:var(--teal-d);font-size:1.05rem;min-height:1.4em}
+
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(20,30,45,.45);display:grid;place-items:center;z-index:50;padding:16px;animation:fade .2s}
+@keyframes fade{from{opacity:0}}
+.modal .card{max-width:440px;width:100%;animation:pop .25s}
+.modal h3{font-size:1.4rem;margin-bottom:8px}
+.modal label{display:block;font-weight:650;font-size:.9rem;margin:12px 0 4px}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 18px;border-radius:14px;z-index:60;box-shadow:0 8px 30px rgba(0,0,0,.25);font-weight:600;max-width:calc(100% - 32px);text-align:center;animation:pop .25s}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:55;overflow:hidden}
+.confetti i{position:absolute;top:-20px;width:9px;height:14px;border-radius:2px;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+
+/* evidence */
+.ev-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.ev-item{background:var(--bg);border-radius:12px;padding:10px 12px}
+.ev-item span{display:block;font-size:.78rem;color:var(--muted)}
+.ev-item b{font-size:1.05rem}
+.bt-row{display:grid;grid-template-columns:minmax(120px,1.3fr) 2fr auto;gap:10px;align-items:center;font-size:.88rem;padding:5px 0;border-bottom:1px solid var(--line)}
+.bt-bars{display:flex;height:12px;border-radius:6px;overflow:hidden;background:#ece6d6}
+.bt-bars i{display:block;height:100%}
+.bt-bars .c{background:var(--teal)}.bt-bars .w{background:var(--coral)}
+.level{font-family:var(--serif);font-size:1.6rem;margin:6px 0}
+.big-pct{font-family:var(--serif);font-size:3.2rem;font-weight:700;line-height:1;color:var(--teal-d)}
+.note{font-size:.85rem;color:var(--muted);background:var(--bg);border-radius:10px;padding:10px 12px}
+#printArea{display:none}
+@media print{
+  body.printing>*:not(#printArea){display:none!important}
+  body.printing #printArea{display:block!important}
+  body{background:#fff}
+}
+</style>
+</head>
+<body>
+<header class="top" id="top">
+  <div class="top-in">
+    <button class="brand" id="brand" type="button" aria-label="Inicio">🌎 Geografía <small>· Primer parcial</small></button>
+    <span class="sp"></span>
+    <span class="chip-pct hidden" id="topPct">0%</span>
+    <button class="ibtn hidden" id="topMap" type="button">🗺️ <span class="lbl">Progreso</span></button>
+    <button class="ibtn hidden" id="topSave" type="button">💾 <span class="lbl">Guardar</span></button>
+  </div>
+</header>
+<main class="wrap" id="main"></main>
+<div id="printArea"></div>
+
+<script type="application/octet-stream" id="gd">==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</script>
+<script>
+'use strict';
+/* ============ utilidades ============ */
+const $ = (s, r = document) => r.querySelector(s);
+function h(tag, attrs, ...kids) {
+  const e = document.createElement(tag);
+  attrs = attrs || {};
+  for (const k in attrs) {
+    const v = attrs[k];
+    if (v === false || v == null) continue;
+    if (k === 'class') e.className = v;
+    else if (k === 'html') e.innerHTML = v;
+    else if (k.slice(0, 2) === 'on' && typeof v === 'function') e.addEventListener(k.slice(2), v);
+    else e.setAttribute(k, v === true ? '' : v);
+  }
+  kids.flat().forEach(c => { if (c == null || c === false) return; e.append(c.nodeType ? c : document.createTextNode(String(c))); });
+  return e;
+}
+const rint = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const sample = (a, n) => shuffle(a).slice(0, n);
+const clone = o => JSON.parse(JSON.stringify(o));
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const round3 = x => Math.round(x * 1000) / 1000;
+const fmtN = x => { try { return Number(x).toLocaleString('es-MX', { maximumFractionDigits: 3 }).replace(/,/g, ' '); } catch (e) { return String(x); } };
+const sc = E => '1:' + fmtN(E);
+const strip = s => String(s).replace(/^[^A-Za-zÁÉÍÓÚÑáéíóúñ0-9¿]+/, '');
+const uid = () => 'u' + Math.random().toString(36).slice(2, 8);
+const fmtDate = iso => { if (!iso) return '—'; const d = new Date(iso); return d.toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' }); };
+const fmtDT = iso => { if (!iso) return '—'; const d = new Date(iso); return d.toLocaleDateString('es-MX', { day: 'numeric', month: 'short', year: 'numeric' }) + ', ' + d.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' }); };
+const fmtTime = s => { const m = Math.round(s / 60); if (m < 1) return 'menos de 1 min'; const hh = Math.floor(m / 60), mm = m % 60; return hh ? `${hh} h ${mm} min` : `${mm} min`; };
+
+/* ============ banco (codificado para que no se lea a simple vista) ============ */
+const BANK = (() => {
+  const s = document.getElementById('gd').textContent.trim().split('').reverse().join('');
+  const bin = atob(s); const u = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i);
+  return JSON.parse(new TextDecoder().decode(u));
+})();
+const C = BANK.cases;
+
+/* ============ estado y guardado ============ */
+const KEY = 'geoGuiaPrimerParcial_v1';
+const GOAL = 6;
+let STORAGE_OK = true;
+function blank() {
+  return { v: 1, name: '', group: '', start: null, last: null, timeSec: 0, sessions: 0, blocks: {}, weak: {}, hist: [], reto: { tries: 0, best: null, last: null, lastDate: null }, lastBlock: null, scaleLevel: 'mix', done: {} };
+}
+function load() {
+  try {
+    const r = localStorage.getItem(KEY);
+    if (r) { const o = JSON.parse(r); const b = blank(); return Object.assign(b, o, { reto: Object.assign(b.reto, o.reto || {}) }); }
+  } catch (e) { STORAGE_OK = false; }
+  return blank();
+}
+let S = load();
+function save() {
+  if (S.start) S.last = new Date().toISOString();
+  try { localStorage.setItem(KEY, JSON.stringify(S)); STORAGE_OK = true; return true; } catch (e) { STORAGE_OK = false; return false; }
+}
+try { const t = '__geo_t'; localStorage.setItem(t, '1'); localStorage.removeItem(t); } catch (e) { STORAGE_OK = false; }
+if (S.start && (!S.last || Date.now() - Date.parse(S.last) > 30 * 60 * 1000)) { S.sessions++; save(); }
+
+const BL = [
+  { e: '🔭', n: 'Geografía como ciencia' },
+  { e: '🧩', n: 'Principios geográficos' },
+  { e: '🧭', n: 'Coordenadas y orientación' },
+  { e: '🌋', n: 'Hechos y fenómenos' },
+  { e: '📏', n: 'Escala' },
+  { e: '🏘️', n: 'Espacio geográfico' },
+  { e: '🗺️', n: 'Categorías espaciales' },
+  { e: '🔍', n: 'Escalas territoriales' },
+  { e: '🖼️', n: 'Mapas y representaciones' },
+  { e: '🛰️', n: 'SIG y percepción remota' },
+  { e: '🌐', n: 'Proyecciones' },
+  { e: '🔬', n: 'Disciplinas auxiliares' },
+  { e: '📐', n: 'Elementos cartográficos' },
+  { e: '🧠', n: 'Repaso final' }
+];
+const ST = { new: ['⚪', 'Sin comenzar'], prac: ['🟡', 'En práctica'], done: ['🟢', 'Dominado'] };
+function bs(b) { return S.blocks[b] || { a: 0, c: 0, w: 0 }; }
+function status(b) {
+  if (b === 14) { if (!S.reto.tries) return 'new'; return S.reto.best >= 70 ? 'done' : 'prac'; }
+  const x = bs(b); if (!x.a) return 'new';
+  return (x.c >= GOAL && x.c / x.a >= 0.7) ? 'done' : 'prac';
+}
+function progress(b) {
+  if (status(b) === 'done') return 1;
+  if (b === 14) return S.reto.tries ? 0.5 : 0;
+  const x = bs(b); if (!x.a) return 0; return Math.min(x.c, GOAL - 1) / GOAL * Math.min(1, (x.c / x.a) / 0.7);
+}
+function avance() { let s = 0; for (let b = 1; b <= 14; b++) s += progress(b); return Math.round(s / 14 * 100); }
+function totals() { let a = 0, c = 0, w = 0; for (let b = 1; b <= 14; b++) { const x = bs(b); a += x.a; c += x.c; w += x.w; } return { a, c, w }; }
+function weakList() { return Object.keys(S.weak).map(Number).filter(b => S.weak[b] > 0).sort((x, y) => S.weak[y] - S.weak[x]); }
+
+function record(b, ok, label, mode) {
+  const before = status(b);
+  const x = S.blocks[b] || (S.blocks[b] = { a: 0, c: 0, w: 0 });
+  x.a++; if (ok) x.c++; else x.w++;
+  if (!ok) S.weak[b] = (S.weak[b] || 0) + 1;
+  else if (mode === 'weak' && S.weak[b]) S.weak[b]--;
+  S.hist.push({ d: Date.now(), b, ok: ok ? 1 : 0, q: String(label || '').slice(0, 90) });
+  if (S.hist.length > 400) S.hist.shift();
+  save(); updTop();
+  if (before !== 'done' && status(b) === 'done' && !S.done[b]) { S.done[b] = new Date().toISOString(); save(); setTimeout(() => celebrate(b), 700); }
+}
+
+/* tiempo aproximado de trabajo */
+let lastAct = Date.now();
+['click', 'keydown', 'touchstart', 'scroll', 'pointermove'].forEach(ev => addEventListener(ev, () => { lastAct = Date.now(); }, { passive: true }));
+setInterval(() => { if (S.start && document.visibilityState === 'visible' && Date.now() - lastAct < 120000) { S.timeSec += 15; save(); } }, 15000);
+
+/* ============ elección de ejercicios sin repetir ============ */
+const RECENT = {};
+function fresh(key, arr) {
+  const r = RECENT[key] || (RECENT[key] = []);
+  const lim = Math.max(1, Math.min(arr.length - 1, Math.floor(arr.length * 0.6)));
+  let i, t = 0;
+  do { i = Math.floor(Math.random() * arr.length); t++; } while (r.includes(i) && t < 60);
+  r.push(i); while (r.length > lim) r.shift();
+  return arr[i];
+}
+const fromBank = n => () => clone(fresh('b' + n, BANK['b' + n]));
+function wpick(list) { const tot = list.reduce((s, x) => s + x[0], 0); let r = Math.random() * tot; for (const x of list) { if ((r -= x[0]) < 0) return x[1]; } return list[list.length - 1][1]; }
+const LASTF = {};
+function genFor(b, lvl) {
+  if (b === 5) return Object.assign(genScale(lvl || 'mix'), { b });
+  const list = MAKERS[b]; let f, t = 0;
+  do { f = wpick(list); t++; } while (f === LASTF[b] && list.length > 1 && t < 6);
+  LASTF[b] = f;
+  const ex = f(); ex.b = b; return ex;
+}
+function stratified(items, ncat, n) {
+  const by = {}; items.forEach(it => (by[it[1]] = by[it[1]] || []).push(it));
+  let out = [];
+  if (n >= ncat) Object.keys(by).forEach(k => out.push(pick(by[k])));
+  const rest = shuffle(items.filter(it => !out.includes(it)));
+  while (out.length < n && rest.length) out.push(rest.pop());
+  return shuffle(out);
+}
+
+/* ============ dibujos SVG propios ============ */
+function wob(pts, j) {
+  j = j == null ? 1.6 : j; let d = '';
+  for (let i = 0; i < pts.length - 1; i++) {
+    const [x1, y1] = pts[i], [x2, y2] = pts[i + 1];
+    if (i === 0) d += `M${x1 + rr(j)},${y1 + rr(j)}`;
+    const mx = (x1 + x2) / 2 + rr(j * 2), my = (y1 + y2) / 2 + rr(j * 2);
+    d += ` Q${mx},${my} ${x2 + rr(j)},${y2 + rr(j)}`;
+  }
+  return d;
+}
+function rr(j) { return +(Math.random() * 2 * j - j).toFixed(1); }
+
+/* Globo terrestre */
+function globeSVG(mode) {
+  const cx = 140, cy = 150, R = 108;
+  const par = [30, 60, -30, -60].map(p => { const y = cy - R * Math.sin(p * Math.PI / 180), w = R * Math.cos(p * Math.PI / 180); return `<ellipse cx="${cx}" cy="${y.toFixed(1)}" rx="${w.toFixed(1)}" ry="${(w * 0.13).toFixed(1)}"/>`; }).join('');
+  const mer = [35, 70].map(l => `<ellipse cx="${cx}" cy="${cy}" rx="${(R * Math.sin(l * Math.PI / 180)).toFixed(1)}" ry="${R}"/>`).join('');
+  const eq = `<ellipse cx="${cx}" cy="${cy}" rx="${R}" ry="${(R * 0.13).toFixed(1)}"/>`;
+  const st = mode === 'static';
+  return `<svg viewBox="0 0 360 300" class="globe ${mode}${st ? ' revealed' : ''}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Esquema de la Tierra">
+  <defs><radialGradient id="gG${mode}" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#eef7fa"/><stop offset="1" stop-color="#b6d8e6"/></radialGradient></defs>
+  <rect width="360" height="300" fill="#f7f3e8"/>
+  <circle cx="${cx}" cy="${cy}" r="${R}" fill="url(#gG${mode})" stroke="#1e2d43" stroke-width="2"/>
+  <path d="M120,92 q18,-14 34,-4 q10,10 -2,22 q-14,6 -20,22 q-10,10 -18,-4 q-6,-16 6,-36z M176,168 q16,-6 22,8 q2,18 -12,26 q-14,4 -14,-14z M96,176 q10,-4 14,8 q-2,14 -12,12z" fill="#cfe3b8" stroke="#9fbf87" stroke-width="1" pointer-events="none"/>
+  <path data-k="hn" class="area" d="M${cx - R},${cy} A${R},${R} 0 0 1 ${cx + R},${cy} Z"/>
+  <path data-k="hs" class="area" d="M${cx - R},${cy} A${R},${R} 0 0 0 ${cx + R},${cy} Z"/>
+  <g data-k="paralelo" class="lnk"><g class="vis" fill="none" stroke="#5f7d93" stroke-width="1.3">${par}</g><g class="hitl">${par}</g></g>
+  <g data-k="meridiano" class="lnk"><g class="vis" fill="none" stroke="#5f7d93" stroke-width="1.3">${mer}</g><g class="hitl">${mer}</g></g>
+  <g data-k="ecuador" class="lnk"><g class="vis" fill="none" stroke="#c98624" stroke-width="2.6">${eq}</g><g class="hitl">${eq}</g></g>
+  <g data-k="eje" class="lnk"><line class="vis" x1="${cx}" y1="${cy - R - 34}" x2="${cx}" y2="${cy + R + 34}" stroke="#1e2d43" stroke-width="2" stroke-dasharray="6 5"/><line class="hitl" x1="${cx}" y1="${cy - R - 34}" x2="${cx}" y2="${cy + R + 34}"/></g>
+  <g data-k="polo_n" class="lnk"><circle class="dot" cx="${cx}" cy="${cy - R}" r="6" fill="#1e2d43"/><circle cx="${cx}" cy="${cy - R}" r="16" fill="transparent"/></g>
+  <g data-k="polo_s" class="lnk"><circle class="dot" cx="${cx}" cy="${cy + R}" r="6" fill="#1e2d43"/><circle cx="${cx}" cy="${cy + R}" r="16" fill="transparent"/></g>
+  <g class="lbl" font-family="system-ui,sans-serif" font-size="12" font-weight="700" fill="#1e2d43" paint-order="stroke" stroke="#f7f3e8" stroke-width="4">
+    <text x="${cx + 12}" y="${cy - R - 4}">Polo Norte</text><text x="${cx + 12}" y="${cy + R + 14}">Polo Sur</text>
+    <text x="${cx + 8}" y="${cy - R - 24}">Eje terrestre</text>
+    <text x="${cx + R + 6}" y="${cy + 4}" fill="#a86b14">Ecuador</text>
+    <line x1="${cx + R * 0.87 - 4}" y1="${cy - R * 0.5}" x2="${cx + R + 4}" y2="${cy - R * 0.5 - 22}" stroke="#1e2d43" stroke-width="1.2"/><text x="${cx + R + 6}" y="${cy - R * 0.5 - 24}">Paralelo (E–O)</text>
+    <line x1="${cx + 52}" y1="${cy + 60}" x2="${cx + R + 2}" y2="${cy + 96}" stroke="#1e2d43" stroke-width="1.2"/><text x="${cx + R + 4}" y="${cy + 108}">Meridiano (N–S)</text>
+    <text x="8" y="60">Hemisferio</text><text x="8" y="74">norte</text><text x="8" y="236">Hemisferio</text><text x="8" y="250">sur</text>
+  </g>
+</svg>`;
+}
+const GLN = { polo_n: 'el Polo Norte', polo_s: 'el Polo Sur', eje: 'el eje terrestre', ecuador: 'el Ecuador', paralelo: 'un paralelo (que no sea el Ecuador)', meridiano: 'un meridiano', hn: 'el hemisferio norte', hs: 'el hemisferio sur' };
+const GLF = {
+  polo_n: 'El Polo Norte es el extremo norte del eje terrestre (latitud 90° N).',
+  polo_s: 'El Polo Sur es el extremo sur del eje terrestre (latitud 90° S).',
+  eje: 'El eje terrestre es la línea imaginaria alrededor de la cual gira la Tierra; une los polos.',
+  ecuador: 'El Ecuador es el paralelo de 0°: divide la Tierra en hemisferio norte y sur.',
+  paralelo: 'Los paralelos son círculos que van de este a oeste, paralelos al Ecuador; sirven para medir la latitud.',
+  meridiano: 'Los meridianos van de norte a sur, de polo a polo; sirven para medir la longitud.',
+  hn: 'El hemisferio norte está entre el Ecuador y el Polo Norte.',
+  hs: 'El hemisferio sur está entre el Ecuador y el Polo Sur.'
+};
+const GLNAMES = { polo_n: 'Polo Norte', polo_s: 'Polo Sur', eje: 'eje terrestre', ecuador: 'Ecuador', paralelo: 'un paralelo', meridiano: 'un meridiano', hn: 'hemisferio norte', hs: 'hemisferio sur' };
+function gGlobe() {
+  const k = pick(['polo_n', 'polo_s', 'eje', 'ecuador', 'paralelo', 'meridiano', 'hn', 'hs', 'paralelo', 'meridiano', 'ecuador']);
+  const mode = (k === 'hn' || k === 'hs') ? 'areas' : 'lines';
+  return { t: 'pick', q: `Toca ${GLN[k]}.`, img: globeSVG(mode), a: k, names: GLNAMES, f: GLF[k], tag: 'Toca en la imagen' };
+}
+
+/* Mapa de coordenadas */
+const PNAMES = ['Puerto Ámbar', 'Bahía Azul', 'Cerro Pelón', 'Isla Garza', 'Villa Coral', 'Punta Brava', 'Mirasol', 'Laguna Seca', 'San Telmo', 'Cabo Niebla', 'Roca Alta', 'Isla Colibrí', 'Arenales', 'El Mangle'];
+function makeGrid() {
+  const step = pick([2, 4, 5, 10]);
+  const lat = [], lon = [];
+  const m = rint(0, 9); let bottom;
+  if (m < 4) bottom = step * rint(1, Math.floor((80 - 3 * step) / step));
+  else if (m < 7) bottom = -step * rint(4, Math.floor(80 / step));
+  else bottom = -step * rint(1, 2);
+  for (let j = 3; j >= 0; j--) lat.push(bottom + j * step);
+  const o = rint(0, 9); let left;
+  if (o < 5) left = -step * rint(5, Math.floor(176 / step));
+  else if (o < 8) left = step * rint(1, Math.floor((176 - 4 * step) / step));
+  else left = -step * rint(1, 3);
+  for (let i = 0; i < 5; i++) lon.push(left + i * step);
+  const cells = [];
+  for (let j = 0; j < 4; j++) for (let i = 0; i < 5; i++) {
+    const la = lat[j], lo = lon[i];
+    if (la === 0 || lo === 0) continue;
+    if ((la === 24 && lo === -96) || (la === 22 && lo === -94)) continue;
+    cells.push({ i, j, lat: la, lon: lo });
+  }
+  const names = sample(PNAMES, 4);
+  const chosen = [];
+  for (const c of shuffle(cells)) { if (chosen.length === 4) break; if (chosen.some(q => q.j === c.j && Math.abs(q.i - c.i) < 2)) continue; chosen.push(c); }
+  const pts = chosen.map((c, k) => Object.assign(c, { name: names[k] }));
+  return { step, lat, lon, pts };
+}
+const hLat = v => v === 0 ? '0°' : `${Math.abs(v)}° ${v > 0 ? 'N' : 'S'}`;
+const hLon = v => v === 0 ? '0°' : `${Math.abs(v)}° ${v > 0 ? 'E' : 'O'}`;
+const fmtC = (la, lo) => `${hLat(la)}, ${hLon(lo)}`;
+function gridSVG(G, opt) {
+  opt = opt || {};
+  const X0 = 62, Y0 = 40, SP = 84, W = X0 + 4 * SP + 116, H = Y0 + 3 * SP + 40;
+  const id = uid();
+  let s = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Mapa con cuadrícula de coordenadas">`;
+  s += `<defs><clipPath id="${id}"><rect x="${X0}" y="${Y0}" width="${4 * SP}" height="${3 * SP}"/></clipPath></defs>`;
+  s += `<rect width="${W}" height="${H}" fill="#f7f3e8"/><rect x="${X0}" y="${Y0}" width="${4 * SP}" height="${3 * SP}" fill="#d7ebf2"/>`;
+  s += `<g clip-path="url(#${id})">`;
+  for (let b = 0; b < 3; b++) {
+    const cx = X0 + rint(20, 4 * SP - 20), cy = Y0 + rint(20, 3 * SP - 20), R = rint(26, 52); let p = [];
+    for (let k = 0; k < 12; k++) { const a = k / 12 * Math.PI * 2, r = R * (0.65 + Math.random() * 0.5); p.push(`${(cx + Math.cos(a) * r).toFixed(1)},${(cy + Math.sin(a) * r * 0.8).toFixed(1)}`); }
+    s += `<polygon points="${p.join(' ')}" fill="#d6e6c0" stroke="#a6c38e" stroke-width="1.2" stroke-linejoin="round"/>`;
+  }
+  s += `</g>`;
+  s += `<g stroke="#557089" stroke-width="1" stroke-opacity=".55">`;
+  for (let i = 0; i < 5; i++) s += `<line x1="${X0 + i * SP}" y1="${Y0}" x2="${X0 + i * SP}" y2="${Y0 + 3 * SP}"${G.lon[i] === 0 ? ' stroke="#c98624" stroke-width="2.2" stroke-opacity="1"' : ''}/>`;
+  for (let j = 0; j < 4; j++) s += `<line x1="${X0}" y1="${Y0 + j * SP}" x2="${X0 + 4 * SP}" y2="${Y0 + j * SP}"${G.lat[j] === 0 ? ' stroke="#c98624" stroke-width="2.2" stroke-opacity="1"' : ''}/>`;
+  s += `</g><rect x="${X0}" y="${Y0}" width="${4 * SP}" height="${3 * SP}" fill="none" stroke="#1e2d43" stroke-width="1.5"/>`;
+  s += `<g font-family="system-ui,sans-serif" font-size="11.5" font-weight="700" fill="#1e2d43">`;
+  for (let j = 0; j < 4; j++) s += `<text x="${X0 - 6}" y="${Y0 + j * SP + 4}" text-anchor="end">${hLat(G.lat[j])}</text>`;
+  for (let i = 0; i < 5; i++) s += `<text x="${X0 + i * SP}" y="${Y0 + 3 * SP + 17}" text-anchor="middle">${hLon(G.lon[i])}</text>`;
+  if (G.lat.includes(0)) { const j = G.lat.indexOf(0); s += `<text x="${X0 + 4 * SP - 4}" y="${Y0 + j * SP - 5}" text-anchor="end" fill="#a86b14" font-size="10.5">Ecuador</text>`; }
+  if (G.lon.includes(0)) { const i = G.lon.indexOf(0); s += `<text x="${X0 + i * SP + 4}" y="${Y0 + 12}" fill="#a86b14" font-size="10.5">Greenwich</text>`; }
+  s += `</g>`;
+  // rosa pequeña
+  const rx = W - 40, ry = Y0 + 3 * SP / 2;
+  s += `<g transform="translate(${rx},${ry})"><circle r="24" fill="#fffdf8" stroke="#1e2d43" stroke-width="1"/><polygon points="0,-20 5,0 0,20 -5,0" fill="#1e2d43"/><polygon points="-20,0 0,-5 20,0 0,5" fill="#8a98a8"/><polygon points="0,-20 5,0 -5,0" fill="#c4553d"/><text y="-27" text-anchor="middle" font-size="11" font-weight="800" font-family="system-ui">N</text><text y="37" text-anchor="middle" font-size="10" font-family="system-ui">S</text><text x="31" y="4" text-anchor="middle" font-size="10" font-family="system-ui">E</text><text x="-31" y="4" text-anchor="middle" font-size="10" font-family="system-ui">O</text></g>`;
+  G.pts.forEach(p => {
+    const x = X0 + p.i * SP, y = Y0 + p.j * SP;
+    const hl = opt.hl && opt.hl.includes(p.name);
+    s += `<g class="pt" data-k="${esc(p.name)}"><circle cx="${x}" cy="${y}" r="17" fill="transparent"/><circle class="ring" cx="${x}" cy="${y}" r="11"/><circle class="dot" cx="${x}" cy="${y}" r="6" fill="${hl ? '#1c7f78' : '#c4553d'}" stroke="#fff" stroke-width="2"/>`;
+    const lx = p.i === 0 ? x + 8 : p.i === 4 ? x - 8 : x, an = p.i === 0 ? 'start' : p.i === 4 ? 'end' : 'middle';
+    s += `<text x="${lx}" y="${y - 13}" text-anchor="${an}" font-family="system-ui,sans-serif" font-size="12.5" font-weight="700" fill="#1e2d43" paint-order="stroke" stroke="#fffdf8" stroke-width="4" pointer-events="none">${esc(p.name)}</text></g>`;
+  });
+  return s + `</svg>`;
+}
+const CTXC = [
+  n => `Una brigada encontró una tortuga marina varada en ${n} y debe reportar su posición. ¿Qué coordenadas corresponden a ${n}?`,
+  n => `Una boya meteorológica está instalada en ${n}. ¿Cuáles son sus coordenadas?`,
+  n => `Un dron de monitoreo aterrizó en ${n}. ¿Qué coordenadas debe registrar el piloto?`,
+  n => `Un grupo de buzos va a explorar ${n}. ¿Qué coordenadas deben anotar en su bitácora?`
+];
+function gCoordMC() {
+  const G = makeGrid(); const P = pick(G.pts);
+  const right = fmtC(P.lat, P.lon);
+  const cand = [`${Math.abs(P.lon)}° ${P.lat > 0 ? 'N' : 'S'}, ${Math.abs(P.lat)}° ${P.lon > 0 ? 'E' : 'O'}`, fmtC(P.lat, -P.lon), fmtC(-P.lat, P.lon), ...G.pts.filter(q => q !== P).map(q => fmtC(q.lat, q.lon))];
+  const o = [right]; for (const c of cand) { if (!o.includes(c) && o.length < 4) o.push(c); }
+  return { t: 'mc', q: pick(CTXC)(P.name), img: gridSVG(G), o, a: 0, f: `Primero se lee la latitud en los paralelos (N o S) y después la longitud en los meridianos (E u O). ${P.name}: ${right}.`, tag: 'Interpreta el mapa' };
+}
+function gCoordPick() {
+  const G = makeGrid(); const P = pick(G.pts);
+  return { t: 'pick', q: `Toca el punto que se encuentra en ${fmtC(P.lat, P.lon)}.`, img: gridSVG(G), a: P.name, f: `Busca primero el paralelo ${hLat(P.lat)} y luego el meridiano ${hLon(P.lon)}: se cruzan en ${P.name}.`, tag: 'Interpreta el mapa' };
+}
+const DIRN = { N: 'Norte', NE: 'Noreste', E: 'Este', SE: 'Sureste', S: 'Sur', SO: 'Suroeste', O: 'Oeste', NO: 'Noroeste' };
+function gCompass() {
+  let G, A, Bp, t = 0;
+  do {
+    G = makeGrid(); [A, Bp] = sample(G.pts, 2); t++;
+    const dx = Bp.i - A.i, dy = A.j - Bp.j;
+    if (dx === 0 || dy === 0 || Math.abs(dx) === Math.abs(dy)) break;
+  } while (t < 200);
+  const dx = Bp.i - A.i, dy = A.j - Bp.j;
+  const k = (dy > 0 ? 'N' : dy < 0 ? 'S' : '') + (dx > 0 ? 'E' : dx < 0 ? 'O' : '');
+  const why = [];
+  if (dy) why.push(`${Bp.name} está más al ${dy > 0 ? 'norte' : 'sur'}`);
+  if (dx) why.push(`más al ${dx > 0 ? 'este' : 'oeste'}`);
+  const ctx = pick([`Una lancha sale de ${A.name} y debe llegar en línea recta a ${Bp.name}.`, `Un dron despega en ${A.name} y vuela en línea recta hasta ${Bp.name}.`, `Un velero parte de ${A.name} rumbo a ${Bp.name}.`]);
+  return { t: 'compass', ctx, q: '¿Hacia qué dirección debe desplazarse? Usa la rosa de los vientos.', img: gridSVG(G, { hl: [A.name] }), a: k, f: `${why.join(' y ')} que ${A.name} → dirección ${DIRN[k].toLowerCase()} (${k}).`, tag: 'Rosa de los vientos' };
+}
+function gHemis() {
+  const la = rint(3, 70) * (Math.random() < .5 ? 1 : -1), lo = rint(3, 175) * (Math.random() < .5 ? 1 : -1);
+  const what = pick(['Una estación científica', 'Un observatorio', 'Un refugio de montaña', 'Un campamento de investigación', 'Una ciudad portuaria']);
+  return { t: 'two', ctx: `${what} se encuentra en ${fmtC(la, lo)}.`, q: '¿En qué hemisferios está?', s: [{ q: '¿Norte o sur?', o: ['Hemisferio norte', 'Hemisferio sur'], a: la > 0 ? 0 : 1 }, { q: '¿Este u oeste?', o: ['Hemisferio oriental (este)', 'Hemisferio occidental (oeste)'], a: lo > 0 ? 0 : 1 }], f: `La latitud (${hLat(la)}) indica norte o sur del Ecuador; la longitud (${hLon(lo)}) indica este u oeste de Greenwich.`, tag: '¿En qué hemisferio?' };
+}
+
+/* Mapa con elementos cartográficos */
+const MNAMES = ['Valle Ámbar', 'Río Claro', 'San Isidro del Monte', 'Loma Bonita', 'Tierra Blanca', 'Santa Lucía', 'Las Peñas', 'Agua Fría'];
+function mapSVG(omit, interactive) {
+  const name = pick(MNAMES);
+  const r1 = rint(80, 150), r2 = rint(100, 180);
+  let s = `<svg viewBox="0 0 380 292" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Mapa de un municipio">`;
+  s += `<rect width="380" height="292" fill="#fffdf8"/>`;
+  if (omit !== 'titulo') s += `<g data-k="titulo"><rect class="box" x="24" y="4" width="236" height="26" rx="6" fill="transparent" stroke="transparent"/><text x="142" y="23" text-anchor="middle" font-family="Georgia,serif" font-size="15" font-weight="700" fill="#1e2d43">Municipio de ${name}</text></g>`;
+  s += `<rect x="24" y="38" width="236" height="198" fill="#e8f0da" stroke="#1e2d43" stroke-width="1.5"/>`;
+  s += `<path d="M24,${r1} C80,${r1 + 30} 110,${r2 - 40} 160,${r2} S230,${r2 + 30} 260,${r2 + 10}" fill="none" stroke="#3d86b8" stroke-width="4"/>`;
+  s += `<ellipse cx="${rint(70, 110)}" cy="${rint(190, 215)}" rx="22" ry="12" fill="#a9d1ea" stroke="#3d86b8"/>`;
+  s += `<path d="M40,60 L120,120 L200,110 L250,200" fill="none" stroke="#8b8b8b" stroke-width="3"/><path d="M120,120 L110,230" fill="none" stroke="#8b8b8b" stroke-width="3"/>`;
+  [[120, 120], [200, 110], [110, 226]].forEach(([x, y]) => s += `<circle cx="${x}" cy="${y}" r="6" fill="#c4553d" stroke="#fff" stroke-width="1.5"/>`);
+  [[60, 90], [215, 64], [230, 160], [180, 70]].forEach(([x, y]) => s += `<polygon points="${x},${y - 9} ${x + 9},${y + 6} ${x - 9},${y + 6}" fill="#8a6a43"/>`);
+  if (omit !== 'coord') s += `<g data-k="coord" font-family="system-ui" font-size="9.5" fill="#1e2d43"><rect class="box" x="2" y="32" width="262" height="14" fill="transparent" stroke="transparent"/><rect class="box" x="2" y="46" width="22" height="196" fill="transparent" stroke="transparent"/><text x="80" y="35" text-anchor="middle">99°20'O</text><text x="200" y="35" text-anchor="middle">99°10'O</text><text x="20" y="98" text-anchor="end" transform="rotate(-90 20 98)">19°40'N</text><text x="20" y="190" text-anchor="end" transform="rotate(-90 20 190)">19°30'N</text><g stroke="#1e2d43"><line x1="80" y1="38" x2="80" y2="44"/><line x1="200" y1="38" x2="200" y2="44"/><line x1="24" y1="90" x2="30" y2="90"/><line x1="24" y1="182" x2="30" y2="182"/></g></g>`;
+  if (omit !== 'simb') s += `<g data-k="simb" font-family="system-ui" font-size="10.5" fill="#1e2d43"><rect class="box" x="270" y="38" width="102" height="128" rx="6" fill="#fff" stroke="#c9bea2"/><text x="321" y="54" text-anchor="middle" font-weight="800">Simbología</text><line x1="280" y1="70" x2="298" y2="70" stroke="#3d86b8" stroke-width="4"/><text x="304" y="74">Río</text><line x1="280" y1="88" x2="298" y2="88" stroke="#8b8b8b" stroke-width="3"/><text x="304" y="92">Carretera</text><circle cx="289" cy="106" r="5" fill="#c4553d"/><text x="304" y="110">Poblado</text><polygon points="289,117 297,130 281,130" fill="#8a6a43"/><text x="304" y="128">Cerro</text><ellipse cx="289" cy="146" rx="9" ry="5" fill="#a9d1ea" stroke="#3d86b8"/><text x="304" y="150">Laguna</text></g>`;
+  if (omit !== 'rosa') s += `<g data-k="rosa"><rect class="box" x="290" y="176" width="64" height="70" rx="8" fill="transparent" stroke="transparent"/><g transform="translate(322,214)"><circle r="22" fill="#fffdf8" stroke="#1e2d43"/><polygon points="0,-19 5,0 0,19 -5,0" fill="#1e2d43"/><polygon points="-19,0 0,-5 19,0 0,5" fill="#8a98a8"/><polygon points="0,-19 5,0 -5,0" fill="#c4553d"/><text y="-26" text-anchor="middle" font-size="11" font-weight="800" font-family="system-ui">N</text></g></g>`;
+  if (omit !== 'escala') s += `<g data-k="escala" font-family="system-ui" font-size="10" fill="#1e2d43"><rect class="box" x="20" y="244" width="250" height="44" rx="6" fill="transparent" stroke="transparent"/><rect x="30" y="256" width="30" height="7" fill="#1e2d43"/><rect x="60" y="256" width="30" height="7" fill="#fff" stroke="#1e2d43"/><rect x="90" y="256" width="30" height="7" fill="#1e2d43"/><rect x="120" y="256" width="30" height="7" fill="#fff" stroke="#1e2d43"/><text x="30" y="277" text-anchor="middle">0</text><text x="60" y="277" text-anchor="middle">1</text><text x="90" y="277" text-anchor="middle">2</text><text x="120" y="277" text-anchor="middle">3</text><text x="150" y="277" text-anchor="middle">4 km</text><text x="170" y="263">1:100 000</text></g>`;
+  return s + `</svg>`;
+}
+const MEL = { titulo: 'el título', simb: 'la simbología (leyenda)', escala: 'la escala', rosa: 'la rosa de los vientos', coord: 'las coordenadas' };
+const MELN = { titulo: 'título', simb: 'simbología', escala: 'escala', rosa: 'rosa de los vientos', coord: 'coordenadas' };
+const MELF = { titulo: 'El título dice qué tema y qué lugar representa el mapa.', simb: 'La simbología explica qué significa cada color y símbolo.', escala: 'La escala relaciona las distancias del mapa con las reales.', rosa: 'La rosa de los vientos indica la orientación: dónde está el norte.', coord: 'Las coordenadas (latitud y longitud) permiten ubicar puntos con exactitud.' };
+function gMapPick() { const k = pick(Object.keys(MEL)); return { t: 'pick', q: `Toca ${MEL[k]} en el mapa.`, img: mapSVG(null, true), a: k, names: MELN, f: MELF[k], tag: 'Toca en la imagen' }; }
+function gMissing() {
+  const k = pick(['titulo', 'simb', 'escala', 'rosa']);
+  const o = ['Título', 'Simbología', 'Escala', 'Rosa de los vientos']; const map = { titulo: 0, simb: 1, escala: 2, rosa: 3 };
+  return { t: 'mc', q: 'A este mapa le falta un elemento importante. ¿Cuál es?', img: mapSVG(k), o, a: map[k], ns: 1, f: 'Sin ese elemento el mapa queda incompleto. ' + MELF[k], tag: 'Detecta el error' };
+}
+
+/* Croquis, mapa e imagen satelital */
+function croquisSVG() {
+  const L = (pts, w) => `<path d="${wob(pts)}" fill="none" stroke="#2b3a55" stroke-width="${w || 2}" stroke-linecap="round"/>`;
+  const font = `font-family="'Segoe Print','Bradley Hand','Comic Sans MS','Chalkboard SE',cursive" fill="#2b3a55"`;
+  let s = `<svg viewBox="0 0 380 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Representación A"><rect width="380" height="260" fill="#fffaf0"/>`;
+  for (let y = 24; y < 260; y += 22) s += `<line x1="0" y1="${y}" x2="380" y2="${y}" stroke="#bcd3ea" stroke-width=".8"/>`;
+  s += `<line x1="34" y1="0" x2="34" y2="260" stroke="#eab0a6" stroke-width="1"/>`;
+  const sy = rint(110, 140), sx = rint(170, 220);
+  s += L([[40, sy], [200, sy + 6], [370, sy - 4]]) + L([[40, sy + 30], [200, sy + 34], [370, sy + 26]]);
+  s += L([[sx, 10], [sx + 4, sy]]) + L([[sx + 30, 10], [sx + 32, sy]]) + L([[sx, sy + 34], [sx - 6, 250]]) + L([[sx + 30, sy + 32], [sx + 26, 250]]);
+  s += `<text x="70" y="${sy + 22}" font-size="13" ${font}>Av. Principal</text>`;
+  s += L([[70, 40], [120, 40], [120, 85], [70, 85], [70, 40]]) + L([[66, 42], [95, 18], [124, 42]]) + `<text x="72" y="104" font-size="14" ${font}>mi casa</text>`;
+  s += L([[260, 170], [340, 170], [340, 228], [260, 228], [260, 170]]) + L([[300, 170], [300, 146]], 1.5) + `<path d="M300,146 l18,6 l-18,6z" fill="#c4553d"/><text x="268" y="246" font-size="14" ${font}>escuela</text>`;
+  s += L([[250, 30], [300, 30], [300, 70], [250, 70], [250, 30]]) + `<text x="252" y="88" font-size="13" ${font}>tiendita</text>`;
+  for (let k = 0; k < 3; k++) { const x = 70 + k * 34, y = 200; s += `<path d="${wob([[x - 12, y], [x - 8, y - 16], [x + 8, y - 18], [x + 12, y], [x - 12, y]], 2)}" fill="#cfe3b8" stroke="#3f6b3a" stroke-width="1.6"/>`; }
+  s += `<text x="66" y="232" font-size="13" ${font}>parque</text>`;
+  s += `<path d="${wob([[120, 70], [sx + 14, 70], [sx + 14, sy + 50], [258, 198]], 2)}" fill="none" stroke="#c4553d" stroke-width="2.2" stroke-dasharray="7 6"/><text x="${sx + 40}" y="${sy + 76}" font-size="12" ${font} fill="#c4553d">aquí das vuelta →</text>`;
+  return s + `</svg>`;
+}
+function satSVG() {
+  const id = uid();
+  let s = `<svg viewBox="0 0 380 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Representación"><defs><filter id="${id}t" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="${(0.012 + Math.random() * 0.012).toFixed(3)}" numOctaves="5" seed="${rint(1, 999)}"/><feColorMatrix type="matrix" values="0.22 0.38 0 0 0.14  0.30 0.46 0 0 0.20  0.08 0.18 0 0 0.08  0 0 0 0 1"/></filter><filter id="${id}b"><feGaussianBlur stdDeviation="7"/></filter><filter id="${id}s"><feGaussianBlur stdDeviation="0.6"/></filter></defs>`;
+  s += `<rect width="380" height="260" filter="url(#${id}t)"/>`;
+  for (let k = 0; k < 9; k++) { const x = rint(0, 330), y = rint(0, 220); s += `<rect x="${x}" y="${y}" width="${rint(22, 50)}" height="${rint(16, 36)}" fill="${pick(['#b8a35a', '#7d8d3c', '#9c8a52', '#a9b06a'])}" opacity=".55" transform="rotate(${rint(-12, 12)} ${x} ${y})"/>`; }
+  const ry = rint(70, 190);
+  s += `<path d="M-5,${ry} C80,${ry - 50} 140,${ry + 60} 220,${ry} S330,${ry - 40} 390,${ry + 10}" fill="none" stroke="#2c4d57" stroke-width="7" filter="url(#${id}s)"/>`;
+  const cx = rint(200, 300), cy = rint(40, 200);
+  s += `<g filter="url(#${id}s)">`;
+  for (let k = 0; k < 70; k++) { const x = cx + rint(-50, 50), y = cy + rint(-36, 36); s += `<rect x="${x}" y="${y}" width="${rint(3, 8)}" height="${rint(3, 8)}" fill="${pick(['#a19f98', '#8d8a82', '#bdb9ae', '#c9c3b5', '#7f7a72'])}"/>`; }
+  s += `</g><g filter="url(#${id}b)" fill="#fff" opacity=".75"><ellipse cx="${rint(40, 140)}" cy="${rint(30, 90)}" rx="46" ry="20"/><ellipse cx="${rint(240, 340)}" cy="${rint(180, 240)}" rx="38" ry="16"/></g>`;
+  return s + `</svg>`;
+}
+function projSVG(k, lab) {
+  let s = `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Esquema de proyección"><rect width="200" height="200" fill="#f7f3e8"/>`;
+  s += `<circle cx="100" cy="110" r="55" fill="#cfe7f0" stroke="#1e2d43" stroke-width="1.5"/><ellipse cx="100" cy="110" rx="55" ry="8" fill="none" stroke="#5f7d93"/><ellipse cx="100" cy="110" rx="22" ry="55" fill="none" stroke="#5f7d93"/>`;
+  if (k === 0) s += `<g fill="none" stroke="#c98624" stroke-width="2"><path d="M45,30 V190 M155,30 V190"/><ellipse cx="100" cy="30" rx="55" ry="10"/><ellipse cx="100" cy="190" rx="55" ry="10" stroke-dasharray="4 4"/></g><ellipse cx="100" cy="110" rx="55" ry="8" fill="none" stroke="#c4553d" stroke-width="3"/>`;
+  if (k === 1) s += `<g fill="none" stroke="#c98624" stroke-width="2"><path d="M100,6 L12,152 M100,6 L188,152"/><ellipse cx="100" cy="152" rx="88" ry="13" stroke-dasharray="4 4"/></g><ellipse cx="100" cy="71" rx="39" ry="6" fill="none" stroke="#c4553d" stroke-width="3"/>`;
+  if (k === 2) s += `<polygon points="22,62 148,62 178,40 52,40" fill="rgba(201,134,36,.18)" stroke="#c98624" stroke-width="2"/><circle cx="100" cy="55" r="4.5" fill="#c4553d"/>`;
+  if (lab) s += `<text x="100" y="196" text-anchor="middle" font-family="system-ui" font-size="11" fill="#1e2d43">${lab}</text>`;
+  return s + `</svg>`;
+}
+function barSVG(k) {
+  let s = `<svg viewBox="0 0 320 78" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Escala gráfica"><rect width="320" height="78" fill="#fffdf8"/>`;
+  for (let i = 0; i < 4; i++) s += `<rect x="${30 + i * 60}" y="22" width="60" height="12" fill="${i % 2 ? '#fff' : '#1e2d43'}" stroke="#1e2d43" stroke-width="1.2"/>`;
+  for (let i = 0; i <= 4; i++) s += `<text x="${30 + i * 60}" y="52" text-anchor="middle" font-family="system-ui" font-size="13" font-weight="700" fill="#1e2d43">${fmtN(round3(k * i))}${i === 4 ? ' km' : ''}</text>`;
+  s += `<path d="M30,14 h60" stroke="#c4553d" stroke-width="1.5"/><text x="60" y="11" text-anchor="middle" font-family="system-ui" font-size="10" fill="#c4553d">1 cm</text>`;
+  return s + `</svg>`;
+}
+function layersSVG() {
+  const L = (y, c, t) => `<g transform="translate(0,${y})"><polygon points="40,40 160,40 200,10 80,10" fill="${c}" fill-opacity=".85" stroke="#1e2d43" stroke-width="1"/><text x="208" y="30" font-family="system-ui" font-size="12" fill="#1e2d43">${t}</text></g>`;
+  return `<svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Capas de un SIG"><rect width="300" height="200" fill="#f7f3e8"/>${L(120, '#d6e6c0', 'Relieve')}${L(86, '#a9d1ea', 'Ríos')}${L(52, '#f3c9a0', 'Población')}${L(18, '#d9d4c8', 'Calles')}<text x="20" y="196" font-family="system-ui" font-size="11" fill="#5f6c7c">Las capas se superponen sobre el mismo espacio</text></svg>`;
+}
+function zoomSVG() {
+  return `<svg viewBox="0 0 320 170" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Escalas de análisis"><rect width="320" height="170" fill="#f7f3e8"/><g font-family="system-ui" font-size="12" font-weight="700" fill="#1e2d43" text-anchor="middle">
+  <circle cx="40" cy="85" r="18" fill="#fbefd8" stroke="#c98624"/><text x="40" y="128">Local</text><text x="40" y="89" font-size="14">🏘️</text>
+  <circle cx="115" cy="85" r="26" fill="#e2f2ef" stroke="#1c7f78"/><text x="115" y="128">Regional</text><text x="115" y="90" font-size="16">🗺️</text>
+  <circle cx="200" cy="85" r="34" fill="#dfe8f3" stroke="#557089"/><text x="200" y="138">Nacional</text><text x="200" y="91" font-size="18">🏛️</text>
+  <circle cx="276" cy="85" r="40" fill="#d7ebf2" stroke="#1e2d43"/><text x="276" y="144">Global</text><text x="276" y="92" font-size="20">🌍</text></g>
+  <text x="160" y="24" text-anchor="middle" font-family="system-ui" font-size="11" fill="#5f6c7c">más detalle ←——————→ más espacio</text></svg>`;
+}
+
+/* ============ generadores por tema ============ */
+const PRIN = ['📍 Localización', '📏 Extensión', '⚙️ Causalidad', '🔗 Correlación'];
+const PRIND = ['¿dónde está?', '¿hasta dónde llega o cuánto abarca?', '¿por qué ocurre?', '¿con qué se relaciona o dónde ocurre algo parecido?'];
+function gPrin() { const [s, a, w] = fresh('p2', C.P2); return { t: 'mc', ctx: s, q: '¿Qué principio geográfico está presente?', o: PRIN, a, ns: 1, cards: 1, f: `${w} → ${strip(PRIN[a])}.`, fw: PRIN.map((p, i) => `Elegiste ${strip(p)}, que responde ${PRIND[i]}`), tag: 'Mini caso' }; }
+
+const RH = ['Es una transformación duradera y estable del espacio, hecha por la sociedad', 'Es un proceso natural de corta duración que modifica el espacio temporalmente', 'Porque ocurre dentro de una ciudad', 'Porque aparece en las noticias'];
+function gHF() {
+  const [s, a] = fresh('hf', C.HF); const o2 = shuffle(RH);
+  return { t: 'two', ctx: s, q: 'Analiza la situación y justifica tu decisión.', s: [{ q: '¿Es un hecho o un fenómeno geográfico?', o: ['🏗️ Hecho geográfico', '🌪️ Fenómeno geográfico'], a }, { q: '¿Cuál es la mejor justificación?', o: o2, a: o2.indexOf(RH[a]) }], f: a === 0 ? 'Hecho geográfico → transformación duradera y estable del espacio, casi siempre producida por la sociedad.' : 'Fenómeno geográfico → proceso natural, de corta duración, que modifica el espacio de forma temporal.', tag: 'Mini caso' };
+}
+function gHFsort() { return { t: 'sort', q: 'Clasifica cada situación.', c: ['🏗️ Hecho geográfico', '🌪️ Fenómeno geográfico'], i: C.HF, n: 6, f: 'Hecho: transformación duradera hecha por la sociedad. Fenómeno: proceso natural de corta duración.' }; }
+
+const COMPN = ['🌳 Natural', '👥 Social', '💰 Económico', '🏛️ Político', '🎭 Cultural'];
+const COMPD = ['elementos de la naturaleza: relieve, agua, clima, suelo, flora y fauna', 'la población y cómo vive: servicios, vivienda, salud, educación, migración', 'actividades para producir, comerciar y obtener ingresos', 'organización y control del espacio: límites, gobierno, leyes', 'formas de vida y expresiones: lengua, fiestas, comida, arte, tradiciones'];
+function gComp() { return { t: 'sort', q: 'Coloca cada elemento en el componente del espacio geográfico que le corresponde.', c: COMPN, i: C.COMP, n: 6, f: 'Natural: naturaleza · Social: población · Económico: producción y comercio · Político: límites y gobierno · Cultural: tradiciones y lengua.' }; }
+function gCompOne() { const [s, a] = fresh('comp', C.COMP); return { t: 'mc', ctx: s, q: '¿A qué componente del espacio geográfico pertenece?', o: COMPN, a, ns: 1, f: `${strip(COMPN[a])}: ${COMPD[a]}.`, fw: COMPN.map((n, i) => `Elegiste ${strip(n)}: ${COMPD[i]}.`) }; }
+
+const CATI = ['📍', '👀', '🧩', '🚩'];
+const CATD = ['espacio vivido y con significado para las personas', 'lo que se observa y se analiza por sus elementos visibles', 'espacio que comparte características comunes', 'espacio delimitado, relacionado con control, organización o apropiación'];
+const CATP = ['El significado y las experiencias de las personas', 'Lo que se puede observar a simple vista', 'Las características que comparten', 'Los límites, el control o la apropiación'];
+const catO = () => C.CATN.map((n, i) => CATI[i] + ' ' + n);
+function gCat() { const [s, a] = fresh('cat', C.CAT); return { t: 'mc', cards: 1, ctx: s, q: '¿Qué categoría del espacio geográfico se está analizando?', o: catO(), a, ns: 1, f: `${C.CATN[a]} → ${CATD[a]}.`, fw: C.CATN.map((n, i) => `Elegiste ${n}: ${CATD[i]}.`), tag: 'Mini caso' }; }
+function gCatTwo() { const [s, a] = fresh('cat', C.CAT); return { t: 'two', ctx: s, q: 'Analiza la situación.', s: [{ q: '¿Qué categoría es?', o: catO(), a }, { q: '¿Qué pista te ayudó a decidir?', o: CATP, a }], f: `${C.CATN[a]} → ${CATD[a]}.`, tag: 'Mini caso' }; }
+function gCatSort() { return { t: 'sort', q: 'Coloca cada situación en la categoría que le corresponde.', c: catO(), i: C.CAT, n: 4, f: 'Lugar = significado · Paisaje = lo visible · Región = características comunes · Territorio = límites y control.' }; }
+
+const ESCN = ['🏘️ Local', '🗺️ Regional', '🏛️ Nacional', '🌍 Global'];
+const ESCD = ['un espacio pequeño y cercano: calle, colonia, barrio o municipio', 'varios municipios o estados que comparten características', 'todo el país', 'todo el planeta o varios continentes'];
+function gEsc() { const [s, a] = fresh('esc', C.ESC); return { t: 'mc', cards: 1, ctx: s, q: '¿A qué escala analizarías este fenómeno?', o: ESCN, a, ns: 1, f: `${strip(ESCN[a])}: abarca ${ESCD[a]}.`, fw: ESCN.map((n, i) => `${strip(n)} abarca ${ESCD[i]}.`) }; }
+
+const TMN = ['🏔️ Mapa físico', '👥 Mapa humano', '📜 Mapa histórico'];
+const TMD = ['muestra elementos naturales: relieve, ríos, climas, vegetación', 'muestra la población y sus actividades: economía, cultura, servicios, transporte', 'muestra cómo era un espacio en el pasado'];
+function gTM() { const [s, a] = fresh('tm', C.TM); return { t: 'mc', cards: 1, q: `Si quieres estudiar ${s}, ¿qué tipo de mapa utilizarías?`, o: TMN, a, ns: 1, f: `${strip(TMN[a])}: ${TMD[a]}.`, fw: TMN.map((n, i) => `${strip(n)}: ${TMD[i]}.`) }; }
+const REPN = ['✏️ Croquis', '🗺️ Mapa', '🛰️ Imagen satelital'];
+const REPF = ['Croquis: dibujo sencillo y aproximado, hecho a mano, sin escala precisa ni simbología formal.', 'Mapa: representación precisa, con escala, simbología, orientación y coordenadas.', 'Imagen satelital: registro de la superficie obtenido por sensores a bordo de un satélite; no es un dibujo.'];
+const repImg = k => k === 0 ? croquisSVG() : k === 1 ? mapSVG() : satSVG();
+function gRepId() { const k = rint(0, 2); return { t: 'mc', cards: 1, q: '¿Qué estoy observando?', img: repImg(k), o: REPN, a: k, ns: 1, f: REPF[k], fw: REPF, tag: 'Observa la imagen' }; }
+const REPC = [
+  [['¿Tiene una escala precisa?', 0], ['¿Usa simbología formal (leyenda)?', 0], ['¿Es una representación aproximada, hecha a mano?', 1], ['¿Fue obtenida mediante sensores?', 0]],
+  [['¿Tiene una escala precisa?', 1], ['¿Usa simbología formal (leyenda)?', 1], ['¿Es una representación aproximada, hecha a mano?', 0], ['¿Fue obtenida mediante sensores?', 0]],
+  [['¿Usa simbología formal (leyenda)?', 0], ['¿Es una representación aproximada, hecha a mano?', 0], ['¿Fue obtenida mediante sensores?', 1], ['¿Muestra la superficie tal como se ve desde arriba?', 1]]
+];
+function gRepChecks() { const k = rint(0, 2); return { t: 'checks', q: 'Observa la representación y responde cada pregunta.', img: repImg(k), items: REPC[k], f: REPF[k], tag: 'Observa y decide' }; }
+
+const TOOLN = ['🧮 SIG', '🛰️ Percepción remota', '📡 GPS'];
+const TOOLW = ['Integra y superpone varias capas de información para analizarlas', 'Obtiene información a distancia mediante sensores (satélites, drones, aviones)', 'Determina la ubicación exacta de un punto'];
+function gTool() { const [s, a] = fresh('tool', C.TOOLS); return { t: 'mc', cards: 1, ctx: s, q: '¿Qué herramienta utilizarías?', o: TOOLN, a, ns: 1, f: `${strip(TOOLN[a])}: ${TOOLW[a].toLowerCase()}.`, fw: TOOLN.map((n, i) => `${strip(n)}: ${TOOLW[i].toLowerCase()}.`), tag: '¿Qué herramienta?' }; }
+function gToolTwo() { const [s, a] = fresh('tool', C.TOOLS); const o2 = shuffle(TOOLW); return { t: 'two', ctx: s, q: 'Elige la herramienta y explica por qué.', s: [{ q: '¿Qué herramienta utilizarías?', o: TOOLN, a }, { q: '¿Por qué?', o: o2, a: o2.indexOf(TOOLW[a]) }], f: `${strip(TOOLN[a])}: ${TOOLW[a].toLowerCase()}.`, tag: '¿Qué herramienta?' }; }
+
+const PJN = ['Cilíndrica', 'Cónica', 'Acimutal'];
+const PJD = ['un cilindro envuelve la Tierra y la toca en el Ecuador: sirve para el mundo completo y la zona ecuatorial', 'un cono se apoya en un paralelo de latitudes medias: sirve para países y continentes de latitudes medias', 'un plano toca la Tierra en un punto: sirve para las zonas polares'];
+function gProjMatch() {
+  const rows = [0, 1, 2].map(k => [fresh('pj' + k, C.PROJ.filter(p => p[1] === k))[0], PJN[k]]);
+  return { t: 'match', q: 'Relaciona cada situación con la proyección más adecuada.', p: rows, f: 'Cilíndrica → mundo y Ecuador · Cónica → latitudes medias · Acimutal → polos.' };
+}
+function gProjOne() { const [s, a] = fresh('pj', C.PROJ); return { t: 'mc', cards: 1, ctx: s, q: '¿Qué proyección es la más adecuada?', o: PJN, a, ns: 1, f: `${PJN[a]}: ${PJD[a]}.`, fw: PJN.map((n, i) => `${n}: ${PJD[i]}.`) }; }
+function gProjId() { const k = rint(0, 2); return { t: 'mc', cards: 1, q: '¿Qué proyección representa este esquema?', img: projSVG(k), o: PJN, a: k, ns: 1, f: `${PJN[k]}: ${PJD[k]}.`, tag: 'Observa la imagen' }; }
+
+const DDESC = { 'Climatología': 'estudia el clima: temperatura, lluvias, vientos y sus variaciones', 'Hidrología': 'estudia las aguas: ríos, lagos, acuíferos y su circulación', 'Geomorfología': 'estudia las formas del relieve, su origen y sus cambios', 'Edafología': 'estudia los suelos: formación, tipos y usos', 'Biogeografía': 'estudia la distribución de plantas y animales', 'Demografía': 'estudia la población: nacimientos, muertes, edades, migración', 'Oceanografía': 'estudia mares y océanos: corrientes, temperatura, mareas', 'Geología': 'estudia las rocas, su origen y el interior de la Tierra', 'Cartografía': 'elabora y estudia los mapas' };
+function gDisc() {
+  const [s, d] = fresh('disc', C.DISC);
+  const core = ['Climatología', 'Hidrología', 'Geomorfología'].filter(x => x !== d);
+  const others = Object.keys(DDESC).filter(x => x !== d && !core.includes(x));
+  const o = [d, ...sample(core, 2), pick(others)];
+  return { t: 'mc', ctx: s, q: '¿Qué disciplina ayudaría a estudiar este fenómeno?', o, a: 0, f: `${d} ${DDESC[d]}.`, fw: o.map(x => `${x} ${DDESC[x]}.`) };
+}
+
+/* Escala: siempre 1 cm en el mapa = X cm en el terreno, y resultados en km */
+const SCALES = [10000, 20000, 25000, 40000, 50000, 75000, 100000, 125000, 200000, 300000, 400000, 500000, 750000, 1000000, 2000000];
+const stepsH = arr => `<ol>${arr.map(x => `<li>${x}</li>`).join('')}</ol>`;
+const numEx = (q, a, unit, steps, extra) => Object.assign({ t: 'num', q, a, unit, steps: stepsH(steps), tag: 'Problema de escala' }, extra || {});
+const sTerr = E => `Escala ${sc(E)} → 1 cm en el mapa = ${fmtN(E)} cm en el terreno`;
+const sKm = E => `Convierte a km: ${fmtN(E)} cm ÷ 100 000 = ${fmtN(E / 1e5)} km → 1 cm = ${fmtN(E / 1e5)} km`;
+function eL1() {
+  const r = rint(0, 2);
+  if (r === 0) {
+    const E = pick(SCALES); const km = E / 1e5;
+    return { t: 'mc', q: `En un mapa a escala ${sc(E)}, ¿qué significa esa escala?`, o: [`1 cm en el mapa = ${fmtN(E)} cm en el terreno (${fmtN(km)} km)`, `1 cm en el mapa = ${fmtN(E)} km en el terreno`, `${fmtN(E)} cm en el mapa = 1 cm en el terreno`, `El mapa mide ${fmtN(E)} cm de largo`], a: 0, f: `En la escala numérica el 1 y el ${fmtN(E)} están en centímetros: 1 cm en el mapa = ${fmtN(E)} cm en el terreno. Para trabajar en km se divide entre 100 000: ${fmtN(km)} km.`, tag: 'Nivel 1 · Identificar' };
+  }
+  if (r === 1) {
+    const [A, Bv] = sample(SCALES, 2); const sm = Math.min(A, Bv);
+    return { t: 'mc', q: '¿Cuál de estos mapas muestra MÁS DETALLE?', o: [`El de escala ${sc(A)}`, `El de escala ${sc(Bv)}`, 'Los dos muestran el mismo detalle'], a: A === sm ? 0 : 1, ns: 1, f: `Entre menor es el número después de "1:", menos se reduce el terreno y más detalle se ve: ${sc(sm)}.`, tag: 'Nivel 1 · Identificar' };
+  }
+  return Object.assign(clone(fresh('b5', BANK.b5)), { tag: 'Nivel 1 · Identificar' });
+}
+function eL2() {
+  const r = rint(0, 2), T = { tag: 'Nivel 2 · Convertir' };
+  if (r === 0) { const E = pick(SCALES); return numEx(`En un mapa a escala ${sc(E)}: 1 cm en el mapa = ${fmtN(E)} cm en el terreno. ¿A cuántos kilómetros equivale 1 cm del mapa?`, E / 1e5, 'km', [sTerr(E), `1 km = 100 000 cm`, `${fmtN(E)} ÷ 100 000 = <b>${fmtN(E / 1e5)} km</b>`], T); }
+  if (r === 1) { const E = pick(SCALES); return { t: 'mc', q: `Expresa la escala ${sc(E)} en kilómetros: 1 cm en el mapa = …`, o: [`${fmtN(E / 1e5)} km en el terreno`, `${fmtN(E / 1e3)} km en el terreno`, `${fmtN(E)} km en el terreno`, `${fmtN(E / 1e7)} km en el terreno`], a: 0, f: 'Para pasar de cm a km se divide entre 100 000 (porque 1 km = 100 000 cm).', steps: stepsH([sTerr(E), `${fmtN(E)} ÷ 100 000 = <b>${fmtN(E / 1e5)} km</b>`]), tag: 'Nivel 2 · Convertir' }; }
+  const km = pick([0.5, 1.2, 2, 2.5, 3.5, 4, 6.4, 7.5, 8, 12, 15, 25, 40]); const cm = Math.round(km * 1e5);
+  return numEx(`Una distancia en el terreno mide ${fmtN(cm)} cm. ¿Cuántos kilómetros son?`, km, 'km', ['1 km = 100 000 cm', `${fmtN(cm)} ÷ 100 000 = <b>${fmtN(km)} km</b>`], T);
+}
+const CTX3 = ['dos pueblos', 'dos volcanes', 'la escuela y el museo', 'dos estaciones de tren', 'el campamento y la cascada', 'dos islas', 'la presa y la ciudad', 'dos miradores de la costa'];
+function eL3(forceReal) {
+  const r = forceReal ? 0 : rint(0, 3), T = { tag: 'Nivel 3 · Problemas' };
+  if (r === 0) {
+    let E, d; do { E = pick(SCALES); d = rint(2, 24) / 2; } while (E === 250000 && d === 6);
+    const k = E / 1e5, km = round3(d * k);
+    return numEx(`En un mapa a escala ${sc(E)}, la distancia entre ${pick(CTX3)} es de ${fmtN(d)} cm. ¿Cuál es la distancia real en kilómetros?`, km, 'km', [sTerr(E), sKm(E), `Multiplica: ${fmtN(d)} cm × ${fmtN(k)} km = <b>${fmtN(km)} km</b>`], T);
+  }
+  if (r === 1) {
+    const E = pick(SCALES.filter(x => x >= 50000)); const d = rint(2, 20) / 2; const k = E / 1e5, km = round3(d * k);
+    return numEx(`Una ruta de ${fmtN(km)} km en el terreno se va a dibujar en un mapa a escala ${sc(E)}. ¿Cuántos centímetros medirá en el mapa?`, d, 'cm', [sTerr(E), sKm(E), `Divide: ${fmtN(km)} km ÷ ${fmtN(k)} km = <b>${fmtN(d)} cm</b> en el mapa`], T);
+  }
+  if (r === 2) {
+    const E = pick(SCALES); const d = rint(2, 10); const k = E / 1e5, km = round3(d * k);
+    return numEx(`En un mapa, ${d} cm representan ${fmtN(km)} km en el terreno. ¿Cuál es la escala numérica? Escribe el número que va después de "1:".`, E, '', [`Cuántos km vale 1 cm: ${fmtN(km)} km ÷ ${d} cm = ${fmtN(k)} km`, `Pasa a cm: ${fmtN(k)} km × 100 000 = ${fmtN(E)} cm`, `1 cm en el mapa = ${fmtN(E)} cm en el terreno → <b>${sc(E)}</b>`], Object.assign({ int: 1, pre: '1 :' }, T));
+  }
+  const k = pick([0.5, 1, 2, 3, 4, 5, 10, 20, 25, 50]); const E = Math.round(k * 1e5);
+  const o = [sc(E), sc(E * 10), sc(E / 10), sc(Math.round(k * 1000))];
+  return { t: 'mc', q: 'Observa la escala gráfica: cada segmento mide 1 cm. ¿Qué escala numérica le corresponde?', img: barSVG(k), o, a: 0, f: 'Pasa a centímetros lo que vale un segmento (1 cm): ese número va después de "1:".', steps: stepsH([`Cada segmento: 1 cm en el mapa = ${fmtN(k)} km en el terreno`, `${fmtN(k)} km × 100 000 = ${fmtN(E)} cm`, `1 cm en el mapa = ${fmtN(E)} cm en el terreno → <b>${sc(E)}</b>`]), tag: 'Nivel 3 · Escala gráfica' };
+}
+const SCO = ['1:500', '1:5 000', '1:1 000 000', '1:50 000 000'];
+function eL4() {
+  if (Math.random() < 0.5) return Object.assign(gEsc(), { tag: 'Nivel 4 · Escala territorial' });
+  const [s, v] = fresh('scn', C.SCN);
+  return { t: 'mc', cards: 1, ctx: s, q: '¿Qué escala numérica sería la más adecuada?', o: SCO, a: SCO.indexOf(v), ns: 1, f: 'Espacios pequeños (una casa, una colonia) necesitan escalas grandes, con mucho detalle (1:500, 1:5 000). Espacios enormes (un estado, el mundo) necesitan escalas pequeñas (1:1 000 000 o 1:50 000 000).', tag: 'Nivel 4 · Escala territorial' };
+}
+function genScale(l) { if (l === 'mix') l = pick(['1', '2', '3', '3', '4']); return l === '1' ? eL1() : l === '2' ? eL2() : l === '3' ? eL3() : eL4(); }
+
+const MAKERS = {
+  1: [[1, fromBank(1)]],
+  2: [[5, gPrin], [3, fromBank(2)]],
+  3: [[3, gCoordMC], [2, gCoordPick], [3, gCompass], [2, gHemis], [1, gGlobe], [3, fromBank(3)]],
+  4: [[5, gHF], [2, gHFsort], [2, fromBank(4)]],
+  6: [[3, gComp], [3, gCompOne], [3, fromBank(6)]],
+  7: [[4, gCat], [3, gCatTwo], [1, gCatSort], [2, fromBank(7)]],
+  8: [[6, gEsc], [3, fromBank(8)]],
+  9: [[2, gRepId], [2, gRepChecks], [4, gTM], [2, fromBank(9)]],
+  10: [[3, gTool], [3, gToolTwo], [2, fromBank(10)]],
+  11: [[3, gProjMatch], [2, gProjId], [2, gProjOne], [2, fromBank(11)]],
+  12: [[6, gDisc], [2, fromBank(12)]],
+  13: [[3, gMapPick], [2, gMissing], [2, gGlobe], [3, fromBank(13)]]
+};
+
+/* ============ ideas clave ============ */
+const IDEA = {
+  1: `<div class="kgrid"><div class="k"><b>🔬 Alexander von Humboldt</b>Viajero y naturalista. Midió en campo y relacionó los elementos naturales: clima, altitud, vegetación.</div><div class="k"><b>🏛️ Karl Ritter</b>La Tierra como hogar de la humanidad. Relacionó el medio natural con la vida, la historia y la organización de los pueblos.</div><div class="k"><b>💡 Ciencia explicativa</b>No solo dice <i>qué hay y dónde</i>: explica <i>por qué</i> está ahí y <i>con qué se relaciona</i>.</div><div class="k"><b>🏔️ Física · 👥 Humana</b>Dos grandes vertientes: la naturaleza y las actividades humanas.</div></div>`,
+  2: `<div class="kgrid"><div class="k"><b>📍 Localización</b>¿Dónde está?</div><div class="k"><b>📏 Extensión</b>¿Hasta dónde llega? ¿Cuánto abarca?</div><div class="k"><b>⚙️ Causalidad</b>¿Por qué ocurre?</div><div class="k"><b>🔗 Correlación</b>¿Con qué se relaciona? ¿Dónde ocurre algo parecido en condiciones semejantes?</div></div>`,
+  3: `<div class="figs"><div>${globeSVG('static')}</div><div class="kgrid" style="text-align:left"><div class="k"><b>Paralelos (este–oeste)</b>Marcan la latitud: 0° a 90° N o S, contando desde el Ecuador.</div><div class="k"><b>Meridianos (norte–sur, de polo a polo)</b>Marcan la longitud: 0° a 180° E u O, contando desde Greenwich.</div><div class="k"><b>✍️ Se escribe</b>Primero latitud, luego longitud: 19° N, 99° O.</div><div class="k"><b>🧭 Rosa</b>N, S, E, O y las intermedias NE, NO, SE, SO.</div></div></div>`,
+  4: `<div class="kgrid"><div class="k"><b>🏗️ Hecho geográfico</b>Transformación duradera y estable del espacio, casi siempre hecha por la sociedad: carreteras, presas, colonias.</div><div class="k"><b>🌪️ Fenómeno geográfico</b>Proceso natural de corta duración que modifica el espacio temporalmente: sismos, lluvias, erupciones.</div></div>`,
+  5: `<p>La <b>escala</b> es la relación entre una distancia en el mapa y la distancia real.</p><div class="formula">1:50 000 → 1 cm en el mapa = 50 000 cm en el terreno = 0.5 km</div><div class="kgrid"><div class="k"><b>1. Lee la escala en cm</b>1 cm en el mapa = X cm en el terreno</div><div class="k"><b>2. Convierte a km</b>X cm ÷ 100 000 = km</div><div class="k"><b>3. Distancia real</b>cm medidos en el mapa × km que vale 1 cm</div><div class="k"><b>Gráfica vs numérica</b>Barra con segmentos · fracción 1:x</div></div>`,
+  6: `<div class="kgrid">${COMPN.map((n, i) => `<div class="k"><b>${n}</b>${COMPD[i]}</div>`).join('')}</div>`,
+  7: `<div class="kgrid">${['Lugar', 'Paisaje', 'Región', 'Territorio'].map((n, i) => `<div class="k"><b>${CATI[i]} ${n}</b>${CATD[i]}</div>`).join('')}</div>`,
+  8: `<div class="figs">${zoomSVG()}</div><p>La escala de análisis funciona como un zoom: decide cuánto espacio observas y con cuánto detalle.</p>`,
+  9: `<div class="figs"><div>${croquisSVG()}<b>Croquis</b><br>aproximado, sin escala</div><div>${mapSVG()}<b>Mapa</b><br>escala, simbología, coordenadas</div><div>${satSVG()}<b>Imagen satelital</b><br>obtenida por sensores</div></div><div class="kgrid mt"><div class="k"><b>🏔️ Mapa físico</b>relieve, ríos, climas</div><div class="k"><b>👥 Mapa humano</b>población, economía, cultura</div><div class="k"><b>📜 Mapa histórico</b>cómo era el espacio en el pasado</div></div>`,
+  10: `<div class="figs"><div>${layersSVG()}</div><div class="kgrid" style="text-align:left"><div class="k"><b>🧮 SIG</b>Integra y superpone capas de información para analizar el espacio.</div><div class="k"><b>🛰️ Percepción remota</b>Obtiene información a distancia con sensores: satélites, aviones, drones.</div><div class="k"><b>📡 GPS</b>Da la ubicación exacta de un punto.</div></div></div>`,
+  11: `<div class="figs"><div>${projSVG(0, 'Cilíndrica → mundo y Ecuador')}</div><div>${projSVG(1, 'Cónica → latitudes medias')}</div><div>${projSVG(2, 'Acimutal → polos')}</div></div><p class="muted">Ninguna proyección es perfecta: al pasar la esfera a un plano siempre algo se deforma.</p>`,
+  12: `<div class="kgrid">${Object.keys(DDESC).map(d => `<div class="k"><b>${d}</b>${DDESC[d]}</div>`).join('')}</div>`,
+  13: `<div class="figs"><div>${mapSVG()}</div></div><div class="kgrid mt"><div class="k"><b>Título</b>qué y dónde</div><div class="k"><b>Escala</b>cuánto se redujo</div><div class="k"><b>Rosa de los vientos</b>orientación</div><div class="k"><b>Simbología</b>qué significa cada símbolo</div><div class="k"><b>Coordenadas</b>ubicación exacta</div></div>`
+};
+
+/* ============ renderizado de ejercicios ============ */
+const TAGS = { mc: 'Opción múltiple', tf: 'Verdadero o falso', sort: 'Arrastra y clasifica', match: 'Relaciona', order: 'Ordena', fill: 'Completa', two: 'Analiza y justifica', checks: 'Observa y decide', num: 'Problema', pick: 'Toca en la imagen', compass: 'Rosa de los vientos' };
+const R = {};
+function lockOpts(w) { w.querySelectorAll('button').forEach(x => x.disabled = true); }
+R.mc = (ex, body, done) => {
+  const idx = ex.ns ? ex.o.map((_, i) => i) : shuffle(ex.o.map((_, i) => i));
+  const w = h('div', { class: 'opts' + (ex.cards ? ' cards' : '') }); let locked = false;
+  idx.forEach((i, n) => {
+    const b = h('button', { class: 'opt', type: 'button' }, h('span', { class: 'ol' }, 'ABCDEF'[n]), h('span', { class: 'ot' }, ex.o[i]));
+    b.onclick = () => { if (locked) return; locked = true; const ok = i === ex.a; b.classList.add(ok ? 'ok' : 'bad'); w.children[idx.indexOf(ex.a)].classList.add('ok'); lockOpts(w); done(ok, !ok && ex.fw ? esc(ex.fw[i]) : ''); };
+    w.append(b);
+  });
+  body.append(w);
+};
+R.tf = (ex, body, done) => {
+  const w = h('div', { class: 'tfrow' }); let locked = false;
+  [['✔ Verdadero', 1], ['✘ Falso', 0]].forEach(([t, v]) => {
+    const b = h('button', { class: 'opt', type: 'button' }, t);
+    b.onclick = () => { if (locked) return; locked = true; const ok = v === ex.a; b.classList.add(ok ? 'ok' : 'bad'); if (!ok) w.children[v ? 1 : 0].classList.add('ok'); lockOpts(w); done(ok, ok ? '' : `La afirmación es <b>${ex.a ? 'verdadera' : 'falsa'}</b>.`); };
+    w.append(b);
+  });
+  body.append(w);
+};
+R.sort = (ex, body, done) => {
+  const items = stratified(ex.i, ex.c.length, ex.n || 6);
+  const place = items.map(() => -1); let sel = -1, locked = false;
+  const pool = h('div', { class: 'pool' });
+  const bins = h('div', { class: 'bins c' + ex.c.length });
+  const btn = h('button', { class: 'btn primary', type: 'button', disabled: true }, 'Comprobar');
+  const zones = ex.c.map((c, ci) => {
+    const zone = h('div', { class: 'zone' });
+    const bin = h('div', { class: 'bin' }, h('div', { class: 'bin-h' }, c), zone);
+    bin.addEventListener('click', () => { if (locked || sel < 0) return; place[sel] = ci; sel = -1; draw(); });
+    bin.addEventListener('dragover', e => { e.preventDefault(); bin.classList.add('over'); });
+    bin.addEventListener('dragleave', () => bin.classList.remove('over'));
+    bin.addEventListener('drop', e => { e.preventDefault(); bin.classList.remove('over'); const k = +e.dataTransfer.getData('text/plain'); if (!locked && k >= 0) { place[k] = ci; sel = -1; draw(); } });
+    bins.append(bin); return zone;
+  });
+  pool.addEventListener('click', e => { if (e.target === pool && sel >= 0 && !locked) { place[sel] = -1; sel = -1; draw(); } });
+  pool.addEventListener('dragover', e => e.preventDefault());
+  pool.addEventListener('drop', e => { e.preventDefault(); const k = +e.dataTransfer.getData('text/plain'); if (!locked && k >= 0) { place[k] = -1; sel = -1; draw(); } });
+  const chips = items.map((it, k) => {
+    const c = h('button', { class: 'chip', type: 'button', draggable: 'true' }, it[0]);
+    c.addEventListener('click', e => { e.stopPropagation(); if (locked) return; sel = sel === k ? -1 : k; draw(); });
+    c.addEventListener('dragstart', e => { e.dataTransfer.setData('text/plain', String(k)); sel = k; });
+    return c;
+  });
+  function draw() { chips.forEach((c, k) => { c.classList.toggle('sel', sel === k); (place[k] < 0 ? pool : zones[place[k]]).append(c); }); bins.classList.toggle('armed', sel >= 0); btn.disabled = place.some(p => p < 0); }
+  btn.onclick = () => {
+    locked = true; btn.remove(); bins.classList.remove('armed'); let bad = 0;
+    chips.forEach((c, k) => { const ok = place[k] === items[k][1]; c.classList.remove('sel'); c.classList.add(ok ? 'ok' : 'bad'); c.disabled = true; c.draggable = false; if (!ok) { bad++; c.append(h('small', {}, '→ ' + strip(ex.c[items[k][1]]))); } });
+    done(bad <= (items.length >= 5 ? 1 : 0), `Acertaste <b>${items.length - bad} de ${items.length}</b>.`);
+  };
+  body.append(h('div', { class: 'hint' }, '👆 Toca una tarjeta y después la categoría (en computadora también puedes arrastrarla).'), pool, bins, h('div', { class: 'actions' }, btn));
+  draw();
+};
+R.match = (ex, body, done) => {
+  const rows = shuffle(ex.p); const rights = shuffle([...new Set(ex.p.map(p => p[1]))]);
+  const sels = []; const tbl = h('div', { class: 'match' });
+  const btn = h('button', { class: 'btn primary', type: 'button', disabled: true }, 'Comprobar');
+  rows.forEach(([l]) => {
+    const s = h('select', { 'aria-label': 'Elige la opción para ' + l }, h('option', { value: '' }, 'Elige…'), ...rights.map(x => h('option', { value: x }, x)));
+    s.onchange = () => { btn.disabled = sels.some(z => !z.value); };
+    sels.push(s); tbl.append(h('div', { class: 'mrow' }, h('div', { class: 'ml' }, l), s));
+  });
+  btn.onclick = () => {
+    btn.remove(); let bad = 0;
+    rows.forEach(([l, r], i) => { const ok = sels[i].value === r; sels[i].disabled = true; sels[i].parentNode.classList.add(ok ? 'ok' : 'bad'); if (!ok) { bad++; sels[i].parentNode.append(h('div', { class: 'mfix' }, '✔ ' + r)); } });
+    done(bad <= (rows.length >= 5 ? 1 : 0), `Acertaste <b>${rows.length - bad} de ${rows.length}</b>.`);
+  };
+  body.append(tbl, h('div', { class: 'actions' }, btn));
+};
+R.order = (ex, body, done) => {
+  let cur; do { cur = shuffle(ex.i); } while (cur.every((x, i) => x === ex.i[i]));
+  const list = h('div', { class: 'olist' }); let locked = false;
+  function draw() {
+    list.innerHTML = '';
+    cur.forEach((x, i) => {
+      const up = h('button', { type: 'button', class: 'ob', 'aria-label': 'Subir', disabled: locked || i === 0 }, '▲');
+      const dn = h('button', { type: 'button', class: 'ob', 'aria-label': 'Bajar', disabled: locked || i === cur.length - 1 }, '▼');
+      up.onclick = () => { [cur[i - 1], cur[i]] = [cur[i], cur[i - 1]]; draw(); };
+      dn.onclick = () => { [cur[i + 1], cur[i]] = [cur[i], cur[i + 1]]; draw(); };
+      const it = h('div', { class: 'oitem' + (locked ? (x === ex.i[i] ? ' ok' : ' bad') : '') }, h('span', { class: 'on' }, i + 1), h('span', { class: 'ot' }, x), up, dn);
+      list.append(it);
+    });
+  }
+  const btn = h('button', { class: 'btn primary', type: 'button' }, 'Comprobar');
+  btn.onclick = () => { locked = true; btn.remove(); draw(); const ok = cur.every((x, i) => x === ex.i[i]); done(ok, ok ? '' : 'Orden correcto: ' + ex.i.map((x, i) => `${i + 1}) ${esc(x)}`).join(' · ')); };
+  body.append(h('div', { class: 'hint' }, 'Usa ▲ ▼ para mover cada tarjeta.'), list, h('div', { class: 'actions' }, btn)); draw();
+};
+R.fill = (ex, body, done) => {
+  const parts = ex.q.split('___'); const blank = h('span', { class: 'blank' }, '______');
+  const sent = h('p', { class: 'sent' }, parts[0], blank, parts[1] || '');
+  let chosen = null, locked = false;
+  const btn = h('button', { class: 'btn primary', type: 'button', disabled: true }, 'Comprobar');
+  const bank = h('div', { class: 'wbank' });
+  shuffle([ex.a, ...ex.o]).forEach(o => {
+    const c = h('button', { class: 'chip', type: 'button' }, o);
+    c.onclick = () => { if (locked) return; chosen = o; blank.textContent = o; blank.classList.add('filled'); bank.querySelectorAll('.chip').forEach(x => x.classList.toggle('sel', x === c)); btn.disabled = false; };
+    bank.append(c);
+  });
+  btn.onclick = () => { locked = true; btn.remove(); lockOpts(bank); const ok = chosen === ex.a; blank.classList.add(ok ? 'ok' : 'bad'); done(ok, ok ? '' : `La palabra correcta es <b>${esc(ex.a)}</b>.`); };
+  body.append(sent, bank, h('div', { class: 'actions' }, btn));
+};
+R.two = (ex, body, done) => {
+  const res = [null, null];
+  const step = si => {
+    const s = ex.s[si]; const idx = ex.sh ? shuffle(s.o.map((_, i) => i)) : s.o.map((_, i) => i);
+    const box = h('div', { class: 'step' }, h('div', { class: 'step-q' }, `${si + 1}. ${s.q}`));
+    const w = h('div', { class: 'opts' });
+    idx.forEach((i, n) => {
+      const b = h('button', { class: 'opt', type: 'button' }, h('span', { class: 'ol' }, 'ABCDEF'[n]), h('span', { class: 'ot' }, s.o[i]));
+      b.onclick = () => {
+        if (res[si] !== null) return; res[si] = i === s.a;
+        b.classList.add(res[si] ? 'ok' : 'bad'); w.children[idx.indexOf(s.a)].classList.add('ok'); lockOpts(w);
+        if (si === 0) step(1);
+        else done(res[0] && res[1], res[0] && !res[1] ? 'Acertaste la primera parte; revisa la justificación.' : (!res[0] && res[1] ? 'Tu justificación es buena; revisa la primera parte.' : ''));
+      };
+      w.append(b);
+    });
+    box.append(w); body.append(box);
+    if (si === 1) setTimeout(() => box.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+  };
+  step(0);
+};
+R.checks = (ex, body, done) => {
+  const ans = ex.items.map(() => null); const rows = [];
+  const btn = h('button', { class: 'btn primary', type: 'button', disabled: true }, 'Comprobar');
+  ex.items.forEach(([q], i) => {
+    const y = h('button', { type: 'button' }, 'Sí'), n = h('button', { type: 'button' }, 'No');
+    const set = v => { ans[i] = v; y.classList.toggle('on', v === 1); n.classList.toggle('on', v === 0); btn.disabled = ans.some(a => a === null); };
+    y.onclick = () => set(1); n.onclick = () => set(0);
+    const r = h('div', { class: 'ck' }, h('div', {}, q), h('div', { class: 'yn' }, y, n)); rows.push(r); body.append(r);
+  });
+  btn.onclick = () => { btn.remove(); let bad = 0; rows.forEach((r, i) => { const ok = ans[i] === ex.items[i][1]; r.classList.add(ok ? 'ok' : 'bad'); r.querySelectorAll('button').forEach(b => b.disabled = true); if (!ok) bad++; }); done(bad === 0, `Acertaste <b>${ex.items.length - bad} de ${ex.items.length}</b>.`); };
+  body.append(h('div', { class: 'actions' }, btn));
+};
+R.num = (ex, body, done) => {
+  const inp = h('input', { type: 'text', inputmode: ex.int ? 'numeric' : 'decimal', class: 'num', placeholder: ex.int ? 'Ej. 50000' : 'Ej. 12.5', autocomplete: 'off', 'aria-label': 'Tu respuesta' });
+  const btn = h('button', { class: 'btn primary', type: 'button', disabled: true }, 'Comprobar');
+  inp.addEventListener('input', () => { btn.disabled = !inp.value.trim(); });
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter' && !btn.disabled) btn.click(); });
+  btn.onclick = () => {
+    const raw = inp.value.trim();
+    const v = ex.int ? parseFloat(raw.replace(/[^\d]/g, '')) : parseFloat(raw.replace(/\s/g, '').replace(',', '.'));
+    if (isNaN(v)) { toast('Escribe un número para comprobar.'); return; }
+    btn.remove(); inp.disabled = true;
+    const ok = Math.abs(v - ex.a) <= Math.max(1e-6, Math.abs(ex.a) * 0.002);
+    inp.classList.add(ok ? 'ok' : 'bad');
+    done(ok, ok ? '' : `La respuesta es <b>${ex.pre ? '1:' : ''}${fmtN(ex.a)} ${ex.unit || ''}</b>.`);
+  };
+  body.append(h('div', { class: 'numrow' }, ex.pre ? h('span', { class: 'unit' }, ex.pre) : null, inp, ex.unit ? h('span', { class: 'unit' }, ex.unit) : null), h('div', { class: 'hint', style: 'margin-top:8px' }, ex.int ? 'Escribe solo números.' : 'Puedes usar punto o coma decimal.'), h('div', { class: 'actions' }, btn));
+  setTimeout(() => { if (matchMedia('(pointer:fine)').matches) inp.focus(); }, 60);
+};
+R.pick = (ex, body, done) => {
+  const w = h('div', { class: 'fig-wrap pick', html: ex.img }); let locked = false;
+  w.addEventListener('click', e => {
+    if (locked) return; const t = e.target.closest('[data-k]'); if (!t) return; locked = true;
+    const k = t.getAttribute('data-k'); const ok = k === ex.a;
+    if (!ok) t.classList.add('hit-bad');
+    w.querySelectorAll('[data-k]').forEach(x => { if (x.getAttribute('data-k') === ex.a) x.classList.add('hit-show'); });
+    const svg = w.querySelector('svg'); if (svg) svg.classList.add('revealed');
+    done(ok, !ok && ex.names ? `Tocaste: ${esc(ex.names[k] || k)}.` : '');
+  });
+  body.append(h('div', { class: 'hint' }, '👆 Toca directamente sobre la imagen.'), w);
+};
+R.compass = (ex, body, done) => {
+  body.append(h('div', { class: 'fig-wrap', html: ex.img }));
+  const g = h('div', { class: 'rosa' }); let locked = false;
+  ['NO', 'N', 'NE', 'O', null, 'E', 'SO', 'S', 'SE'].forEach(k => {
+    if (!k) { g.append(h('div', { class: 'mid' }, '🧭')); return; }
+    const b = h('button', { type: 'button', title: DIRN[k] }, k);
+    b.onclick = () => { if (locked) return; locked = true; const ok = k === ex.a; b.classList.add(ok ? 'ok' : 'bad'); g.querySelectorAll('button').forEach(x => { if (x.textContent === ex.a) x.classList.add('ok'); x.disabled = true; }); done(ok, ok ? '' : `Elegiste ${DIRN[k].toLowerCase()}; la respuesta es <b>${DIRN[ex.a].toLowerCase()} (${ex.a})</b>.`); };
+    g.append(b);
+  });
+  body.append(g);
+};
+const OWNIMG = { pick: 1, compass: 1 };
+
+function exCard(ex, onResult) {
+  const card = h('div', { class: 'ex' });
+  card.append(h('div', { class: 'ex-tag' }, ex.tag || TAGS[ex.t]));
+  if (ex.ctx) card.append(h('div', { class: 'ctx' }, ex.ctx));
+  if (ex.t === 'fill') card.append(h('div', { class: 'ex-q' }, 'Completa el enunciado con la palabra correcta.'));
+  if (ex.img && !OWNIMG[ex.t]) card.append(h('div', { class: 'fig-wrap', html: ex.img }));
+  if (ex.t !== 'fill') card.append(h('div', { class: 'ex-q' }, ex.q));
+  const body = h('div', { class: 'ex-body' }); card.append(body);
+  let answered = false;
+  R[ex.t](ex, body, (ok, extra) => {
+    if (answered) return; answered = true;
+    const fb = h('div', { class: 'fb ' + (ok ? 'ok' : 'bad') });
+    fb.innerHTML = `<div class="fb-h">${ok ? '✅ ¡Correcto!' : '🔎 Casi. Revisa esta idea.'}</div><div class="fb-b">${extra ? extra + '<br>' : ''}${ok ? '' : '<b>Recuerda:</b> '}${esc(ex.f || '')}</div>${ex.steps ? `<div class="steps"><b>Paso a paso</b>${ex.steps}</div>` : ''}`;
+    card.append(fb);
+    setTimeout(() => fb.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 60);
+    onResult(ok, ex, card);
+  });
+  return card;
+}
+
+/* ============ interfaz general ============ */
+const main = $('#main');
+function toast(msg, ms) { document.querySelectorAll('.toast').forEach(t => t.remove()); const t = h('div', { class: 'toast', role: 'status' }, msg); document.body.append(t); setTimeout(() => t.remove(), ms || 2600); }
+function modal(content) { const m = h('div', { class: 'modal', role: 'dialog', 'aria-modal': 'true' }, content); m.addEventListener('click', e => { if (e.target === m && !m.dataset.locked) m.remove(); }); document.body.append(m); return m; }
+function confetti() {
+  const c = h('div', { class: 'confetti' }); const cols = ['#1c7f78', '#c98624', '#c4553d', '#2f8a49', '#557089', '#d8a11a'];
+  for (let i = 0; i < 70; i++) { const d = h('i'); d.style.left = Math.random() * 100 + '%'; d.style.background = pick(cols); d.style.animationDuration = (1.8 + Math.random() * 1.8) + 's'; d.style.animationDelay = (Math.random() * .6) + 's'; c.append(d); }
+  document.body.append(c); setTimeout(() => c.remove(), 4200);
+}
+function celebrate(b) {
+  confetti();
+  const m = modal(h('div', { class: 'card', style: 'text-align:center' },
+    h('div', { style: 'font-size:3rem' }, '🎉'), h('h3', {}, '¡Bloque completado!'),
+    h('p', { class: 'muted' }, `${BL[b - 1].e} ${BL[b - 1].n}: ya dominas este tema.`),
+    h('div', { class: 'row c mt' },
+      h('button', { class: 'btn', type: 'button', onclick: () => m.remove() }, 'Seguir practicando'),
+      h('button', { class: 'btn primary', type: 'button', onclick: () => { m.remove(); go('menu'); } }, '🗺️ Mapa de progreso'))));
+}
+function updTop() {
+  const on = !!S.start;
+  ['#topPct', '#topMap', '#topSave'].forEach(s => $(s).classList.toggle('hidden', !on));
+  $('#topPct').textContent = avance() + '%';
+}
+$('#brand').onclick = () => go('home');
+$('#topMap').onclick = () => go('menu');
+$('#topSave').onclick = doSave;
+function doSave() { const ok = save(); toast(ok ? `💾 Progreso guardado en este dispositivo (${new Date().toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' })}).` : '⚠️ Este navegador no permite guardar. Tu avance se perderá al cerrar.'); }
+function doContinue() { if (!S.start) return askName(); if (S.lastBlock) go('block', S.lastBlock); else { const nb = [...Array(14).keys()].map(i => i + 1).find(b => status(b) !== 'done') || 1; go('block', nb); } }
+function doReset() {
+  const m = modal(h('div', { class: 'card' },
+    h('h3', {}, '🗑️ ¿Reiniciar la guía?'),
+    h('p', {}, 'Se borrará todo tu progreso guardado en este dispositivo: nombre, aciertos, errores, tiempo y evidencia. Esta acción no se puede deshacer.'),
+    h('div', { class: 'row mt' },
+      h('button', { class: 'btn', type: 'button', onclick: () => m.remove() }, 'Cancelar'),
+      h('button', { class: 'btn danger', type: 'button', onclick: () => { try { localStorage.removeItem(KEY); } catch (e) { } S = blank(); m.remove(); updTop(); go('home'); toast('La guía se reinició.'); } }, 'Sí, borrar todo'))));
+}
+function askName(after) {
+  const n = h('input', { class: 'txt', type: 'text', maxlength: '60', placeholder: 'Nombre y apellidos', value: S.name || '', autocomplete: 'name' });
+  const g = h('input', { class: 'txt', type: 'text', maxlength: '20', placeholder: 'Ej. 4010', value: S.group || '' });
+  const err = h('div', { class: 'hint', style: 'color:var(--coral)' });
+  const okF = () => {
+    const v = n.value.trim(); if (v.length < 3) { err.textContent = 'Escribe tu nombre para que aparezca en tu evidencia.'; n.focus(); return; }
+    S.name = v; S.group = g.value.trim();
+    if (!S.start) { S.start = new Date().toISOString(); S.sessions = 1; }
+    save(); m.remove(); updTop(); if (after) after(); else go('menu');
+  };
+  n.addEventListener('keydown', e => { if (e.key === 'Enter') okF(); });
+  const m = modal(h('div', { class: 'card' },
+    h('h3', {}, '👋 Antes de empezar'),
+    h('p', { class: 'muted' }, 'Tu nombre aparecerá en tu evidencia de estudio. Todo se guarda solo en este dispositivo.'),
+    h('label', {}, 'Nombre completo'), n, h('label', {}, 'Grupo (opcional)'), g, err,
+    h('div', { class: 'row mt' }, h('button', { class: 'btn', type: 'button', onclick: () => m.remove() }, 'Cancelar'), h('button', { class: 'btn primary', type: 'button', onclick: okF }, 'Guardar y continuar'))));
+  setTimeout(() => n.focus(), 50);
+}
+
+let VIEW = { name: 'home' };
+function go(name, arg) {
+  VIEW = { name, arg };
+  main.innerHTML = '';
+  ({ home: vHome, menu: vMenu, block: vBlock, weak: vWeak, reto: vReto, evidence: vEvidence })[name](arg);
+  updTop(); window.scrollTo(0, 0);
+}
+
+/* ---------- Inicio ---------- */
+function logoSVG() {
+  return `<svg class="globe-logo" viewBox="0 0 150 150" aria-hidden="true"><circle cx="75" cy="75" r="70" fill="#fffdf8" stroke="#1e2d43" stroke-width="2"/><circle cx="75" cy="75" r="58" fill="#d7ebf2" stroke="#557089"/><g class="spin" fill="none" stroke="#557089" stroke-width="1"><ellipse cx="75" cy="75" rx="22" ry="58"/><ellipse cx="75" cy="75" rx="44" ry="58"/><path d="M17,75 h116 M23,50 h104 M23,100 h104"/></g><path d="M52,52 q12,-10 24,-2 q8,8 -2,16 q-10,4 -14,16 q-8,8 -12,-4 q-4,-12 4,-26z M88,86 q12,-4 16,6 q2,14 -8,18 q-10,2 -10,-10z" fill="#d6e6c0" stroke="#8fb37a"/><g class="needle"><polygon points="75,22 81,75 75,128 69,75" fill="#1e2d43" opacity=".85"/><polygon points="75,22 81,75 69,75" fill="#c4553d"/><circle cx="75" cy="75" r="5" fill="#c98624"/></g><text x="75" y="14" text-anchor="middle" font-size="10" font-weight="800" fill="#1e2d43" font-family="system-ui">N</text></svg>`;
+}
+function vHome() {
+  const hero = h('section', { class: 'hero' },
+    h('div', { html: logoSVG() }),
+    h('h1', {}, '🌎 GUÍA DE ESTUDIO'),
+    h('div', { class: 'sub' }, 'Prepárate para tu primer parcial de Geografía'),
+    h('p', { class: 'lead' }, 'Esta guía no es un examen. Es un espacio para practicar, equivocarte, aprender y volver a intentarlo.'),
+    h('button', { class: 'btn primary big', type: 'button', onclick: () => S.start ? go('menu') : askName() }, 'COMENZAR'));
+  main.append(hero);
+  if (!STORAGE_OK) main.append(h('div', { class: 'warn' }, '⚠️ Este navegador no permite guardar datos (quizá estás en modo privado). Puedes practicar, pero tu avance se perderá al cerrar. Abre el archivo en una ventana normal de Chrome, Edge, Firefox o Safari.'));
+  if (S.start) {
+    main.append(h('div', { class: 'card welcome' },
+      h('div', { style: 'font-weight:750;font-size:1.1rem' }, `¡Hola de nuevo, ${S.name}!`),
+      h('div', { class: 'muted' }, `Avance: ${avance()}% · Última actividad: ${fmtDT(S.last)}`),
+      h('div', { class: 'row' },
+        h('button', { class: 'btn primary', type: 'button', onclick: doContinue }, '↩️ CONTINUAR MI GUÍA'),
+        h('button', { class: 'btn danger', type: 'button', onclick: doReset }, '🗑️ REINICIAR GUÍA'))));
+  }
+  main.append(h('div', { class: 'foot' }, 'Geografía · Preparatoria UNAM · Docente: Viridiana Corro Espino', h('br'), 'Funciona sin internet. Tu progreso se guarda solo en este dispositivo.'));
+}
+
+/* ---------- Mapa de progreso ---------- */
+function ringSVG(p) {
+  const r = 48, c = 2 * Math.PI * r;
+  return `<svg class="ring" viewBox="0 0 118 118" role="img" aria-label="Avance ${p}%"><circle cx="59" cy="59" r="${r}" fill="none" stroke="#ece6d6" stroke-width="12"/><circle cx="59" cy="59" r="${r}" fill="none" stroke="#1c7f78" stroke-width="12" stroke-linecap="round" stroke-dasharray="${(c * p / 100).toFixed(1)} ${c.toFixed(1)}" transform="rotate(-90 59 59)"/><text x="59" y="64" text-anchor="middle" font-family="Georgia,serif" font-size="24" font-weight="700" fill="#1e2d43">${p}%</text></svg>`;
+}
+function weakUL(ws, src) {
+  return h('ul', { class: 'weak-list' }, ws.map(b => h('li', {}, h('span', {}, `${BL[b - 1].e} ${BL[b - 1].n}`), h('b', {}, `${src[b]} ${src[b] === 1 ? 'error' : 'errores'}`))));
+}
+function vMenu() {
+  const T = totals(), p = avance();
+  main.append(h('div', { class: 'bhead' }, h('h2', {}, '🗺️ Mapa de progreso'), h('div', { class: 'muted' }, S.name ? `${S.name}${S.group ? ' · Grupo ' + S.group : ''}` : '')));
+  main.append(h('div', { class: 'card dash' }, h('div', { html: ringSVG(p) }),
+    h('div', {}, h('div', { style: 'font-weight:700;margin-bottom:8px' }, p >= 85 ? 'Te falta poco. ¡Excelente trabajo!' : p >= 40 ? '¡Vas avanzando!' : p > 0 ? 'Buen comienzo. Un bloque a la vez.' : 'Elige un bloque para empezar.'),
+      h('div', { class: 'stats' }, h('div', { class: 'stat' }, h('b', {}, T.c), h('span', {}, 'aciertos')), h('div', { class: 'stat' }, h('b', {}, T.w), h('span', {}, 'errores')), h('div', { class: 'stat' }, h('b', {}, fmtTime(S.timeSec)), h('span', {}, 'de estudio'))))));
+  main.append(h('div', { class: 'legend' }, h('span', {}, '🟢 Dominado'), h('span', {}, '🟡 En práctica'), h('span', {}, '⚪ Sin comenzar'), h('span', {}, `· Dominar = ${GOAL} aciertos con 70% de efectividad`)));
+  const g = h('div', { class: 'grid' });
+  BL.forEach((m, i) => {
+    const b = i + 1, st = status(b), x = bs(b);
+    const sub = b === 14 ? (S.reto.tries ? `Mejor resultado: ${S.reto.best}%` : 'Reto que combina todo') : (x.a ? `${x.c} aciertos · ${x.w} errores` : 'Toca para empezar');
+    g.append(h('button', { class: 'bcard' + (st === 'done' ? ' done' : '') + (b === 14 ? ' final' : ''), type: 'button', onclick: () => go('block', b) },
+      h('div', { class: 'row', style: 'justify-content:space-between;align-items:center' }, h('span', { class: 'bn' }, `BLOQUE ${b}`), h('span', { title: ST[st][1] }, ST[st][0])),
+      h('div', { class: 'be' }, m.e), h('div', { class: 'bt' }, m.n),
+      h('div', { class: 'bar' }, h('i', { style: `width:${Math.round(progress(b) * 100)}%` })),
+      h('div', { class: 'bs' }, `${ST[st][1]} · ${sub}`)));
+  });
+  main.append(g);
+  const ws = weakList();
+  const wb = h('div', { class: 'card weakbox mt2' }, h('h3', {}, '🎯 Temas que necesitas practicar'));
+  if (ws.length) { wb.append(weakUL(ws, S.weak), h('button', { class: 'btn ocre', type: 'button', onclick: () => go('weak') }, '🔁 Practicar nuevamente mis áreas débiles')); }
+  else wb.append(h('p', { class: 'muted' }, S.hist.length ? '¡Por ahora no tienes temas pendientes! Sigue practicando o intenta el reto final.' : 'Aquí aparecerán los temas en los que te equivoques, para que los repases.'));
+  main.append(wb);
+  main.append(h('div', { class: 'row mt2' },
+    h('button', { class: 'btn', type: 'button', onclick: doSave }, '💾 GUARDAR PROGRESO'),
+    h('button', { class: 'btn primary', type: 'button', onclick: doContinue }, '↩️ CONTINUAR MI GUÍA'),
+    h('button', { class: 'btn', type: 'button', onclick: () => go('evidence') }, '🎓 MI EVIDENCIA DE ESTUDIO'),
+    h('button', { class: 'btn danger', type: 'button', onclick: doReset }, '🗑️ REINICIAR GUÍA')));
+}
+
+/* ---------- Bloque ---------- */
+const MOTIV = ['¡Vas avanzando!', 'Un error también es información.', 'Sigue así: cada ejercicio cuenta.', 'Leer con calma también es estrategia.', '¡Buen ritmo!'];
+let sessionCount = 0;
+function motivate(el, b, ok) {
+  sessionCount++;
+  const x = bs(b); let msg = '';
+  if (status(b) === 'done' && ok) msg = 'Ya dominas este tema.';
+  else if (x.c === GOAL - 1 && ok) msg = 'Te falta poco.';
+  else if (!ok && Math.random() < .55) msg = 'Un error también es información.';
+  else if (sessionCount % 3 === 0) msg = pick(MOTIV);
+  el.textContent = msg;
+}
+function vBlock(b) {
+  if (!S.start) { askName(() => go('block', b)); go('home'); return; }
+  if (b === 14) return vReto();
+  S.lastBlock = b; save();
+  const m = BL[b - 1];
+  const head = h('div', { class: 'bhead' }, h('button', { class: 'back', type: 'button', onclick: () => go('menu') }, '← Mapa de progreso'), h('h2', {}, `${m.e} ${b}. ${m.n}`));
+  const pill = h('span', { class: 'pill' }); const mbar = h('i'); const mtxt = h('span');
+  head.append(pill, h('div', { class: 'mastery' }, h('div', { class: 'bar' }, mbar), mtxt));
+  const upd = () => { const st = status(b), x = bs(b); pill.textContent = `${ST[st][0]} ${ST[st][1]}`; mbar.style.width = Math.round(progress(b) * 100) + '%'; mtxt.textContent = st === 'done' ? '¡Dominado! Puedes seguir practicando.' : `${Math.min(x.c, GOAL)}/${GOAL} aciertos para dominar${x.a ? ` · efectividad ${Math.round(x.c / x.a * 100)}%` : ''}`; };
+  upd(); main.append(head);
+  main.append(h('details', { class: 'idea' }, h('summary', {}, '📌 Idea clave (repasa antes de practicar)'), h('div', { class: 'idea-b', html: IDEA[b] })));
+  let lvl = S.scaleLevel || 'mix';
+  if (b === 5) {
+    const L = [['1', 'Nivel 1 · Identificar'], ['2', 'Nivel 2 · Convertir'], ['3', 'Nivel 3 · Problemas'], ['4', 'Nivel 4 · Escala territorial'], ['mix', '🎲 Mixto']];
+    const lv = h('div', { class: 'levels', role: 'tablist' });
+    L.forEach(([k, t]) => { const btn = h('button', { class: 'lv' + (k === lvl ? ' on' : ''), type: 'button', onclick: () => { lvl = k; S.scaleLevel = k; save(); lv.querySelectorAll('.lv').forEach(x => x.classList.toggle('on', x === btn)); next(); } }, t); lv.append(btn); });
+    main.append(lv);
+  }
+  const counter = h('div', { class: 'counter' }); const host = h('div'); const motiv = h('div', { class: 'motiv', 'aria-live': 'polite' });
+  const another = h('button', { class: 'btn primary', type: 'button' }, '🔄 Otro ejercicio');
+  let n = 0;
+  function next() {
+    n++; counter.innerHTML = ''; counter.append(h('span', {}, `Ejercicio ${n} de esta sesión`), h('span', {}, `Intentos en el bloque: ${bs(b).a}`));
+    another.classList.remove('pulse'); motiv.textContent = '';
+    const ex = genFor(b, lvl); host.innerHTML = '';
+    host.append(exCard(ex, ok => { record(b, ok, ex.ctx || ex.q); upd(); motivate(motiv, b, ok); another.classList.add('pulse'); counter.lastChild.textContent = `Intentos en el bloque: ${bs(b).a}`; }));
+  }
+  another.onclick = () => { next(); setTimeout(() => counter.scrollIntoView({ behavior: 'smooth', block: 'start' }), 30); };
+  main.append(counter, host, motiv, h('div', { class: 'nav' }, another, h('button', { class: 'btn', type: 'button', onclick: () => go('menu') }, '🗺️ Mapa de progreso'), b < 13 ? h('button', { class: 'btn', type: 'button', onclick: () => go('block', b + 1) }, `Siguiente bloque →`) : h('button', { class: 'btn ocre', type: 'button', onclick: () => go('block', 14) }, '🧠 Ir al reto final')));
+  next();
+}
+
+/* ---------- Áreas débiles ---------- */
+function vWeak() {
+  main.append(h('div', { class: 'bhead' }, h('button', { class: 'back', type: 'button', onclick: () => go('menu') }, '← Mapa de progreso'), h('h2', {}, '🎯 Practicar mis áreas débiles')));
+  const ws = weakList();
+  if (!ws.length) { main.append(h('div', { class: 'card' }, h('p', {}, '¡No tienes temas pendientes! 🎉 Practica cualquier bloque o intenta el reto final.'), h('button', { class: 'btn primary', type: 'button', onclick: () => go('menu') }, '🗺️ Mapa de progreso'))); return; }
+  const N = 8; let i = 0, okc = 0; const start = Object.assign({}, S.weak);
+  main.append(h('div', { class: 'card' }, h('div', { class: 'muted' }, 'Ejercicios nuevos de los temas donde te has equivocado. Cada acierto aquí reduce tus errores pendientes.'), weakUL(ws, S.weak)));
+  const counter = h('div', { class: 'counter' }); const host = h('div'); const nav = h('div', { class: 'nav' }); const motiv = h('div', { class: 'motiv' });
+  main.append(counter, host, motiv, nav);
+  function nextQ() {
+    const list = weakList(); const pool = list.length ? list : Object.keys(start).map(Number);
+    const b = wpick(pool.map(x => [Math.max(1, S.weak[x] || 1), x]));
+    i++; counter.innerHTML = ''; counter.append(h('span', {}, `Ejercicio ${i} de ${N}`), h('span', {}, `${BL[b - 1].e} ${BL[b - 1].n}`));
+    nav.innerHTML = ''; host.innerHTML = ''; motiv.textContent = '';
+    const ex = genFor(b === 14 ? 7 : b, 'mix');
+    host.append(exCard(ex, ok => {
+      record(ex.b, ok, ex.ctx || ex.q, 'weak'); if (ok) okc++; motivate(motiv, ex.b, ok);
+      nav.append(i < N ? h('button', { class: 'btn primary pulse', type: 'button', onclick: () => { nextQ(); window.scrollTo(0, 0); } }, 'Siguiente →') : h('button', { class: 'btn primary pulse', type: 'button', onclick: finish }, 'Ver resultado'));
+    }));
+  }
+  function finish() {
+    main.innerHTML = ''; const rest = weakList();
+    main.append(h('div', { class: 'bhead' }, h('h2', {}, '🎯 Práctica terminada')),
+      h('div', { class: 'card' }, h('div', { class: 'big-pct' }, `${okc}/${N}`), h('p', {}, okc >= 6 ? '¡Muy bien! Esos temas ya están más firmes.' : 'Un error también es información: repasa la idea clave de cada tema y vuelve a intentarlo.'),
+        rest.length ? h('div', {}, h('b', {}, 'Todavía por reforzar:'), weakUL(rest, S.weak)) : h('p', {}, '🎉 ¡Ya no tienes errores pendientes!'),
+        h('div', { class: 'row mt' }, rest.length ? h('button', { class: 'btn ocre', type: 'button', onclick: () => go('weak') }, '🔁 Practicar otra vez') : null, h('button', { class: 'btn primary', type: 'button', onclick: () => go('menu') }, '🗺️ Mapa de progreso'))));
+    window.scrollTo(0, 0);
+  }
+  nextQ();
+}
+
+/* ---------- Reto final ---------- */
+const RETO = [
+  [7, gCat], [5, () => eL3(true)], [10, gTool], [3, gCoordMC], [4, gHF], [9, gRepId],
+  [11, gProjMatch], [2, gPrin], [8, gEsc], [12, gDisc], [6, gCompOne], [13, gMapPick],
+  [3, gCompass], [9, gTM], [5, () => eL3()]
+];
+function levelFor(p) { return p >= 85 ? ['🏆', '¡Listo para el parcial!'] : p >= 70 ? ['⭐', 'Buena preparación'] : p >= 50 ? ['📈', 'Vas avanzando'] : ['📚', 'Necesitas repasar']; }
+function vReto() {
+  S.lastBlock = 14; save();
+  main.append(h('div', { class: 'bhead' }, h('button', { class: 'back', type: 'button', onclick: () => go('menu') }, '← Mapa de progreso'), h('h2', {}, '🧠 RETO FINAL')));
+  main.append(h('div', { class: 'card' },
+    h('p', {}, `${RETO.length} preguntas nuevas que combinan todo: categorías espaciales, escala, coordenadas, herramientas geográficas, hechos y fenómenos, representaciones y más.`),
+    h('p', { class: 'muted' }, 'Funciona como diagnóstico: al final verás tu nivel de preparación y los temas que conviene repasar.'),
+    S.reto.tries ? h('div', { class: 'ev-grid mt' }, h('div', { class: 'ev-item' }, h('span', {}, 'Mejor resultado'), h('b', {}, S.reto.best + '%')), h('div', { class: 'ev-item' }, h('span', {}, 'Último intento'), h('b', {}, S.reto.last + '%')), h('div', { class: 'ev-item' }, h('span', {}, 'Intentos'), h('b', {}, S.reto.tries))) : null,
+    h('div', { class: 'row mt' }, h('button', { class: 'btn ocre big', type: 'button', onclick: runReto }, S.reto.tries ? '🔁 Intentar de nuevo' : '🚀 Comenzar reto'))));
+}
+function runReto() {
+  const list = shuffle(RETO); let i = 0, okc = 0; const wrong = {};
+  main.innerHTML = '';
+  const top = h('div', { class: 'bhead' }, h('h2', {}, '🧠 Reto final')); const bar = h('i'); const counter = h('div', { class: 'counter' });
+  top.append(h('div', { class: 'bar' }, bar)); const host = h('div'); const nav = h('div', { class: 'nav' });
+  main.append(top, counter, host, nav);
+  function q() {
+    const [b, f] = list[i]; const ex = f(); ex.b = b;
+    bar.style.width = Math.round(i / list.length * 100) + '%';
+    counter.innerHTML = ''; counter.append(h('span', {}, `Pregunta ${i + 1} de ${list.length}`), h('span', {}, `${BL[b - 1].e} ${BL[b - 1].n}`));
+    host.innerHTML = ''; nav.innerHTML = '';
+    host.append(exCard(ex, ok => {
+      record(b, ok, ex.ctx || ex.q); if (ok) okc++; else wrong[b] = (wrong[b] || 0) + 1;
+      i++; nav.append(h('button', { class: 'btn primary pulse', type: 'button', onclick: () => { i < list.length ? q() : end(); window.scrollTo(0, 0); } }, i < list.length ? 'Siguiente →' : 'Ver mi nivel de preparación'));
+    }));
+  }
+  function end() {
+    const p = Math.round(okc / list.length * 100); const before = status(14);
+    S.reto.tries++; S.reto.last = p; S.reto.best = Math.max(S.reto.best == null ? 0 : S.reto.best, p); S.reto.lastDate = new Date().toISOString(); save(); updTop();
+    const [ic, lv] = levelFor(p); const wl = Object.keys(wrong).map(Number).sort((a, c) => wrong[c] - wrong[a]);
+    main.innerHTML = '';
+    main.append(h('div', { class: 'bhead' }, h('h2', {}, '🧠 Resultado del reto final')),
+      h('div', { class: 'card', style: 'text-align:center' }, h('div', { class: 'big-pct' }, p + '%'), h('div', { class: 'muted' }, `${okc} de ${list.length} respuestas correctas`),
+        h('div', { class: 'level' }, `${ic} Nivel de preparación: ${lv}`),
+        h('div', { class: 'note mt' }, 'Este porcentaje corresponde únicamente a tu desempeño en la guía y NO garantiza una calificación determinada en el examen.')),
+      h('div', { class: 'card weakbox mt' }, h('h3', {}, '🎯 Temas que necesitas practicar'), wl.length ? weakUL(wl, wrong) : h('p', {}, '🎉 ¡No tuviste errores en este reto!'),
+        h('div', { class: 'row' }, weakList().length ? h('button', { class: 'btn ocre', type: 'button', onclick: () => go('weak') }, '🔁 Practicar nuevamente mis áreas débiles') : null,
+          h('button', { class: 'btn', type: 'button', onclick: runReto }, '🔁 Repetir reto'),
+          h('button', { class: 'btn primary', type: 'button', onclick: () => go('evidence') }, '🎓 Ver mi evidencia'),
+          h('button', { class: 'btn', type: 'button', onclick: () => go('menu') }, '🗺️ Mapa de progreso'))));
+    window.scrollTo(0, 0);
+    if (before !== 'done' && status(14) === 'done' && !S.done[14]) { S.done[14] = new Date().toISOString(); save(); setTimeout(() => celebrate(14), 600); }
+  }
+  q();
+}
+
+/* ---------- Evidencia ---------- */
+function evData() {
+  const T = totals();
+  const practiced = BL.map((m, i) => i + 1).filter(b => bs(b).a > 0);
+  return {
+    T, p: avance(), practiced, weak: weakList(),
+    doneB: BL.map((m, i) => i + 1).filter(b => status(b) === 'done'),
+    eff: T.a ? Math.round(T.c / T.a * 100) : 0
+  };
+}
+function folio() { const s = `${S.name}|${S.start}|${totals().a}|${totals().c}|${S.timeSec}|${S.reto.best}`; let x = 2166136261; for (let i = 0; i < s.length; i++) { x ^= s.charCodeAt(i); x = Math.imul(x, 16777619); } return 'GEO-' + (x >>> 0).toString(36).toUpperCase().padStart(7, '0'); }
+function vEvidence() {
+  const D = evData();
+  main.append(h('div', { class: 'bhead' }, h('button', { class: 'back', type: 'button', onclick: () => go('menu') }, '← Mapa de progreso'), h('h2', {}, '🎓 MI EVIDENCIA DE ESTUDIO')));
+  const it = (l, v) => h('div', { class: 'ev-item' }, h('span', {}, l), h('b', {}, v));
+  main.append(h('div', { class: 'card' },
+    h('div', { class: 'row', style: 'justify-content:space-between;align-items:center' }, h('div', {}, h('div', { style: 'font-weight:800;font-size:1.15rem' }, S.name || '—'), h('div', { class: 'muted' }, S.group ? 'Grupo ' + S.group : 'Grupo no indicado')), h('button', { class: 'btn', type: 'button', onclick: () => askName(() => go('evidence')) }, '✏️ Editar nombre')),
+    h('div', { class: 'ev-grid mt' },
+      it('Fecha', fmtDate(new Date().toISOString())), it('Inicio de la guía', fmtDate(S.start)), it('Última actividad', fmtDT(S.last)),
+      it('Porcentaje de avance', D.p + '%'), it('Actividades realizadas', `${D.practiced.length} de 14 bloques`), it('Bloques dominados', `${D.doneB.length} de 14`),
+      it('Ejercicios realizados', D.T.a), it('Aciertos', D.T.c), it('Errores', D.T.w),
+      it('Efectividad', D.eff + '%'), it('Tiempo aproximado', fmtTime(S.timeSec)), it('Reto final', S.reto.tries ? `${S.reto.best}% (mejor) · ${S.reto.tries} intento(s)` : 'Sin intentar'))));
+  const tb = h('div', { class: 'card mt' }, h('h3', { style: 'font-size:1.2rem;margin-bottom:8px' }, '📊 Aciertos y errores por tema'));
+  const max = Math.max(1, ...BL.map((m, i) => bs(i + 1).a));
+  BL.forEach((m, i) => { const b = i + 1, x = bs(b); if (b === 14) { tb.append(h('div', { class: 'bt-row' }, h('span', {}, `${ST[status(14)][0]} Reto final`), h('div', { class: 'bt-bars' }, h('i', { class: 'c', style: `width:${S.reto.best || 0}%` })), h('span', { class: 'muted' }, S.reto.tries ? `mejor ${S.reto.best}%` : 'sin intentar'))); return; } tb.append(h('div', { class: 'bt-row' }, h('span', {}, `${ST[status(b)][0]} ${m.n}`), h('div', { class: 'bt-bars' }, h('i', { class: 'c', style: `width:${x.c / max * 100}%` }), h('i', { class: 'w', style: `width:${x.w / max * 100}%` })), h('span', { class: 'muted' }, `${x.c}✔ ${x.w}✘`))); });
+  tb.append(h('div', { class: 'legend' }, h('span', {}, '■ aciertos'), h('span', { style: 'color:var(--coral)' }, '■ errores')));
+  main.append(tb);
+  main.append(h('div', { class: 'card mt' },
+    h('h3', { style: 'font-size:1.2rem' }, '✅ Temas practicados'), h('p', {}, D.practiced.length ? D.practiced.map(b => BL[b - 1].n).join(' · ') : 'Todavía no hay temas practicados.'),
+    h('h3', { style: 'font-size:1.2rem;margin-top:12px' }, '🎯 Temas que necesito reforzar'), D.weak.length ? weakUL(D.weak, S.weak) : h('p', {}, 'Sin temas pendientes.')));
+  main.append(h('div', { class: 'row mt2' },
+    h('button', { class: 'btn primary big', type: 'button', onclick: genEvidence }, '📄 GENERAR EVIDENCIA'),
+    h('button', { class: 'btn', type: 'button', onclick: doSave }, '💾 GUARDAR PROGRESO')),
+    h('p', { class: 'muted mt' }, 'Se abrirá tu ficha en una ventana nueva. Desde ahí puedes imprimirla o guardarla como PDF para entregarla.'));
+}
+function reportHTML() {
+  const D = evData();
+  const rows = BL.map((m, i) => { const b = i + 1, x = bs(b); if (b === 14) return `<tr><td>14</td><td>Repaso final (reto)</td><td>${ST[status(14)][1]}</td><td colspan="3">${S.reto.tries ? `${S.reto.tries} intento(s) · mejor ${S.reto.best}% · último ${S.reto.last}%` : 'Sin intentar'}</td></tr>`; return `<tr><td>${b}</td><td>${esc(m.n)}</td><td>${ST[status(b)][1]}</td><td>${x.a}</td><td>${x.c}</td><td>${x.w}</td></tr>`; }).join('');
+  const weak = D.weak.length ? D.weak.map(b => `<li>${esc(BL[b - 1].n)} — ${S.weak[b]} ${S.weak[b] === 1 ? 'error' : 'errores'}</li>`).join('') : '<li>Sin temas pendientes</li>';
+  const pr = D.practiced.length ? D.practiced.map(b => esc(BL[b - 1].n)).join(' · ') : '—';
+  return `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Evidencia de estudio · ${esc(S.name)}</title>
+<style>body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:#1e2d43;margin:0;background:#f4f0e4}.sheet{max-width:780px;margin:20px auto;background:#fff;border:1px solid #d3cab4;border-radius:14px;padding:28px 30px}
+h1{font-family:Georgia,serif;font-size:24px;margin:0}h2{font-family:Georgia,serif;font-size:16px;margin:20px 0 8px;border-bottom:2px solid #1c7f78;padding-bottom:4px}.hd{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;border-bottom:3px double #1e2d43;padding-bottom:12px}
+.small{font-size:12px;color:#5f6c7c}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.it{background:#f7f3e8;border-radius:8px;padding:8px 10px}.it span{display:block;font-size:11px;color:#5f6c7c}.it b{font-size:15px}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{border-bottom:1px solid #e3dccb;padding:5px 6px;text-align:left}th{background:#f7f3e8}ul{margin:4px 0;padding-left:20px;font-size:14px}
+.sign{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:40px;font-size:12px;text-align:center}.sign div{border-top:1px solid #1e2d43;padding-top:6px}.note{font-size:11px;color:#5f6c7c;margin-top:16px}
+.bar{text-align:center;margin:16px}.bar button{font:inherit;font-weight:700;padding:12px 22px;border-radius:12px;border:0;background:#1c7f78;color:#fff;cursor:pointer}
+@media print{body{background:#fff}.sheet{border:0;margin:0;padding:0;max-width:none}.bar{display:none}}@media (max-width:600px){.grid{grid-template-columns:1fr 1fr}.sheet{margin:0;border-radius:0;padding:18px}}</style></head><body>
+<div class="bar"><button onclick="window.print()">🖨️ Imprimir o guardar como PDF</button></div>
+<div class="sheet"><div class="hd"><div><div class="small">Preparatoria UNAM · Geografía · Primer parcial</div><h1>🎓 Evidencia de estudio</h1><div class="small">Guía de estudio interactiva · Docente: Viridiana Corro Espino</div></div><div class="small" style="text-align:right">Folio<br><b style="font-size:14px;color:#1e2d43">${folio()}</b><br>Emitida: ${fmtDT(new Date().toISOString())}</div></div>
+<h2>Datos del alumno</h2><div class="grid"><div class="it"><span>Nombre</span><b>${esc(S.name || '—')}</b></div><div class="it"><span>Grupo</span><b>${esc(S.group || '—')}</b></div><div class="it"><span>Fecha</span><b>${fmtDate(new Date().toISOString())}</b></div><div class="it"><span>Inicio de la guía</span><b>${fmtDate(S.start)}</b></div><div class="it"><span>Última actividad</span><b>${fmtDT(S.last)}</b></div><div class="it"><span>Sesiones de estudio</span><b>${S.sessions || 1}</b></div></div>
+<h2>Resumen del trabajo</h2><div class="grid"><div class="it"><span>Porcentaje de avance</span><b>${D.p}%</b></div><div class="it"><span>Actividades realizadas</span><b>${D.practiced.length} de 14 bloques</b></div><div class="it"><span>Bloques dominados</span><b>${D.doneB.length} de 14</b></div><div class="it"><span>Ejercicios realizados</span><b>${D.T.a}</b></div><div class="it"><span>Aciertos</span><b>${D.T.c}</b></div><div class="it"><span>Errores</span><b>${D.T.w}</b></div><div class="it"><span>Efectividad</span><b>${D.eff}%</b></div><div class="it"><span>Tiempo aproximado de trabajo</span><b>${fmtTime(S.timeSec)}</b></div><div class="it"><span>Reto final (mejor / intentos)</span><b>${S.reto.tries ? S.reto.best + '% / ' + S.reto.tries : 'Sin intentar'}</b></div></div>
+<h2>Detalle por tema</h2><table><thead><tr><th>#</th><th>Tema</th><th>Estado</th><th>Ejercicios</th><th>Aciertos</th><th>Errores</th></tr></thead><tbody>${rows}</tbody></table>
+<h2>Temas practicados</h2><p style="font-size:14px">${pr}</p><h2>Temas que necesita reforzar</h2><ul>${weak}</ul>
+<div class="sign"><div>Firma del alumno</div><div>Revisó (docente)</div></div>
+<p class="note">Evidencia generada localmente en el dispositivo del alumno. Los porcentajes reflejan el trabajo realizado en la guía y no garantizan una calificación determinada en el examen.</p></div></body></html>`;
+}
+function genEvidence() {
+  if (!S.start) return askName(genEvidence);
+  save(); const html = reportHTML();
+  let w = null; try { w = window.open('', '_blank'); } catch (e) { w = null; }
+  if (w && w.document) { w.document.open(); w.document.write(html); w.document.close(); toast('📄 Tu evidencia se abrió en una ventana nueva.'); return; }
+  const pa = $('#printArea'); const doc = new DOMParser().parseFromString(html, 'text/html');
+  pa.innerHTML = ''; doc.querySelectorAll('style').forEach(s => pa.append(s)); pa.append(doc.querySelector('.sheet'));
+  document.body.classList.add('printing'); setTimeout(() => { window.print(); setTimeout(() => document.body.classList.remove('printing'), 500); }, 100);
+}
+
+/* arranque */
+updTop();
+go('home');
+</script>
+</body>
+</html>

@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#E9DDF7">
+<title>¿Qué roca cuenta tu historia? · Laboratorio de Geología</title>
+<style>
+  :root{
+    --lav:#E9DDF7; --rosa:#F7DCE6; --menta:#D5EEE5; --vain:#F9E8B9; --cielo:#DCEBFA;
+    --blanco:#FFFCFA; --texto:#55516A; --acento:#9A78B8;
+    --acento-osc:#7E5DA0; --suave:#8C88A0;
+    --ok:#5FA98A; --ok-bg:#D5EEE5; --bad:#C9708F; --bad-bg:#F7DCE6;
+    --radio:24px;
+    --sombra:0 10px 30px rgba(122,96,160,.12), 0 2px 6px rgba(122,96,160,.08);
+    --font: ui-rounded, "SF Pro Rounded", "Nunito", "Varela Round", "Quicksand", "Hiragino Maru Gothic ProN", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    font-family:var(--font); color:var(--texto); background:var(--blanco);
+    min-height:100vh; line-height:1.5; overflow-x:hidden;
+    background-image:
+      radial-gradient(circle at 12% 8%, rgba(233,221,247,.9) 0, transparent 38%),
+      radial-gradient(circle at 92% 22%, rgba(247,220,230,.85) 0, transparent 34%),
+      radial-gradient(circle at 8% 78%, rgba(213,238,229,.85) 0, transparent 36%),
+      radial-gradient(circle at 88% 92%, rgba(220,235,250,.9) 0, transparent 38%),
+      radial-gradient(rgba(154,120,184,.13) 1.2px, transparent 1.3px);
+    background-size:auto,auto,auto,auto,22px 22px;
+    background-attachment:fixed;
+  }
+  button{font-family:inherit;color:inherit;cursor:pointer;border:none;background:none}
+  button:focus-visible{outline:3px solid var(--acento);outline-offset:3px}
+  .app{max-width:600px;margin:0 auto;padding:18px 16px 40px;position:relative;z-index:1}
+
+  /* destellos flotantes */
+  .sparkles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+  .sparkles span{position:absolute;color:var(--acento);opacity:.35;animation:float 7s ease-in-out infinite}
+  @keyframes float{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-14px) rotate(20deg)}}
+
+  /* pantallas */
+  .screen{display:none}
+  .screen.active{display:block;animation:screenIn .55s cubic-bezier(.2,.8,.2,1)}
+  @keyframes screenIn{from{opacity:0;transform:translateY(18px) scale(.985)}to{opacity:1;transform:none}}
+
+  .card{
+    background:rgba(255,252,250,.92); border-radius:var(--radio); box-shadow:var(--sombra);
+    padding:22px 20px; position:relative; border:1px solid rgba(154,120,184,.14);
+    backdrop-filter:blur(4px);
+  }
+  .badge{
+    display:inline-flex;align-items:center;gap:6px;font-size:.72rem;font-weight:800;letter-spacing:.12em;
+    text-transform:uppercase;background:var(--lav);color:var(--acento-osc);padding:6px 12px;border-radius:999px;
+    border:1.5px dashed rgba(154,120,184,.5)
+  }
+  .tag{display:inline-block;font-size:.7rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:8px;background:var(--cielo);color:#5a6f8f}
+  h1,h2,h3{line-height:1.15;color:var(--texto)}
+  .muted{color:var(--suave)}
+
+  /* botones */
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    font-weight:800;letter-spacing:.06em;font-size:1rem;padding:15px 24px;border-radius:999px;
+    background:linear-gradient(135deg,#A985C9,var(--acento) 55%,#B98BB6);color:#fff;
+    box-shadow:0 8px 20px rgba(154,120,184,.35), inset 0 -3px 0 rgba(0,0,0,.08);
+    transition:transform .18s, box-shadow .18s, opacity .2s; min-height:52px;
+  }
+  .btn:hover{transform:translateY(-2px);box-shadow:0 12px 24px rgba(154,120,184,.42)}
+  .btn:active{transform:translateY(1px) scale(.98)}
+  .btn[disabled]{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+  .btn.ghost{background:#fff;color:var(--acento-osc);border:2px solid var(--lav);box-shadow:0 4px 12px rgba(154,120,184,.12)}
+  .btn.big{font-size:1.08rem;padding:18px 30px;width:100%;max-width:380px}
+  .btn-row{display:flex;gap:12px;justify-content:space-between;align-items:center;margin-top:18px}
+  .btn-row .btn{flex:1}
+  .btn-stack{display:flex;flex-direction:column;gap:12px;align-items:stretch;margin-top:20px}
+
+  /* ===== BIENVENIDA ===== */
+  .hero{text-align:center;padding-top:6px}
+  .hero h1{
+    font-size:clamp(1.9rem,8vw,2.8rem);font-weight:900;letter-spacing:-.01em;margin:14px 0 8px;
+    background:linear-gradient(120deg,#8E6AB0,#C57D9E 50%,#6FA790);-webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .hero .sub{font-size:1.02rem;font-weight:700;max-width:440px;margin:0 auto}
+  .hero-art{position:relative;margin:14px auto 6px;max-width:420px}
+  .hero-art svg{width:100%;height:auto;display:block}
+  .bob{animation:bob 3.4s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+  .bob.d1{animation-delay:-.8s}.bob.d2{animation-delay:-1.7s}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+  .twinkle{animation:twinkle 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+  @keyframes twinkle{0%,100%{opacity:.3;transform:scale(.7)}50%{opacity:1;transform:scale(1.1)}}
+  .intro{font-size:.98rem;text-align:left;margin-top:14px}
+  .intro p+p{margin-top:8px}
+  .quote{font-style:italic;color:var(--acento-osc);font-size:.92rem;margin:14px auto 0;max-width:460px;text-align:center}
+  .counter{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:12px;font-size:.82rem;font-weight:800;color:var(--suave)}
+  .counter span{background:#fff;border-radius:999px;padding:5px 11px;border:1px solid var(--lav)}
+  .disclaimer{
+    margin-top:16px;font-size:.8rem;background:var(--vain);border-radius:14px;padding:10px 12px;text-align:left;
+    display:flex;gap:8px;align-items:flex-start;color:#6d6346
+  }
+
+  /* ===== CUESTIONARIO ===== */
+  .qtop{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px}
+  .qnum{font-weight:900;font-size:.95rem;color:var(--acento-osc)}
+  .qnum b{font-size:1.4rem}
+  .progress{height:16px;background:#fff;border-radius:999px;border:1.5px solid var(--lav);position:relative;overflow:visible;margin:8px 0 6px}
+  .progress-fill{
+    height:100%;border-radius:999px;width:0;transition:width .55s cubic-bezier(.2,.8,.2,1);
+    background:repeating-linear-gradient(90deg,#E9DDF7 0 14px,#F7DCE6 14px 28px,#D5EEE5 28px 42px,#F9E8B9 42px 56px,#DCEBFA 56px 70px);
+    box-shadow:inset 0 -2px 0 rgba(0,0,0,.05)
+  }
+  .progress-gem{position:absolute;top:50%;width:30px;height:30px;transform:translate(-50%,-50%);transition:left .55s cubic-bezier(.2,.8,.2,1);filter:drop-shadow(0 2px 3px rgba(122,96,160,.3))}
+  .steps{display:flex;justify-content:space-between;margin-top:6px}
+  .steps i{width:9px;height:9px;border-radius:50%;background:var(--lav);display:block;transition:background .3s,transform .3s}
+  .steps i.done{background:var(--acento)}
+  .steps i.now{transform:scale(1.5);background:#C57D9E}
+  .motiv{font-size:.85rem;font-weight:700;color:var(--suave);text-align:center;margin:10px 0 12px;min-height:1.3em}
+  .qcard{animation:cardIn .45s cubic-bezier(.2,.8,.2,1)}
+  @keyframes cardIn{from{opacity:0;transform:translateX(24px) rotate(.6deg)}to{opacity:1;transform:none}}
+  .qcard.back{animation-name:cardInBack}
+  @keyframes cardInBack{from{opacity:0;transform:translateX(-24px) rotate(-.6deg)}to{opacity:1;transform:none}}
+  .qlabel{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+  .qtext{font-size:clamp(1.12rem,4.6vw,1.32rem);font-weight:800;margin-bottom:16px}
+  .options{display:grid;gap:11px}
+  .opt{
+    display:flex;align-items:center;gap:12px;text-align:left;width:100%;padding:14px 14px;border-radius:18px;
+    font-size:.98rem;font-weight:600;line-height:1.35;border:2px solid transparent;position:relative;
+    transition:transform .18s, box-shadow .2s, border-color .2s; min-height:64px;
+  }
+  .opt:hover{transform:translateY(-2px);box-shadow:0 6px 14px rgba(122,96,160,.14)}
+  .opt .letter{
+    flex:0 0 38px;height:38px;border-radius:12px;background:#fff;display:grid;place-items:center;font-weight:900;
+    color:var(--acento-osc);box-shadow:0 2px 0 rgba(0,0,0,.06);transition:background .2s,color .2s
+  }
+  .opt .check{margin-left:auto;flex:0 0 26px;height:26px;border-radius:50%;border:2px solid rgba(154,120,184,.35);display:grid;place-items:center;background:#fff;transition:all .2s}
+  .opt .check svg{opacity:0;transform:scale(.4);transition:all .25s}
+  .opt[aria-checked="true"]{border-color:var(--acento);box-shadow:0 8px 18px rgba(154,120,184,.25);animation:pop .35s}
+  .opt[aria-checked="true"] .letter{background:var(--acento);color:#fff}
+  .opt[aria-checked="true"] .check{background:var(--acento);border-color:var(--acento)}
+  .opt[aria-checked="true"] .check svg{opacity:1;transform:scale(1)}
+  @keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.03)}100%{transform:scale(1)}}
+  .c0{background:var(--lav)}.c1{background:var(--rosa)}.c2{background:var(--menta)}.c3{background:var(--vain)}
+  .opt .deco{position:absolute;right:46px;top:6px;font-size:.7rem;opacity:.45}
+  .hint{font-size:.82rem;color:var(--bad);font-weight:700;text-align:center;margin-top:12px;min-height:1.2em}
+  .hint.shake{animation:shake .4s}
+  @keyframes shake{20%,60%{transform:translateX(-5px)}40%,80%{transform:translateX(5px)}}
+
+  /* ===== RESULTADO (tarjeta coleccionable) ===== */
+  .collect{
+    border-radius:28px;padding:5px;position:relative;
+    background:linear-gradient(135deg,#E9DDF7,#F7DCE6,#D5EEE5,#F9E8B9,#DCEBFA,#E9DDF7);
+    background-size:300% 300%;animation:holo 8s linear infinite;box-shadow:0 18px 40px rgba(122,96,160,.22);
+  }
+  @keyframes holo{0%{background-position:0 50%}100%{background-position:300% 50%}}
+  .collect-inner{background:var(--blanco);border-radius:24px;overflow:hidden}
+  .collect-head{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;font-size:.7rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--acento-osc);border-bottom:2px dashed var(--lav)}
+  .collect-art{position:relative;padding:10px 16px 0}
+  .collect-art svg{width:100%;height:auto;display:block;max-height:260px}
+  .collect-art .shine{position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.65) 45%,transparent 60%);background-size:250% 100%;animation:shine 4.5s ease-in-out infinite;pointer-events:none}
+  @keyframes shine{0%{background-position:150% 0}60%,100%{background-position:-60% 0}}
+  .collect-body{padding:6px 18px 20px;text-align:center}
+  .rname{font-size:clamp(1.45rem,6.5vw,1.95rem);font-weight:900;margin:8px 0 4px;letter-spacing:.01em}
+  .rphrase{display:inline-block;font-weight:800;color:var(--acento-osc);background:var(--lav);padding:6px 14px;border-radius:999px;font-size:.95rem;margin:4px 0 10px}
+  .rdesc{text-align:left;font-size:.97rem}
+  .block{text-align:left;margin-top:14px;border-radius:18px;padding:14px 14px 14px}
+  .block h3{font-size:.95rem;display:flex;align-items:center;gap:8px;margin-bottom:6px}
+  .block p{font-size:.93rem}
+  .block.sci{background:var(--cielo)}
+  .block.ex{background:var(--menta)}
+  .block.ref{background:var(--rosa)}
+  .block.note{background:var(--vain);font-size:.88rem}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+  .chip{background:#fff;border-radius:999px;padding:6px 12px;font-weight:800;font-size:.86rem;display:inline-flex;align-items:center;gap:6px;box-shadow:0 2px 0 rgba(0,0,0,.05)}
+  .chip i{width:12px;height:12px;border-radius:50%;display:inline-block}
+  .scores{margin-top:14px;text-align:left;background:#fff;border:1.5px dashed var(--lav);border-radius:18px;padding:12px 14px}
+  .scores h3{font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;color:var(--suave);margin-bottom:8px}
+  .srow{display:grid;grid-template-columns:minmax(0,1.25fr) 1fr 34px;gap:8px;align-items:center;font-size:.84rem;font-weight:700;margin:5px 0}
+  .sbar{height:11px;background:#F3EEF9;border-radius:999px;overflow:hidden}
+  .sbar b{display:block;height:100%;border-radius:999px;width:0;transition:width 1s cubic-bezier(.2,.8,.2,1)}
+  .srow.win{color:var(--acento-osc)}
+  .smallnote{font-size:.76rem;color:var(--suave);margin-top:10px}
+
+  /* ===== RETO ===== */
+  .challenge-head{text-align:center;margin-bottom:14px}
+  .challenge-head h2{font-size:clamp(1.4rem,6vw,1.8rem);font-weight:900;margin:10px 0 4px}
+  .copt{display:flex;gap:12px;align-items:flex-start;text-align:left;width:100%;padding:14px;border-radius:18px;background:#fff;border:2px solid var(--lav);font-size:.96rem;font-weight:600;transition:all .2s;min-height:58px}
+  .copt:hover:not([disabled]){transform:translateY(-2px);border-color:var(--acento)}
+  .copt .letter{flex:0 0 34px;height:34px;border-radius:11px;display:grid;place-items:center;font-weight:900;background:var(--lav);color:var(--acento-osc)}
+  .copt[disabled]{cursor:default}
+  .copt.right{background:var(--ok-bg);border-color:var(--ok)}
+  .copt.right .letter{background:var(--ok);color:#fff}
+  .copt.wrong{background:var(--bad-bg);border-color:var(--bad);animation:shake .4s}
+  .copt.wrong .letter{background:var(--bad);color:#fff}
+  .copt.dim{opacity:.55}
+  .feedback{margin-top:14px;border-radius:16px;padding:12px 14px;font-size:.92rem;display:none}
+  .feedback.show{display:block;animation:screenIn .35s}
+  .feedback.ok{background:var(--ok-bg)}
+  .feedback.no{background:var(--bad-bg)}
+  .feedback strong{display:block;font-size:1rem;margin-bottom:3px}
+  .score-big{font-size:3.4rem;font-weight:900;line-height:1;color:var(--acento-osc)}
+  .score-big small{font-size:1.4rem;color:var(--suave)}
+  .stars{font-size:1.9rem;letter-spacing:4px;margin:6px 0}
+  .stars span{display:inline-block;animation:starIn .5s both}
+  .review{text-align:left;margin-top:14px;display:grid;gap:10px}
+  .review div{border-radius:14px;padding:11px 12px;font-size:.88rem}
+  .review .r-ok{background:var(--ok-bg)}.review .r-no{background:var(--bad-bg)}
+  @keyframes starIn{from{opacity:0;transform:scale(.2) rotate(-90deg)}to{opacity:1;transform:none}}
+
+  /* ===== CICLO ===== */
+  .cycle-wrap{position:relative}
+  .cycle-wrap svg{width:100%;height:auto;display:block}
+  .node{cursor:pointer;outline:none}
+  .node:focus-visible rect{stroke:#7E5DA0;stroke-width:4}
+  .node rect{transition:transform .2s;transform-box:fill-box;transform-origin:center}
+  .node:hover rect,.node.sel rect{stroke:#7E5DA0;stroke-width:3}
+  .flow{stroke-dasharray:6 7;animation:flow 1.6s linear infinite}
+  @keyframes flow{to{stroke-dashoffset:-26}}
+  .info{margin-top:10px;background:#fff;border:2px solid var(--lav);border-radius:16px;padding:12px 14px;font-size:.9rem;min-height:72px}
+  .info b{color:var(--acento-osc)}
+  .legend{display:grid;gap:7px;margin-top:12px;font-size:.86rem}
+  .legend div{display:flex;gap:10px;align-items:flex-start}
+  .legend .n{flex:0 0 24px;height:24px;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:.78rem;color:#fff;background:var(--acento)}
+  .legend .n.alt{background:#fff;color:var(--acento-osc);border:2px dashed var(--acento)}
+  .closing{margin-top:16px;text-align:center;font-weight:800;font-size:1.02rem;background:linear-gradient(135deg,var(--lav),var(--rosa));border-radius:18px;padding:16px}
+
+  footer{text-align:center;font-size:.75rem;color:var(--suave);margin-top:22px}
+
+  /* confeti */
+  .confetti{position:fixed;top:-20px;width:10px;height:14px;border-radius:3px;z-index:50;pointer-events:none;animation:fall linear forwards}
+  @keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:.8}}
+
+  @media (min-width:640px){
+    .app{padding-top:34px}
+    .card{padding:30px 30px}
+    .collect-body{padding:8px 28px 26px}
+  }
+  @media (max-width:380px){
+    .opt{font-size:.92rem;padding:12px}
+    .srow{grid-template-columns:minmax(0,1.3fr) 1fr 30px;font-size:.8rem}
+    .btn{font-size:.92rem;padding:14px 16px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  }
+</style>
+</head>
+<body>
+
+<div class="sparkles" aria-hidden="true">
+  <span style="left:6%;top:14%;font-size:16px">✦</span>
+  <span style="left:90%;top:9%;font-size:12px;animation-delay:-2s">✧</span>
+  <span style="left:84%;top:52%;font-size:18px;animation-delay:-4s">✦</span>
+  <span style="left:4%;top:60%;font-size:12px;animation-delay:-1s">✧</span>
+  <span style="left:48%;top:94%;font-size:14px;animation-delay:-3s">✦</span>
+</div>
+
+<main class="app">
+
+  <!-- ================= BIENVENIDA ================= -->
+  <section class="screen active" id="s-welcome" aria-labelledby="t-welcome">
+    <div class="card hero">
+      <span class="badge">🔬 Laboratorio de Geología</span>
+      <h1 id="t-welcome" tabindex="-1">¿QUÉ ROCA CUENTA TU HISTORIA?</h1>
+      <p class="sub">Descubre qué tipo de roca representa simbólicamente tu manera de afrontar los cambios.</p>
+
+      <div class="hero-art" id="heroArt" aria-hidden="true"></div>
+
+      <div class="intro">
+        <p>En la Tierra, las rocas tienen diferentes historias: algunas nacen del <b>enfriamiento del magma</b>, otras se forman por la <b>acumulación de sedimentos</b> y algunas se transforman por el <b>calor y la presión</b>.</p>
+        <p>Hoy vamos a descubrir qué historia geológica se parece más a la tuya.</p>
+      </div>
+      <p class="quote">“Cada roca tiene una historia. Algunas se construyen capa por capa, otras nacen del fuego y algunas se transforman bajo presión. ¿Con cuál te identificas?”</p>
+
+      <div style="margin-top:20px">
+        <button class="btn big" id="btnStart">COMENZAR MI EXPLORACIÓN ✨</button>
+      </div>
+      <div class="counter"><span>8 preguntas</span><span>3 posibles perfiles</span><span>1 descubrimiento</span></div>
+
+      <div class="disclaimer">
+        <span aria-hidden="true">🪨</span>
+        <span><b>Importante:</b> esto es un juego de analogías entre experiencias humanas y procesos geológicos. No es un test psicológico ni una clasificación real de la personalidad. No hay respuestas buenas ni malas.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CUESTIONARIO ================= -->
+  <section class="screen" id="s-quiz" aria-labelledby="qText">
+    <div class="qtop">
+      <span class="badge">📓 Bitácora de campo</span>
+      <span class="qnum" id="qNum">Pregunta <b>1</b> de 8</span>
+    </div>
+    <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="8" aria-valuenow="0" id="progress" aria-label="Progreso del cuestionario">
+      <div class="progress-fill" id="progressFill"></div>
+      <svg class="progress-gem" id="progressGem" viewBox="0 0 40 40" aria-hidden="true">
+        <polygon points="20,3 33,13 28,36 12,36 7,13" fill="#E9DDF7" stroke="#9A78B8" stroke-width="2.5" stroke-linejoin="round"/>
+        <polygon points="20,3 24,13 20,36 16,13" fill="#fff" opacity=".7"/>
+        <line x1="7" y1="13" x2="33" y2="13" stroke="#9A78B8" stroke-width="2"/>
+      </svg>
+    </div>
+    <div class="steps" id="steps" aria-hidden="true"></div>
+    <p class="motiv" id="motiv" aria-live="polite"></p>
+
+    <div class="card qcard" id="qCard">
+      <div class="qlabel"><span class="tag" id="qTag">Muestra N.º 01</span></div>
+      <h2 class="qtext" id="qText" tabindex="-1"></h2>
+      <div class="options" id="options" role="radiogroup" aria-labelledby="qText"></div>
+      <p class="hint" id="hint" aria-live="assertive"></p>
+      <div class="btn-row">
+        <button class="btn ghost" id="btnPrev">← ANTERIOR</button>
+        <button class="btn" id="btnNext" disabled>SIGUIENTE →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= RESULTADO ================= -->
+  <section class="screen" id="s-result" aria-labelledby="rName">
+    <div style="text-align:center;margin-bottom:12px">
+      <span class="badge">💎 Descubrimiento registrado</span>
+    </div>
+    <article class="collect">
+      <div class="collect-inner">
+        <div class="collect-head"><span id="rTag">Roca sedimentaria</span><span id="rNo">Ficha N.º 01</span></div>
+        <div class="collect-art"><div id="rArt"></div><div class="shine"></div></div>
+        <div class="collect-body">
+          <h2 class="rname" id="rName" tabindex="-1"></h2>
+          <div class="rphrase" id="rPhrase"></div>
+          <p class="rdesc" id="rDesc"></p>
+          <div class="block note" id="rNote" hidden></div>
+          <div class="block sci"><h3>🔬 ¿Qué dice la geología?</h3><p id="rSci"></p></div>
+          <div class="block ex"><h3 id="rExTitle">🪨 Ejemplos de rocas</h3><div class="chips" id="rEx"></div></div>
+          <div class="block ref"><h3>💭 Para reflexionar</h3><p id="rRef"></p></div>
+          <div class="scores" id="rScores"></div>
+          <p class="smallnote">Recuerda: es un juego de analogías, no un test psicológico. Tu ficha es una forma creativa de conectar tu historia con la de la Tierra.</p>
+        </div>
+      </div>
+    </article>
+    <div class="btn-stack">
+      <button class="btn big" id="btnToChallenge" style="align-self:center">IR AL RETO CIENTÍFICO 🧪</button>
+    </div>
+  </section>
+
+  <!-- ================= RETO ================= -->
+  <section class="screen" id="s-challenge" aria-labelledby="cTitle">
+    <div class="challenge-head">
+      <span class="badge">🧪 Reto final</span>
+      <h2 id="cTitle" tabindex="-1">¿CUÁNTO APRENDISTE?</h2>
+      <p class="muted" id="cSub">3 preguntas · retroalimentación inmediata</p>
+    </div>
+    <div class="card" id="cCard"></div>
+  </section>
+
+  <!-- ================= CICLO ================= -->
+  <section class="screen" id="s-cycle" aria-labelledby="yTitle">
+    <div class="card">
+      <div style="text-align:center">
+        <span class="badge">♻️ Mapa del ciclo</span>
+        <h2 id="yTitle" tabindex="-1" style="font-size:clamp(1.5rem,6.5vw,2rem);font-weight:900;margin:10px 0 4px">EL CICLO CONTINÚA</h2>
+        <p class="muted" style="font-size:.9rem">Toca cada estación del ciclo para explorarla. Las líneas punteadas muestran que hay <b>otros caminos posibles</b>.</p>
+      </div>
+      <div class="cycle-wrap" id="cycleArt"></div>
+      <div class="info" id="cycleInfo" aria-live="polite"><b>👆 Toca una estación.</b> El ciclo de las rocas no tiene un punto de inicio obligatorio ni un orden único: cualquier roca puede tomar distintos caminos.</div>
+      <div class="legend" id="legend"></div>
+      <p class="closing">“Así como las rocas cambian a lo largo del tiempo geológico, el territorio está en constante transformación. La Tierra nunca deja de construir nuevas historias”.</p>
+      <div class="btn-stack">
+        <button class="btn" id="btnExplore">VOLVER A EXPLORAR 💎</button>
+        <button class="btn ghost" id="btnRestart">REINICIAR CUESTIONARIO ↺</button>
+      </div>
+    </div>
+  </section>
+
+  <footer>Laboratorio de Geología · Ciclo de las rocas · Hecho para aprender explorando ✦</footer>
+</main>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ================= DATOS ================= */
+  var CATS = ["S","I","M","D"]; // A=Sedimentaria, B=Ígnea, C=Metamórfica, D=Movimiento
+  var CAT_LABEL = {S:"Sedimentaria", I:"Ígnea", M:"Metamórfica", D:"En movimiento"};
+  var CAT_COLOR = {S:"#E8C79A", I:"#E79AB5", M:"#B596D6", D:"#8FC9B2"};
+
+  var QUESTIONS = [
+    {q:"Cuando atraviesas una etapa difícil, ¿qué suele ayudarte a continuar?", o:[
+      "Recordar todo lo que he aprendido de experiencias anteriores.",
+      "Tomar impulso y buscar un nuevo comienzo.",
+      "Adaptarme, aunque eso implique cambiar mi manera de pensar.",
+      "Alejarme un poco de lo que me está afectando para recuperar claridad."]},
+    {q:"Cuando aparece un cambio inesperado en tu vida, ¿cómo reaccionas?", o:[
+      "Intento comprender cómo se relaciona con todo lo que he vivido.",
+      "Lo veo como una oportunidad para empezar algo diferente.",
+      "Aunque al principio me cueste, busco transformarme y adaptarme.",
+      "Necesito tomar distancia, observar y dejar que las cosas sigan su curso."]},
+    {q:"¿Qué haces cuando sientes mucha presión por cumplir con tus responsabilidades?", o:[
+      "Me apoyo en lo que he aprendido y trato de organizar mis ideas.",
+      "Busco una solución que me permita avanzar.",
+      "La presión puede impulsarme a desarrollar nuevas capacidades.",
+      "Necesito liberar tensión y dejar atrás aquello que ya no puedo controlar."]},
+    {q:"¿Qué representa para ti el paso del tiempo?", o:[
+      "La oportunidad de acumular experiencias que construyen mi historia.",
+      "La posibilidad de volver a comenzar y crear algo nuevo.",
+      "Una oportunidad constante para cambiar y evolucionar.",
+      "Un proceso que me ayuda a desprenderme de cosas que ya no necesito."]},
+    {q:"Si pudieras elegir una característica para describirte, ¿cuál sería?", o:[
+      "Soy alguien que aprende de cada experiencia y conserva sus recuerdos.",
+      "Tengo energía para iniciar proyectos y explorar nuevas posibilidades.",
+      "Soy capaz de cambiar y reconstruirme ante distintas circunstancias.",
+      "Sé reconocer cuándo es momento de soltar y continuar mi camino."]},
+    {q:"Cuando cometes un error, ¿qué haces generalmente?", o:[
+      "Reflexiono sobre lo ocurrido y lo incorporo como aprendizaje.",
+      "Me recupero y comienzo de nuevo con otra estrategia.",
+      "Cambio aquello que sea necesario para no repetirlo.",
+      "Intento dejar atrás la situación y continuar."]},
+    {q:"Imagina que tu historia fuera un paisaje geológico. ¿Cuál elegirías?", o:[
+      "Un cañón con capas de diferentes colores que muestran el paso del tiempo.",
+      "Un paisaje volcánico donde la energía ha dado origen a nuevas formas.",
+      "Una montaña con rocas plegadas que muestran cómo la Tierra puede transformarse.",
+      "Un paisaje donde el viento y el agua modelan constantemente el relieve."]},
+    {q:"¿Qué frase se acerca más a tu manera de ver la vida?", o:[
+      "“Cada experiencia deja una huella y construye lo que soy”.",
+      "“Siempre puedo encontrar la energía para comenzar de nuevo”.",
+      "“No soy la misma persona después de cada experiencia”.",
+      "“A veces avanzar también significa soltar y dejar que algo cambie”."]}
+  ];
+
+  var MOTIV = [
+    "✦ Primera muestra: observa con calma.",
+    "✦ Tu bitácora empieza a tomar forma.",
+    "✦ Buen ritmo, geólogo/a en formación.",
+    "✦ ¡Vas a la mitad del recorrido!",
+    "✦ Cada respuesta es una nueva capa.",
+    "✦ El laboratorio está casi listo.",
+    "✦ Ya se ve el paisaje en el microscopio…",
+    "✦ ¡Última muestra! Tu descubrimiento te espera."
+  ];
+  var OPT_DECO = ["✦","✧","⋆","✦"];
+
+  var RESULTS = {
+    S:{tag:"Roca sedimentaria", no:"01", name:"EL ACUMULADOR DE HISTORIAS",
+      phrase:"Cada experiencia deja una huella",
+      desc:"Tu historia se construye a partir de muchas experiencias. Cada aprendizaje, recuerdo y momento vivido representa una pequeña capa que se integra a lo que eres. No todo sucede de golpe: algunas de las cosas más importantes se construyen con el tiempo.",
+      sci:"Las rocas sedimentarias se forman a partir de fragmentos de otras rocas, minerales o restos de organismos. Estos materiales se depositan en capas y, con el tiempo, pueden compactarse y cementarse hasta formar una roca.",
+      exTitle:"🪨 Ejemplos de rocas", ex:["Arenisca","Conglomerado","Lutita"], exColors:["#E8C79A","#C9B7A0","#9C97A8"],
+      ref:"¿Qué experiencias consideras que han dejado una huella importante en tu historia?", art:"S"},
+    I:{tag:"Roca ígnea", no:"02", name:"EL CREADOR DE NUEVOS COMIENZOS",
+      phrase:"De la energía pueden surgir nuevas formas",
+      desc:"Te identificas con la energía de comenzar, explorar y construir nuevas posibilidades. Incluso después de una etapa intensa, puedes encontrar una oportunidad para dar forma a algo diferente.",
+      sci:"Las rocas ígneas se forman cuando el magma o la lava se enfrían y se solidifican. Si el enfriamiento ocurre lentamente en el interior terrestre, pueden formarse cristales grandes. Si ocurre rápidamente en la superficie, los cristales suelen ser pequeños.",
+      exTitle:"🪨 Ejemplos de rocas", ex:["Granito","Obsidiana","Basalto"], exColors:["#E6C9D3","#4D4860","#7A7588"],
+      ref:"¿Qué nuevo comienzo te gustaría construir?", art:"I"},
+    M:{tag:"Roca metamórfica", no:"03", name:"EL QUE SE TRANSFORMA",
+      phrase:"Cambiar también es una forma de construir",
+      desc:"Tu historia está marcada por la capacidad de adaptarte y cambiar. Las experiencias pueden modificar tu forma de ver el mundo, fortalecer tus aprendizajes y ayudarte a construir nuevas perspectivas.",
+      sci:"Las rocas metamórficas se originan cuando una roca preexistente experimenta cambios debido al calor, la presión y la acción de fluidos. Sus minerales y texturas pueden reorganizarse sin que la roca llegue a fundirse.",
+      exTitle:"🪨 Ejemplos de rocas", ex:["Mármol","Pizarra","Gneis"], exColors:["#F2EEF4","#6F7487","#B596D6"],
+      ref:"¿Qué cambio te ha permitido descubrir una nueva capacidad en ti?", art:"M"},
+    D:{tag:"Proceso geológico · no es una roca", no:"04", name:"EL QUE SABE SOLTAR Y CONTINUAR",
+      phrase:"Transformarse también significa cambiar de lugar",
+      desc:"Tu respuesta se relaciona simbólicamente con la capacidad de tomar distancia, dejar atrás una etapa y permitir que algo cambie. A veces, avanzar implica reconocer que no todo tiene que permanecer igual.",
+      note:"⚠️ <b>Ojo, geólogo/a:</b> este resultado <b>no es un tipo de roca</b>. Se relaciona con la <b>meteorización</b> y la <b>erosión</b>, que son <b>procesos geológicos</b>: actúan sobre cualquier roca (ígnea, sedimentaria o metamórfica) y la preparan para nuevas historias.",
+      sci:"En geología, la meteorización desintegra o altera las rocas en el lugar donde se encuentran. La erosión remueve y transporta los materiales mediante el agua, el viento, el hielo o la gravedad. Después, estos materiales pueden depositarse y formar sedimentos.",
+      exTitle:"🌬️ Agentes que participan en estos procesos", ex:["Agua","Viento","Hielo","Gravedad"], exColors:["#9CC6EC","#CFE6DD","#E3F1FB","#C9B7A0"],
+      ref:"¿Por qué crees que los procesos de desgaste y transporte también son importantes para transformar el paisaje?", art:"D"},
+    E:{tag:"Resultado especial", no:"05", name:"UNA HISTORIA DE MÚLTIPLES PROCESOS",
+      phrase:"Equilibrio geológico",
+      desc:"Tu resultado muestra una combinación de formas de afrontar las experiencias. Así como la Tierra no sigue un único camino para transformar sus rocas, tu historia tampoco tiene que explicarse desde una sola característica.",
+      sci:"El ciclo de las rocas es dinámico. Una roca puede transformarse mediante distintos procesos y dar origen a otros materiales a lo largo del tiempo.",
+      exTitle:"⚖️ Tus perfiles empatados", ex:[], exColors:[],
+      ref:"Si tu historia fuera una muestra de roca, ¿qué procesos reconocerías en ella y en qué momentos de tu vida aparecieron?", art:"E"}
+  };
+
+  var CHALLENGE = [
+    {q:"¿Qué proceso permite que los sedimentos se conviertan en una roca sedimentaria?",
+     o:["Fusión y enfriamiento.","Compactación y cementación.","Evaporación del magma."], c:1,
+     why:"El peso de las capas superiores <b>compacta</b> los sedimentos y los minerales disueltos en el agua (como calcita o sílice) los <b>cementan</b>, uniéndolos hasta formar roca. La fusión y el enfriamiento corresponden a las rocas ígneas."},
+    {q:"¿Qué diferencia a una roca metamórfica de una roca ígnea?",
+     o:["La metamórfica cambia por calor y presión sin fundirse; la ígnea se forma por enfriamiento y solidificación del magma o la lava.","Ambas se forman exclusivamente por acumulación de sedimentos.","La metamórfica siempre se forma en la superficie terrestre."], c:0,
+     why:"La roca metamórfica se transforma <b>en estado sólido</b> por calor, presión y fluidos, generalmente en el interior de la corteza. La ígnea nace cuando el <b>magma o la lava se enfrían y solidifican</b>."},
+    {q:"¿Qué puede suceder cuando una roca experimenta meteorización y erosión?",
+     o:["Se convierte inmediatamente en magma.","Sus materiales pueden fragmentarse y ser transportados como sedimentos.","Se transforma automáticamente en una roca metamórfica."], c:1,
+     why:"La <b>meteorización</b> fragmenta o altera la roca y la <b>erosión</b> transporta esos materiales con el agua, el viento, el hielo o la gravedad. Al depositarse, forman <b>sedimentos</b>."}
+  ];
+
+  /* ================= ESTADO ================= */
+  var answers = new Array(QUESTIONS.length).fill(null);
+  var current = 0;
+  var lastResult = null;
+  var cIndex = 0;
+  var cAnswers = [];
+
+  /* ================= UTILIDADES ================= */
+  var $ = function(id){ return document.getElementById(id); };
+  var uid = 0;
+  function nid(p){ uid += 1; return p + uid; }
+
+  function show(id){
+    var screens = document.querySelectorAll(".screen");
+    for (var i=0;i<screens.length;i++) screens[i].classList.remove("active");
+    var s = $(id);
+    s.classList.add("active");
+    window.scrollTo({top:0, behavior:"smooth"});
+    var h = s.querySelector("[tabindex='-1']");
+    if (h) { try { h.focus({preventScroll:true}); } catch(e){ /* sin foco */ } }
+  }
+
+  function confetti(n){
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    var colors = ["#E9DDF7","#F7DCE6","#D5EEE5","#F9E8B9","#DCEBFA","#9A78B8"];
+    for (var i=0;i<n;i++){
+      var d = document.createElement("div");
+      d.className = "confetti";
+      d.style.left = (Math.random()*100) + "vw";
+      d.style.background = colors[i % colors.length];
+      d.style.animationDuration = (2.2 + Math.random()*1.8) + "s";
+      d.style.animationDelay = (Math.random()*0.5) + "s";
+      d.style.transform = "rotate(" + (Math.random()*180) + "deg)";
+      document.body.appendChild(d);
+      (function(el){ setTimeout(function(){ if (el.parentNode) el.parentNode.removeChild(el); }, 4800); })(d);
+    }
+  }
+
+  /* ================= ILUSTRACIONES SVG ================= */
+  var BLOB = "M18 72 Q12 42 42 28 Q68 14 96 28 Q122 40 118 72 Q114 98 70 100 Q24 100 18 72Z";
+
+  function face(cx, cy, s){
+    s = s || 1;
+    return '<g transform="translate(' + cx + ' ' + cy + ') scale(' + s + ')">' +
+      '<ellipse cx="-22" cy="9" rx="7" ry="4.2" fill="#F4A7C0" opacity=".65"/>' +
+      '<ellipse cx="22" cy="9" rx="7" ry="4.2" fill="#F4A7C0" opacity=".65"/>' +
+      '<circle cx="-13" cy="0" r="4.3" fill="#55516A"/><circle cx="13" cy="0" r="4.3" fill="#55516A"/>' +
+      '<circle cx="-11.6" cy="-1.6" r="1.5" fill="#fff"/><circle cx="14.4" cy="-1.6" r="1.5" fill="#fff"/>' +
+      '<path d="M-6 8 Q0 14 6 8" fill="none" stroke="#55516A" stroke-width="2.6" stroke-linecap="round"/>' +
+      '</g>';
+  }
+
+  // Personaje roca: tipo S, I, M ; devuelve <g> para viewBox 0 0 136 112
+  function rockChar(type){
+    var id = nid("clip");
+    var inner = "";
+    var base = "#F2D7B4", stroke = "#C9A57E";
+    if (type === "S"){
+      inner = '<rect x="0" y="38" width="140" height="11" fill="#E9C59D"/>' +
+              '<rect x="0" y="55" width="140" height="10" fill="#F7DCE6"/>' +
+              '<rect x="0" y="72" width="140" height="11" fill="#E4CBA8"/>' +
+              '<rect x="0" y="89" width="140" height="14" fill="#D9BC97"/>' +
+              '<g transform="translate(96 92)"><path d="M0 0 a5 5 0 1 1 5 5 a8 8 0 1 1 -8 -8" fill="none" stroke="#B48C66" stroke-width="1.6"/></g>';
+    } else if (type === "I"){
+      base = "#8B839E"; stroke = "#6A6380";
+      inner = '<circle cx="34" cy="48" r="3" fill="#F7DCE6"/><circle cx="92" cy="44" r="2.4" fill="#fff"/>' +
+              '<circle cx="104" cy="70" r="3.2" fill="#F7DCE6"/><circle cx="30" cy="80" r="2.2" fill="#fff"/>' +
+              '<circle cx="60" cy="90" r="2.6" fill="#DCEBFA"/><circle cx="84" cy="88" r="2" fill="#fff"/>' +
+              '<circle cx="48" cy="36" r="1.8" fill="#fff"/><circle cx="76" cy="34" r="2.2" fill="#F9E8B9"/>';
+    } else {
+      base = "#D3C0EA"; stroke = "#A587C9";
+      inner = '<path d="M0 44 Q20 34 40 44 T80 44 T120 44 T160 44" fill="none" stroke="#B89BDA" stroke-width="5"/>' +
+              '<path d="M0 60 Q20 50 40 60 T80 60 T120 60 T160 60" fill="none" stroke="#F7DCE6" stroke-width="4"/>' +
+              '<path d="M0 78 Q20 68 40 78 T80 78 T120 78 T160 78" fill="none" stroke="#B89BDA" stroke-width="5"/>' +
+              '<path d="M0 94 Q20 84 40 94 T80 94 T120 94 T160 94" fill="none" stroke="#E9DDF7" stroke-width="4"/>';
+    }
+    return '<defs><clipPath id="' + id + '"><path d="' + BLOB + '"/></clipPath></defs>' +
+      '<path d="' + BLOB + '" fill="' + base + '"/>' +
+      '<g clip-path="url(#' + id + ')">' + inner + '</g>' +
+      '<path d="' + BLOB + '" fill="none" stroke="' + stroke + '" stroke-width="3" stroke-linejoin="round"/>' +
+      '<path d="M40 36 Q54 26 70 28" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".55"/>' +
+      face(68, 62, 1);
+  }
+
+  function crystal(x, y, s, c1, c2){
+    return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">' +
+      '<polygon points="0,-30 10,-12 6,10 -6,10 -10,-12" fill="' + c1 + '" stroke="#9A78B8" stroke-width="2" stroke-linejoin="round"/>' +
+      '<polygon points="0,-30 3,-12 0,10 -3,-12" fill="#fff" opacity=".6"/>' +
+      '<polygon points="14,-16 21,-4 18,10 10,10 8,-4" fill="' + c2 + '" stroke="#9A78B8" stroke-width="2" stroke-linejoin="round"/>' +
+      '<polygon points="-14,-12 -8,-2 -10,10 -18,10 -20,-2" fill="' + c2 + '" stroke="#9A78B8" stroke-width="2" stroke-linejoin="round"/>' +
+      '</g>';
+  }
+  function star(x, y, s, col, cls){
+    return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')"><path class="' + (cls||"twinkle") + '" d="M0 -10 L2.5 -2.5 L10 0 L2.5 2.5 L0 10 L-2.5 2.5 L-10 0 L-2.5 -2.5Z" fill="' + (col||"#F9E8B9") + '" stroke="#C9A85A" stroke-width=".8"/></g>';
+  }
+  function ammonite(x, y, s){
+    return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')" opacity=".8">' +
+      '<circle r="13" fill="#F9E8B9" stroke="#B48C66" stroke-width="2"/>' +
+      '<path d="M0 0 a3 3 0 1 1 3 3 a6 6 0 1 1 -6 -6 a9 9 0 1 1 9 9" fill="none" stroke="#B48C66" stroke-width="1.8"/></g>';
+  }
+  function microscope(x, y, s){
+    return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">' +
+      '<rect x="-18" y="30" width="36" height="7" rx="3.5" fill="#DCEBFA" stroke="#9A78B8" stroke-width="2"/>' +
+      '<path d="M-4 30 Q-14 18 -6 6" fill="none" stroke="#9A78B8" stroke-width="5" stroke-linecap="round"/>' +
+      '<rect x="-4" y="-18" width="10" height="26" rx="3" transform="rotate(-25)" fill="#E9DDF7" stroke="#9A78B8" stroke-width="2"/>' +
+      '<rect x="-12" y="16" width="20" height="4" rx="2" fill="#9A78B8"/>' +
+      '</g>';
+  }
+  function label(x, y, text, fill){
+    var w = text.length * 6.6 + 16;
+    return '<g transform="translate(' + x + ' ' + y + ')"><rect x="' + (-w/2) + '" y="-11" width="' + w + '" height="22" rx="7" fill="' + (fill||"#fff") + '" stroke="#9A78B8" stroke-width="1.5" stroke-dasharray="3 2"/>' +
+      '<text x="0" y="4.5" text-anchor="middle" font-size="11" font-weight="800" fill="#7E5DA0" font-family="system-ui, sans-serif" letter-spacing=".5">' + text + '</text></g>';
+  }
+
+  function heroSVG(){
+    return '<svg viewBox="0 0 420 250" role="img" aria-label="Tres rocas con caritas: sedimentaria, ígnea y metamórfica, rodeadas de cristales">' +
+      '<ellipse cx="210" cy="218" rx="190" ry="22" fill="#E9DDF7" opacity=".7"/>' +
+      '<path d="M20 214 Q70 200 120 210 T220 206 T320 210 T400 212" fill="none" stroke="#D5EEE5" stroke-width="10" stroke-linecap="round"/>' +
+      crystal(38, 196, 1.15, "#D5EEE5", "#DCEBFA") + crystal(386, 198, 1.1, "#F7DCE6", "#E9DDF7") +
+      ammonite(212, 30, .8) + microscope(392, 44, .75) +
+      '<g transform=\"translate(16 92) scale(.95)\"><g class=\"bob\">' + rockChar("S") + '</g></g>' +
+      '<g transform=\"translate(142 66) scale(1.05)\"><g class=\"bob d1\">' + rockChar("I") + '</g></g>' +
+      '<g transform=\"translate(276 92) scale(.95)\"><g class=\"bob d2\">' + rockChar("M") + '</g></g>' +
+      label(80, 208, "SEDIMENTARIA", "#F9E8B9") + label(213, 196, "ÍGNEA", "#F7DCE6") + label(340, 208, "METAMÓRFICA", "#E9DDF7") +
+      star(150, 34, 1, "#F9E8B9") + star(292, 50, .8, "#F7DCE6") + star(120, 66, .6, "#DCEBFA") + star(400, 70, .7, "#F9E8B9") + star(20, 40, .7, "#E9DDF7") +
+      '</svg>';
+  }
+
+  function artSVG(key){
+    var sky = '<rect width="360" height="230" rx="18" fill="#DCEBFA" opacity=".55"/>';
+    var sparks = star(30, 28, .8) + star(330, 36, .7, "#F7DCE6") + star(300, 14, .5, "#fff");
+    if (key === "S"){
+      return '<svg viewBox="0 0 360 230" role="img" aria-label="Cañón con capas sedimentarias de colores y un fósil">' + sky + sparks +
+        '<path d="M0 70 L120 70 L140 230 L0 230Z" fill="#E9C59D"/>' +
+        '<path d="M0 70 L120 70 L124 100 L0 100Z" fill="#F2D7B4"/><path d="M0 100 L124 100 L128 130 L0 130Z" fill="#F7DCE6"/>' +
+        '<path d="M0 130 L128 130 L132 160 L0 160Z" fill="#F9E8B9"/><path d="M0 160 L132 160 L136 195 L0 195Z" fill="#E4CBA8"/>' +
+        '<path d="M360 60 L236 60 L216 230 L360 230Z" fill="#E9C59D"/>' +
+        '<path d="M360 60 L236 60 L232 92 L360 92Z" fill="#F2D7B4"/><path d="M360 92 L232 92 L228 124 L360 124Z" fill="#F7DCE6"/>' +
+        '<path d="M360 124 L228 124 L224 156 L360 156Z" fill="#F9E8B9"/><path d="M360 156 L224 156 L220 192 L360 192Z" fill="#E4CBA8"/>' +
+        '<path d="M136 230 Q180 212 220 230Z" fill="#9CC6EC"/>' +
+        ammonite(56, 178, 1) + ammonite(300, 140, .7) +
+        label(300, 76, "CAPA 1", "#fff") + label(300, 108, "CAPA 2", "#fff") +
+        '<g transform=\"translate(122 104) scale(.85)\"><g class=\"bob\">' + rockChar("S") + '</g></g>' +
+        '</svg>';
+    }
+    if (key === "I"){
+      return '<svg viewBox="0 0 360 230" role="img" aria-label="Volcán con lava y cristales de roca ígnea">' + sky + sparks +
+        '<circle cx="250" cy="40" r="16" fill="#fff" opacity=".9"/><circle cx="270" cy="30" r="20" fill="#fff" opacity=".9"/><circle cx="292" cy="42" r="14" fill="#fff" opacity=".9"/>' +
+        '<path d="M70 230 L170 70 L210 70 L320 230Z" fill="#B7AEC9"/>' +
+        '<path d="M170 70 L210 70 L200 92 Q190 84 182 96 Z" fill="#F4A7C0"/>' +
+        '<path d="M182 96 Q176 130 160 150 Q150 166 156 182" fill="none" stroke="#F4A7C0" stroke-width="9" stroke-linecap="round"/>' +
+        '<path d="M200 92 Q214 124 236 140" fill="none" stroke="#F9C9A0" stroke-width="7" stroke-linecap="round"/>' +
+        '<circle cx="180" cy="50" r="6" fill="#F7DCE6" class="twinkle"/><circle cx="200" cy="40" r="4" fill="#F9E8B9" class="twinkle"/><circle cx="168" cy="36" r="3.5" fill="#F4A7C0" class="twinkle"/>' +
+        crystal(298, 206, 1, "#E9DDF7", "#F7DCE6") + crystal(60, 208, .9, "#DCEBFA", "#D5EEE5") +
+        '<g transform=\"translate(22 108) scale(.85)\"><g class=\"bob\">' + rockChar("I") + '</g></g>' +
+        label(276, 112, "MAGMA → ROCA", "#fff") +
+        '</svg>';
+    }
+    if (key === "M"){
+      return '<svg viewBox="0 0 360 230" role="img" aria-label="Montaña con capas de roca plegadas por calor y presión">' + sky + sparks +
+        '<path d="M20 230 L150 60 L200 100 L240 70 L345 230Z" fill="#D3C0EA"/>' +
+        '<g fill="none" stroke-width="7" stroke-linecap="round">' +
+        '<path d="M70 200 Q110 150 150 190 T230 180 T310 200" stroke="#B89BDA"/>' +
+        '<path d="M90 168 Q125 118 160 156 T230 146 T290 168" stroke="#F7DCE6"/>' +
+        '<path d="M115 134 Q140 96 168 124 T228 112 T268 136" stroke="#B89BDA"/>' +
+        '</g>' +
+        '<g fill="#F4A7C0" opacity=".8"><path d="M30 120 l14 0 -5 -5 M44 120 l-5 5" stroke="#C9708F" stroke-width="3"/><path d="M330 120 l-14 0 5 -5 M316 120 l5 5" stroke="#C9708F" stroke-width="3"/></g>' +
+        '<text x="22" y="108" font-size="10" font-weight="800" fill="#C9708F" font-family="system-ui,sans-serif">PRESIÓN</text>' +
+        '<text x="292" y="108" font-size="10" font-weight="800" fill="#C9708F" font-family="system-ui,sans-serif">PRESIÓN</text>' +
+        '<g transform=\"translate(126 140) scale(.75)\"><g class=\"bob\">' + rockChar("M") + '</g></g>' +
+        crystal(330, 212, .8, "#E9DDF7", "#DCEBFA") +
+        '</svg>';
+    }
+    if (key === "D"){
+      return '<svg viewBox="0 0 360 230" role="img" aria-label="Viento y agua desgastando una roca y transportando sedimentos">' + sky + sparks +
+        '<g fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" class="bob">' +
+        '<path d="M24 60 Q80 46 120 60 Q140 66 136 52"/><path d="M40 90 Q100 76 150 88"/></g>' +
+        '<path d="M0 190 Q90 170 180 186 T360 180 L360 230 L0 230Z" fill="#9CC6EC"/>' +
+        '<path d="M0 205 Q90 190 180 204 T360 200" fill="none" stroke="#fff" stroke-width="3" opacity=".7"/>' +
+        '<g transform=\"translate(150 70) scale(.95)\"><g class=\"bob\">' + rockChar("S").replace(/#E9C59D/g,"#E4CBA8") + '</g></g>' +
+        '<g fill="#E9C59D" stroke="#C9A57E" stroke-width="1.5">' +
+        '<circle cx="268" cy="150" r="7" class="twinkle"/><circle cx="290" cy="170" r="5"/><circle cx="312" cy="160" r="4"/><circle cx="330" cy="176" r="3"/><ellipse cx="250" cy="176" rx="6" ry="4"/></g>' +
+        '<path d="M246 140 L330 140" stroke="#7E5DA0" stroke-width="2.5" stroke-dasharray="6 5" class="flow" fill="none"/>' +
+        '<path d="M326 135 L334 140 L326 145" fill="none" stroke="#7E5DA0" stroke-width="2.5" stroke-linecap="round"/>' +
+        '<g fill="#9CC6EC"><path d="M60 120 q5 -10 10 0 a5 5 0 1 1 -10 0Z"/><path d="M84 140 q5 -10 10 0 a5 5 0 1 1 -10 0Z"/></g>' +
+        label(84, 30, "VIENTO + AGUA", "#fff") + label(290, 120, "TRANSPORTE", "#fff") +
+        '</svg>';
+    }
+    // E: equilibrio
+    return '<svg viewBox="0 0 360 230" role="img" aria-label="Tres rocas juntas en equilibrio">' + sky + sparks +
+      '<path d="M40 196 L320 196" stroke="#9A78B8" stroke-width="4" stroke-linecap="round"/>' +
+      '<polygon points="180,196 166,222 194,222" fill="#E9DDF7" stroke="#9A78B8" stroke-width="3" stroke-linejoin="round"/>' +
+      '<g transform=\"translate(28 100) scale(.78)\"><g class=\"bob\">' + rockChar("S") + '</g></g>' +
+      '<g transform=\"translate(126 74) scale(.85)\"><g class=\"bob d1\">' + rockChar("I") + '</g></g>' +
+      '<g transform=\"translate(226 100) scale(.78)\"><g class=\"bob d2\">' + rockChar("M") + '</g></g>' +
+      star(180, 50, 1.2, "#F9E8B9") +
+      '</svg>';
+  }
+
+  /* ===== Diagrama del ciclo ===== */
+  var NODES = {
+    magma:{x:180,y:44,label:"MAGMA",fill:"#F7DCE6",info:"<b>Magma:</b> roca fundida en el interior de la Tierra. Cuando sale a la superficie se llama <b>lava</b>. Al enfriarse y solidificarse forma <b>rocas ígneas</b>."},
+    ign:{x:298,y:140,label:"R. ÍGNEAS",fill:"#F9E8B9",info:"<b>Rocas ígneas:</b> nacen del enfriamiento del magma o la lava (granito, basalto, obsidiana). Pueden <b>meteorizarse y erosionarse</b>, o bien <b>transformarse por calor y presión</b> en metamórficas."},
+    sedim:{x:262,y:300,label:"SEDIMENTOS",fill:"#DCEBFA",info:"<b>Sedimentos:</b> fragmentos de roca, minerales y restos de organismos transportados por agua, viento, hielo o gravedad. Al <b>depositarse, compactarse y cementarse</b> forman rocas sedimentarias."},
+    sed:{x:98,y:300,label:"R. SEDIMENTARIAS",fill:"#D5EEE5",info:"<b>Rocas sedimentarias:</b> se forman capa por capa (arenisca, conglomerado, lutita). Con <b>calor, presión y fluidos</b> pueden volverse metamórficas; también pueden volver a erosionarse o fundirse."},
+    meta:{x:62,y:140,label:"R. METAMÓRFICAS",fill:"#E9DDF7",info:"<b>Rocas metamórficas:</b> rocas preexistentes que cambian sin fundirse (mármol, pizarra, gneis). Si la temperatura es suficiente, se <b>funden</b> y vuelven a ser magma; si llegan a la superficie, pueden <b>meteorizarse y erosionarse</b>."}
+  };
+  var MAIN = [
+    {d:"M232 46 Q292 56 300 116", n:"1", at:[280,70], t:"Enfriamiento y solidificación"},
+    {d:"M314 162 Q326 236 292 280", n:"2", at:[316,228], t:"Meteorización y erosión"},
+    {d:"M206 316 Q180 338 154 316", n:"3", at:[180,334], t:"Deposición, compactación y cementación"},
+    {d:"M74 280 Q36 230 50 164", n:"4", at:[44,226], t:"Calor, presión y fluidos"},
+    {d:"M58 118 Q66 58 124 46", n:"5", at:[74,70], t:"Fusión"}
+  ];
+  var ALT = [
+    {d:"M244 146 Q180 168 120 146", n:"a", at:[180,160], t:"Una roca ígnea también puede transformarse por calor y presión en metamórfica."},
+    {d:"M112 280 Q150 196 172 70", n:"b", at:[146,196], t:"Una roca sedimentaria puede fundirse directamente y volver a ser magma."},
+    {d:"M96 162 Q196 214 244 280", n:"c", at:[196,226], t:"Una roca metamórfica (o cualquier otra) puede meteorizarse y erosionarse y formar nuevos sedimentos."}
+  ];
+
+  function cycleSVG(){
+    var mk = nid("arr"), mk2 = nid("arr");
+    var s = '<svg viewBox="0 0 360 350" role="img" aria-label="Diagrama del ciclo de las rocas con caminos principales y alternativos">' +
+      '<defs>' +
+      '<marker id="' + mk + '" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="#9A78B8"/></marker>' +
+      '<marker id="' + mk2 + '" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="#C9A0C8"/></marker>' +
+      '</defs>' +
+      '<circle cx="180" cy="180" r="86" fill="#FFFCFA" stroke="#E9DDF7" stroke-width="2" stroke-dasharray="4 6"/>' +
+      '<text x="180" y="186" text-anchor="middle" font-size="12" font-weight="900" fill="#C9B8DD" font-family="system-ui,sans-serif" letter-spacing="2">CICLO</text>';
+    ALT.forEach(function(a){
+      s += '<path d="' + a.d + '" fill="none" stroke="#C9A0C8" stroke-width="2.5" stroke-dasharray="5 6" marker-end="url(#' + mk2 + ')"/>';
+    });
+    MAIN.forEach(function(m){
+      s += '<path d="' + m.d + '" fill="none" stroke="#E9DDF7" stroke-width="9" stroke-linecap="round"/>';
+      s += '<path class="flow" d="' + m.d + '" fill="none" stroke="#9A78B8" stroke-width="3" stroke-linecap="round" marker-end="url(#' + mk + ')"/>';
+    });
+    ALT.forEach(function(a){
+      s += '<circle cx="' + a.at[0] + '" cy="' + a.at[1] + '" r="10" fill="#fff" stroke="#C9A0C8" stroke-width="2" stroke-dasharray="3 2"/>' +
+           '<text x="' + a.at[0] + '" y="' + (a.at[1]+4) + '" text-anchor="middle" font-size="11" font-weight="900" fill="#9A78B8" font-family="system-ui,sans-serif">' + a.n + '</text>';
+    });
+    MAIN.forEach(function(m){
+      s += '<circle cx="' + m.at[0] + '" cy="' + m.at[1] + '" r="11" fill="#9A78B8" stroke="#fff" stroke-width="2"/>' +
+           '<text x="' + m.at[0] + '" y="' + (m.at[1]+4) + '" text-anchor="middle" font-size="11.5" font-weight="900" fill="#fff" font-family="system-ui,sans-serif">' + m.n + '</text>';
+    });
+    Object.keys(NODES).forEach(function(k){
+      var n = NODES[k], w = n.label.length > 10 ? 116 : 100;
+      s += '<g class="node" data-node="' + k + '" tabindex="0" role="button" aria-label="' + n.label + '">' +
+        '<rect x="' + (n.x - w/2) + '" y="' + (n.y - 19) + '" width="' + w + '" height="38" rx="19" fill="' + n.fill + '" stroke="#9A78B8" stroke-width="2"/>' +
+        '<text x="' + n.x + '" y="' + (n.y + 4.5) + '" text-anchor="middle" font-size="' + (n.label.length > 12 ? 10.5 : 12) + '" font-weight="900" fill="#55516A" font-family="system-ui,sans-serif" letter-spacing=".3">' + n.label + '</text></g>';
+    });
+    s += star(340, 20, .7) + star(22, 330, .7, "#F7DCE6") + star(338, 336, .6, "#D5EEE5");
+    return s + '</svg>';
+  }
+
+  /* ================= BIENVENIDA ================= */
+  $("heroArt").innerHTML = heroSVG();
+  $("btnStart").addEventListener("click", function(){
+    current = 0;
+    renderQuestion("fwd");
+    show("s-quiz");
+  });
+
+  /* ================= CUESTIONARIO ================= */
+  var stepsEl = $("steps");
+  QUESTIONS.forEach(function(){ stepsEl.appendChild(document.createElement("i")); });
+
+  function renderQuestion(dir){
+    var q = QUESTIONS[current];
+    $("qNum").innerHTML = "Pregunta <b>" + (current + 1) + "</b> de " + QUESTIONS.length;
+    $("qTag").textContent = "Muestra N.º " + String(current + 1).padStart(2, "0");
+    $("qText").textContent = q.q;
+    $("motiv").textContent = MOTIV[current];
+    $("hint").textContent = "";
+
+    var answered = answers.filter(function(a){ return a !== null; }).length;
+    var pct = (current / QUESTIONS.length) * 100;
+    $("progressFill").style.width = pct + "%";
+    $("progressGem").style.left = Math.max(pct, 3) + "%";
+    $("progress").setAttribute("aria-valuenow", String(answered));
+    var dots = stepsEl.children;
+    for (var i=0;i<dots.length;i++){
+      dots[i].className = (i === current) ? "now" : (answers[i] !== null ? "done" : "");
+    }
+
+    var box = $("options");
+    box.innerHTML = "";
+    q.o.forEach(function(text, idx){
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "opt c" + idx;
+      b.setAttribute("role", "radio");
+      b.setAttribute("aria-checked", answers[current] === idx ? "true" : "false");
+      b.innerHTML = '<span class="letter">' + "ABCD"[idx] + '</span><span>' + text + '</span>' +
+        '<span class="deco" aria-hidden="true">' + OPT_DECO[idx] + '</span>' +
+        '<span class="check" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 14 14"><path d="M2.5 7.5 L5.8 10.5 L11.5 3.8" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>';
+      b.addEventListener("click", function(){ selectOption(idx); });
+      box.appendChild(b);
+    });
+
+    $("btnPrev").style.visibility = current > 0 ? "visible" : "hidden";
+    $("btnNext").textContent = current === QUESTIONS.length - 1 ? "VER MI RESULTADO ✨" : "SIGUIENTE →";
+    $("btnNext").disabled = answers[current] === null;
+
+    var card = $("qCard");
+    card.classList.remove("qcard", "back");
+    void card.offsetWidth;
+    card.classList.add("qcard");
+    if (dir === "back") card.classList.add("back");
+  }
+
+  function selectOption(idx){
+    answers[current] = idx;
+    var opts = $("options").children;
+    for (var i=0;i<opts.length;i++) opts[i].setAttribute("aria-checked", i === idx ? "true" : "false");
+    $("btnNext").disabled = false;
+    $("hint").textContent = "";
+    stepsEl.children[current].className = "now";
+  }
+
+  $("btnNext").addEventListener("click", function(){
+    if (answers[current] === null){
+      var h = $("hint");
+      h.textContent = "Elige una opción para continuar ✨";
+      h.classList.remove("shake"); void h.offsetWidth; h.classList.add("shake");
+      return;
+    }
+    if (current < QUESTIONS.length - 1){
+      current += 1;
+      renderQuestion("fwd");
+      window.scrollTo({top:0, behavior:"smooth"});
+    } else {
+      $("progressFill").style.width = "100%";
+      $("progressGem").style.left = "100%";
+      finishQuiz();
+    }
+  });
+  // Mensaje si tocan "Siguiente" deshabilitado (área contenedora)
+  $("btnNext").parentNode.addEventListener("click", function(e){
+    if (e.target === this && answers[current] === null) { $("hint").textContent = "Elige una opción para continuar ✨"; }
+  });
+  $("btnPrev").addEventListener("click", function(){
+    if (current > 0){ current -= 1; renderQuestion("back"); window.scrollTo({top:0, behavior:"smooth"}); }
+  });
+
+  /* ================= PUNTUACIÓN ================= */
+  function computeResult(ans){
+    var counts = {S:0, I:0, M:0, D:0};
+    ans.forEach(function(a){ if (a !== null) counts[CATS[a]] += 1; });
+    var max = Math.max(counts.S, counts.I, counts.M, counts.D);
+    var winners = CATS.filter(function(k){ return counts[k] === max; });
+    return {key: winners.length > 1 ? "E" : winners[0], counts: counts, winners: winners, max: max};
+  }
+  window.__computeResult = computeResult; // útil para verificar desde la consola
+
+  function finishQuiz(){
+    if (answers.some(function(a){ return a === null; })){
+      var first = answers.indexOf(null);
+      current = first; renderQuestion("back");
+      $("hint").textContent = "Te faltó responder esta pregunta ✨";
+      return;
+    }
+    lastResult = computeResult(answers);
+    renderResult(lastResult);
+    show("s-result");
+    setTimeout(function(){ confetti(40); }, 250);
+  }
+
+  function renderResult(r){
+    var R = RESULTS[r.key];
+    $("rTag").textContent = R.tag;
+    $("rNo").textContent = "Ficha N.º " + R.no;
+    $("rArt").innerHTML = artSVG(R.art);
+    $("rName").textContent = R.name;
+    $("rPhrase").textContent = "“" + R.phrase + "”";
+    $("rDesc").textContent = R.desc;
+    $("rSci").textContent = R.sci;
+    $("rRef").textContent = R.ref;
+    $("rExTitle").textContent = R.exTitle;
+
+    var note = $("rNote");
+    if (R.note){ note.innerHTML = R.note; note.hidden = false; }
+    else if (r.key === "E"){
+      var names = r.winners.map(function(k){ return "<b>" + CAT_LABEL[k] + "</b>"; });
+      var joined = names.length === 2 ? names.join(" y ") : names.slice(0, -1).join(", ") + " y " + names[names.length - 1];
+      note.innerHTML = "⚖️ Hubo un <b>empate</b> con " + r.max + " puntos entre " + joined + "." +
+        (r.winners.indexOf("D") > -1 ? " Recuerda que “En movimiento” representa procesos (meteorización y erosión), no un tipo de roca." : "");
+      note.hidden = false;
+    } else { note.hidden = true; note.innerHTML = ""; }
+
+    var ex = $("rEx"); ex.innerHTML = "";
+    var items = R.ex, cols = R.exColors;
+    if (r.key === "E"){ items = r.winners.map(function(k){ return CAT_LABEL[k]; }); cols = r.winners.map(function(k){ return CAT_COLOR[k]; }); }
+    items.forEach(function(t, i){
+      var c = document.createElement("span"); c.className = "chip";
+      c.innerHTML = '<i style="background:' + cols[i] + ';border:1.5px solid rgba(0,0,0,.12)"></i>' + t;
+      ex.appendChild(c);
+    });
+
+    var sc = '<h3>📊 Tu muestra analizada</h3>';
+    var rows = [["S","A · Sedimentaria"],["I","B · Ígnea"],["M","C · Metamórfica"],["D","D · En movimiento"]];
+    rows.forEach(function(rw){
+      var v = r.counts[rw[0]], win = r.winners.indexOf(rw[0]) > -1;
+      sc += '<div class="srow' + (win ? " win" : "") + '"><span>' + rw[1] + (win ? " ★" : "") + '</span>' +
+        '<span class="sbar"><b data-w="' + (v / QUESTIONS.length * 100) + '" style="background:' + CAT_COLOR[rw[0]] + '"></b></span><span>' + v + '/8</span></div>';
+    });
+    $("rScores").innerHTML = sc;
+    setTimeout(function(){
+      var bars = document.querySelectorAll("#rScores .sbar b");
+      for (var i=0;i<bars.length;i++) bars[i].style.width = bars[i].getAttribute("data-w") + "%";
+    }, 300);
+  }
+
+  $("btnToChallenge").addEventListener("click", function(){
+    cIndex = 0; cAnswers = [];
+    renderChallenge();
+    show("s-challenge");
+  });
+
+  /* ================= RETO ================= */
+  function renderChallenge(){
+    var card = $("cCard");
+    $("cSub").textContent = "Pregunta " + (cIndex + 1) + " de " + CHALLENGE.length + " · retroalimentación inmediata";
+    var Q = CHALLENGE[cIndex];
+    var html = '<div class="qlabel"><span class="tag">Experimento ' + (cIndex + 1) + '/3</span></div>' +
+      '<h3 class="qtext">' + Q.q + '</h3><div class="options" id="cOpts">';
+    Q.o.forEach(function(t, i){
+      html += '<button type="button" class="copt" data-i="' + i + '"><span class="letter">' + "ABC"[i] + '</span><span>' + t + '</span></button>';
+    });
+    html += '</div><div class="feedback" id="cFb" aria-live="polite"></div>' +
+      '<div class="btn-row" style="justify-content:flex-end"><button class="btn" id="cNext" hidden>' +
+      (cIndex === CHALLENGE.length - 1 ? "VER MI PUNTAJE 🏅" : "SIGUIENTE EXPERIMENTO →") + '</button></div>';
+    card.innerHTML = html;
+    card.classList.remove("qcard"); void card.offsetWidth; card.classList.add("qcard");
+
+    var btns = card.querySelectorAll(".copt");
+    for (var i=0;i<btns.length;i++){
+      btns[i].addEventListener("click", onChallengeAnswer);
+    }
+    $("cNext").addEventListener("click", function(){
+      if (cIndex < CHALLENGE.length - 1){ cIndex += 1; renderChallenge(); window.scrollTo({top:0, behavior:"smooth"}); }
+      else { renderChallengeSummary(); }
+    });
+  }
+
+  function onChallengeAnswer(e){
+    var pick = parseInt(e.currentTarget.getAttribute("data-i"), 10);
+    var Q = CHALLENGE[cIndex];
+    if (cAnswers[cIndex] !== undefined) return;
+    cAnswers[cIndex] = pick;
+    var ok = pick === Q.c;
+    var btns = $("cOpts").querySelectorAll(".copt");
+    for (var i=0;i<btns.length;i++){
+      btns[i].disabled = true;
+      if (i === Q.c) btns[i].classList.add("right");
+      else if (i === pick) btns[i].classList.add("wrong");
+      else btns[i].classList.add("dim");
+    }
+    var fb = $("cFb");
+    fb.className = "feedback show " + (ok ? "ok" : "no");
+    fb.innerHTML = "<strong>" + (ok ? "¡Correcto! 💎 Excelente observación." : "Casi… 🔍 La respuesta correcta es la " + "ABC"[Q.c] + ".") + "</strong>" + Q.why;
+    $("cNext").hidden = false;
+    if (ok) confetti(14);
+  }
+
+  function renderChallengeSummary(){
+    var score = 0;
+    CHALLENGE.forEach(function(Q, i){ if (cAnswers[i] === Q.c) score += 1; });
+    var msgs = [
+      "¡Buen inicio de exploración! Cada geólogo empieza observando. Revisa las explicaciones y vuelve a intentarlo: las rocas tienen paciencia. 🌱",
+      "¡Vas por buen camino! Ya reconoces parte del ciclo. Repasa las explicaciones para completar tu colección. 🔍",
+      "¡Muy bien! Dominas casi todo el ciclo de las rocas. Un pequeño repaso y serás experto/a. ✨",
+      "¡Puntaje perfecto! Eres un/a auténtico/a geólogo/a en formación. 💎"
+    ];
+    var stars = "";
+    for (var i=0;i<3;i++){ stars += '<span style="animation-delay:' + (i * .18) + 's">' + (i < score ? "⭐" : "☆") + '</span>'; }
+    var html = '<div style="text-align:center"><span class="tag">Reporte de laboratorio</span>' +
+      '<div class="score-big" style="margin-top:12px">' + score + '<small> / 3</small></div>' +
+      '<div class="stars" aria-label="' + score + ' de 3 aciertos">' + stars + '</div>' +
+      '<p style="font-weight:800">' + score + (score === 1 ? " acierto" : " aciertos") + '</p>' +
+      '<p style="margin-top:6px">' + msgs[score] + '</p></div><div class="review">';
+    CHALLENGE.forEach(function(Q, i){
+      var ok = cAnswers[i] === Q.c;
+      html += '<div class="' + (ok ? "r-ok" : "r-no") + '"><b>' + (ok ? "✅" : "🔁") + " " + (i + 1) + ". " + Q.q + '</b><br>' +
+        'Respuesta correcta: <b>' + "ABC"[Q.c] + ") " + Q.o[Q.c] + '</b><br><span>' + Q.why + '</span></div>';
+    });
+    html += '</div><div class="btn-stack"><button class="btn" id="toCycle">VER EL CICLO DE LAS ROCAS ♻️</button>' +
+      '<button class="btn ghost" id="retryChallenge">REPETIR EL RETO</button></div>';
+    $("cSub").textContent = "Resultados del reto";
+    var card = $("cCard");
+    card.innerHTML = html;
+    card.classList.remove("qcard"); void card.offsetWidth; card.classList.add("qcard");
+    window.scrollTo({top:0, behavior:"smooth"});
+    if (score === 3) confetti(50);
+    $("toCycle").addEventListener("click", function(){ renderCycle(); show("s-cycle"); });
+    $("retryChallenge").addEventListener("click", function(){ cIndex = 0; cAnswers = []; renderChallenge(); window.scrollTo({top:0, behavior:"smooth"}); });
+  }
+
+  /* ================= CICLO ================= */
+  var cycleBuilt = false;
+  function renderCycle(){
+    if (cycleBuilt) return;
+    cycleBuilt = true;
+    $("cycleArt").innerHTML = cycleSVG();
+    var lg = '<p style="font-weight:900;font-size:.82rem;letter-spacing:.08em;color:#8C88A0;text-transform:uppercase">Caminos principales</p>';
+    MAIN.forEach(function(m){ lg += '<div><span class="n">' + m.n + '</span><span>' + m.t + '</span></div>'; });
+    lg += '<p style="font-weight:900;font-size:.82rem;letter-spacing:.08em;color:#8C88A0;text-transform:uppercase;margin-top:6px">Otros caminos posibles</p>';
+    ALT.forEach(function(a){ lg += '<div><span class="n alt">' + a.n + '</span><span>' + a.t + '</span></div>'; });
+    $("legend").innerHTML = lg;
+
+    var nodes = document.querySelectorAll("#cycleArt .node");
+    function pick(el){
+      for (var j=0;j<nodes.length;j++) nodes[j].classList.remove("sel");
+      el.classList.add("sel");
+      $("cycleInfo").innerHTML = NODES[el.getAttribute("data-node")].info;
+    }
+    for (var i=0;i<nodes.length;i++){
+      nodes[i].addEventListener("click", function(){ pick(this); });
+      nodes[i].addEventListener("keydown", function(ev){ if (ev.key === "Enter" || ev.key === " "){ ev.preventDefault(); pick(this); } });
+    }
+  }
+
+  $("btnExplore").addEventListener("click", function(){
+    if (lastResult){ renderResult(lastResult); show("s-result"); }
+    else { show("s-welcome"); }
+  });
+  $("btnRestart").addEventListener("click", function(){
+    answers = new Array(QUESTIONS.length).fill(null);
+    current = 0; lastResult = null; cIndex = 0; cAnswers = [];
+    renderQuestion("fwd");
+    show("s-quiz");
+  });
+})();
+</script>
+</body>
+</html>

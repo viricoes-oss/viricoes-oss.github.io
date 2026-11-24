@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Expediente País 2050</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+/* VOICE: claro y cercano, para estudiantes de primer año
+   IDEA: un pasaporte/expediente oficial que se sella misión por misión
+   PICTURE: la tarjeta del país con barras de población y sellos de avance
+   COLOUR and TYPE: azul tinta dominante, papel blanco, sello coral; Rubik
+   LAYOUT: una columna tranquila, cabecera en banda, tarjetas apiladas */
+:root{color-scheme:light dark;--bg:light-dark(#eef3f8,#0b1624);--ink:light-dark(#13233a,#e8eef6);--band:light-dark(#12355b,#0f2a48);--card:light-dark(#fff,#13253b);--mut:light-dark(#5b6b80,#9fb0c4);--line:light-dark(#d5dee9,#26405e);--acc:#ff5a3c;--ok:light-dark(#1d7a4c,#5fd39a);--bad:light-dark(#b3261e,#ff8a80);--soft:light-dark(#f4f7fb,#0f1f33)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Rubik,system-ui,sans-serif;overflow-x:clip}
+header{background:var(--band);color:#fff;padding:22px max(5vw,16px) 26px}
+header h1{font-size:clamp(28px,6vw,44px);line-height:1.05;margin:0 0 6px;font-weight:800;text-wrap:balance}
+header p{margin:0;opacity:.85;max-width:60ch}
+.stamps{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.st{width:40px;height:40px;border-radius:50%;border:2px dashed rgba(255,255,255,.45);display:grid;place-items:center;font-weight:700;font-size:15px;color:rgba(255,255,255,.6)}
+.st.on{border:2px solid var(--acc);background:var(--acc);color:#fff;transform:rotate(-8deg)}
+.st.now{border-style:solid;border-color:#fff;color:#fff}
+main{max-width:760px;margin:0 auto;padding:20px max(4vw,14px) 60px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:16px}
+h2{font-size:26px;line-height:1.1;margin:0 0 10px;text-wrap:balance}
+h3{font-size:18px;margin:0 0 8px}
+.mut{color:var(--mut);font-size:14px}
+label{display:block;font-weight:500;margin:12px 0 6px}
+input[type=text],input[type=number],textarea{width:100%;font:16px Rubik,sans-serif;padding:12px;border:1.5px solid var(--line);border-radius:10px;background:var(--soft);color:var(--ink)}
+textarea{min-height:150px;resize:vertical}
+input:focus,textarea:focus,button:focus-visible,.opt:focus-within{outline:3px solid var(--acc);outline-offset:2px}
+button{font:600 16px Rubik,sans-serif;min-height:46px;padding:10px 20px;border-radius:10px;border:0;background:var(--band);color:#fff;cursor:pointer}
+button[disabled]{opacity:.4;cursor:not-allowed}
+button.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:16px}
+.opt{display:flex;gap:10px;align-items:flex-start;padding:12px;border:1.5px solid var(--line);border-radius:10px;margin:8px 0;cursor:pointer;font-weight:400}
+.opt input{margin-top:4px;width:18px;height:18px;flex:none}
+.opt.sel{border-color:var(--acc);background:var(--soft)}
+.country{display:flex;gap:14px;align-items:center}
+.seal{flex:none;width:74px;height:74px;border-radius:50%;border:3px solid var(--acc);color:var(--acc);display:grid;place-items:center;text-align:center;font-weight:800;font-size:12px;line-height:1.1;transform:rotate(-10deg)}
+.bars .b{display:grid;grid-template-columns:8.5em minmax(0,1fr) 3.2em;gap:8px;align-items:center;margin:8px 0;font-size:15px}
+.bars .t{height:20px;background:var(--soft);border-radius:6px;overflow:hidden}
+.bars .f{height:100%;background:var(--band)}
+:root[data-theme=dark] .bars .f{background:#5b9bd5}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .bars .f{background:#5b9bd5}}
+.bars .f.a{background:var(--acc)}
+.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:12px}
+.kv div{background:var(--soft);border-radius:10px;padding:10px}
+.kv b{display:block;font-size:22px}
+.rule{border-left:4px solid var(--acc);background:var(--soft);padding:10px 14px;border-radius:0 10px 10px 0;margin-top:12px;font-size:15px}
+.case{font-size:17px;background:var(--soft);padding:14px;border-radius:10px;margin:10px 0}
+.wc{font-size:14px;margin-top:6px;color:var(--mut)}.wc.ok{color:var(--ok)}
+.warn{color:var(--bad);font-size:15px;margin-top:10px}
+.sec{border-top:1px solid var(--line);padding-top:12px;margin-top:12px}
+.res{font-weight:600;white-space:nowrap}.res.ok{color:var(--ok)}.res.bad{color:var(--bad)}
+.ans{white-space:pre-wrap;background:var(--soft);padding:10px;border-radius:8px;margin:6px 0}
+.score{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px;text-align:center}
+.score div{border:1.5px solid var(--line);border-radius:10px;padding:10px}.score b{display:block;font-size:24px}
+.blank{display:inline-block;min-width:3em;border-bottom:1.5px solid var(--ink)}
+@media(max-width:600px){.country{flex-direction:column;align-items:flex-start}.bars .b{grid-template-columns:6.5em minmax(0,1fr) 3em}}
+@media print{header,.noprint{display:none}body{background:#fff;color:#000}.card{border:1px solid #999}}
+@media(prefers-reduced-motion:no-preference){.st.on{transition:transform .3s}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Expediente País 2050</h1>
+  <p>Geografía · Población, ciudades, campo y cultura en el mundo globalizado</p>
+  <div class="stamps" id="stamps"></div>
+</header>
+<main id="app"><div class="card">Cargando…</div></main>
+<script>
+{
+const C=[
+{n:"Japón",pop:"124 millones",u:12,o:29,tgf:1.2,urb:92,pol:"El gobierno da apoyos económicos por cada hijo y abre la puerta a más trabajadores extranjeros.",mig:"recibe",migT:"El número de residentes extranjeros llegó a cifras récord: llegan trabajadores de Vietnam, China y Filipinas para cubrir empleos que faltan.",city:"Tokio",cityT:"Su área metropolitana tiene unos 37 millones de habitantes. En hora pico los trenes van tan llenos que hay empleados que empujan a los pasajeros para cerrar las puertas, y los departamentos son muy pequeños y caros.",ck:"trans",rurT:"Miles de pueblos pierden habitantes: hay millones de casas abandonadas (llamadas akiya) y la mayoría de los agricultores tiene más de 65 años.",rk:"despob",culT:"El ainu, lengua del pueblo originario de la isla de Hokkaido, casi ha desaparecido: hoy muy pocas personas lo hablan como lengua materna.",kk:"homo"},
+{n:"Alemania",pop:"84 millones",u:14,o:22,tgf:1.4,urb:78,pol:"Atrae trabajadores calificados del extranjero y da un apoyo mensual a las familias por cada hijo.",mig:"recibe",migT:"Es uno de los países que más inmigrantes recibe: refugiados de Siria y Ucrania, y trabajadores de Turquía, Polonia y otros países.",city:"Berlín",cityT:"Las rentas subieron tanto en barrios populares que muchos vecinos de toda la vida tuvieron que mudarse; en su lugar llegaron cafés de moda y habitantes con más dinero.",ck:"gentri",rurT:"En zonas rurales del este, muchos jóvenes se fueron a ciudades del oeste; los pueblos envejecen y cierran escuelas, tiendas y estaciones de tren.",rk:"despob",culT:"El döner kebab, traído por inmigrantes turcos, se transformó con un estilo propio alemán y hoy es una de las comidas más populares del país.",kk:"hibrid"},
+{n:"China",pop:"1,410 millones",u:17,o:15,tgf:1.0,urb:66,pol:"Aplicó la política del hijo único (1980–2015); hoy permite y alienta tener hasta tres hijos.",mig:"interna",migT:"Unos 290 millones de trabajadores salieron del campo para trabajar en fábricas y obras de construcción en las ciudades.",city:"Pekín",cityT:"En los días de invierno más críticos, el smog es tan denso que se cancelan vuelos, se cierran escuelas y se pide a la gente no salir sin cubrebocas.",ck:"aire",rurT:"Millones de niños del campo crecen con sus abuelos porque sus padres trabajan en ciudades lejanas; se les llama «niños dejados atrás».",rk:"ninos",culT:"Cada vez más niños de las ciudades hablan solo mandarín en la escuela y en casa, y ya no aprenden las lenguas locales que hablan sus abuelos.",kk:"homo"},
+{n:"India",pop:"1,440 millones",u:25,o:7,tgf:2.0,urb:36,pol:"Fue de los primeros países del mundo en crear un programa nacional de planificación familiar (1952).",mig:"expulsa",migT:"Es el país con más personas viviendo en el extranjero (unos 18 millones) y el que más remesas recibe en el mundo.",city:"Bombay (Mumbai)",cityT:"Una gran parte de sus habitantes vive en barrios de viviendas improvisadas, como Dharavi, donde cientos de miles de personas comparten baños y callejones estrechos.",ck:"irreg",rurT:"Alrededor de 2 de cada 3 personas viven en el campo; casi la mitad de los trabajadores se dedica a la agricultura, la mayoría en parcelas muy pequeñas.",rk:"parcela",culT:"Las cadenas internacionales de hamburguesas en la India crearon menús sin carne de res y con especias locales, como la hamburguesa de papa al curry.",kk:"hibrid"},
+{n:"Níger",pop:"27 millones",u:49,o:3,tgf:6.1,urb:17,pol:"Tiene una de las tasas de fecundidad más altas del mundo; hay programas para retrasar el matrimonio infantil y lograr que más niñas terminen la escuela.",mig:"transito",migT:"La ciudad de Agadez es un punto de paso para migrantes de África occidental que cruzan el desierto del Sahara rumbo a Libia, Argelia y Europa.",city:"Niamey",cityT:"La ciudad crece muy rápido y muchos barrios nuevos no tienen agua entubada, drenaje ni recolección de basura.",ck:"serv",rurT:"La mayoría de la población vive en el campo, donde muy pocas viviendas tienen electricidad y las sequías destruyen las cosechas.",rk:"pobreza",culT:"Cada año, los pastores nómadas tuareg y wodaabe se reúnen en el festival Cure Salée para celebrar con sus cantos, vestidos y danzas tradicionales.",kk:"resist"},
+{n:"Brasil",pop:"212 millones",u:20,o:11,tgf:1.6,urb:88,pol:"Su fecundidad bajó muy rápido en pocas décadas, sin una ley que obligara a tener menos hijos.",mig:"interna",migT:"Durante décadas, millones de personas del Nordeste migraron a São Paulo y Río de Janeiro; hoy muchos se mueven hacia ciudades medias y zonas agrícolas del centro del país.",city:"São Paulo",cityT:"En 2014 y 2015 sus presas casi se vaciaron: millones de personas sufrieron cortes de agua y tuvieron que guardarla en cubetas.",ck:"agua",rurT:"Pocas familias y empresas son dueñas de gran parte de las tierras agrícolas; el Movimiento de los Sin Tierra lucha para que los campesinos tengan terreno propio.",rk:"tierra",culT:"Pueblos indígenas de la Amazonía defienden su territorio y su lengua frente a la minería ilegal y la tala de la selva.",kk:"resist"},
+{n:"Estados Unidos",pop:"335 millones",u:18,o:18,tgf:1.6,urb:83,pol:"Su población sigue creciendo, sobre todo gracias a la llegada de inmigrantes.",mig:"recibe",migT:"Es el país con más inmigrantes del mundo (unos 50 millones); el grupo más grande es de origen mexicano.",city:"Los Ángeles",cityT:"La ciudad se extendió por kilómetros de casas y autopistas; casi todo queda lejos y sin automóvil es muy difícil llegar al trabajo o a la escuela.",ck:"disp",rurT:"Menos de 2 de cada 100 trabajadores se dedica a la agricultura: las granjas son enormes y usan tanta maquinaria que dan pocos empleos.",rk:"mecan",culT:"Las mismas cadenas de café, ropa y comida rápida están en casi todas sus ciudades, y muchas calles comerciales se ven idénticas.",kk:"homo"},
+{n:"Guatemala",pop:"18 millones",u:32,o:5,tgf:2.3,urb:53,pol:"Tiene una de las poblaciones más jóvenes de América Latina; su reto es dar escuela y empleo a millones de jóvenes.",mig:"expulsa",migT:"Cientos de miles de guatemaltecos viven en Estados Unidos; el dinero que envían (remesas) equivale a casi una quinta parte de la economía del país.",city:"Ciudad de Guatemala",cityT:"Miles de familias construyeron sus casas en las laderas de barrancos, sin permisos; con las lluvias fuertes hay deslaves que destruyen viviendas.",ck:"irreg",rurT:"Más de la mitad de la población del campo vive en pobreza, muchas comunidades no tienen agua potable y hay altos niveles de desnutrición infantil.",rk:"pobreza",culT:"Tejedoras mayas defienden sus huipiles como herencia de sus pueblos y exigen que las empresas de moda no copien sus diseños sin permiso.",kk:"resist"}];
+const PIR={joven:"Joven (pirámide progresiva)",trans:"En transición (pirámide estacionaria)",vieja:"Envejecida (pirámide regresiva)"};
+const MIG={recibe:"Recibe inmigrantes de otros países",expulsa:"Expulsa emigrantes hacia otros países",interna:"Gran migración interna (del campo a la ciudad o entre regiones)",transito:"Es un país de tránsito para migrantes"};
+const URB={trans:"Saturación del transporte y vivienda muy cara",gentri:"Gentrificación (desplazamiento de vecinos)",aire:"Contaminación del aire",irreg:"Asentamientos irregulares",serv:"Falta de servicios básicos",agua:"Escasez de agua",disp:"Expansión urbana dispersa"};
+const UX={serv:["irreg","agua"],irreg:["serv"],agua:["serv"]};
+const RUR={despob:"Despoblamiento y envejecimiento",pobreza:"Pobreza y falta de servicios",parcela:"Dependencia de la agricultura en parcelas pequeñas",ninos:"Los padres migran y los niños se quedan con los abuelos",tierra:"Concentración de la tierra en pocas manos",mecan:"Agricultura muy mecanizada que da pocos empleos"};
+const RX={pobreza:["parcela"],parcela:["pobreza"]};
+const CUL={homo:"Homogeneización cultural",resist:"Resistencia cultural",hibrid:"Hibridación (mezcla de culturas)"};
+const pir=c=>c.u>=30?"joven":c.o>=20?"vieja":"trans";
+const esc=s=>String(s).replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
+const words=s=>(s.trim().match(/\S+/g)||[]).length;
+const hash=s=>{let h=5381;for(let i=0;i<s.length;i++)h=(h*33^s.charCodeAt(i))>>>0;return h};
+const rng=seed=>()=>{seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
+const shuffle=(a,r)=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const pick=(dict,ok,ex,r)=>{const pool=shuffle(Object.keys(dict).filter(k=>k!==ok&&!(ex[ok]||[]).includes(k)),r).slice(0,3);return shuffle([ok,...pool],r)};
+const MIN=20,KEY="expediente2050",PIN="2050";
+let S;try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+if(!S)S={step:0,ans:[],leaves:0};
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const app=document.getElementById("app");
+const M=[
+{t:"Estructura de la población",data:c=>`<div class="bars">
+ <div class="b"><span>Menores de 15</span><div class="t"><div class="f" style="width:${c.u*2}%"></div></div><span class="num">${c.u}%</span></div>
+ <div class="b"><span>De 15 a 64</span><div class="t"><div class="f" style="width:${(100-c.u-c.o)}%"></div></div><span class="num">${100-c.u-c.o}%</span></div>
+ <div class="b"><span>65 y más</span><div class="t"><div class="f a" style="width:${c.o*2}%"></div></div><span class="num">${c.o}%</span></div></div>
+ <div class="kv"><div><span class="mut">Hijos por mujer</span><b>${c.tgf}</b></div><div><span class="mut">Población</span><b>${c.pop}</b></div></div>
+ <p><b>Política poblacional:</b> ${c.pol}</p>
+ <div class="rule"><b>Regla para clasificar:</b> si los menores de 15 son 30% o más, la población es <b>joven</b>. Si los de 65 y más son 20% o más, es <b>envejecida</b>. Si no ocurre ninguna, está <b>en transición</b>.</div>`,
+ q:"Según la regla, ¿cómo es la estructura de la población de tu país?",opts:(c,r)=>shuffle(Object.keys(PIR),r),lab:PIR,ok:c=>pir(c),
+ open:c=>`Con base en la estructura de población de ${c.n}, ¿qué problema enfrentará hacia 2050? Propón una política poblacional y explica por qué ayudaría.`},
+{t:"Movilidad de la población",data:c=>`<div class="case">${c.migT}</div>`,
+ q:"¿Qué tipo de movilidad caracteriza más a tu país?",opts:(c,r)=>shuffle(Object.keys(MIG),r),lab:MIG,ok:c=>c.mig,
+ open:c=>`Explica dos causas de este tipo de movilidad en ${c.n} (factores de atracción o de expulsión) y una consecuencia para el país.`},
+{t:"Ciudades y problemas de la urbanización",data:c=>`<div class="kv"><div><span class="mut">Población urbana</span><b>${c.urb}%</b></div><div><span class="mut">Ciudad principal</span><b>${c.city}</b></div></div><div class="case">${c.cityT}</div>`,
+ q:c=>`¿Qué problema de la urbanización describe el caso de ${c.city}?`,opts:(c,r)=>pick(URB,c.ck,UX,r),lab:URB,ok:c=>c.ck,
+ open:c=>`Compara el problema de ${c.city} con Ecatepec o con la colonia donde vives: ¿en qué se parecen y en qué son diferentes?`},
+{t:"Desigualdad de los espacios rurales",data:c=>`<div class="kv"><div><span class="mut">Población rural</span><b>${100-c.urb}%</b></div></div><div class="case">${c.rurT}</div>`,
+ q:"¿Cuál es el principal problema del campo en tu país según el caso?",opts:(c,r)=>pick(RUR,c.rk,RX,r),lab:RUR,ok:c=>c.rk,
+ open:c=>`Describe en qué es distinta la vida en el campo y en la ciudad en ${c.n} y explica una causa de esa desigualdad.`},
+{t:"Diversidad y patrimonio cultural",data:c=>`<div class="case">${c.culT}</div><div class="rule"><b>Homogeneización:</b> las culturas se parecen cada vez más y se pierde lo propio.<br><b>Resistencia:</b> un grupo defiende y mantiene su cultura.<br><b>Hibridación:</b> lo global y lo local se mezclan y crean algo nuevo.</div>`,
+ q:"¿Qué proceso cultural muestra este caso?",opts:(c,r)=>shuffle(Object.keys(CUL),r),lab:CUL,ok:c=>c.kk,
+ open:c=>`Explica por qué el caso de ${c.n} es un ejemplo del proceso que elegiste. Después menciona una tradición de tu familia o comunidad que se mantiene y una influencia global que la está cambiando.`}];
+const stamps=()=>{document.getElementById("stamps").innerHTML=M.map((m,i)=>{const s=i+2;return `<div class="st ${S.step>s?"on":S.step===s?"now":""}" title="${m.t}">${i+1}</div>`}).join("")};
+const C0=()=>C[S.ci];
+function render(){stamps();window.scrollTo(0,0);
+ if(S.step===0)return start();
+ if(S.step===1)return intro();
+ if(S.step<=6)return mission(S.step-2);
+ return ficha();}
+function start(){app.innerHTML=`<div class="card"><h2>Antes de empezar</h2>
+ <p>Vas a recibir un país asignado y completarás 5 misiones. Al final se genera tu expediente para entregarlo.</p>
+ <p class="mut">Trabajo individual. No puedes pegar texto, no puedes regresar a misiones anteriores y la actividad registra cada vez que sales de esta pantalla.</p>
+ <label for="nm">Nombre completo</label><input type="text" id="nm" autocomplete="off">
+ <label for="gr">Grupo</label><input type="text" id="gr" inputmode="numeric" autocomplete="off">
+ <label for="nl">Número de lista</label><input type="number" id="nl" min="1" max="80">
+ <div class="warn" id="msg"></div>
+ <div class="row"><button id="go">Comenzar</button></div></div>`;
+ let armed=false;const go=document.getElementById("go"),msg=document.getElementById("msg");
+ app.querySelectorAll("input").forEach(i=>i.oninput=()=>{armed=false;go.textContent="Comenzar";msg.textContent=""});
+ go.onclick=()=>{const nm=document.getElementById("nm").value.trim().replace(/\s+/g," "),gr=document.getElementById("gr").value.trim(),nl=parseInt(document.getElementById("nl").value,10);
+  if(nm.split(" ").length<2){msg.textContent="Escribe tu nombre y al menos un apellido.";return}
+  if(!/^\d{3,4}$/.test(gr)){msg.textContent="Escribe tu grupo con números (por ejemplo 4010).";return}
+  if(!(nl>=1&&nl<=80)){msg.textContent="Escribe tu número de lista.";return}
+  if(!armed){armed=true;msg.textContent=`Revisa: ${nm}, grupo ${gr}, número ${nl}. Después no podrás cambiarlo.`;go.textContent="Sí, mis datos son correctos";return}
+  const g=[...gr].reduce((a,d)=>a+ +d,0);
+  Object.assign(S,{name:nm,grupo:gr,num:nl,ci:(nl*3+g)%8,seed:hash(nm+gr+nl),start:Date.now(),step:1});save();render()}}
+function intro(){const c=C0();app.innerHTML=`<div class="card"><div class="country"><div class="seal">PAÍS<br>ASIGNADO</div><div><span class="mut">${esc(S.name)} · Grupo ${esc(S.grupo)} · No. ${S.num}</span><h2>${c.n}</h2><p style="margin:0">Población: ${c.pop}</p></div></div>
+ <p>Tu tarea es armar el expediente de <b>${c.n}</b> para el año 2050. En cada misión lee los datos, contesta una pregunta de opción y escribe una respuesta con tus propias palabras (mínimo ${MIN} palabras).</p>
+ <p class="mut">Tus compañeros tienen otros países y otras opciones, así que copiar no te servirá.</p>
+ <div class="row"><button id="go">Empezar misión 1</button></div></div>`;
+ document.getElementById("go").onclick=()=>{S.step=2;save();render()}}
+function mission(i){const c=C0(),m=M[i],r=rng(S.seed+i*977),opts=m.opts(c,r),q=typeof m.q==="function"?m.q(c):m.q;
+ app.innerHTML=`<div class="card"><span class="mut">Misión ${i+1} de 5 · ${c.n}</span><h2>${m.t}</h2>${m.data(c)}</div>
+ <div class="card"><h3>A. ${q}</h3>${opts.map(k=>`<label class="opt"><input type="radio" name="o" value="${k}"><span>${m.lab[k]}</span></label>`).join("")}</div>
+ <div class="card"><h3>B. ${m.open(c)}</h3><textarea id="tx" spellcheck="true" placeholder="Escribe con tus propias palabras…"></textarea><div class="wc" id="wc">0 de ${MIN} palabras mínimas</div>
+ <div class="row"><button id="go" disabled>Guardar y continuar</button></div><p class="mut">Al guardar ya no podrás regresar a esta misión.</p></div>`;
+ const tx=document.getElementById("tx"),go=document.getElementById("go"),wc=document.getElementById("wc");
+ const k="draft"+i;tx.value=S[k]||"";
+ const chk=()=>{const sel=app.querySelector("input[name=o]:checked"),n=words(tx.value);wc.textContent=`${n} de ${MIN} palabras mínimas`;wc.classList.toggle("ok",n>=MIN);go.disabled=!(sel&&n>=MIN);app.querySelectorAll(".opt").forEach(o=>o.classList.toggle("sel",o.querySelector("input").checked))};
+ ["paste","drop"].forEach(e=>tx.addEventListener(e,ev=>{ev.preventDefault();wc.textContent="No se permite pegar texto: escribe tu respuesta."}));
+ tx.oninput=()=>{S[k]=tx.value;save();chk()};app.querySelectorAll("input[name=o]").forEach(x=>x.onchange=chk);chk();
+ go.onclick=()=>{const sel=app.querySelector("input[name=o]:checked").value;S.ans[i]={c:sel,ok:sel===m.ok(c),o:tx.value.trim()};delete S[k];S.step++;if(S.step===7)S.end=Date.now();save();render()}}
+function ficha(){const c=C0(),auto=S.ans.filter(a=>a&&a.ok).length,f=t=>new Date(t).toLocaleString("es-MX",{dateStyle:"short",timeStyle:"short"});
+ const code=hash(JSON.stringify([S.name,S.grupo,S.num,S.ans,S.leaves])).toString(36).toUpperCase().slice(0,6);
+ app.innerHTML=`<div class="card"><div class="country"><div class="seal">EXPE-<br>DIENTE<br>2050</div><div><h2>${c.n}</h2>
+ <div>${esc(S.name)} · Grupo ${esc(S.grupo)} · No. ${S.num}</div>
+ <div class="mut">Inicio ${f(S.start)} · Fin ${f(S.end)} · Salidas de la actividad: <b>${S.leaves}</b> · Código ${code}</div></div></div>
+ <div class="score"><div><span class="mut">Opción (automático)</span><b>${auto} / 5</b></div><div><span class="mut">Respuestas abiertas</span><b><span class="blank"></span> / 5</b></div><div><span class="mut">Calificación</span><b><span class="blank"></span> / 10</b></div></div>
+ ${M.map((m,i)=>{const a=S.ans[i];return `<div class="sec"><h3>${i+1}. ${m.t}</h3>
+ <div>A. ${m.lab[a.c]} <span class="res ${a.ok?"ok":"bad"}">${a.ok?"Correcta · 1":"Incorrecta · 0"}</span></div>
+ <div style="margin-top:6px">B. <span class="mut">${m.open(c)}</span></div><div class="ans">${esc(a.o)}</div><div class="mut">Puntaje docente: <span class="blank"></span> / 1</div></div>`}).join("")}
+ <p class="mut" style="margin-top:14px">Criterio para respuestas abiertas: 1 = completa, relacionada con su país y justificada · 0.5 = incompleta o muy general · 0 = vacía o sin relación.</p></div>
+ <div class="card noprint"><h3>Entrega</h3><p>Muestra esta pantalla a tu maestra o toma una captura de pantalla completa y envíala por el medio que te indique.</p>
+ <div class="row"><button id="pr">Imprimir o guardar PDF</button></div><div class="mut" id="pm"></div>
+ <details style="margin-top:16px"><summary class="mut">Solo docente</summary><label for="pin">Clave para reiniciar el dispositivo</label><input type="text" id="pin" autocomplete="off"><div class="row"><button class="ghost" id="rs">Reiniciar para otro alumno</button></div></details></div>`;
+ document.getElementById("pr").onclick=()=>{try{window.print()}catch(e){}document.getElementById("pm").textContent="Si no se abrió la ventana de impresión, toma una captura de pantalla."};
+ document.getElementById("rs").onclick=()=>{if(document.getElementById("pin").value.trim()===PIN){S={step:0,ans:[],leaves:0};save();render()}}}
+document.addEventListener("visibilitychange",()=>{if(document.hidden&&S.step>=1&&S.step<=6){S.leaves++;save()}});
+render();
+}
+</script>
+</body>
+</html>

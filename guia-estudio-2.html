@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Guía de estudio · Geografía</title>
+<meta name="description" content="Guía de estudio interactiva para el segundo parcial de Geografía. Preparatoria UNAM.">
+<style>
+:root{
+  --bg:#f4f0e4; --paper:#fffdf8; --ink:#1e2d43; --muted:#5f6c7c; --line:#e3dccb; --line2:#d3cab4;
+  --sea:#d7ebf2; --land:#d6e6c0;
+  --teal:#1c7f78; --teal-d:#14625c; --teal-l:#e2f2ef;
+  --ocre:#c98624; --ocre-l:#fbefd8;
+  --coral:#c4553d; --coral-l:#fbe6e0;
+  --green:#2f8a49; --green-l:#e2f3e5;
+  --yellow:#d8a11a;
+  --r:18px; --r2:12px;
+  --sh:0 1px 0 rgba(30,45,67,.05),0 6px 22px rgba(30,45,67,.08);
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--bg);line-height:1.5;font-size:16px;min-height:100vh;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420' viewBox='0 0 420 420'%3E%3Cg fill='none' stroke='%23c9bea2' stroke-opacity='.28' stroke-width='1'%3E%3Cpath d='M-20 80c60-40 120 30 190 0s110-60 180-20 90 40 90 40'/%3E%3Cpath d='M-20 110c70-40 120 30 190 0s120-50 180-10 90 40 90 40'/%3E%3Cpath d='M-20 260c50 30 120-30 200 0s120 60 180 20 80-30 80-30'/%3E%3Cpath d='M-20 290c50 30 120-30 200 0s120 60 180 20 80-30 80-30'/%3E%3Cpath d='M-20 320c50 30 120-30 200 0s120 60 180 20 80-30 80-30'/%3E%3Cellipse cx='300' cy='170' rx='40' ry='22'/%3E%3Cellipse cx='300' cy='170' rx='22' ry='11'/%3E%3C/g%3E%3C/svg%3E");}
+button{font:inherit;color:inherit}
+h1,h2,h3{font-family:var(--serif);line-height:1.15;margin:0;letter-spacing:-.01em}
+.wrap{max-width:920px;margin:0 auto;padding:0 16px 80px}
+.hidden{display:none!important}
+
+/* top bar */
+.top{position:sticky;top:0;z-index:20;background:rgba(244,240,228,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top-in{max-width:920px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:10px}
+.brand{display:flex;align-items:center;gap:8px;font-family:var(--serif);font-weight:700;font-size:1.05rem;cursor:pointer;background:none;border:0;padding:4px 0}
+.brand small{font-family:var(--sans);font-weight:500;color:var(--muted);font-size:.78rem}
+.top .sp{flex:1}
+.chip-pct{font-weight:700;font-size:.85rem;background:var(--paper);border:1px solid var(--line);padding:5px 10px;border-radius:999px;white-space:nowrap}
+.ibtn{border:1px solid var(--line);background:var(--paper);border-radius:12px;padding:7px 10px;cursor:pointer;font-size:.9rem;white-space:nowrap}
+.ibtn:hover{border-color:var(--line2)}
+@media (max-width:520px){.brand small{display:none}.ibtn .lbl{display:none}}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1.5px solid var(--line2);background:var(--paper);border-radius:14px;padding:12px 18px;font-weight:650;cursor:pointer;min-height:48px;transition:transform .08s ease,box-shadow .15s ease,background .15s}
+.btn:hover{box-shadow:var(--sh)}
+.btn:active{transform:translateY(1px)}
+.btn:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
+.btn.primary{background:var(--teal);border-color:var(--teal);color:#fff}
+.btn.primary:hover{background:var(--teal-d)}
+.btn.ocre{background:var(--ocre);border-color:var(--ocre);color:#fff}
+.btn.danger{color:var(--coral);border-color:#e7b9ad}
+.btn.big{font-size:1.1rem;padding:16px 30px;min-height:58px;border-radius:16px}
+.btn.pulse{animation:pulse 1.4s ease 2}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(28,127,120,.0)}50%{box-shadow:0 0 0 6px rgba(28,127,120,.18)}}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.row.c{justify-content:center}
+
+.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:20px}
+.muted{color:var(--muted)}
+.mt{margin-top:16px}.mt2{margin-top:28px}
+
+/* home */
+.hero{text-align:center;padding:42px 0 10px}
+.hero .globe-logo{width:150px;height:150px;margin:0 auto 10px;display:block}
+.hero h1{font-size:clamp(2rem,6vw,3.1rem)}
+.hero .sub{font-family:var(--serif);font-style:italic;font-size:clamp(1.1rem,3.4vw,1.35rem);color:var(--teal-d);margin:8px 0 14px}
+.hero p.lead{max-width:520px;margin:0 auto 26px;color:var(--muted);font-size:1.05rem}
+.spin{animation:spin 40s linear infinite;transform-origin:75px 75px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.needle{animation:wob 4s ease-in-out infinite;transform-origin:75px 75px}
+@keyframes wob{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(10deg)}}
+.welcome{max-width:520px;margin:22px auto 0;text-align:left}
+.welcome .row{margin-top:12px}
+.foot{text-align:center;color:var(--muted);font-size:.85rem;margin-top:40px}
+.warn{background:var(--ocre-l);border:1px solid #efd4a4;border-radius:12px;padding:10px 14px;font-size:.92rem;margin:14px auto;max-width:560px}
+
+/* menu */
+.dash{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center}
+.ring{width:118px;height:118px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{background:var(--bg);border-radius:12px;padding:10px 12px}
+.stat b{display:block;font-size:1.35rem;font-family:var(--serif)}
+.stat span{font-size:.8rem;color:var(--muted)}
+@media (max-width:560px){.dash{grid-template-columns:1fr;justify-items:center;text-align:center}.stats{width:100%}}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.86rem;color:var(--muted);margin:18px 2px 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:12px}
+.bcard{position:relative;text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:14px 14px 12px;cursor:pointer;box-shadow:var(--sh);display:flex;flex-direction:column;gap:6px;min-height:118px;transition:transform .1s,border-color .15s}
+.bcard:hover{transform:translateY(-2px);border-color:var(--line2)}
+.bcard .bn{font-size:.75rem;font-weight:700;color:var(--muted);letter-spacing:.04em}
+.bcard .be{font-size:1.5rem;line-height:1}
+.bcard .bt{font-weight:700;font-size:1rem;line-height:1.25}
+.bcard .bs{font-size:.8rem;color:var(--muted);margin-top:auto}
+.bcard.done{border-color:#b9dcc1;background:linear-gradient(180deg,#fbfffb,var(--paper))}
+.bcard.final{background:linear-gradient(135deg,#fff7e6,#fffdf8);border-color:#ecd3a2}
+.bar{height:7px;border-radius:9px;background:#ece6d6;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--teal);border-radius:9px;transition:width .4s}
+.bcard.done .bar i{background:var(--green)}
+.weakbox h3{font-size:1.25rem;margin-bottom:8px}
+.weak-list{list-style:none;padding:0;margin:8px 0 14px;display:grid;gap:6px}
+.weak-list li{display:flex;justify-content:space-between;gap:10px;background:var(--coral-l);border-radius:10px;padding:8px 12px;font-size:.95rem}
+.weak-list li b{white-space:nowrap}
+
+/* block */
+.bhead{padding:22px 0 8px}
+.back{background:none;border:0;color:var(--teal-d);font-weight:650;cursor:pointer;padding:6px 0;font-size:.95rem}
+.bhead h2{font-size:clamp(1.5rem,4.6vw,2.1rem);margin:6px 0 10px}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;font-weight:650;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:4px 10px}
+.mastery{display:flex;align-items:center;gap:10px;margin-top:10px;font-size:.88rem;color:var(--muted)}
+.mastery .bar{flex:1;max-width:280px}
+details.idea{background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--ocre);border-radius:14px;margin:14px 0;box-shadow:var(--sh)}
+details.idea summary{cursor:pointer;padding:12px 16px;font-weight:700;list-style:none;display:flex;justify-content:space-between;align-items:center}
+details.idea summary::-webkit-details-marker{display:none}
+details.idea summary::after{content:"＋";color:var(--ocre);font-weight:800}
+details.idea[open] summary::after{content:"－"}
+.idea-b{padding:0 16px 16px;font-size:.96rem}
+.idea-b .kgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.idea-b .k{background:var(--bg);border-radius:12px;padding:10px 12px}
+.idea-b .k b{display:block;margin-bottom:2px}
+.idea-b .figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;text-align:center;font-size:.88rem}
+.idea-b .figs svg{width:100%;height:auto;max-height:170px;background:var(--bg);border-radius:10px}
+.formula{font-family:var(--serif);font-size:1.1rem;background:var(--teal-l);border-radius:12px;padding:10px 14px;margin:8px 0}
+.dtab{width:100%;border-collapse:collapse;font-size:.95rem;background:#fff;border-radius:10px;overflow:hidden;margin:0 auto 8px;max-width:520px}.dtab th,.dtab td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:center}.dtab th{background:var(--teal-l);font-size:.85rem}.dtab td:first-child{text-align:left;font-weight:700}
+.levels{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 12px}
+.lv{border:1.5px solid var(--line2);background:var(--paper);border-radius:999px;padding:8px 14px;font-weight:650;cursor:pointer;font-size:.9rem}
+.lv.on{background:var(--ink);border-color:var(--ink);color:#fff}
+
+/* exercise */
+.ex{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:20px;margin-top:6px}
+.ex-tag{display:inline-block;font-size:.74rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--teal-d);background:var(--teal-l);border-radius:999px;padding:4px 10px;margin-bottom:12px}
+.ctx{background:var(--bg);border-left:4px solid var(--teal);border-radius:10px;padding:12px 14px;margin-bottom:12px;font-size:1.02rem}
+.ex-q{font-weight:650;font-size:1.08rem;margin-bottom:14px}
+.fig-wrap{margin:4px 0 14px;text-align:center}
+.fig-wrap svg{width:100%;max-width:520px;height:auto;border-radius:12px}
+.opts{display:grid;gap:10px}
+.opts.cards{grid-template-columns:repeat(2,1fr)}
+@media (min-width:700px){.opts.cards{grid-template-columns:repeat(4,1fr)}}
+.opt{display:flex;gap:12px;align-items:flex-start;text-align:left;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;cursor:pointer;min-height:52px;transition:border-color .12s,background .12s}
+.opt:hover:not(:disabled){border-color:var(--teal);background:#fbfefd}
+.opt .ol{flex:none;width:26px;height:26px;border-radius:8px;background:var(--bg);display:grid;place-items:center;font-weight:800;font-size:.82rem;color:var(--muted)}
+.opts.cards .opt{flex-direction:column;align-items:center;text-align:center;justify-content:center;font-weight:700;padding:16px 10px}
+.opts.cards .opt .ol{display:none}
+.opt.ok{border-color:var(--green);background:var(--green-l)}
+.opt.ok .ol{background:var(--green);color:#fff}
+.opt.bad{border-color:var(--coral);background:var(--coral-l)}
+.opt.bad .ol{background:var(--coral);color:#fff}
+.opt:disabled{cursor:default}
+.tfrow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tfrow .opt{justify-content:center;align-items:center;font-weight:700;font-size:1.05rem}
+.hint{font-size:.85rem;color:var(--muted);margin:2px 0 10px}
+.actions{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
+
+/* sort */
+.pool{display:flex;flex-wrap:wrap;gap:8px;min-height:54px;padding:10px;border:1.5px dashed var(--line2);border-radius:14px;background:var(--bg)}
+.pool:empty::before{content:"✓ Todas las tarjetas están colocadas";color:var(--muted);font-size:.88rem;align-self:center}
+.chip{border:1.5px solid var(--line2);background:#fff;border-radius:12px;padding:8px 12px;cursor:pointer;font-size:.93rem;text-align:left;line-height:1.3;touch-action:manipulation}
+.chip.sel{border-color:var(--teal);box-shadow:0 0 0 3px rgba(28,127,120,.2);background:var(--teal-l)}
+.chip.ok{border-color:var(--green);background:var(--green-l)}
+.chip.bad{border-color:var(--coral);background:var(--coral-l)}
+.chip small{display:block;font-weight:700;color:var(--coral);font-size:.8rem}
+.bins{display:grid;gap:10px;margin-top:12px;grid-template-columns:1fr}
+@media (min-width:640px){.bins.c2{grid-template-columns:1fr 1fr}.bins.c4{grid-template-columns:1fr 1fr}.bins.c5{grid-template-columns:repeat(3,1fr)}}
+.bin{border:1.5px solid var(--line);border-radius:14px;padding:10px;background:#fff;min-height:84px;cursor:pointer;transition:border-color .12s,background .12s}
+.bins.armed .bin{border-color:var(--teal);border-style:dashed;background:#fbfefd}
+.bin.over{background:var(--teal-l)}
+.bin-h{font-weight:750;font-size:.92rem;margin-bottom:8px}
+.zone{display:flex;flex-wrap:wrap;gap:6px}
+
+/* match */
+.match{display:grid;gap:10px}
+.mrow{display:grid;grid-template-columns:1fr 1.2fr;gap:10px;align-items:center;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:10px 12px}
+@media (max-width:600px){.mrow{grid-template-columns:1fr}}
+.ml{font-weight:650}
+select{font:inherit;width:100%;padding:10px;border-radius:10px;border:1.5px solid var(--line2);background:var(--paper);min-height:46px;color:var(--ink)}
+.mrow.ok{border-color:var(--green);background:var(--green-l)}
+.mrow.bad{border-color:var(--coral);background:var(--coral-l)}
+.mfix{grid-column:1/-1;font-size:.88rem;font-weight:700;color:var(--green)}
+
+/* order */
+.olist{display:grid;gap:8px}
+.oitem{display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:8px 10px}
+.oitem .on{width:28px;height:28px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:800;font-size:.85rem;flex:none}
+.oitem .ot{flex:1}
+.ob{border:1px solid var(--line2);background:var(--paper);border-radius:10px;width:40px;height:38px;cursor:pointer}
+.ob:disabled{opacity:.3}
+.oitem.ok{border-color:var(--green);background:var(--green-l)}
+.oitem.bad{border-color:var(--coral);background:var(--coral-l)}
+
+/* fill */
+.sent{font-size:1.12rem;font-family:var(--serif);line-height:1.7;margin:0 0 14px}
+.blank{display:inline-block;min-width:110px;border-bottom:2.5px solid var(--teal);padding:0 8px;color:var(--muted);text-align:center;font-family:var(--sans);font-weight:700}
+.blank.filled{color:var(--teal-d)}
+.blank.ok{color:var(--green);border-color:var(--green)}
+.blank.bad{color:var(--coral);border-color:var(--coral)}
+.wbank{display:flex;flex-wrap:wrap;gap:8px}
+
+/* two & checks */
+.step{margin-top:6px}
+.step+.step{margin-top:16px;padding-top:14px;border-top:1px dashed var(--line2)}
+.step-q{font-weight:700;margin-bottom:10px}
+.ck{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:8px}
+.ck .yn{display:flex;gap:6px}
+.ck .yn button{border:1.5px solid var(--line2);background:var(--paper);border-radius:10px;padding:8px 14px;font-weight:700;cursor:pointer;min-width:58px}
+.ck .yn button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.ck.ok{border-color:var(--green);background:var(--green-l)}
+.ck.bad{border-color:var(--coral);background:var(--coral-l)}
+
+/* num */
+.numrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+input.num,input.txt{font:inherit;font-size:1.2rem;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line2);background:#fff;width:200px;max-width:100%;color:var(--ink)}
+input.txt{width:100%;font-size:1.05rem}
+input.num:focus,input.txt:focus,select:focus{outline:3px solid rgba(28,127,120,.25);border-color:var(--teal)}
+.unit{font-weight:700;font-size:1.1rem}
+input.num.ok{border-color:var(--green);background:var(--green-l)}
+input.num.bad{border-color:var(--coral);background:var(--coral-l)}
+
+/* rosa */
+.rosa{display:grid;grid-template-columns:repeat(3,64px);grid-template-rows:repeat(3,64px);gap:6px;justify-content:center;margin:6px auto 0}
+.rosa button{border:1.5px solid var(--line2);background:#fff;border-radius:14px;font-weight:800;cursor:pointer;font-size:.95rem}
+.rosa button:hover:not(:disabled){border-color:var(--teal)}
+.rosa .mid{display:grid;place-items:center;font-size:1.8rem}
+.rosa button.ok{background:var(--green-l);border-color:var(--green)}
+.rosa button.bad{background:var(--coral-l);border-color:var(--coral)}
+
+/* pick */
+.pick svg{cursor:pointer}
+.pick [data-k]{transition:opacity .15s}
+svg .hitl{stroke:transparent;stroke-width:16;fill:none}
+svg .lbl{opacity:0;transition:opacity .3s;pointer-events:none}
+svg.revealed .lbl{opacity:1}
+.hit-ok .vis,.hit-ok.vis{stroke:var(--green)!important}
+.hit-show .vis{stroke:var(--green)!important;stroke-width:4!important}
+.hit-show.area{fill:rgba(47,138,73,.28)!important}
+.hit-bad.area{fill:rgba(196,85,61,.25)!important}
+.hit-bad .vis{stroke:var(--coral)!important;stroke-width:4!important}
+.hit-show .dot{fill:var(--green)!important}
+.hit-bad .dot{fill:var(--coral)!important}
+.hit-show .box{stroke:var(--green)!important;stroke-width:3!important;fill:rgba(47,138,73,.12)!important}
+.hit-bad .box{stroke:var(--coral)!important;stroke-width:3!important;fill:rgba(196,85,61,.12)!important}
+.pt .ring{fill:none;stroke:none}
+.hit-show .ring{stroke:var(--green);stroke-width:3}
+.hit-bad .ring{stroke:var(--coral);stroke-width:3}
+.globe .area{fill:transparent}
+.globe.lines .area{pointer-events:none}
+.globe.areas .lnk{pointer-events:none}
+
+/* feedback */
+.fb{margin-top:16px;border-radius:14px;padding:14px 16px;animation:pop .25s ease}
+.fb.ok{background:var(--green-l);border:1.5px solid #b6dcbf}
+.fb.bad{background:#fff4e2;border:1.5px solid #f0d6a6}
+.fb-h{font-weight:800;font-size:1.08rem;margin-bottom:4px}
+.fb-b{font-size:.98rem}
+.steps{margin-top:10px;background:#fff;border-radius:10px;padding:10px 12px;font-size:.95rem}
+.steps ol{margin:6px 0 0;padding-left:22px}
+@keyframes pop{from{transform:translateY(6px);opacity:0}to{transform:none;opacity:1}}
+.nav{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.counter{font-size:.85rem;color:var(--muted);margin:14px 0 6px;display:flex;justify-content:space-between;gap:10px}
+.motiv{margin-top:12px;text-align:center;font-family:var(--serif);font-style:italic;color:var(--teal-d);font-size:1.05rem;min-height:1.4em}
+
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(20,30,45,.45);display:grid;place-items:center;z-index:50;padding:16px;animation:fade .2s}
+@keyframes fade{from{opacity:0}}
+.modal .card{max-width:440px;width:100%;animation:pop .25s}
+.modal h3{font-size:1.4rem;margin-bottom:8px}
+.modal label{display:block;font-weight:650;font-size:.9rem;margin:12px 0 4px}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 18px;border-radius:14px;z-index:60;box-shadow:0 8px 30px rgba(0,0,0,.25);font-weight:600;max-width:calc(100% - 32px);text-align:center;animation:pop .25s}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:55;overflow:hidden}
+.confetti i{position:absolute;top:-20px;width:9px;height:14px;border-radius:2px;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+
+/* evidence */
+.ev-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.ev-item{background:var(--bg);border-radius:12px;padding:10px 12px}
+.ev-item span{display:block;font-size:.78rem;color:var(--muted)}
+.ev-item b{font-size:1.05rem}
+.bt-row{display:grid;grid-template-columns:minmax(120px,1.3fr) 2fr auto;gap:10px;align-items:center;font-size:.88rem;padding:5px 0;border-bottom:1px solid var(--line)}
+.bt-bars{display:flex;height:12px;border-radius:6px;overflow:hidden;background:#ece6d6}
+.bt-bars i{display:block;height:100%}
+.bt-bars .c{background:var(--teal)}.bt-bars .w{background:var(--coral)}
+.level{font-family:var(--serif);font-size:1.6rem;margin:6px 0}
+.big-pct{font-family:var(--serif);font-size:3.2rem;font-weight:700;line-height:1;color:var(--teal-d)}
+.note{font-size:.85rem;color:var(--muted);background:var(--bg);border-radius:10px;padding:10px 12px}
+#printArea{display:none}
+@media print{
+  body.printing>*:not(#printArea){display:none!important}
+  body.printing #printArea{display:block!important}
+  body{background:#fff}
+}
+</style>
+</head>
+<body>
+<header class="top" id="top">
+  <div class="top-in">
+    <button class="brand" id="brand" type="button" aria-label="Inicio">🌎 Geografía <small>· Segundo parcial</small></button>
+    <span class="sp"></span>
+    <span class="chip-pct hidden" id="topPct">0%</span>
+    <button class="ibtn hidden" id="topMap" type="button">🗺️ <span class="lbl">Progreso</span></button>
+    <button class="ibtn hidden" id="topSave" type="button">💾 <span class="lbl">Guardar</span></button>
+  </div>
+</header>
+<main class="wrap" id="main"></main>
+<div id="printArea"></div>
+
+<script type="application/octet-stream" id="gd">=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</script>
+<script>
+'use strict';
+/* ============ utilidades ============ */
+const $ = (s, r = document) => r.querySelector(s);
+function h(tag, attrs, ...kids) {
+  const e = document.createElement(tag);
+  attrs = attrs || {};
+  for (const k in attrs) {
+    const v = attrs[k];
+    if (v === false || v == null) continue;
+    if (k === 'class') e.className = v;
+    else if (k === 'html') e.innerHTML = v;
+    else if (k.slice(0, 2) === 'on' && typeof v === 'function') e.addEventListener(k.slice(2), v);
+    else e.setAttribute(k, v === true ? '' : v);
+  }
+  kids.flat().forEach(c => { if (c == null || c === false) return; e.append(c.nodeType ? c : document.createTextNode(String(c))); });
+  return e;
+}
+const rint = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const sample = (a, n) => shuffle(a).slice(0, n);
+const clone = o => JSON.parse(JSON.stringify(o));
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const round3 = x => Math.round(x * 1000) / 1000;
+const fmtN = x => { try { return Number(x).toLocaleString('es-MX', { maximumFractionDigits: 3 }); } catch (e) { return String(x); } };
+const sc = E => '1:' + fmtN(E);
+const strip = s => String(s).replace(/^[^A-Za-zÁÉÍÓÚÑáéíóúñ0-9¿]+/, '');
+const uid = () => 'u' + Math.random().toString(36).slice(2, 8);
+const fmtDate = iso => { if (!iso) return '—'; const d = new Date(iso); return d.toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' }); };
+const fmtDT = iso => { if (!iso) return '—'; const d = new Date(iso); return d.toLocaleDateString('es-MX', { day: 'numeric', month: 'short', year: 'numeric' }) + ', ' + d.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' }); };
+const fmtTime = s => { const m = Math.round(s / 60); if (m < 1) return 'menos de 1 min'; const hh = Math.floor(m / 60), mm = m % 60; return hh ? `${hh} h ${mm} min` : `${mm} min`; };
+
+/* ============ banco (codificado para que no se lea a simple vista) ============ */
+const BANK = (() => {
+  const s = document.getElementById('gd').textContent.trim().split('').reverse().join('');
+  const bin = atob(s); const u = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i);
+  return JSON.parse(new TextDecoder().decode(u));
+})();
+const C = BANK.cases;
+
+/* ============ estado y guardado ============ */
+const KEY = 'geoGuiaSegundoParcial_v1';
+const GOAL = 6;
+let STORAGE_OK = true;
+function blank() {
+  return { v: 1, name: '', group: '', start: null, last: null, timeSec: 0, sessions: 0, blocks: {}, weak: {}, hist: [], reto: { tries: 0, best: null, last: null, lastDate: null }, lastBlock: null, scaleLevel: 'mix', done: {} };
+}
+function load() {
+  try {
+    const r = localStorage.getItem(KEY);
+    if (r) { const o = JSON.parse(r); const b = blank(); return Object.assign(b, o, { reto: Object.assign(b.reto, o.reto || {}) }); }
+  } catch (e) { STORAGE_OK = false; }
+  return blank();
+}
+let S = load();
+function save() {
+  if (S.start) S.last = new Date().toISOString();
+  try { localStorage.setItem(KEY, JSON.stringify(S)); STORAGE_OK = true; return true; } catch (e) { STORAGE_OK = false; return false; }
+}
+try { const t = '__geo_t'; localStorage.setItem(t, '1'); localStorage.removeItem(t); } catch (e) { STORAGE_OK = false; }
+if (S.start && (!S.last || Date.now() - Date.parse(S.last) > 30 * 60 * 1000)) { S.sessions++; save(); }
+
+const BL = [
+  { e: '👥', n: 'Pirámides de población' },
+  { e: '📈', n: 'Dinámica y políticas de población' },
+  { e: '🗺️', n: 'Densidad y distribución' },
+  { e: '📊', n: 'Representar datos de población' },
+  { e: '🧳', n: 'Movilidad y migración' },
+  { e: '💸', n: 'Causas y consecuencias de la migración' },
+  { e: '🏙️', n: 'Espacio urbano y rural' },
+  { e: '🚧', n: 'Problemas de la urbanización' },
+  { e: '🌐', n: 'Procesos culturales' },
+  { e: '🎭', n: 'Patrimonio y diversidad cultural' },
+  { e: '📚', n: 'Fuentes de información' },
+  { e: '🪨', n: 'Rocas y ciclo de las rocas' },
+  { e: '🧠', n: 'Repaso final' }
+];
+const FIN = BL.length;
+const ST = { new: ['⚪', 'Sin comenzar'], prac: ['🟡', 'En práctica'], done: ['🟢', 'Dominado'] };
+function bs(b) { return S.blocks[b] || { a: 0, c: 0, w: 0 }; }
+function status(b) {
+  if (b === FIN) { if (!S.reto.tries) return 'new'; return S.reto.best >= 70 ? 'done' : 'prac'; }
+  const x = bs(b); if (!x.a) return 'new';
+  return (x.c >= GOAL && x.c / x.a >= 0.7) ? 'done' : 'prac';
+}
+function progress(b) {
+  if (status(b) === 'done') return 1;
+  if (b === FIN) return S.reto.tries ? 0.5 : 0;
+  const x = bs(b); if (!x.a) return 0; return Math.min(x.c, GOAL - 1) / GOAL * Math.min(1, (x.c / x.a) / 0.7);
+}
+function avance() { let s = 0; for (let b = 1; b <= FIN; b++) s += progress(b); return Math.round(s / FIN * 100); }
+function totals() { let a = 0, c = 0, w = 0; for (let b = 1; b <= FIN; b++) { const x = bs(b); a += x.a; c += x.c; w += x.w; } return { a, c, w }; }
+function weakList() { return Object.keys(S.weak).map(Number).filter(b => S.weak[b] > 0).sort((x, y) => S.weak[y] - S.weak[x]); }
+
+function record(b, ok, label, mode) {
+  const before = status(b);
+  const x = S.blocks[b] || (S.blocks[b] = { a: 0, c: 0, w: 0 });
+  x.a++; if (ok) x.c++; else x.w++;
+  if (!ok) S.weak[b] = (S.weak[b] || 0) + 1;
+  else if (mode === 'weak' && S.weak[b]) S.weak[b]--;
+  S.hist.push({ d: Date.now(), b, ok: ok ? 1 : 0, q: String(label || '').slice(0, 90) });
+  if (S.hist.length > 400) S.hist.shift();
+  save(); updTop();
+  if (before !== 'done' && status(b) === 'done' && !S.done[b]) { S.done[b] = new Date().toISOString(); save(); setTimeout(() => celebrate(b), 700); }
+}
+
+/* tiempo aproximado de trabajo */
+let lastAct = Date.now();
+['click', 'keydown', 'touchstart', 'scroll', 'pointermove'].forEach(ev => addEventListener(ev, () => { lastAct = Date.now(); }, { passive: true }));
+setInterval(() => { if (S.start && document.visibilityState === 'visible' && Date.now() - lastAct < 120000) { S.timeSec += 15; save(); } }, 15000);
+
+/* ============ elección de ejercicios sin repetir ============ */
+const RECENT = {};
+function fresh(key, arr) {
+  const r = RECENT[key] || (RECENT[key] = []);
+  const lim = Math.max(1, Math.min(arr.length - 1, Math.floor(arr.length * 0.6)));
+  let i, t = 0;
+  do { i = Math.floor(Math.random() * arr.length); t++; } while (r.includes(i) && t < 60);
+  r.push(i); while (r.length > lim) r.shift();
+  return arr[i];
+}
+const fromBank = n => () => clone(fresh('b' + n, BANK['b' + n]));
+function wpick(list) { const tot = list.reduce((s, x) => s + x[0], 0); let r = Math.random() * tot; for (const x of list) { if ((r -= x[0]) < 0) return x[1]; } return list[list.length - 1][1]; }
+const LASTF = {};
+function genFor(b, lvl) {
+  const list = MAKERS[b]; let f, t = 0;
+  do { f = wpick(list); t++; } while (f === LASTF[b] && list.length > 1 && t < 6);
+  LASTF[b] = f;
+  const ex = f(); ex.b = b; return ex;
+}
+function stratified(items, ncat, n) {
+  const by = {}; items.forEach(it => (by[it[1]] = by[it[1]] || []).push(it));
+  let out = [];
+  if (n >= ncat) Object.keys(by).forEach(k => out.push(pick(by[k])));
+  const rest = shuffle(items.filter(it => !out.includes(it)));
+  while (out.length < n && rest.length) out.push(rest.pop());
+  return shuffle(out);
+}
+
+/* ============ dibujos SVG propios ============ */
+function wob(pts, j) {
+  j = j == null ? 1.6 : j; let d = '';
+  for (let i = 0; i < pts.length - 1; i++) {
+    const [x1, y1] = pts[i], [x2, y2] = pts[i + 1];
+    if (i === 0) d += `M${x1 + rr(j)},${y1 + rr(j)}`;
+    const mx = (x1 + x2) / 2 + rr(j * 2), my = (y1 + y2) / 2 + rr(j * 2);
+    d += ` Q${mx},${my} ${x2 + rr(j)},${y2 + rr(j)}`;
+  }
+  return d;
+}
+function rr(j) { return +(Math.random() * 2 * j - j).toFixed(1); }
+
+/* ============ SEGUNDO PARCIAL: dibujos y generadores ============ */
+const stepsH = arr => `<ol>${arr.map(x => `<li>${x}</li>`).join('')}</ol>`;
+const numEx = (q, a, unit, steps, extra) => Object.assign({ t: 'num', q, a, unit, steps: stepsH(steps), tag: 'Problema' }, extra || {});
+function caseMC(key, arr, names, descs, q, extra) {
+  const [s, a] = fresh(key, arr);
+  return Object.assign({ t: 'mc', ctx: s, q, o: names, a, ns: 1, f: `${strip(names[a])}: ${descs[a]}.`, fw: names.map((n, i) => `Elegiste ${strip(n)}: ${descs[i]}.`) }, extra || {});
+}
+const PAISES = ['Valdora', 'Quensia', 'Marabú', 'Tierra Alta', 'Nueva Ostra', 'Kalinda', 'Belmar', 'Sorana', 'Zafira', 'Ríos Claros', 'Albania del Sur', 'Montelargo'];
+const MUNIS = ['San Lorenzo', 'Villa Hermosa del Valle', 'Santa Rita', 'El Mirador', 'Río Verde', 'Las Palmas', 'San Gabriel', 'Cerro Azul', 'La Esperanza', 'Valle Sereno'];
+
+/* ---- 1 · Pirámides ---- */
+const PYN = ['🔺 Progresiva', '▮ Estancada', '🔻 Regresiva'];
+const PYD = ['base ancha y cima estrecha: nacen muchos niños, población joven', 'forma casi rectangular: natalidad y mortalidad bajas, población en transición', 'base más angosta que el centro: nacen pocos niños, población envejecida'];
+function pyrShape(type) {
+  const base = type === 0 ? [1, .8, .64, .5, .38, .28, .19, .11, .05] : type === 1 ? [.92, .95, .97, .96, .9, .8, .62, .4, .18] : [.58, .66, .76, .88, .98, 1, .9, .7, .45];
+  return base.map(v => v * (0.94 + Math.random() * 0.12));
+}
+function pyrSVG(type) {
+  const w = pyrShape(type), max = Math.max(...w), ages = ['0–9', '10–19', '20–29', '30–39', '40–49', '50–59', '60–69', '70–79', '80+'];
+  const W = 340, cx = 170, bh = 20, gap = 3, top = 14, L = 120;
+  let s = `<svg viewBox="0 0 ${W} 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Pirámide de población"><rect width="${W}" height="260" fill="#fffdf8"/>`;
+  for (let i = 0; i < 9; i++) {
+    const y = top + (8 - i) * (bh + gap);
+    const m = w[i] / max * L * (0.95 + Math.random() * 0.05), f = w[i] / max * L * (0.95 + Math.random() * 0.07);
+    s += `<rect x="${(cx - 24 - m).toFixed(1)}" y="${y}" width="${m.toFixed(1)}" height="${bh}" fill="#557089" rx="2"/><rect x="${cx + 24}" y="${y}" width="${Math.min(f, L + 4).toFixed(1)}" height="${bh}" fill="#c98624" rx="2"/>`;
+    s += `<text x="${cx}" y="${y + 14}" text-anchor="middle" font-family="system-ui" font-size="10.5" fill="#1e2d43">${ages[i]}</text>`;
+  }
+  s += `<g font-family="system-ui" font-size="12" font-weight="700"><text x="${cx - 80}" y="236" text-anchor="middle" fill="#557089">Hombres</text><text x="${cx + 80}" y="236" text-anchor="middle" fill="#a86b14">Mujeres</text><text x="${cx}" y="252" text-anchor="middle" fill="#5f6c7c" font-size="10">Edad (años)</text></g>`;
+  return s + `</svg>`;
+}
+function gPyrId() { const k = rint(0, 2); return { t: 'mc', cards: 1, q: '¿Qué tipo de pirámide de población es?', img: pyrSVG(k), o: PYN, a: k, ns: 1, f: `${strip(PYN[k])}: ${PYD[k]}.`, fw: PYN.map((n, i) => `${strip(n)}: ${PYD[i]}.`), tag: 'Observa la gráfica' }; }
+function popVals(type) { return type === 0 ? [rint(31, 48), rint(2, 7)] : type === 2 ? [rint(10, 15), rint(20, 31)] : [rint(18, 27), rint(8, 15)]; }
+const POPC = ['Joven (pirámide progresiva)', 'En transición (pirámide estancada)', 'Envejecida (pirámide regresiva)'];
+const ruleTxt = 'Regla: 30 % o más de menores de 15 años → joven · 20 % o más de 65 años y más → envejecida · si no cumple ninguna → en transición.';
+function tableHTML(head, rows) { return `<table class="dtab"><thead><tr>${head.map(x => `<th>${x}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr>${r.map(x => `<td>${x}</td>`).join('')}</tr>`).join('')}</tbody></table>`; }
+function gPyrRule() {
+  const names = sample(PAISES, 3), types = shuffle([0, 1, 2]), vals = types.map(popVals);
+  const ask = rint(0, 2), lab = ['una población joven', 'una población en transición', 'una población envejecida'][ask];
+  const idx = types.indexOf(ask);
+  return { t: 'mc', q: `Según la tabla y la regla, ¿qué país tiene ${lab}?`, img: tableHTML(['País', 'Menores de 15 años', '65 años y más'], names.map((n, i) => [n, vals[i][0] + ' %', vals[i][1] + ' %'])) + `<p class="note" style="text-align:left">${ruleTxt}</p>`, o: [...names, 'Ninguno de los tres'], a: idx, ns: 1, f: `${names[idx]}: ${vals[idx][0]} % de menores de 15 y ${vals[idx][1]} % de 65 y más → ${POPC[ask].toLowerCase()}.`, tag: 'Interpreta la tabla' };
+}
+function gPyrRuleOne() {
+  const n = pick(PAISES), k = rint(0, 2), [y, o] = popVals(k);
+  return { t: 'mc', ctx: `En ${n}, el ${y} % de la población tiene menos de 15 años y el ${o} % tiene 65 años o más.`, q: '¿Cómo se clasifica su población?', o: POPC, a: k, ns: 1, f: `${ruleTxt} Aquí: ${y} % y ${o} % → ${POPC[k].toLowerCase()}.`, tag: 'Aplica la regla' };
+}
+
+/* ---- 2 · Dinámica y políticas ---- */
+function gCrec() {
+  const aging = Math.random() < .3; const n = aging ? rint(6, 9) : rint(12, 42), m = aging ? rint(10, 13) : rint(5, 11), c = n - m;
+  const p = pick(PAISES);
+  return numEx(`En ${p}, la tasa de natalidad es de ${n} nacimientos por cada mil habitantes (${n} ‰) y la de mortalidad es de ${m} ‰. ¿Cuál es su crecimiento natural en ‰?`, c, '‰', [`Crecimiento natural = natalidad − mortalidad`, `${n} − ${m} = <b>${c} ‰</b>`, c < 0 ? 'Es negativo: mueren más personas de las que nacen, la población disminuye (sin contar la migración).' : c < 5 ? 'Es bajo: la población crece lentamente.' : 'Es positivo y alto: la población crece rápido.'], { tag: 'Problema · crecimiento natural', tol: 0.01 });
+}
+function gPol() { const [s, a, w] = fresh('pol', C.POL); return { t: 'mc', ctx: s, q: '¿Qué política de población es la más coherente con esta situación?', o: C.POLN, a, ns: 1, f: w, tag: 'Mini caso' }; }
+
+/* ---- 3 · Densidad ---- */
+function gDens() {
+  const area = pick([48, 85, 120, 236, 410, 780, 1250, 2300, 3950, 6100, 8400]); const d = pick([4, 9, 15, 22, 38, 64, 95, 140, 260, 410, 880, 1500, 3200]);
+  const pop = Math.round(area * d * (0.9 + Math.random() * 0.2)); const a = Math.round(pop / area);
+  const cls = a > 120 ? 'concentración (más de 120 hab/km²)' : a < 30 ? 'dispersión (menos de 30 hab/km²)' : 'densidad media (entre 30 y 120 hab/km²)';
+  return numEx(`El municipio de ${pick(MUNIS)} tiene ${fmtN(pop)} habitantes y una superficie de ${fmtN(area)} km². ¿Cuál es su densidad de población? (Redondea a enteros.)`, a, 'hab/km²', [`Densidad = habitantes ÷ superficie`, `${fmtN(pop)} ÷ ${fmtN(area)} = ${fmtN(Math.round(pop / area * 10) / 10)}`, `≈ <b>${fmtN(a)} hab/km²</b> → ${cls}`], { tag: 'Problema · densidad', tol: 0.6 });
+}
+function gDensClass() {
+  const names = sample(['Estado Norte', 'Estado del Valle', 'Estado Costero', 'Estado Serrano', 'Estado del Lago', 'Estado Desierto', 'Estado Central', 'Estado del Río'], 6);
+  const vals = shuffle([rint(4, 26), rint(8, 28), rint(35, 110), rint(40, 115), rint(130, 450), rint(150, 2500)]);
+  const items = names.map((n, i) => [`${n}: ${fmtN(vals[i])} hab/km²`, vals[i] > 120 ? 0 : vals[i] < 30 ? 2 : 1]);
+  return { t: 'sort', q: 'Clasifica cada estado según su densidad de población (como cuando coloreas un mapa).', c: ['🔴 Concentración (más de 120)', '⚪ Densidad media (30 a 120)', '🔵 Dispersión (menos de 30)'], i: items, n: 6, f: 'Más de 120 hab/km² = concentración; menos de 30 = dispersión; en medio = densidad media.', tag: 'Clasifica' };
+}
+function gFac() { return { t: 'sort', q: '¿Cada factor favorece que la población se concentre o se disperse?', c: ['🔴 Favorece la concentración', '🔵 Favorece la dispersión'], i: C.FAC, n: 6, f: 'Agua, suelos fértiles, clima templado, empleo y comunicaciones atraen población; aridez, relieve abrupto, frío extremo y aislamiento la dispersan.' }; }
+function gReg() {
+  const [s, a, w] = fresh('reg', C.REGD);
+  const others = sample(C.REGD.filter(r => r[1] !== a), 2).map(r => r[2]);
+  const o2 = shuffle([w, ...others]);
+  return { t: 'two', ctx: s, q: 'Analiza la región.', s: [{ q: '¿Es una región de concentración o de dispersión?', o: ['🔴 Concentración', '🔵 Dispersión'], a }, { q: '¿Qué lo explica mejor?', o: o2, a: o2.indexOf(w) }], f: w, tag: 'Mini caso' };
+}
+
+/* ---- 4 · Representación ---- */
+const REPD = ['colorea cada área según un valor relativo (densidad, porcentaje o tasa)', 'el tamaño del símbolo crece con la cantidad absoluta (totales)', 'usa flechas para mostrar origen, destino y volumen de los movimientos', 'reparte a la población por edad y sexo'];
+function gRep() { return caseMC('rep', C.REP, C.REPN, REPD, '¿Qué representación es la más adecuada para mostrarlo?', { cards: 1, tag: '¿Qué representación?' }); }
+function repSVG(k) {
+  let s = `<svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Representación"><rect width="300" height="200" fill="#fffdf8"/>`;
+  const cells = []; for (let r = 0; r < 3; r++) for (let c = 0; c < 4; c++) cells.push([40 + c * 55, 25 + r * 50]);
+  if (k === 0) { const sh = ['#fbefd8', '#f3c98d', '#e09a45', '#b5651d']; cells.forEach(([x, y]) => s += `<rect x="${x}" y="${y}" width="55" height="50" fill="${pick(sh)}" stroke="#fff" stroke-width="2"/>`); s += `<g font-family="system-ui" font-size="9" fill="#1e2d43">${sh.map((c, i) => `<rect x="${262}" y="${30 + i * 18}" width="12" height="12" fill="${c}"/>`).join('')}</g>`; }
+  if (k === 1) { cells.forEach(([x, y]) => s += `<rect x="${x}" y="${y}" width="55" height="50" fill="#eef2e6" stroke="#c9bea2"/>`); cells.forEach(([x, y]) => s += `<circle cx="${x + 27}" cy="${y + 25}" r="${rint(3, 21)}" fill="rgba(196,85,61,.55)" stroke="#c4553d"/>`); }
+  if (k === 2) { cells.forEach(([x, y]) => s += `<rect x="${x}" y="${y}" width="55" height="50" fill="#eef2e6" stroke="#c9bea2"/>`); s += `<defs><marker id="ah${k}" markerWidth="8" markerHeight="8" refX="5" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8z" fill="#1c7f78"/></marker></defs>`; [[60, 160, 230, 50, 9], [70, 60, 230, 55, 4], [150, 170, 235, 70, 6]].forEach(([a, b, c, d, w]) => s += `<path d="M${a},${b} Q${(a + c) / 2},${Math.min(b, d) - 30} ${c},${d}" fill="none" stroke="#1c7f78" stroke-width="${w}" stroke-opacity=".75" marker-end="url(#ah${k})"/>`); }
+  return s + `</svg>`;
+}
+function gRepImg() { const k = rint(0, 2); return { t: 'mc', cards: 1, q: '¿Qué tipo de representación es esta?', img: repSVG(k), o: C.REPN, a: k, ns: 1, f: `${strip(C.REPN[k])}: ${REPD[k]}.`, tag: 'Observa la imagen' }; }
+
+/* ---- 5 · Movilidad ---- */
+const NOMBRES = ['Daniela', 'Iván', 'Ximena', 'Óscar', 'Regina', 'Emiliano', 'Fernanda', 'Uriel', 'Paola', 'Santiago', 'Abril', 'Mateo'];
+const MOVN = ['🚌 Movilidad cotidiana', '🏠 Migración interna', '🌎 Migración internacional'];
+const MOVD = ['se desplaza a diario y regresa a su casa; no cambia de residencia', 'cambia su residencia a otro lugar del mismo país', 'cambia su residencia a otro país, cruzando una frontera'];
+function movCase(k) {
+  const n = pick(NOMBRES);
+  if (k === 0) return `${n} vive en ${pick(['Nezahualcóyotl', 'Tlalnepantla', 'Chalco', 'Texcoco', 'Naucalpan', 'Tecámac'])} y cada día viaja en ${pick(['Mexibús y Metro', 'combi y tren suburbano', 'bicicleta y Metrobús'])} para ${pick(['estudiar en Ciudad Universitaria', 'trabajar en Santa Fe', 'trabajar en Polanco', 'estudiar en Tlatelolco'])}; por la noche regresa a su casa.`;
+  if (k === 1) return `${n} se mudó hace ${rint(2, 15)} años de ${pick(['Oaxaca', 'Guerrero', 'Chiapas', 'Michoacán', 'Zacatecas', 'Hidalgo'])} a ${pick(['Monterrey', 'Tijuana', 'Querétaro', 'Cancún', 'León', 'Guadalajara'])}, donde ahora vive y trabaja.`;
+  return `${n} salió de ${pick(['Puebla', 'Jalisco', 'Guanajuato', 'Michoacán', 'Zacatecas'])} y ahora vive en ${pick(['Houston', 'Chicago', 'Los Ángeles', 'Toronto', 'Madrid'])}, donde trabaja desde hace ${rint(2, 12)} años.`;
+}
+function gMov() { const k = rint(0, 2); return { t: 'mc', cards: 1, ctx: movCase(k), q: '¿Qué tipo de movilidad realiza?', o: MOVN, a: k, ns: 1, f: `${strip(MOVN[k])}: ${MOVD[k]}.`, fw: MOVN.map((m, i) => `${strip(m)}: ${MOVD[i]}.`), tag: 'Mini caso' }; }
+function gMovTwo() { const [k1, k2] = sample([0, 1, 2], 2); const c1 = movCase(k1), c2 = movCase(k2); const n1 = c1.split(' ')[0], n2 = c2.split(' ')[0]; return { t: 'two', ctx: c1 + ' ' + c2, q: 'Identifica el tipo de movilidad de cada persona.', s: [{ q: `¿Qué realiza ${n1}?`, o: MOVN, a: k1 }, { q: `¿Y ${n2 === n1 ? 'la segunda persona' : n2}?`, o: MOVN, a: k2 }], f: `${strip(MOVN[k1])}: ${MOVD[k1]}. ${strip(MOVN[k2])}: ${MOVD[k2]}.`, tag: 'Mini caso' }; }
+function gEmInm() {
+  const [origin, dest] = sample(['México', 'Guatemala', 'Honduras', 'Venezuela', 'Colombia', 'España', 'Canadá', 'Haití', 'Argentina'], 2);
+  const view = Math.random() < .5 ? origin : dest, a = view === origin ? 0 : 1;
+  return { t: 'mc', ctx: `Una familia sale de ${origin} para establecerse en ${dest}.`, q: `Desde el punto de vista de ${view}, ¿es emigración o inmigración?`, o: ['⬅️ Emigración', '➡️ Inmigración'], a, ns: 1, cards: 1, f: a === 0 ? `Para ${view} es emigración: las personas salen de su lugar de origen.` : `Para ${view} es inmigración: las personas llegan a establecerse ahí.`, tag: 'Punto de vista' };
+}
+
+/* ---- 6 · Causas y consecuencias ---- */
+const MOT = ['Reunirse con la familia', 'Buscar trabajo', 'Cambio u oferta de trabajo', 'Estudiar', 'Casarse o unirse', 'Inseguridad o violencia', 'Otro motivo'];
+function chartData() { let v = MOT.map(() => rint(4, 30)); const s = v.reduce((a, b) => a + b, 0); v = v.map(x => Math.max(2, Math.round(x / s * 100))); v[6] += 100 - v.reduce((a, b) => a + b, 0); if (v[6] < 1) { v[0] += v[6] - 1; v[6] = 1; } return v; }
+function chartSVG(v) {
+  const max = Math.max(...v); let s = `<svg viewBox="0 0 380 ${MOT.length * 30 + 30}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Gráfica de barras"><rect width="380" height="${MOT.length * 30 + 30}" fill="#fffdf8"/>`;
+  MOT.forEach((m, i) => { const y = 10 + i * 30, w = v[i] / max * 170; s += `<text x="168" y="${y + 15}" text-anchor="end" font-family="system-ui" font-size="11.5" fill="#1e2d43">${m}</text><rect x="174" y="${y + 3}" width="${w.toFixed(1)}" height="17" rx="3" fill="#1c7f78"/><text x="${(178 + w).toFixed(1)}" y="${y + 16}" font-family="system-ui" font-size="11.5" font-weight="700" fill="#1e2d43">${v[i]} %</text>`; });
+  return s + `<text x="190" y="${MOT.length * 30 + 22}" text-anchor="middle" font-family="system-ui" font-size="10" fill="#5f6c7c">Porcentaje de personas que cambiaron de estado (datos de práctica)</text></svg>`;
+}
+function gChart() {
+  let v = chartData(); const r = rint(0, 2);
+  while (r === 2 && v.slice(0, 6).filter(x => x === Math.max(...v.slice(0, 6))).length > 1) v = chartData();
+  const img = chartSVG(v), ctx = `Encuesta de práctica en el municipio de ${pick(MUNIS)}: ¿por qué te mudaste de otro estado?`;
+  if (r === 0) { const lab = v[1] + v[2], fam = v[0]; const o = [lab > fam ? 'Los motivos laborales superan a los familiares' : lab < fam ? 'Los motivos familiares superan a los laborales' : 'Los motivos laborales y familiares son iguales', lab > fam ? 'Los motivos familiares superan a los laborales' : 'Los motivos laborales superan a los familiares', 'Estudiar es el motivo principal', 'No se puede saber con la gráfica'];
+    return { t: 'mc', ctx, img, q: 'Si SUMAS los dos motivos laborales (buscar trabajo + cambio u oferta de trabajo), ¿qué conclusión es correcta?', o, a: 0, f: `Laborales: ${v[1]} % + ${v[2]} % = ${lab} %. Familiares: ${fam} %.`, tag: 'Interpreta la gráfica' }; }
+  if (r === 1) { const [i, j] = sample([0, 3, 4, 5], 2); return numEx(`${ctx} ¿Qué porcentaje en total se mudó por "${MOT[i]}" o por "${MOT[j]}"?`, v[i] + v[j], '%', [`${MOT[i]}: ${v[i]} %`, `${MOT[j]}: ${v[j]} %`, `${v[i]} + ${v[j]} = <b>${v[i] + v[j]} %</b>`], { img, tag: 'Interpreta la gráfica', tol: 0.01 }); }
+  const mx = v.slice(0, 6).indexOf(Math.max(...v.slice(0, 6)));
+  return { t: 'mc', ctx, img, q: '¿Cuál fue el motivo individual más frecuente?', o: [MOT[mx], ...sample(MOT.slice(0, 6).filter((_, k) => k !== mx), 3)], a: 0, f: `La barra más larga es "${MOT[mx]}" con ${v[mx]} %.`, tag: 'Interpreta la gráfica' };
+}
+function gPush() { return { t: 'sort', q: 'Clasifica cada factor de la migración.', c: ['⬅️ Expulsión (lugar de origen)', '➡️ Atracción (lugar de destino)'], i: C.PUSH, n: 6, f: 'Expulsión: lo que hace salir a las personas. Atracción: lo que las hace llegar a otro lugar.' }; }
+function gCons() { return { t: 'sort', q: 'Clasifica cada consecuencia de la migración.', c: ['👍 Beneficio', '⚠️ Costo o problema'], i: C.CONS, n: 6, f: 'La migración tiene beneficios (remesas, intercambio, trabajo) y costos humanos (separación, riesgos, discriminación).' }; }
+
+/* ---- 7 · Urbano y rural ---- */
+function gLoc() {
+  const k = rint(0, 2); const pop = k === 0 ? rint(150, 2400) : k === 1 ? pick([rint(2600, 9000), rint(15000, 90000), rint(200000, 3000000)]) : rint(105, 380) * 100000;
+  const place = k === 2 ? `Una zona metropolitana de ${pick(['Asia', 'África', 'América del Sur', 'Europa'])}` : `La localidad de ${pick(MUNIS)}`;
+  const o = ['🌾 Rural', '🏙️ Urbana', '🌆 Megaciudad'];
+  return { t: 'mc', cards: 1, ctx: `${place} tiene ${fmtN(pop)} habitantes.`, q: 'Según los criterios vistos en clase, ¿cómo se clasifica?', o, a: k, ns: 1, f: 'En México: menos de 2,500 habitantes = rural; 2,500 o más = urbana. Más de 10 millones = megaciudad.', tag: 'Clasifica' };
+}
+function gRU() { return { t: 'sort', q: '¿Es una característica del espacio rural o del urbano?', c: ['🌾 Rural', '🏙️ Urbano'], i: C.RU, n: 6, f: 'Rural: actividades primarias y baja densidad. Urbano: industria, comercio, servicios y alta densidad.' }; }
+
+/* ---- 8 · Problemas urbanos ---- */
+const URBD = ['viviendas sin permiso, en zonas de riesgo y sin servicios', 'suben las rentas y los vecinos de siempre tienen que irse', 'la ciudad se extiende sin planeación y todo depende del automóvil', 'smog por autos, fábricas e incendios', 'no alcanza el agua por sequías, sobreexplotación o fugas'];
+function gUrb() { return caseMC('urb', C.URB, C.URBN, URBD, '¿Qué problema de la urbanización describe el caso?', { tag: 'Mini caso' }); }
+function gUrbTwo() { const [s, a] = fresh('urb', C.URB); const o2 = shuffle(C.URBS.slice()); return { t: 'two', ctx: s, q: 'Identifica el problema y propone una solución.', s: [{ q: '¿Qué problema es?', o: C.URBN, a }, { q: '¿Qué medida ayudaría más?', o: o2, a: o2.indexOf(C.URBS[a]) }], f: `${strip(C.URBN[a])}: ${URBD[a]}. Medida: ${C.URBS[a].toLowerCase()}.`, tag: '¿Qué harías?' }; }
+
+/* ---- 9 · Procesos culturales ---- */
+function gCul() { return caseMC('cul', C.CUL, C.CULN, C.CULD, '¿Qué proceso cultural muestra el caso?', { cards: 1, tag: 'Mini caso' }); }
+function gCulSort() { return { t: 'sort', q: 'Clasifica cada caso.', c: ['🔁 Homogeneización', '🧩 Hibridación', '🛡️ Resistencia'], i: C.CUL.filter(c => c[1] <= 2), n: 4, f: 'Homogeneización: todo se parece. Hibridación: mezcla de lo global y lo local. Resistencia: defensa de lo propio.' }; }
+
+/* ---- 10 · Patrimonio ---- */
+const PATN = ['🏛️ Material', '🎶 Inmaterial', '🌿 Natural'];
+const PATD = ['edificios, monumentos y sitios arqueológicos', 'tradiciones, fiestas, saberes y técnicas que se heredan', 'paisajes y ecosistemas de gran valor'];
+function gPat() { return caseMC('pat', C.PAT, PATN, PATD, '¿Qué tipo de patrimonio es?', { cards: 1 }); }
+function gPatSort() { return { t: 'sort', q: 'Clasifica cada elemento del patrimonio.', c: PATN, i: C.PAT, n: 6, f: 'Material = construcciones · Inmaterial = saberes y tradiciones · Natural = ecosistemas.' }; }
+
+/* ---- 11 · Fuentes ---- */
+function gFue() { return caseMC('fue', C.FUE, C.FUEN, C.FUED, '¿Qué fuente consultarías?', { tag: '¿Qué fuente?' }); }
+
+/* ---- 12 · Rocas ---- */
+function gRoc() { const [n, a, w] = fresh('roc', C.ROC); return { t: 'mc', cards: 1, ctx: `${n}: se formó a partir de ${w}.`, q: '¿Qué tipo de roca es?', o: C.ROCN, a, ns: 1, f: `${n} → roca ${strip(C.ROCN[a]).toLowerCase()}: ${C.ROCD[a]}.`, fw: C.ROCN.map((r, i) => `Roca ${strip(r).toLowerCase()}: ${C.ROCD[i]}.`) }; }
+function gRocTwo() { const [n, a, w] = fresh('roc', C.ROC); const o2 = shuffle(C.ROCD.slice()); return { t: 'two', ctx: `Encontraste una muestra de ${n.toLowerCase()} en una práctica de campo.`, q: 'Clasifícala y explica su origen.', s: [{ q: '¿Qué tipo de roca es?', o: C.ROCN, a }, { q: '¿Cómo se forman las rocas de ese tipo?', o: o2, a: o2.indexOf(C.ROCD[a]) }], f: `${n}: ${w}.`, tag: 'Analiza y justifica' }; }
+function gRocSort() { return { t: 'sort', q: 'Coloca cada roca en su tipo.', c: C.ROCN, i: C.ROC.map(r => [r[0], r[1]]), n: 6, f: 'Ígneas: granito, basalto, obsidiana, pómez, tezontle · Sedimentarias: arenisca, caliza, conglomerado, lutita · Metamórficas: mármol, pizarra, gneis, cuarcita.' }; }
+function cycleSVG() {
+  return `<svg viewBox="0 0 340 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ciclo de las rocas"><rect width="340" height="250" fill="#f7f3e8"/><defs><marker id="cyA" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8z" fill="#557089"/></marker></defs>
+  <g font-family="system-ui" font-size="12" font-weight="700" text-anchor="middle" fill="#1e2d43">
+  <rect x="115" y="10" width="110" height="36" rx="10" fill="#fbe6e0" stroke="#c4553d"/><text x="170" y="33">🌋 Ígnea</text>
+  <rect x="12" y="180" width="130" height="36" rx="10" fill="#fbefd8" stroke="#c98624"/><text x="77" y="203">🏜️ Sedimentaria</text>
+  <rect x="200" y="180" width="128" height="36" rx="10" fill="#e2f2ef" stroke="#1c7f78"/><text x="264" y="203">🔥 Metamórfica</text>
+  <rect x="130" y="110" width="80" height="30" rx="15" fill="#fff" stroke="#c4553d"/><text x="170" y="130">Magma</text></g>
+  <g stroke="#557089" stroke-width="2" fill="none" marker-end="url(#cyA)"><path d="M135,46 L80,176"/><path d="M142,214 L196,214"/><path d="M250,178 L205,142"/><path d="M170,108 L170,50"/></g>
+  <g font-family="system-ui" font-size="10" fill="#5f6c7c" text-anchor="middle"><text x="70" y="110">meteorización,</text><text x="70" y="122">transporte, depósito,</text><text x="70" y="134">compactación</text><text x="170" y="236">calor y presión</text><text x="268" y="150">fusión</text><text x="200" y="82">enfriamiento</text></g></svg>`;
+}
+
+const MAKERS = {
+  1: [[3, gPyrId], [3, gPyrRule], [2, gPyrRuleOne], [3, fromBank(1)]],
+  2: [[3, gCrec], [4, gPol], [3, fromBank(2)]],
+  3: [[3, gDens], [2, gDensClass], [2, gFac], [3, gReg], [2, fromBank(3)]],
+  4: [[5, gRep], [2, gRepImg], [2, fromBank(4)]],
+  5: [[4, gMov], [2, gMovTwo], [2, gEmInm], [3, fromBank(5)]],
+  6: [[4, gChart], [2, gPush], [2, gCons], [2, fromBank(6)]],
+  7: [[3, gLoc], [2, gRU], [3, fromBank(7)]],
+  8: [[5, gUrb], [3, gUrbTwo], [2, fromBank(8)]],
+  9: [[6, gCul], [1, gCulSort], [2, fromBank(9)]],
+  10: [[4, gPat], [1, gPatSort], [3, fromBank(10)]],
+  11: [[5, gFue], [3, fromBank(11)]],
+  12: [[3, gRoc], [3, gRocTwo], [2, gRocSort], [3, fromBank(12)]]
+};
+
+/* ============ ideas clave ============ */
+const IDEA = {
+  1: `<div class="figs"><div>${pyrSVG(0)}<b>Progresiva</b><br>joven</div><div>${pyrSVG(1)}<b>Estancada</b><br>en transición</div><div>${pyrSVG(2)}<b>Regresiva</b><br>envejecida</div></div><div class="formula" style="font-size:1rem">${ruleTxt}</div>`,
+  2: `<div class="kgrid"><div class="k"><b>Natalidad</b>nacimientos por cada mil habitantes (‰)</div><div class="k"><b>Mortalidad</b>defunciones por cada mil habitantes (‰)</div><div class="k"><b>Crecimiento natural</b>natalidad − mortalidad</div><div class="k"><b>Reemplazo</b>≈ 2.1 hijos por mujer</div></div><div class="kgrid mt">${C.POLN.map(p => `<div class="k">${p}</div>`).join('')}</div>`,
+  3: `<div class="formula">Densidad = habitantes ÷ superficie (km²) → hab/km²</div><div class="kgrid"><div class="k"><b>🔴 Concentración</b>más de 120 hab/km²: agua, suelos fértiles, empleo, comunicaciones</div><div class="k"><b>🔵 Dispersión</b>menos de 30 hab/km²: aridez, relieve abrupto, frío extremo, aislamiento</div></div>`,
+  4: `<div class="figs"><div>${repSVG(0)}<b>Coropletas</b><br>valores relativos</div><div>${repSVG(1)}<b>Símbolos proporcionales</b><br>cantidades absolutas</div><div>${repSVG(2)}<b>Flujos</b><br>movimientos</div></div>`,
+  5: `<div class="kgrid">${MOVN.map((m, i) => `<div class="k"><b>${m}</b>${MOVD[i]}</div>`).join('')}<div class="k"><b>⬅️ Emigración / ➡️ Inmigración</b>salir del lugar de origen / llegar a otro lugar</div></div>`,
+  6: `<div class="kgrid"><div class="k"><b>⬅️ Expulsión</b>lo que hace salir: desempleo, violencia, sequías</div><div class="k"><b>➡️ Atracción</b>lo que hace llegar: empleo, familia, seguridad</div><div class="k"><b>💸 Remesas</b>dinero que los migrantes envían a sus familias</div><div class="k"><b>⚖️ Argumento crítico</b>reconoce beneficios y costos, con datos</div></div>`,
+  7: `<div class="kgrid"><div class="k"><b>🌾 Rural</b>menos de 2,500 habitantes (México); actividades primarias</div><div class="k"><b>🏙️ Urbana</b>2,500 habitantes o más; industria, comercio y servicios</div><div class="k"><b>🌆 Megaciudad</b>más de 10 millones de habitantes</div></div>`,
+  8: `<div class="kgrid">${C.URBN.map((n, i) => `<div class="k"><b>${n}</b>${URBD[i]}</div>`).join('')}</div>`,
+  9: `<div class="kgrid">${C.CULN.map((n, i) => `<div class="k"><b>${n}</b>${C.CULD[i]}</div>`).join('')}</div>`,
+  10: `<div class="kgrid">${PATN.map((n, i) => `<div class="k"><b>${n}</b>${PATD[i]}</div>`).join('')}<div class="k"><b>📜 Artículo 2</b>base de los derechos de los pueblos indígenas y afromexicanos</div></div>`,
+  11: `<div class="kgrid">${C.FUEN.map((n, i) => `<div class="k"><b>${n}</b>${C.FUED[i]}</div>`).join('')}</div>`,
+  12: `<div class="figs"><div>${cycleSVG()}</div><div class="kgrid" style="text-align:left">${C.ROCN.map((n, i) => `<div class="k"><b>${n}</b>${C.ROCD[i]}</div>`).join('')}</div></div>`
+};
+
+/* ============ renderizado de ejercicios ============ */
+const TAGS = { mc: 'Opción múltiple', tf: 'Verdadero o falso', sort: 'Arrastra y clasifica', match: 'Relaciona', order: 'Ordena', fill: 'Completa', two: 'Analiza y justifica', checks: 'Observa y decide', num: 'Problema', pick: 'Toca en la imagen', compass: 'Rosa de los vientos' };
+const R = {};
+function lockOpts(w) { w.querySelectorAll('button').forEach(x => x.disabled = true); }
+R.mc = (ex, body, done) => {
+  const idx = ex.ns ? ex.o.map((_, i) => i) : shuffle(ex.o.map((_, i) => i));
+  const w = h('div', { class: 'opts' + (ex.cards ? ' cards' : '') }); let locked = false;
+  idx.forEach((i, n) => {
+    const b = h('button', { class: 'opt', type: 'button' }, h('span', { class: 'ol' }, 'ABCDEF'[n]), h('span', { class: 'ot' }, ex.o[i]));
+    b.onclick = () => { if (locked) return; locked = true; const ok = i === ex.a; b.classList.add(ok ? 'ok' : 'bad'); w.children[idx.indexOf(ex.a)].classList.add('ok'); lockOpts(w); done(ok, !ok && ex.fw ? esc(ex.fw[i]) : ''); };
+    w.append(b);
+  });
+  body.append(w);
+};
+R.tf = (ex, body, done) => {
+  const w = h('div', { class: 'tfrow' }); let locked = false;
+  [['✔ Verdadero', 1], ['✘ Falso', 0]].forEach(([t, v]) => {
+    const b = h('button', { class: 'opt', type: 'button' }, t);
+    b.onclick = () => { if (locked) return; locked = true; const ok = v === ex.a; b.classList.add(ok ? 'ok' : 'bad'); if (!ok) w.children[v ? 1 : 0].classList.add('ok'); lockOpts(w); done(ok, ok ? '' : `La afirmación es <b>${ex.a ? 'verdadera' : 'falsa'}</b>.`); };
+    w.append(b);
+  });
+  body.append(w);
+};
+R.sort = (ex, body, done) => {
+  const items = stratified(ex.i, ex.c.length, ex.n || 6);
+  const place = items.map(() => -1); let sel = -1, locked = false;
+  const pool = h('div', { class: 'pool' });
+  const bins = h('div', { class: 'bins c' + ex.c.length });
+  const btn = h('button', { class: 'btn primary', type: 'button', disabled: true }, 'Comprobar');
+  const zones = ex.c.map((c, ci) => {
+    const zone = h('div', { class: 'zone' });
+    const bin = h('div', { class: 'bin' }, h('div', { class: 'bin-h' }, c), zone);
+    bin.addEventListener('click', () => { if (locked || sel < 0) return; place[sel] = ci; sel = -1; draw(); });
+    bin.addEventListener('dragover', e => { e.preventDefault(); bin.classList.add('over'); });
+    bin.addEventListener('dragleave', () => bin.classList.remove('over'));
+    bin.addEventListener('drop', e => { e.preventDefault(); bin.classList.remove('over'); const k = +e.dataTransfer.getData('text/plain'); if (!locked && k >= 0) { place[k] = ci; sel = -1; draw(); } });
+    bins.append(bin); return zone;
+  });
+  pool.addEventListener('click', e => { if (e.target === pool && sel >= 0 && !locked) { place[sel] = -1; sel = -1; draw(); } });
+  pool.addEventListener('dragover', e => e.preventDefault());
+  pool.addEventListener('drop', e => { e.preventDefault(); const k = +e.dataTransfer.getData('text/plain'); if (!locked && k >= 0) { place[k] = -1; sel = -1; draw(); } });
+  const chips = items.map((it, k) => {
+    const c = h('button', { class: 'chip', type: 'button', draggable: 'true' }, it[0]);
+    c.addEventListener('click', e => { e.stopPropagation(); if (locked) return; sel = sel === k ? -1 : k; draw(); });
+    c.addEventListener('dragstart', e => { e.dataTransfer.setData('text/plain', String(k)); sel = k; });
+    return c;
+  });
+  function draw() { chips.forEach((c, k) => { c.classList.toggle('sel', sel === k); (place[k] < 0 ? pool : zones[place[k]]).append(c); }); bins.classList.toggle('armed', sel >= 0); btn.disabled = place.some(p => p < 0); }
+  btn.onclick = () => {
+    locked = true; btn.remove(); bins.classList.remove('armed'); let bad = 0;
+    chips.forEach((c, k) => { const ok = place[k] === items[k][1]; c.classList.remove('sel'); c.classList.add(ok ? 'ok' : 'bad'); c.disabled = true; c.draggable = false; if (!ok) { bad++; c.append(h('small', {}, '→ ' + strip(ex.c[items[k][1]]))); } });
+    done(bad <= (items.length >= 5 ? 1 : 0), `Acertaste <b>${items.length - bad} de ${items.length}</b>.`);
+  };
+  body.append(h('div', { class: 'hint' }, '👆 Toca una tarjeta y después la categoría (en computadora también puedes arrastrarla).'), pool, bins, h('div', { class: 'actions' }, btn));
+  draw();
+};
+R.match = (ex, body, done) => {
+  const rows = shuffle(ex.p); const rights = shuffle([...new Set(ex.p.map(p => p[1]))]);
+  const sels = []; const tbl = h('div', { class: 'match' });
+  const btn = h('button', { class: 'btn primary', type: 'button', disabled: true }, 'Comprobar');
+  rows.forEach(([l]) => {
+    const s = h('select', { 'aria-label': 'Elige la opción para ' + l }, h('option', { value: '' }, 'Elige…'), ...rights.map(x => h('option', { value: x }, x)));
+    s.onchange = () => { btn.disabled = sels.some(z => !z.value); };
+    sels.push(s); tbl.append(h('div', { class: 'mrow' }, h('div', { class: 'ml' }, l), s));
+  });
+  btn.onclick = () => {
+    btn.remove(); let bad = 0;
+    rows.forEach(([l, r], i) => { const ok = sels[i].value === r; sels[i].disabled = true; sels[i].parentNode.classList.add(ok ? 'ok' : 'bad'); if (!ok) { bad++; sels[i].parentNode.append(h('div', { class: 'mfix' }, '✔ ' + r)); } });
+    done(bad <= (rows.length >= 5 ? 1 : 0), `Acertaste <b>${rows.length - bad} de ${rows.length}</b>.`);
+  };
+  body.append(tbl, h('div', { class: 'actions' }, btn));
+};
+R.order = (ex, body, done) => {
+  let cur; do { cur = shuffle(ex.i); } while (cur.every((x, i) => x === ex.i[i]));
+  const list = h('div', { class: 'olist' }); let locked = false;
+  function draw() {
+    list.innerHTML = '';
+    cur.forEach((x, i) => {
+      const up = h('button', { type: 'button', class: 'ob', 'aria-label': 'Subir', disabled: locked || i === 0 }, '▲');
+      const dn = h('button', { type: 'button', class: 'ob', 'aria-label': 'Bajar', disabled: locked || i === cur.length - 1 }, '▼');
+      up.onclick = () => { [cur[i - 1], cur[i]] = [cur[i], cur[i - 1]]; draw(); };
+      dn.onclick = () => { [cur[i + 1], cur[i]] = [cur[i], cur[i + 1]]; draw(); };
+      const it = h('div', { class: 'oitem' + (locked ? (x === ex.i[i] ? ' ok' : ' bad') : '') }, h('span', { class: 'on' }, i + 1), h('span', { class: 'ot' }, x), up, dn);
+      list.append(it);
+    });
+  }
+  const btn = h('button', { class: 'btn primary', type: 'button' }, 'Comprobar');
+  btn.onclick = () => { locked = true; btn.remove(); draw(); const ok = cur.every((x, i) => x === ex.i[i]); done(ok, ok ? '' : 'Orden correcto: ' + ex.i.map((x, i) => `${i + 1}) ${esc(x)}`).join(' · ')); };
+  body.append(h('div', { class: 'hint' }, 'Usa ▲ ▼ para mover cada tarjeta.'), list, h('div', { class: 'actions' }, btn)); draw();
+};
+R.fill = (ex, body, done) => {
+  const parts = ex.q.split('___'); const blank = h('span', { class: 'blank' }, '______');
+  const sent = h('p', { class: 'sent' }, parts[0], blank, parts[1] || '');
+  let chosen = null, locked = false;
+  const btn = h('button', { class: 'btn primary', type: 'button', disabled: true }, 'Comprobar');
+  const bank = h('div', { class: 'wbank' });
+  shuffle([ex.a, ...ex.o]).forEach(o => {
+    const c = h('button', { class: 'chip', type: 'button' }, o);
+    c.onclick = () => { if (locked) return; chosen = o; blank.textContent = o; blank.classList.add('filled'); bank.querySelectorAll('.chip').forEach(x => x.classList.toggle('sel', x === c)); btn.disabled = false; };
+    bank.append(c);
+  });
+  btn.onclick = () => { locked = true; btn.remove(); lockOpts(bank); const ok = chosen === ex.a; blank.classList.add(ok ? 'ok' : 'bad'); done(ok, ok ? '' : `La palabra correcta es <b>${esc(ex.a)}</b>.`); };
+  body.append(sent, bank, h('div', { class: 'actions' }, btn));
+};
+R.two = (ex, body, done) => {
+  const res = [null, null];
+  const step = si => {
+    const s = ex.s[si]; const idx = ex.sh ? shuffle(s.o.map((_, i) => i)) : s.o.map((_, i) => i);
+    const box = h('div', { class: 'step' }, h('div', { class: 'step-q' }, `${si + 1}. ${s.q}`));
+    const w = h('div', { class: 'opts' });
+    idx.forEach((i, n) => {
+      const b = h('button', { class: 'opt', type: 'button' }, h('span', { class: 'ol' }, 'ABCDEF'[n]), h('span', { class: 'ot' }, s.o[i]));
+      b.onclick = () => {
+        if (res[si] !== null) return; res[si] = i === s.a;
+        b.classList.add(res[si] ? 'ok' : 'bad'); w.children[idx.indexOf(s.a)].classList.add('ok'); lockOpts(w);
+        if (si === 0) step(1);
+        else done(res[0] && res[1], res[0] && !res[1] ? 'Acertaste la primera parte; revisa la justificación.' : (!res[0] && res[1] ? 'Tu justificación es buena; revisa la primera parte.' : ''));
+      };
+      w.append(b);
+    });
+    box.append(w); body.append(box);
+    if (si === 1) setTimeout(() => box.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+  };
+  step(0);
+};
+R.checks = (ex, body, done) => {
+  const ans = ex.items.map(() => null); const rows = [];
+  const btn = h('button', { class: 'btn primary', type: 'button', disabled: true }, 'Comprobar');
+  ex.items.forEach(([q], i) => {
+    const y = h('button', { type: 'button' }, 'Sí'), n = h('button', { type: 'button' }, 'No');
+    const set = v => { ans[i] = v; y.classList.toggle('on', v === 1); n.classList.toggle('on', v === 0); btn.disabled = ans.some(a => a === null); };
+    y.onclick = () => set(1); n.onclick = () => set(0);
+    const r = h('div', { class: 'ck' }, h('div', {}, q), h('div', { class: 'yn' }, y, n)); rows.push(r); body.append(r);
+  });
+  btn.onclick = () => { btn.remove(); let bad = 0; rows.forEach((r, i) => { const ok = ans[i] === ex.items[i][1]; r.classList.add(ok ? 'ok' : 'bad'); r.querySelectorAll('button').forEach(b => b.disabled = true); if (!ok) bad++; }); done(bad === 0, `Acertaste <b>${ex.items.length - bad} de ${ex.items.length}</b>.`); };
+  body.append(h('div', { class: 'actions' }, btn));
+};
+R.num = (ex, body, done) => {
+  const inp = h('input', { type: 'text', inputmode: ex.int ? 'numeric' : 'decimal', class: 'num', placeholder: ex.int ? 'Ej. 50000' : 'Ej. 12.5', autocomplete: 'off', 'aria-label': 'Tu respuesta' });
+  const btn = h('button', { class: 'btn primary', type: 'button', disabled: true }, 'Comprobar');
+  inp.addEventListener('input', () => { btn.disabled = !inp.value.trim(); });
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter' && !btn.disabled) btn.click(); });
+  btn.onclick = () => {
+    const raw = inp.value.trim();
+    const v = ex.int ? parseFloat(raw.replace(/[^\d-]/g, '')) : parseFloat(/^-?\d{1,3}(,\d{3})+(\.\d+)?$/.test(raw.replace(/\s/g, '')) ? raw.replace(/[\s,]/g, '') : raw.replace(/\s/g, '').replace(',', '.'));
+    if (isNaN(v)) { toast('Escribe un número para comprobar.'); return; }
+    btn.remove(); inp.disabled = true;
+    const ok = Math.abs(v - ex.a) <= (ex.tol != null ? ex.tol : Math.max(1e-6, Math.abs(ex.a) * 0.002));
+    inp.classList.add(ok ? 'ok' : 'bad');
+    done(ok, ok ? '' : `La respuesta es <b>${ex.pre ? '1:' : ''}${fmtN(ex.a)} ${ex.unit || ''}</b>.`);
+  };
+  body.append(h('div', { class: 'numrow' }, ex.pre ? h('span', { class: 'unit' }, ex.pre) : null, inp, ex.unit ? h('span', { class: 'unit' }, ex.unit) : null), h('div', { class: 'hint', style: 'margin-top:8px' }, ex.int ? 'Escribe solo números.' : 'Puedes usar punto o coma decimal.'), h('div', { class: 'actions' }, btn));
+  setTimeout(() => { if (matchMedia('(pointer:fine)').matches) inp.focus(); }, 60);
+};
+R.pick = (ex, body, done) => {
+  const w = h('div', { class: 'fig-wrap pick', html: ex.img }); let locked = false;
+  w.addEventListener('click', e => {
+    if (locked) return; const t = e.target.closest('[data-k]'); if (!t) return; locked = true;
+    const k = t.getAttribute('data-k'); const ok = k === ex.a;
+    if (!ok) t.classList.add('hit-bad');
+    w.querySelectorAll('[data-k]').forEach(x => { if (x.getAttribute('data-k') === ex.a) x.classList.add('hit-show'); });
+    const svg = w.querySelector('svg'); if (svg) svg.classList.add('revealed');
+    done(ok, !ok && ex.names ? `Tocaste: ${esc(ex.names[k] || k)}.` : '');
+  });
+  body.append(h('div', { class: 'hint' }, '👆 Toca directamente sobre la imagen.'), w);
+};
+R.compass = (ex, body, done) => {
+  body.append(h('div', { class: 'fig-wrap', html: ex.img }));
+  const g = h('div', { class: 'rosa' }); let locked = false;
+  ['NO', 'N', 'NE', 'O', null, 'E', 'SO', 'S', 'SE'].forEach(k => {
+    if (!k) { g.append(h('div', { class: 'mid' }, '🧭')); return; }
+    const b = h('button', { type: 'button', title: DIRN[k] }, k);
+    b.onclick = () => { if (locked) return; locked = true; const ok = k === ex.a; b.classList.add(ok ? 'ok' : 'bad'); g.querySelectorAll('button').forEach(x => { if (x.textContent === ex.a) x.classList.add('ok'); x.disabled = true; }); done(ok, ok ? '' : `Elegiste ${DIRN[k].toLowerCase()}; la respuesta es <b>${DIRN[ex.a].toLowerCase()} (${ex.a})</b>.`); };
+    g.append(b);
+  });
+  body.append(g);
+};
+const OWNIMG = { pick: 1, compass: 1 };
+
+function exCard(ex, onResult) {
+  const card = h('div', { class: 'ex' });
+  card.append(h('div', { class: 'ex-tag' }, ex.tag || TAGS[ex.t]));
+  if (ex.ctx) card.append(h('div', { class: 'ctx' }, ex.ctx));
+  if (ex.t === 'fill') card.append(h('div', { class: 'ex-q' }, 'Completa el enunciado con la palabra correcta.'));
+  if (ex.img && !OWNIMG[ex.t]) card.append(h('div', { class: 'fig-wrap', html: ex.img }));
+  if (ex.t !== 'fill') card.append(h('div', { class: 'ex-q' }, ex.q));
+  const body = h('div', { class: 'ex-body' }); card.append(body);
+  let answered = false;
+  R[ex.t](ex, body, (ok, extra) => {
+    if (answered) return; answered = true;
+    const fb = h('div', { class: 'fb ' + (ok ? 'ok' : 'bad') });
+    fb.innerHTML = `<div class="fb-h">${ok ? '✅ ¡Correcto!' : '🔎 Casi. Revisa esta idea.'}</div><div class="fb-b">${extra ? extra + '<br>' : ''}${ok ? '' : '<b>Recuerda:</b> '}${esc(ex.f || '')}</div>${ex.steps ? `<div class="steps"><b>Paso a paso</b>${ex.steps}</div>` : ''}`;
+    card.append(fb);
+    setTimeout(() => fb.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 60);
+    onResult(ok, ex, card);
+  });
+  return card;
+}
+
+/* ============ interfaz general ============ */
+const main = $('#main');
+function toast(msg, ms) { document.querySelectorAll('.toast').forEach(t => t.remove()); const t = h('div', { class: 'toast', role: 'status' }, msg); document.body.append(t); setTimeout(() => t.remove(), ms || 2600); }
+function modal(content) { const m = h('div', { class: 'modal', role: 'dialog', 'aria-modal': 'true' }, content); m.addEventListener('click', e => { if (e.target === m && !m.dataset.locked) m.remove(); }); document.body.append(m); return m; }
+function confetti() {
+  const c = h('div', { class: 'confetti' }); const cols = ['#1c7f78', '#c98624', '#c4553d', '#2f8a49', '#557089', '#d8a11a'];
+  for (let i = 0; i < 70; i++) { const d = h('i'); d.style.left = Math.random() * 100 + '%'; d.style.background = pick(cols); d.style.animationDuration = (1.8 + Math.random() * 1.8) + 's'; d.style.animationDelay = (Math.random() * .6) + 's'; c.append(d); }
+  document.body.append(c); setTimeout(() => c.remove(), 4200);
+}
+function celebrate(b) {
+  confetti();
+  const m = modal(h('div', { class: 'card', style: 'text-align:center' },
+    h('div', { style: 'font-size:3rem' }, '🎉'), h('h3', {}, '¡Bloque completado!'),
+    h('p', { class: 'muted' }, `${BL[b - 1].e} ${BL[b - 1].n}: ya dominas este tema.`),
+    h('div', { class: 'row c mt' },
+      h('button', { class: 'btn', type: 'button', onclick: () => m.remove() }, 'Seguir practicando'),
+      h('button', { class: 'btn primary', type: 'button', onclick: () => { m.remove(); go('menu'); } }, '🗺️ Mapa de progreso'))));
+}
+function updTop() {
+  const on = !!S.start;
+  ['#topPct', '#topMap', '#topSave'].forEach(s => $(s).classList.toggle('hidden', !on));
+  $('#topPct').textContent = avance() + '%';
+}
+$('#brand').onclick = () => go('home');
+$('#topMap').onclick = () => go('menu');
+$('#topSave').onclick = doSave;
+function doSave() { const ok = save(); toast(ok ? `💾 Progreso guardado en este dispositivo (${new Date().toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' })}).` : '⚠️ Este navegador no permite guardar. Tu avance se perderá al cerrar.'); }
+function doContinue() { if (!S.start) return askName(); if (S.lastBlock) go('block', S.lastBlock); else { const nb = [...Array(FIN).keys()].map(i => i + 1).find(b => status(b) !== 'done') || 1; go('block', nb); } }
+function doReset() {
+  const m = modal(h('div', { class: 'card' },
+    h('h3', {}, '🗑️ ¿Reiniciar la guía?'),
+    h('p', {}, 'Se borrará todo tu progreso guardado en este dispositivo: nombre, aciertos, errores, tiempo y evidencia. Esta acción no se puede deshacer.'),
+    h('div', { class: 'row mt' },
+      h('button', { class: 'btn', type: 'button', onclick: () => m.remove() }, 'Cancelar'),
+      h('button', { class: 'btn danger', type: 'button', onclick: () => { try { localStorage.removeItem(KEY); } catch (e) { } S = blank(); m.remove(); updTop(); go('home'); toast('La guía se reinició.'); } }, 'Sí, borrar todo'))));
+}
+function askName(after) {
+  const n = h('input', { class: 'txt', type: 'text', maxlength: '60', placeholder: 'Nombre y apellidos', value: S.name || '', autocomplete: 'name' });
+  const g = h('input', { class: 'txt', type: 'text', maxlength: '20', placeholder: 'Ej. 4010', value: S.group || '' });
+  const err = h('div', { class: 'hint', style: 'color:var(--coral)' });
+  const okF = () => {
+    const v = n.value.trim(); if (v.length < 3) { err.textContent = 'Escribe tu nombre para que aparezca en tu evidencia.'; n.focus(); return; }
+    S.name = v; S.group = g.value.trim();
+    if (!S.start) { S.start = new Date().toISOString(); S.sessions = 1; }
+    save(); m.remove(); updTop(); if (after) after(); else go('menu');
+  };
+  n.addEventListener('keydown', e => { if (e.key === 'Enter') okF(); });
+  const m = modal(h('div', { class: 'card' },
+    h('h3', {}, '👋 Antes de empezar'),
+    h('p', { class: 'muted' }, 'Tu nombre aparecerá en tu evidencia de estudio. Todo se guarda solo en este dispositivo.'),
+    h('label', {}, 'Nombre completo'), n, h('label', {}, 'Grupo (opcional)'), g, err,
+    h('div', { class: 'row mt' }, h('button', { class: 'btn', type: 'button', onclick: () => m.remove() }, 'Cancelar'), h('button', { class: 'btn primary', type: 'button', onclick: okF }, 'Guardar y continuar'))));
+  setTimeout(() => n.focus(), 50);
+}
+
+let VIEW = { name: 'home' };
+function go(name, arg) {
+  VIEW = { name, arg };
+  main.innerHTML = '';
+  ({ home: vHome, menu: vMenu, block: vBlock, weak: vWeak, reto: vReto, evidence: vEvidence })[name](arg);
+  updTop(); window.scrollTo(0, 0);
+}
+
+/* ---------- Inicio ---------- */
+function logoSVG() {
+  return `<svg class="globe-logo" viewBox="0 0 150 150" aria-hidden="true"><circle cx="75" cy="75" r="70" fill="#fffdf8" stroke="#1e2d43" stroke-width="2"/><circle cx="75" cy="75" r="58" fill="#d7ebf2" stroke="#557089"/><g class="spin" fill="none" stroke="#557089" stroke-width="1"><ellipse cx="75" cy="75" rx="22" ry="58"/><ellipse cx="75" cy="75" rx="44" ry="58"/><path d="M17,75 h116 M23,50 h104 M23,100 h104"/></g><path d="M52,52 q12,-10 24,-2 q8,8 -2,16 q-10,4 -14,16 q-8,8 -12,-4 q-4,-12 4,-26z M88,86 q12,-4 16,6 q2,14 -8,18 q-10,2 -10,-10z" fill="#d6e6c0" stroke="#8fb37a"/><g class="needle"><polygon points="75,22 81,75 75,128 69,75" fill="#1e2d43" opacity=".85"/><polygon points="75,22 81,75 69,75" fill="#c4553d"/><circle cx="75" cy="75" r="5" fill="#c98624"/></g><text x="75" y="14" text-anchor="middle" font-size="10" font-weight="800" fill="#1e2d43" font-family="system-ui">N</text></svg>`;
+}
+function vHome() {
+  const hero = h('section', { class: 'hero' },
+    h('div', { html: logoSVG() }),
+    h('h1', {}, '🌎 GUÍA DE ESTUDIO'),
+    h('div', { class: 'sub' }, 'Prepárate para tu segundo parcial de Geografía'),
+    h('p', { class: 'lead' }, 'Esta guía no es un examen. Es un espacio para practicar, equivocarte, aprender y volver a intentarlo.'),
+    h('button', { class: 'btn primary big', type: 'button', onclick: () => S.start ? go('menu') : askName() }, 'COMENZAR'));
+  main.append(hero);
+  if (!STORAGE_OK) main.append(h('div', { class: 'warn' }, '⚠️ Este navegador no permite guardar datos (quizá estás en modo privado). Puedes practicar, pero tu avance se perderá al cerrar. Abre el archivo en una ventana normal de Chrome, Edge, Firefox o Safari.'));
+  if (S.start) {
+    main.append(h('div', { class: 'card welcome' },
+      h('div', { style: 'font-weight:750;font-size:1.1rem' }, `¡Hola de nuevo, ${S.name}!`),
+      h('div', { class: 'muted' }, `Avance: ${avance()}% · Última actividad: ${fmtDT(S.last)}`),
+      h('div', { class: 'row' },
+        h('button', { class: 'btn primary', type: 'button', onclick: doContinue }, '↩️ CONTINUAR MI GUÍA'),
+        h('button', { class: 'btn danger', type: 'button', onclick: doReset }, '🗑️ REINICIAR GUÍA'))));
+  }
+  main.append(h('div', { class: 'foot' }, 'Geografía · Preparatoria UNAM · Docente: Viridiana Corro Espino', h('br'), 'Funciona sin internet. Tu progreso se guarda solo en este dispositivo.'));
+}
+
+/* ---------- Mapa de progreso ---------- */
+function ringSVG(p) {
+  const r = 48, c = 2 * Math.PI * r;
+  return `<svg class="ring" viewBox="0 0 118 118" role="img" aria-label="Avance ${p}%"><circle cx="59" cy="59" r="${r}" fill="none" stroke="#ece6d6" stroke-width="12"/><circle cx="59" cy="59" r="${r}" fill="none" stroke="#1c7f78" stroke-width="12" stroke-linecap="round" stroke-dasharray="${(c * p / 100).toFixed(1)} ${c.toFixed(1)}" transform="rotate(-90 59 59)"/><text x="59" y="64" text-anchor="middle" font-family="Georgia,serif" font-size="24" font-weight="700" fill="#1e2d43">${p}%</text></svg>`;
+}
+function weakUL(ws, src) {
+  return h('ul', { class: 'weak-list' }, ws.map(b => h('li', {}, h('span', {}, `${BL[b - 1].e} ${BL[b - 1].n}`), h('b', {}, `${src[b]} ${src[b] === 1 ? 'error' : 'errores'}`))));
+}
+function vMenu() {
+  const T = totals(), p = avance();
+  main.append(h('div', { class: 'bhead' }, h('h2', {}, '🗺️ Mapa de progreso'), h('div', { class: 'muted' }, S.name ? `${S.name}${S.group ? ' · Grupo ' + S.group : ''}` : '')));
+  main.append(h('div', { class: 'card dash' }, h('div', { html: ringSVG(p) }),
+    h('div', {}, h('div', { style: 'font-weight:700;margin-bottom:8px' }, p >= 85 ? 'Te falta poco. ¡Excelente trabajo!' : p >= 40 ? '¡Vas avanzando!' : p > 0 ? 'Buen comienzo. Un bloque a la vez.' : 'Elige un bloque para empezar.'),
+      h('div', { class: 'stats' }, h('div', { class: 'stat' }, h('b', {}, T.c), h('span', {}, 'aciertos')), h('div', { class: 'stat' }, h('b', {}, T.w), h('span', {}, 'errores')), h('div', { class: 'stat' }, h('b', {}, fmtTime(S.timeSec)), h('span', {}, 'de estudio'))))));
+  main.append(h('div', { class: 'legend' }, h('span', {}, '🟢 Dominado'), h('span', {}, '🟡 En práctica'), h('span', {}, '⚪ Sin comenzar'), h('span', {}, `· Dominar = ${GOAL} aciertos con 70% de efectividad`)));
+  const g = h('div', { class: 'grid' });
+  BL.forEach((m, i) => {
+    const b = i + 1, st = status(b), x = bs(b);
+    const sub = b === FIN ? (S.reto.tries ? `Mejor resultado: ${S.reto.best}%` : 'Reto que combina todo') : (x.a ? `${x.c} aciertos · ${x.w} errores` : 'Toca para empezar');
+    g.append(h('button', { class: 'bcard' + (st === 'done' ? ' done' : '') + (b === FIN ? ' final' : ''), type: 'button', onclick: () => go('block', b) },
+      h('div', { class: 'row', style: 'justify-content:space-between;align-items:center' }, h('span', { class: 'bn' }, `BLOQUE ${b}`), h('span', { title: ST[st][1] }, ST[st][0])),
+      h('div', { class: 'be' }, m.e), h('div', { class: 'bt' }, m.n),
+      h('div', { class: 'bar' }, h('i', { style: `width:${Math.round(progress(b) * 100)}%` })),
+      h('div', { class: 'bs' }, `${ST[st][1]} · ${sub}`)));
+  });
+  main.append(g);
+  const ws = weakList();
+  const wb = h('div', { class: 'card weakbox mt2' }, h('h3', {}, '🎯 Temas que necesitas practicar'));
+  if (ws.length) { wb.append(weakUL(ws, S.weak), h('button', { class: 'btn ocre', type: 'button', onclick: () => go('weak') }, '🔁 Practicar nuevamente mis áreas débiles')); }
+  else wb.append(h('p', { class: 'muted' }, S.hist.length ? '¡Por ahora no tienes temas pendientes! Sigue practicando o intenta el reto final.' : 'Aquí aparecerán los temas en los que te equivoques, para que los repases.'));
+  main.append(wb);
+  main.append(h('div', { class: 'row mt2' },
+    h('button', { class: 'btn', type: 'button', onclick: doSave }, '💾 GUARDAR PROGRESO'),
+    h('button', { class: 'btn primary', type: 'button', onclick: doContinue }, '↩️ CONTINUAR MI GUÍA'),
+    h('button', { class: 'btn', type: 'button', onclick: () => go('evidence') }, '🎓 MI EVIDENCIA DE ESTUDIO'),
+    h('button', { class: 'btn danger', type: 'button', onclick: doReset }, '🗑️ REINICIAR GUÍA')));
+}
+
+/* ---------- Bloque ---------- */
+const MOTIV = ['¡Vas avanzando!', 'Un error también es información.', 'Sigue así: cada ejercicio cuenta.', 'Leer con calma también es estrategia.', '¡Buen ritmo!'];
+let sessionCount = 0;
+function motivate(el, b, ok) {
+  sessionCount++;
+  const x = bs(b); let msg = '';
+  if (status(b) === 'done' && ok) msg = 'Ya dominas este tema.';
+  else if (x.c === GOAL - 1 && ok) msg = 'Te falta poco.';
+  else if (!ok && Math.random() < .55) msg = 'Un error también es información.';
+  else if (sessionCount % 3 === 0) msg = pick(MOTIV);
+  el.textContent = msg;
+}
+function vBlock(b) {
+  if (!S.start) { askName(() => go('block', b)); go('home'); return; }
+  if (b === FIN) return vReto();
+  S.lastBlock = b; save();
+  const m = BL[b - 1];
+  const head = h('div', { class: 'bhead' }, h('button', { class: 'back', type: 'button', onclick: () => go('menu') }, '← Mapa de progreso'), h('h2', {}, `${m.e} ${b}. ${m.n}`));
+  const pill = h('span', { class: 'pill' }); const mbar = h('i'); const mtxt = h('span');
+  head.append(pill, h('div', { class: 'mastery' }, h('div', { class: 'bar' }, mbar), mtxt));
+  const upd = () => { const st = status(b), x = bs(b); pill.textContent = `${ST[st][0]} ${ST[st][1]}`; mbar.style.width = Math.round(progress(b) * 100) + '%'; mtxt.textContent = st === 'done' ? '¡Dominado! Puedes seguir practicando.' : `${Math.min(x.c, GOAL)}/${GOAL} aciertos para dominar${x.a ? ` · efectividad ${Math.round(x.c / x.a * 100)}%` : ''}`; };
+  upd(); main.append(head);
+  main.append(h('details', { class: 'idea' }, h('summary', {}, '📌 Idea clave (repasa antes de practicar)'), h('div', { class: 'idea-b', html: IDEA[b] })));
+  let lvl = S.scaleLevel || 'mix';
+  if (false) {
+    const L = [['1', 'Nivel 1 · Identificar'], ['2', 'Nivel 2 · Convertir'], ['3', 'Nivel 3 · Problemas'], ['4', 'Nivel 4 · Escala territorial'], ['mix', '🎲 Mixto']];
+    const lv = h('div', { class: 'levels', role: 'tablist' });
+    L.forEach(([k, t]) => { const btn = h('button', { class: 'lv' + (k === lvl ? ' on' : ''), type: 'button', onclick: () => { lvl = k; S.scaleLevel = k; save(); lv.querySelectorAll('.lv').forEach(x => x.classList.toggle('on', x === btn)); next(); } }, t); lv.append(btn); });
+    main.append(lv);
+  }
+  const counter = h('div', { class: 'counter' }); const host = h('div'); const motiv = h('div', { class: 'motiv', 'aria-live': 'polite' });
+  const another = h('button', { class: 'btn primary', type: 'button' }, '🔄 Otro ejercicio');
+  let n = 0;
+  function next() {
+    n++; counter.innerHTML = ''; counter.append(h('span', {}, `Ejercicio ${n} de esta sesión`), h('span', {}, `Intentos en el bloque: ${bs(b).a}`));
+    another.classList.remove('pulse'); motiv.textContent = '';
+    const ex = genFor(b, lvl); host.innerHTML = '';
+    host.append(exCard(ex, ok => { record(b, ok, ex.ctx || ex.q); upd(); motivate(motiv, b, ok); another.classList.add('pulse'); counter.lastChild.textContent = `Intentos en el bloque: ${bs(b).a}`; }));
+  }
+  another.onclick = () => { next(); setTimeout(() => counter.scrollIntoView({ behavior: 'smooth', block: 'start' }), 30); };
+  main.append(counter, host, motiv, h('div', { class: 'nav' }, another, h('button', { class: 'btn', type: 'button', onclick: () => go('menu') }, '🗺️ Mapa de progreso'), b < FIN - 1 ? h('button', { class: 'btn', type: 'button', onclick: () => go('block', b + 1) }, `Siguiente bloque →`) : h('button', { class: 'btn ocre', type: 'button', onclick: () => go('block', FIN) }, '🧠 Ir al reto final')));
+  next();
+}
+
+/* ---------- Áreas débiles ---------- */
+function vWeak() {
+  main.append(h('div', { class: 'bhead' }, h('button', { class: 'back', type: 'button', onclick: () => go('menu') }, '← Mapa de progreso'), h('h2', {}, '🎯 Practicar mis áreas débiles')));
+  const ws = weakList();
+  if (!ws.length) { main.append(h('div', { class: 'card' }, h('p', {}, '¡No tienes temas pendientes! 🎉 Practica cualquier bloque o intenta el reto final.'), h('button', { class: 'btn primary', type: 'button', onclick: () => go('menu') }, '🗺️ Mapa de progreso'))); return; }
+  const N = 8; let i = 0, okc = 0; const start = Object.assign({}, S.weak);
+  main.append(h('div', { class: 'card' }, h('div', { class: 'muted' }, 'Ejercicios nuevos de los temas donde te has equivocado. Cada acierto aquí reduce tus errores pendientes.'), weakUL(ws, S.weak)));
+  const counter = h('div', { class: 'counter' }); const host = h('div'); const nav = h('div', { class: 'nav' }); const motiv = h('div', { class: 'motiv' });
+  main.append(counter, host, motiv, nav);
+  function nextQ() {
+    const list = weakList(); const pool = list.length ? list : Object.keys(start).map(Number);
+    const b = wpick(pool.map(x => [Math.max(1, S.weak[x] || 1), x]));
+    i++; counter.innerHTML = ''; counter.append(h('span', {}, `Ejercicio ${i} de ${N}`), h('span', {}, `${BL[b - 1].e} ${BL[b - 1].n}`));
+    nav.innerHTML = ''; host.innerHTML = ''; motiv.textContent = '';
+    const ex = genFor(b === FIN ? 7 : b, 'mix');
+    host.append(exCard(ex, ok => {
+      record(ex.b, ok, ex.ctx || ex.q, 'weak'); if (ok) okc++; motivate(motiv, ex.b, ok);
+      nav.append(i < N ? h('button', { class: 'btn primary pulse', type: 'button', onclick: () => { nextQ(); window.scrollTo(0, 0); } }, 'Siguiente →') : h('button', { class: 'btn primary pulse', type: 'button', onclick: finish }, 'Ver resultado'));
+    }));
+  }
+  function finish() {
+    main.innerHTML = ''; const rest = weakList();
+    main.append(h('div', { class: 'bhead' }, h('h2', {}, '🎯 Práctica terminada')),
+      h('div', { class: 'card' }, h('div', { class: 'big-pct' }, `${okc}/${N}`), h('p', {}, okc >= 6 ? '¡Muy bien! Esos temas ya están más firmes.' : 'Un error también es información: repasa la idea clave de cada tema y vuelve a intentarlo.'),
+        rest.length ? h('div', {}, h('b', {}, 'Todavía por reforzar:'), weakUL(rest, S.weak)) : h('p', {}, '🎉 ¡Ya no tienes errores pendientes!'),
+        h('div', { class: 'row mt' }, rest.length ? h('button', { class: 'btn ocre', type: 'button', onclick: () => go('weak') }, '🔁 Practicar otra vez') : null, h('button', { class: 'btn primary', type: 'button', onclick: () => go('menu') }, '🗺️ Mapa de progreso'))));
+    window.scrollTo(0, 0);
+  }
+  nextQ();
+}
+
+/* ---------- Reto final ---------- */
+const RETO = [
+  [1, gPyrRule], [1, gPyrId], [2, gPol], [3, gDens], [3, gReg], [4, gRep], [5, gMovTwo], [6, gChart],
+  [7, gLoc], [8, gUrb], [9, gCul], [10, gPat], [11, gFue], [12, gRoc], [12, gRocTwo]
+];
+function levelFor(p) { return p >= 85 ? ['🏆', '¡Listo para el parcial!'] : p >= 70 ? ['⭐', 'Buena preparación'] : p >= 50 ? ['📈', 'Vas avanzando'] : ['📚', 'Necesitas repasar']; }
+function vReto() {
+  S.lastBlock = FIN; save();
+  main.append(h('div', { class: 'bhead' }, h('button', { class: 'back', type: 'button', onclick: () => go('menu') }, '← Mapa de progreso'), h('h2', {}, '🧠 RETO FINAL')));
+  main.append(h('div', { class: 'card' },
+    h('p', {}, `${RETO.length} preguntas nuevas que combinan todo: categorías espaciales, escala, coordenadas, herramientas geográficas, hechos y fenómenos, representaciones y más.`),
+    h('p', { class: 'muted' }, 'Funciona como diagnóstico: al final verás tu nivel de preparación y los temas que conviene repasar.'),
+    S.reto.tries ? h('div', { class: 'ev-grid mt' }, h('div', { class: 'ev-item' }, h('span', {}, 'Mejor resultado'), h('b', {}, S.reto.best + '%')), h('div', { class: 'ev-item' }, h('span', {}, 'Último intento'), h('b', {}, S.reto.last + '%')), h('div', { class: 'ev-item' }, h('span', {}, 'Intentos'), h('b', {}, S.reto.tries))) : null,
+    h('div', { class: 'row mt' }, h('button', { class: 'btn ocre big', type: 'button', onclick: runReto }, S.reto.tries ? '🔁 Intentar de nuevo' : '🚀 Comenzar reto'))));
+}
+function runReto() {
+  const list = shuffle(RETO); let i = 0, okc = 0; const wrong = {};
+  main.innerHTML = '';
+  const top = h('div', { class: 'bhead' }, h('h2', {}, '🧠 Reto final')); const bar = h('i'); const counter = h('div', { class: 'counter' });
+  top.append(h('div', { class: 'bar' }, bar)); const host = h('div'); const nav = h('div', { class: 'nav' });
+  main.append(top, counter, host, nav);
+  function q() {
+    const [b, f] = list[i]; const ex = f(); ex.b = b;
+    bar.style.width = Math.round(i / list.length * 100) + '%';
+    counter.innerHTML = ''; counter.append(h('span', {}, `Pregunta ${i + 1} de ${list.length}`), h('span', {}, `${BL[b - 1].e} ${BL[b - 1].n}`));
+    host.innerHTML = ''; nav.innerHTML = '';
+    host.append(exCard(ex, ok => {
+      record(b, ok, ex.ctx || ex.q); if (ok) okc++; else wrong[b] = (wrong[b] || 0) + 1;
+      i++; nav.append(h('button', { class: 'btn primary pulse', type: 'button', onclick: () => { i < list.length ? q() : end(); window.scrollTo(0, 0); } }, i < list.length ? 'Siguiente →' : 'Ver mi nivel de preparación'));
+    }));
+  }
+  function end() {
+    const p = Math.round(okc / list.length * 100); const before = status(FIN);
+    S.reto.tries++; S.reto.last = p; S.reto.best = Math.max(S.reto.best == null ? 0 : S.reto.best, p); S.reto.lastDate = new Date().toISOString(); save(); updTop();
+    const [ic, lv] = levelFor(p); const wl = Object.keys(wrong).map(Number).sort((a, c) => wrong[c] - wrong[a]);
+    main.innerHTML = '';
+    main.append(h('div', { class: 'bhead' }, h('h2', {}, '🧠 Resultado del reto final')),
+      h('div', { class: 'card', style: 'text-align:center' }, h('div', { class: 'big-pct' }, p + '%'), h('div', { class: 'muted' }, `${okc} de ${list.length} respuestas correctas`),
+        h('div', { class: 'level' }, `${ic} Nivel de preparación: ${lv}`),
+        h('div', { class: 'note mt' }, 'Este porcentaje corresponde únicamente a tu desempeño en la guía y NO garantiza una calificación determinada en el examen.')),
+      h('div', { class: 'card weakbox mt' }, h('h3', {}, '🎯 Temas que necesitas practicar'), wl.length ? weakUL(wl, wrong) : h('p', {}, '🎉 ¡No tuviste errores en este reto!'),
+        h('div', { class: 'row' }, weakList().length ? h('button', { class: 'btn ocre', type: 'button', onclick: () => go('weak') }, '🔁 Practicar nuevamente mis áreas débiles') : null,
+          h('button', { class: 'btn', type: 'button', onclick: runReto }, '🔁 Repetir reto'),
+          h('button', { class: 'btn primary', type: 'button', onclick: () => go('evidence') }, '🎓 Ver mi evidencia'),
+          h('button', { class: 'btn', type: 'button', onclick: () => go('menu') }, '🗺️ Mapa de progreso'))));
+    window.scrollTo(0, 0);
+    if (before !== 'done' && status(FIN) === 'done' && !S.done[FIN]) { S.done[FIN] = new Date().toISOString(); save(); setTimeout(() => celebrate(FIN), 600); }
+  }
+  q();
+}
+
+/* ---------- Evidencia ---------- */
+function evData() {
+  const T = totals();
+  const practiced = BL.map((m, i) => i + 1).filter(b => bs(b).a > 0);
+  return {
+    T, p: avance(), practiced, weak: weakList(),
+    doneB: BL.map((m, i) => i + 1).filter(b => status(b) === 'done'),
+    eff: T.a ? Math.round(T.c / T.a * 100) : 0
+  };
+}
+function folio() { const s = `${S.name}|${S.start}|${totals().a}|${totals().c}|${S.timeSec}|${S.reto.best}`; let x = 2166136261; for (let i = 0; i < s.length; i++) { x ^= s.charCodeAt(i); x = Math.imul(x, 16777619); } return 'GEO-' + (x >>> 0).toString(36).toUpperCase().padStart(7, '0'); }
+function vEvidence() {
+  const D = evData();
+  main.append(h('div', { class: 'bhead' }, h('button', { class: 'back', type: 'button', onclick: () => go('menu') }, '← Mapa de progreso'), h('h2', {}, '🎓 MI EVIDENCIA DE ESTUDIO')));
+  const it = (l, v) => h('div', { class: 'ev-item' }, h('span', {}, l), h('b', {}, v));
+  main.append(h('div', { class: 'card' },
+    h('div', { class: 'row', style: 'justify-content:space-between;align-items:center' }, h('div', {}, h('div', { style: 'font-weight:800;font-size:1.15rem' }, S.name || '—'), h('div', { class: 'muted' }, S.group ? 'Grupo ' + S.group : 'Grupo no indicado')), h('button', { class: 'btn', type: 'button', onclick: () => askName(() => go('evidence')) }, '✏️ Editar nombre')),
+    h('div', { class: 'ev-grid mt' },
+      it('Fecha', fmtDate(new Date().toISOString())), it('Inicio de la guía', fmtDate(S.start)), it('Última actividad', fmtDT(S.last)),
+      it('Porcentaje de avance', D.p + '%'), it('Actividades realizadas', `${D.practiced.length} de ${FIN} bloques`), it('Bloques dominados', `${D.doneB.length} de ${FIN}`),
+      it('Ejercicios realizados', D.T.a), it('Aciertos', D.T.c), it('Errores', D.T.w),
+      it('Efectividad', D.eff + '%'), it('Tiempo aproximado', fmtTime(S.timeSec)), it('Reto final', S.reto.tries ? `${S.reto.best}% (mejor) · ${S.reto.tries} intento(s)` : 'Sin intentar'))));
+  const tb = h('div', { class: 'card mt' }, h('h3', { style: 'font-size:1.2rem;margin-bottom:8px' }, '📊 Aciertos y errores por tema'));
+  const max = Math.max(1, ...BL.map((m, i) => bs(i + 1).a));
+  BL.forEach((m, i) => { const b = i + 1, x = bs(b); if (b === FIN) { tb.append(h('div', { class: 'bt-row' }, h('span', {}, `${ST[status(FIN)][0]} Reto final`), h('div', { class: 'bt-bars' }, h('i', { class: 'c', style: `width:${S.reto.best || 0}%` })), h('span', { class: 'muted' }, S.reto.tries ? `mejor ${S.reto.best}%` : 'sin intentar'))); return; } tb.append(h('div', { class: 'bt-row' }, h('span', {}, `${ST[status(b)][0]} ${m.n}`), h('div', { class: 'bt-bars' }, h('i', { class: 'c', style: `width:${x.c / max * 100}%` }), h('i', { class: 'w', style: `width:${x.w / max * 100}%` })), h('span', { class: 'muted' }, `${x.c}✔ ${x.w}✘`))); });
+  tb.append(h('div', { class: 'legend' }, h('span', {}, '■ aciertos'), h('span', { style: 'color:var(--coral)' }, '■ errores')));
+  main.append(tb);
+  main.append(h('div', { class: 'card mt' },
+    h('h3', { style: 'font-size:1.2rem' }, '✅ Temas practicados'), h('p', {}, D.practiced.length ? D.practiced.map(b => BL[b - 1].n).join(' · ') : 'Todavía no hay temas practicados.'),
+    h('h3', { style: 'font-size:1.2rem;margin-top:12px' }, '🎯 Temas que necesito reforzar'), D.weak.length ? weakUL(D.weak, S.weak) : h('p', {}, 'Sin temas pendientes.')));
+  main.append(h('div', { class: 'row mt2' },
+    h('button', { class: 'btn primary big', type: 'button', onclick: genEvidence }, '📄 GENERAR EVIDENCIA'),
+    h('button', { class: 'btn', type: 'button', onclick: doSave }, '💾 GUARDAR PROGRESO')),
+    h('p', { class: 'muted mt' }, 'Se abrirá tu ficha en una ventana nueva. Desde ahí puedes imprimirla o guardarla como PDF para entregarla.'));
+}
+function reportHTML() {
+  const D = evData();
+  const rows = BL.map((m, i) => { const b = i + 1, x = bs(b); if (b === FIN) return `<tr><td>${FIN}</td><td>Repaso final (reto)</td><td>${ST[status(FIN)][1]}</td><td colspan="3">${S.reto.tries ? `${S.reto.tries} intento(s) · mejor ${S.reto.best}% · último ${S.reto.last}%` : 'Sin intentar'}</td></tr>`; return `<tr><td>${b}</td><td>${esc(m.n)}</td><td>${ST[status(b)][1]}</td><td>${x.a}</td><td>${x.c}</td><td>${x.w}</td></tr>`; }).join('');
+  const weak = D.weak.length ? D.weak.map(b => `<li>${esc(BL[b - 1].n)} — ${S.weak[b]} ${S.weak[b] === 1 ? 'error' : 'errores'}</li>`).join('') : '<li>Sin temas pendientes</li>';
+  const pr = D.practiced.length ? D.practiced.map(b => esc(BL[b - 1].n)).join(' · ') : '—';
+  return `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Evidencia de estudio · ${esc(S.name)}</title>
+<style>body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:#1e2d43;margin:0;background:#f4f0e4}.sheet{max-width:780px;margin:20px auto;background:#fff;border:1px solid #d3cab4;border-radius:14px;padding:28px 30px}
+h1{font-family:Georgia,serif;font-size:24px;margin:0}h2{font-family:Georgia,serif;font-size:16px;margin:20px 0 8px;border-bottom:2px solid #1c7f78;padding-bottom:4px}.hd{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;border-bottom:3px double #1e2d43;padding-bottom:12px}
+.small{font-size:12px;color:#5f6c7c}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.it{background:#f7f3e8;border-radius:8px;padding:8px 10px}.it span{display:block;font-size:11px;color:#5f6c7c}.it b{font-size:15px}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{border-bottom:1px solid #e3dccb;padding:5px 6px;text-align:left}th{background:#f7f3e8}ul{margin:4px 0;padding-left:20px;font-size:14px}
+.sign{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:40px;font-size:12px;text-align:center}.sign div{border-top:1px solid #1e2d43;padding-top:6px}.note{font-size:11px;color:#5f6c7c;margin-top:16px}
+.bar{text-align:center;margin:16px}.bar button{font:inherit;font-weight:700;padding:12px 22px;border-radius:12px;border:0;background:#1c7f78;color:#fff;cursor:pointer}
+@media print{body{background:#fff}.sheet{border:0;margin:0;padding:0;max-width:none}.bar{display:none}}@media (max-width:600px){.grid{grid-template-columns:1fr 1fr}.sheet{margin:0;border-radius:0;padding:18px}}</style></head><body>
+<div class="bar"><button onclick="window.print()">🖨️ Imprimir o guardar como PDF</button></div>
+<div class="sheet"><div class="hd"><div><div class="small">Preparatoria UNAM · Geografía · Segundo parcial</div><h1>🎓 Evidencia de estudio</h1><div class="small">Guía de estudio interactiva · Docente: Viridiana Corro Espino</div></div><div class="small" style="text-align:right">Folio<br><b style="font-size:14px;color:#1e2d43">${folio()}</b><br>Emitida: ${fmtDT(new Date().toISOString())}</div></div>
+<h2>Datos del alumno</h2><div class="grid"><div class="it"><span>Nombre</span><b>${esc(S.name || '—')}</b></div><div class="it"><span>Grupo</span><b>${esc(S.group || '—')}</b></div><div class="it"><span>Fecha</span><b>${fmtDate(new Date().toISOString())}</b></div><div class="it"><span>Inicio de la guía</span><b>${fmtDate(S.start)}</b></div><div class="it"><span>Última actividad</span><b>${fmtDT(S.last)}</b></div><div class="it"><span>Sesiones de estudio</span><b>${S.sessions || 1}</b></div></div>
+<h2>Resumen del trabajo</h2><div class="grid"><div class="it"><span>Porcentaje de avance</span><b>${D.p}%</b></div><div class="it"><span>Actividades realizadas</span><b>${D.practiced.length} de ${FIN} bloques</b></div><div class="it"><span>Bloques dominados</span><b>${D.doneB.length} de 14</b></div><div class="it"><span>Ejercicios realizados</span><b>${D.T.a}</b></div><div class="it"><span>Aciertos</span><b>${D.T.c}</b></div><div class="it"><span>Errores</span><b>${D.T.w}</b></div><div class="it"><span>Efectividad</span><b>${D.eff}%</b></div><div class="it"><span>Tiempo aproximado de trabajo</span><b>${fmtTime(S.timeSec)}</b></div><div class="it"><span>Reto final (mejor / intentos)</span><b>${S.reto.tries ? S.reto.best + '% / ' + S.reto.tries : 'Sin intentar'}</b></div></div>
+<h2>Detalle por tema</h2><table><thead><tr><th>#</th><th>Tema</th><th>Estado</th><th>Ejercicios</th><th>Aciertos</th><th>Errores</th></tr></thead><tbody>${rows}</tbody></table>
+<h2>Temas practicados</h2><p style="font-size:14px">${pr}</p><h2>Temas que necesita reforzar</h2><ul>${weak}</ul>
+<div class="sign"><div>Firma del alumno</div><div>Revisó (docente)</div></div>
+<p class="note">Evidencia generada localmente en el dispositivo del alumno. Los porcentajes reflejan el trabajo realizado en la guía y no garantizan una calificación determinada en el examen.</p></div></body></html>`;
+}
+function genEvidence() {
+  if (!S.start) return askName(genEvidence);
+  save(); const html = reportHTML();
+  let w = null; try { w = window.open('', '_blank'); } catch (e) { w = null; }
+  if (w && w.document) { w.document.open(); w.document.write(html); w.document.close(); toast('📄 Tu evidencia se abrió en una ventana nueva.'); return; }
+  const pa = $('#printArea'); const doc = new DOMParser().parseFromString(html, 'text/html');
+  pa.innerHTML = ''; doc.querySelectorAll('style').forEach(s => pa.append(s)); pa.append(doc.querySelector('.sheet'));
+  document.body.classList.add('printing'); setTimeout(() => { window.print(); setTimeout(() => document.body.classList.remove('printing'), 500); }, 100);
+}
+
+/* arranque */
+updTop();
+go('home');
+</script>
+</body>
+</html>
